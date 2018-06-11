@@ -1,0 +1,35 @@
+{
+  "name": "bfx-report-electron",
+  "version": "0.1.0",
+  "description": "Reporting tool",
+  "main": "index.js",
+  "private": true,
+  "devDependencies": {
+    "electron": "^2.0.2",
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "node-sass-chokidar": "^1.3.0",
+    "react-scripts": "1.1.4",
+    "standard": "^11.0.1",
+    "electron-packager": "^12.1.0"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "it",
+      "before",
+      "after"
+    ]
+  },
+  "scripts": {
+    "build": "npm run buildWin && npm run buildLinux",
+    "buildWin": "electron-packager . bfx-report --platform=win32 --arch=x64 --out ./release-builds --app-version 0.1.0 --overwrite",
+    "buildLinux": "electron-packager . bfx-report --platform=linux --arch=x64 --out ./release-builds --app-version 0.1.0 --overwrite",
+    "electron": "electron .",
+    "test": "standard"
+  }
+}
