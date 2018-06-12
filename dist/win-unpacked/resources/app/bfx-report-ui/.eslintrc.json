@@ -1,0 +1,30 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "airbnb"
+  ],
+  "rules": {
+    "jsx-quotes": ["error", "prefer-single"],
+    "react/jsx-filename-extension": [2, { "extensions": [".js"] }],
+    "semi": 0,
+    "max-len": 0,
+    "react/require-default-props": 0,
+    "react/forbid-prop-types": 0,
+    "import/no-named-as-default": 0,
+    "import/no-named-as-default-member": 0
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "moduleDirectory": [
+          "node_modules",
+          "src"
+        ]
+      }
+    }
+  },
+  "env": {
+    "browser": true,
+    "jest": true
+  }
+}

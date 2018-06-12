@@ -1,0 +1,23 @@
+{
+  "app": {
+    "port": 31339,
+    "host": "127.0.0.1"
+  },
+  "grenacheService": {
+    "restUrl": "https://api.bitfinex.com"
+  },
+  "logDebug": {
+    "postfix": ":app-prod",
+    "enableInfo": false,
+    "enableDev": false,
+    "enableError": false,
+    "enableServerStream": false
+  },
+  "log": {
+    "label": ":app-prod",
+    "pathError": null,
+    "pathLog": null,
+    "enableConsole": false,
+    "enableColor": false
+  }
+}

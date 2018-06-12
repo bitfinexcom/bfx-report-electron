@@ -1,0 +1,18 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+body.pt-dark {
+  background-color: #394b59;
+}
+
+div.bitfinex-auth {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.bitfinex-table {
+  max-height: 400px;
+}

@@ -1,0 +1,20 @@
+{
+  "app": {
+    "port": 31339,
+    "cors": {
+      "enable": true
+    }
+  },
+  "grenacheService": {
+    "restUrl": "https://api.bitfinex.com"
+  },
+  "grenacheClient": {
+    "grape": "http://127.0.0.1:30001"
+  },
+  "log": {
+    "pathError": null,
+    "pathLog": null,
+    "pathExcLogger": null,
+    "enableConsole": false
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "app": {
+    "port": 31339,
+    "host": "127.0.0.1",
+    "cors": {
+      "enable": true
+    }
+  },
+  "grenacheClient": {
+    "query": "rest:report:api",
+    "grape": "http://127.0.0.1:30001",
+    "timeout": 10000
+  },
+  "grenacheService": {
+    "restUrl": "https://api.bitfinex.com",
+    "grape1": {
+      "dht_port": 20002,
+      "dht_bootstrap": ["127.0.0.1:20001"],
+      "api_port": 40001
+    },
+    "grape2": {
+      "dht_port": 20001,
+      "dht_bootstrap": ["127.0.0.1:20002"],
+      "api_port": 30001
+    }
+  },
+  "logDebug": {
+    "prefix": "",
+    "postfix": ":app",
+    "enableInfo": true,
+    "enableDev": true,
+    "enableError": true,
+    "enableServerStream": true
+  },
+  "log": {
+    "label": ":app",
+    "pathError": "logs/error.log",
+    "pathExcLogger": "logs/exceptions-logger.log",
+    "pathLog": "logs/log.log",
+    "enableConsole": true,
+    "enableColor": true,
+    "enableColorPathError": false,
+    "enableColorPathExcLogger": false,
+    "enableColorPathLog": false,
+    "maxSize": null
+  }
+}

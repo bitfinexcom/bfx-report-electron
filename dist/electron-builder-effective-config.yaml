@@ -1,0 +1,49 @@
+directories:
+  output: dist
+  buildResources: build
+extends: null
+asar: false
+productName: bfx-report
+appId: bitfinex.report.com
+files:
+  - from: .
+    to: .
+    filter:
+      - bfx-report
+      - bfx-report-ui
+      - node_modules
+      - index.js
+      - server.js
+      - package.json
+  - from: ./build
+    to: .
+    filter:
+      - '**/*'
+mac:
+  artifactName: '${productName}-${version}-osx.${ext}'
+  category: public.app-category.productivity
+  target:
+    - dmg
+    - zip
+linux:
+  artifactName: '${productName}-${version}-${arch}-linux.${ext}'
+  description: Reporting tool
+  maintainer: <bitfinex.com>
+  target:
+    - zip
+    - deb
+    - rpm
+win:
+  target:
+    - zip
+    - dir
+  publisherName: Reporting tool
+dmg:
+  contents:
+    - x: 110
+      'y': 150
+    - x: 240
+      'y': 150
+      type: link
+      path: /Applications
+electronVersion: 2.0.2

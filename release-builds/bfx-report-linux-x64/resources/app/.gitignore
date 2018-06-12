@@ -1,9 +1,0 @@
-.idea/
-.vscode/
-node_modules/
-npm-debug.log
-bfx-report-ui/*
-!bfx-report-ui/.gitkeep
-!bfx-report-ui/build/
-bfx-report/*
-!bfx-report/.gitkeep

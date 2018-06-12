@@ -1,0 +1,115 @@
+{
+  "name": "bfx-report",
+  "version": "0.1.0",
+  "description": "Reporting tool",
+  "main": "app.js",
+  "private": true,
+  "dependencies": {
+    "async": "^2.5.0",
+    "better-npm-run": "^0.1.0",
+    "bfx-svc-boot-js": "https://github.com/bitfinexcom/bfx-svc-boot-js.git",
+    "bfx-wrk-api": "git+https://github.com/bitfinexcom/bfx-wrk-api.git",
+    "bitfinex-api-node": "git+https://github.com/bitfinexcom/bitfinex-api-node.git",
+    "bfx-facs-interval": "https://github.com/bitfinexcom/bfx-facs-interval.git",
+    "body-parser": "^1.18.3",
+    "colors": "^1.3.0",
+    "config": "^1.30.0",
+    "cors": "^2.8.4",
+    "debug": "^3.1.0",
+    "express": "^4.16.3",
+    "grenache-grape": "^0.9.6",
+    "grenache-nodejs-http": "^0.7.3",
+    "grenache-nodejs-link": "^0.7.7",
+    "method-override": "^2.3.10",
+    "morgan": "^1.9.0",
+    "winston": "^3.0.0-rc5"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.17.5",
+    "standard": "^11.0.1",
+    "supertest": "^3.1.0"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "it",
+      "before",
+      "after"
+    ]
+  },
+  "nodemonConfig": {
+    "verbose": true,
+    "ignore": [
+      "test/",
+      "node_modules/",
+      "logs/",
+      "public/",
+      ".git/",
+      ".idea/",
+      ".vscode/"
+    ]
+  },
+  "betterScripts": {
+    "start:prod": {
+      "command": "node app.js",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "start:grapes:worker:prod": {
+      "command": "node grapes-worker.js",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "start:all:prod": {
+      "command": "node index.js",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    "start:dev": {
+      "command": "nodemon app.js",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    "start:grapes:worker:dev": {
+      "command": "nodemon grapes-worker.js",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    "start:all:dev": {
+      "command": "nodemon index.js",
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    "test": {
+      "command": "standard && mocha --opts .mocha.opts",
+      "env": {
+        "NODE_ENV": "test"
+      }
+    }
+  },
+  "scripts": {
+    "start": "better-npm-run start:prod",
+    "startDev": "better-npm-run start:dev",
+    "startGrapesWorker": "better-npm-run start:grapes:worker:prod",
+    "startGrapesWorkerDev": "better-npm-run start:grapes:worker:dev",
+    "startAll": "better-npm-run start:all:prod",
+    "startAllDev": "better-npm-run start:all:dev",
+    "startWorker": "node worker.js --env=production --wtype=wrk-report-service-api --apiPort 1337",
+    "startWorkerDev": "node worker.js --env=development --wtype=wrk-report-service-api --apiPort 1337",
+    "test": "better-npm-run test"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "bfx-report-electron",
+  "version": "0.1.0",
+  "description": "Reporting tool",
+  "author": "bitfinex.com",
+  "main": "index.js",
+  "private": true,
+  "standard": {
+    "globals": [
+      "describe",
+      "it",
+      "before",
+      "after"
+    ]
+  }
+}
