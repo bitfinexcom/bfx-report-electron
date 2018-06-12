@@ -4,8 +4,7 @@
 
 ### Install
 
-- install libraries. Once the project is cloned,
-execute the following commands from the root directory of the project:
+- install libraries. Once the project is cloned, execute the following commands from the root directory of the project:
 
 ```
 npm install
@@ -39,4 +38,12 @@ cd ..
 
 ```
 npm run electron
+```
+
+### Build distributions
+
+```
+npm run dist-win
+npm run dist-linux
+npm run dist-mac
 ```
