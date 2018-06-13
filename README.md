@@ -14,8 +14,11 @@ npm install
 
 ```
 cd bfx-report-ui
+rm .gitkeep
 git clone git@github.com:bitfinexcom/bfx-report-ui.git
 npm install
+export REACT_APP_PLATFORM=localhost
+export PUBLIC_URL=./
 npm run build
 cd ..
 ```
@@ -24,8 +27,9 @@ cd ..
 
 ```
 cd bfx-report
+rm .gitkeep
 git clone git@github.com:bitfinexcom/bfx-report.git
-npm install
+npm install --production
 cp config/local-development.json.example config/local-development.json
 cp config/local-production.json.example config/local-production.json
 cp config/common.json.example config/common.json
