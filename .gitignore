@@ -6,3 +6,5 @@ bfx-report-ui/*
 !bfx-report-ui/.gitkeep
 bfx-report/*
 !bfx-report/.gitkeep
+dist/*
+!dist/.gitkeep
