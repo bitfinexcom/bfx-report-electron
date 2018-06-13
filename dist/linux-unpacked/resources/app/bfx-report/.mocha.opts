@@ -1,2 +1,0 @@
---recursive test/**/*.spec.js
---timeout 10000

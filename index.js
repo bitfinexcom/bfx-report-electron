@@ -5,8 +5,7 @@ const path = require('path')
 const url = require('url')
 const { fork } = require('child_process')
 
-const app = electron.app
-const BrowserWindow = electron.BrowserWindow
+const { app, BrowserWindow } = electron
 
 let mainWindow
 
@@ -14,7 +13,10 @@ const serverPath = path.join(__dirname, 'server.js')
 let ipc = null
 
 const runServer = () => {
-  ipc = fork(serverPath)
+  ipc = fork(serverPath, [], {
+    cwd: process.cwd(),
+    stdio: ['inherit', 'inherit', 'inherit', 'ipc']
+  })
 }
 
 const createWindow = () => {
@@ -52,11 +54,6 @@ app.on('ready', () => {
     }
   })
 })
-
-// TODO:
-// app.on('browser-window-created', (e, window) => {
-//   window.setMenu(null)
-// })
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

@@ -28,6 +28,7 @@
     "dist-win": "electron-builder build --win",
     "dist-linux": "electron-builder build --linux",
     "dist-mac": "electron-builder build --mac",
+    "start": "node start-electron.js",
     "electron": "electron .",
     "test": "standard"
   },
@@ -37,42 +38,42 @@
     "productName": "bfx-report",
     "appId": "bitfinex.report.com",
     "files": [
+      "**/*",
+      "!bfx-report",
+      "!bfx-report-ui",
       {
-        "from": ".",
-        "to": ".",
+        "from": "bfx-report",
+        "to": "bfx-report",
         "filter": [
-          "bfx-report",
-          "bfx-report-ui/build",
-          "node_modules",
-          "index.js",
-          "server.js",
-          "package.json"
+          "**/*",
+          "!test",
+          "!logs"
         ]
       },
       {
-        "from": "./build",
-        "to": ".",
+        "from": "bfx-report-ui",
+        "to": "bfx-report-ui",
         "filter": [
-          "**/*"
+          "build"
         ]
       }
     ],
     "mac": {
-      "artifactName": "${productName}-${version}-osx.${ext}",
+      "artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
       "category": "public.app-category.productivity",
       "target": [
-        "dmg",
-        "zip"
+        "zip",
+        "dmg"
       ]
     },
     "linux": {
-      "artifactName": "${productName}-${version}-${arch}-linux.${ext}",
+      "artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
       "description": "Reporting tool",
       "maintainer": "<bitfinex.com>",
+      "category": "Network",
       "target": [
         "zip",
-        "deb",
-        "rpm"
+        "deb"
       ]
     },
     "win": {
@@ -83,18 +84,24 @@
       "publisherName": "Reporting tool"
     },
     "dmg": {
+      "iconSize": 100,
       "contents": [
         {
-          "x": 110,
-          "y": 150
-        },
-        {
-          "x": 240,
-          "y": 150,
+          "x": 380,
+          "y": 280,
           "type": "link",
           "path": "/Applications"
+        },
+        {
+          "x": 110,
+          "y": 280,
+          "type": "file"
         }
-      ]
+      ],
+      "window": {
+        "width": 500,
+        "height": 500
+      }
     }
   }
 }
