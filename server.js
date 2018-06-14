@@ -2,7 +2,7 @@
 
 const path = require('path')
 
-process.env.NODE_ENV = 'development'
+process.env.NODE_ENV = 'development' // TODO:
 process.send = process.send || (() => {})
 process.env.NODE_CONFIG_DIR = path.join(__dirname, 'bfx-report', 'config')
 

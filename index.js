@@ -34,7 +34,8 @@ const createWindow = () => {
 
   mainWindow.loadURL(startUrl)
 
-  mainWindow.webContents.openDevTools()
+  // TODO:
+  // mainWindow.webContents.openDevTools()
 
   mainWindow.on('close', () => {
     ipc.kill('SIGINT')

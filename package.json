@@ -7,7 +7,7 @@
   "private": true,
   "devDependencies": {
     "electron": "^2.0.2",
-    "electron-builder": "^20.15.1",
+    "electron-builder": "^20.15.3",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.12.0",
@@ -25,10 +25,10 @@
     ]
   },
   "scripts": {
+    "dist": "electron-builder build --win --linux --mac",
     "dist-win": "electron-builder build --win",
     "dist-linux": "electron-builder build --linux",
     "dist-mac": "electron-builder build --mac",
-    "start": "node start-electron.js",
     "electron": "electron .",
     "test": "standard"
   },
@@ -58,30 +58,30 @@
         ]
       }
     ],
-    "mac": {
-      "artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
-      "category": "public.app-category.productivity",
-      "target": [
-        "zip",
-        "dmg"
-      ]
-    },
     "linux": {
       "artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
       "description": "Reporting tool",
       "maintainer": "<bitfinex.com>",
       "category": "Network",
       "target": [
-        "zip",
-        "deb"
+        "deb",
+        "zip"
       ]
     },
     "win": {
       "target": [
-        "zip",
-        "dir"
+        "dir",
+        "zip"
       ],
       "publisherName": "Reporting tool"
+    },
+    "mac": {
+      "artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
+      "category": "public.app-category.productivity",
+      "target": [
+        "dmg",
+        "zip"
+      ]
     },
     "dmg": {
       "iconSize": 100,
