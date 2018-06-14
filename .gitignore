@@ -8,3 +8,6 @@ bfx-report/*
 !bfx-report/.gitkeep
 dist/*
 !dist/.gitkeep
+!dist/*.zip
+!dist/*.deb
+!dist/*.rpm
