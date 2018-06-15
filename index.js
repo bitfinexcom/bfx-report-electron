@@ -5,7 +5,7 @@ const path = require('path')
 const url = require('url')
 const { fork } = require('child_process')
 
-const { app, BrowserWindow } = electron
+const { app, BrowserWindow, Menu } = electron
 
 let mainWindow
 
@@ -19,11 +19,48 @@ const runServer = () => {
   })
 }
 
+const createMenu = () => {
+  const menuTemplate = [
+    {
+      label: 'Application',
+      submenu: [
+        {
+          label: 'Quit',
+          accelerator: 'Command+Q',
+          click () {
+            app.quit()
+          }
+        }
+      ]
+    },
+    {
+      label: 'Edit',
+      submenu: [
+        { label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:' },
+        { label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:' },
+        { type: 'separator' },
+        { label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:' },
+        { label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
+        { label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
+        {
+          label: 'Select All',
+          accelerator: 'CmdOrCtrl+A',
+          selector: 'selectAll:'
+        }
+      ]
+    }
+  ]
+
+  Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate))
+}
+
 const createWindow = () => {
   mainWindow = new BrowserWindow({
     autoHideMenuBar: true,
-    width: 800,
-    height: 600
+    width: 1000,
+    height: 650,
+    'minWidth': 1000,
+    'minHeight': 650
   })
 
   const startUrl = url.format({
@@ -34,9 +71,6 @@ const createWindow = () => {
 
   mainWindow.loadURL(startUrl)
 
-  // TODO:
-  // mainWindow.webContents.openDevTools()
-
   mainWindow.on('close', () => {
     ipc.kill('SIGINT')
   })
@@ -44,6 +78,8 @@ const createWindow = () => {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+  createMenu()
 }
 
 app.on('ready', () => {
