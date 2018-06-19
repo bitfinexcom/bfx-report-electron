@@ -26,7 +26,7 @@ const createMenu = () => {
       submenu: [
         {
           label: 'Quit',
-          accelerator: 'Command+Q',
+          accelerator: 'CmdOrCtrl+Q',
           click () {
             app.quit()
           }
@@ -59,8 +59,9 @@ const createWindow = () => {
     autoHideMenuBar: true,
     width: 1000,
     height: 650,
-    'minWidth': 1000,
-    'minHeight': 650
+    minWidth: 1000,
+    minHeight: 650,
+    icon: path.join(__dirname, 'build/icons/512.png')
   })
 
   const startUrl = url.format({

@@ -6,6 +6,7 @@
   "main": "index.js",
   "private": true,
   "devDependencies": {
+    "ajv": "^6.5.1",
     "electron": "^2.0.2",
     "electron-builder": "^20.15.1",
     "eslint": "^4.19.1",
@@ -38,6 +39,7 @@
     "appId": "bitfinex.report.com",
     "files": [
       "**/*",
+      "build/icons",
       "!bfx-report",
       "!bfx-report-ui",
       {
@@ -64,7 +66,8 @@
       "category": "Network",
       "target": [
         "dir",
-        "zip"
+        "zip",
+        "deb"
       ]
     },
     "win": {
