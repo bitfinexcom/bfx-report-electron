@@ -1,0 +1,12 @@
+.idea/
+.vscode/
+node_modules/
+npm-debug.log
+bfx-report-ui/*
+!bfx-report-ui/.gitkeep
+bfx-report/*
+!bfx-report/.gitkeep
+dist/*
+!dist/.gitkeep
+!dist/*.zip
+!dist/*.deb
