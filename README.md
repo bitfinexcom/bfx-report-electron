@@ -51,3 +51,15 @@ npm run dist-linux
 npm run dist-win
 npm run dist-mac
 ```
+
+## Notes
+
+- Close and reopen will show the empty list. It caused by we local cache the auth state(include auth status) so the ui can't recognize its been re-opened. Press auth button and fetch data again will work for now
+
+- Current query are fixed to last 2 weeks and fetch max query, will implement the time range selector to allow user fetch data from different time range with different query limit
+
+- No loading state indicators
+
+- No infinite scroll or pagination
+
+- No csv download
