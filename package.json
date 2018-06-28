@@ -1,0 +1,109 @@
+{
+  "name": "bfx-report-electron",
+  "version": "0.1.0",
+  "description": "Reporting tool",
+  "author": "bitfinex.com",
+  "main": "index.js",
+  "private": true,
+  "devDependencies": {
+    "ajv": "^6.5.1",
+    "electron": "^2.0.2",
+    "electron-builder": "^20.15.1",
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "standard": "^11.0.1"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "it",
+      "before",
+      "after"
+    ]
+  },
+  "scripts": {
+    "dist-win": "electron-builder build --win",
+    "dist-linux": "electron-builder build --linux",
+    "dist-mac": "electron-builder build --mac",
+    "electron": "electron .",
+    "test": "standard"
+  },
+  "build": {
+    "extends": null,
+    "asar": false,
+    "productName": "bfx-report",
+    "appId": "bitfinex.report.com",
+    "files": [
+      "**/*",
+      "build/icons",
+      "!bfx-report",
+      "!bfx-report-ui",
+      {
+        "from": "bfx-report",
+        "to": "bfx-report",
+        "filter": [
+          "**/*",
+          "!test",
+          "!logs"
+        ]
+      },
+      {
+        "from": "bfx-report-ui",
+        "to": "bfx-report-ui",
+        "filter": [
+          "build"
+        ]
+      }
+    ],
+    "linux": {
+      "artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
+      "description": "Reporting tool",
+      "maintainer": "<bitfinex.com>",
+      "category": "Network",
+      "target": [
+        "dir",
+        "zip",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": [
+        "dir",
+        "zip"
+      ],
+      "publisherName": "Reporting tool"
+    },
+    "mac": {
+      "artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
+      "category": "public.app-category.productivity",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "dmg": {
+      "iconSize": 100,
+      "contents": [
+        {
+          "x": 380,
+          "y": 280,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 110,
+          "y": 280,
+          "type": "file"
+        }
+      ],
+      "window": {
+        "width": 500,
+        "height": 500
+      }
+    }
+  }
+}
