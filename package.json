@@ -5,6 +5,10 @@
   "author": "bitfinex.com",
   "main": "index.js",
   "private": true,
+  "dependencies": {
+    "async": "^2.6.1",
+    "grenache-grape": "^0.9.8"
+  },
   "devDependencies": {
     "ajv": "^6.5.1",
     "electron": "^2.0.2",
