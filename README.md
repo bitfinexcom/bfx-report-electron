@@ -6,13 +6,13 @@
 
 - install libraries. Once the project is cloned, execute the following commands from the root directory of the project:
 
-```
+```console
 npm install
 ```
 
 - go to the bfx-report-ui project folder, clone `bfx-report-ui` repository, install the libraries and run build:
 
-```
+```console
 cd bfx-report-ui
 git clone git@github.com:bitfinexcom/bfx-report-ui.git .
 npm install
@@ -25,7 +25,7 @@ cd ..
 
 - go to the bfx-report project folder, clone `bfx-report` repository, install the libraries and configure service:
 
-```
+```console
 cd bfx-report
 git clone git@github.com:bitfinexcom/bfx-report.git .
 npm install --production
@@ -37,32 +37,32 @@ cp config/facs/grc.config.json.example config/facs/grc.config.json
 
 - change the configuration file `config/default.json`, enter the parameter `"redirectCsvUrl": "https://dev-prdn.bitfinex.com:2995/"` in the root
 
-```
+```console
 vim config/default.json
 ```
 
 - change in the configuration file `common.json` the parameter `"isElectronEnv": false` to `true`
 
-```
+```console
 vim config/common.json
 ```
 
 - to use `https://dev-prdn.bitfinex.com:2998`, change in the configuration file `service.report.json` the parameter `"restUrl": "https://api.bitfinex.com"` to `https://dev-prdn.bitfinex.com:2998`
 
-```
+```console
 vim config/service.report.json
 cd ..
 ```
 
 ### Run the electron
 
-```
+```console
 npm run electron
 ```
 
 ### Build distributions
 
-```
+```console
 npm run dist-linux
 npm run dist-win
 npm run dist-mac
