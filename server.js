@@ -69,10 +69,12 @@ bootTwoGrapes((err, g) => {
   ipc = fork(modulePath, [
     `--env=${process.env.NODE_ENV}`,
     '--wtype=wrk-report-service-api',
-    '--apiPort=1337'
+    '--apiPort=1337',
+    '--dbID=1',
+    '--csvFolder=../../../csv'
   ], {
     cwd: process.cwd(),
-    stdio: ['inherit', 'inherit', 'inherit', 'ipc']
+    silent: false
   })
   ipc.on('close', () => {
     killGrapes(grapes, () => {
