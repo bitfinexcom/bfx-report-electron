@@ -57,11 +57,3 @@ npm run dist-linux
 npm run dist-win
 npm run dist-mac
 ```
-
-## Notes
-
-- No loading state indicators
-
-- No infinite scroll or pagination
-
-- No csv download
