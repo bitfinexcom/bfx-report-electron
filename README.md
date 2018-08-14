@@ -6,13 +6,13 @@
 
 - install libraries. Once the project is cloned, execute the following commands from the root directory of the project:
 
-```
+```console
 npm install
 ```
 
 - go to the bfx-report-ui project folder, clone `bfx-report-ui` repository, install the libraries and run build:
 
-```
+```console
 cd bfx-report-ui
 git clone git@github.com:bitfinexcom/bfx-report-ui.git .
 npm install
@@ -25,41 +25,35 @@ cd ..
 
 - go to the bfx-report project folder, clone `bfx-report` repository, install the libraries and configure service:
 
-```
+```console
 cd bfx-report
 git clone git@github.com:bitfinexcom/bfx-report.git .
 npm install --production
-cp config/local-production.json.example config/local-production.json
+cp config/default.json.example config/default.json
 cp config/common.json.example config/common.json
 cp config/service.report.json.example config/service.report.json
 cp config/facs/grc.config.json.example config/facs/grc.config.json
+touch db/lokue_queue_1_aggregator.db.json
+touch db/lokue_queue_1_processor.db.json
+```
+
+- to use `https://test.bitfinex.com`, change in the configuration file `service.report.json` the parameter `"restUrl": "https://api.bitfinex.com"` to `https://test.bitfinex.com`
+
+```console
+vim config/service.report.json
 cd ..
 ```
 
-> To use `https://dev-prdn.bitfinex.com:2998`, change in the configuration file `local-production.json` the parameter `"restUrl": "https://api.bitfinex.com"` to `https://dev-prdn.bitfinex.com:2998`
-
 ### Run the electron
 
-```
+```console
 npm run electron
 ```
 
 ### Build distributions
 
-```
+```console
 npm run dist-linux
 npm run dist-win
 npm run dist-mac
 ```
-
-## Notes
-
-- Close and reopen will show the empty list. It caused by we local cache the auth state(include auth status) so the ui can't recognize its been re-opened. Press auth button and fetch data again will work for now
-
-- Current query are fixed to last 2 weeks and fetch max query, will implement the time range selector to allow user fetch data from different time range with different query limit
-
-- No loading state indicators
-
-- No infinite scroll or pagination
-
-- No csv download
