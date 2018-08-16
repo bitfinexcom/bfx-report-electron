@@ -84,7 +84,11 @@ const createWindow = () => {
 }
 
 app.on('ready', () => {
-  runServer()
+  try {
+    runServer()
+  } catch (err) {
+    console.log('---err---', err)
+  }
 
   ipc.on('message', mess => {
     if (mess && mess.state === 'ready:server') {

@@ -7,6 +7,8 @@
   "private": true,
   "dependencies": {
     "async": "^2.6.1",
+    "bittorrent-dht": "^8.4.0",
+    "find-free-port": "^2.0.0",
     "grenache-grape": "^0.9.8"
   },
   "devDependencies": {
@@ -33,7 +35,7 @@
     "dist-win": "electron-builder build --win",
     "dist-linux": "electron-builder build --linux",
     "dist-mac": "electron-builder build --mac",
-    "electron": "electron .",
+    "electron": "export DEBUG=*&&electron .",
     "test": "standard"
   },
   "build": {
