@@ -32,7 +32,6 @@ let grapes = null
 void (async () => {
   const defaultPorts = getDefaultPorts()
   const ports = await getFreePort(defaultPorts)
-  console.log('---ports---', ports) // TODO:
   const grape = `http://127.0.0.1:${ports.grape2ApiPort}`
 
   confFacsGrc.p0.grape = grape
