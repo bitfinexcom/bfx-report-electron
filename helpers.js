@@ -90,14 +90,20 @@ const checkAndChangeAccess = (path) => {
 
 const findAndReplacePortInFrontend = (root, port) => {
   const pathToJsDir = path.join(root, 'build/static/js')
+  checkAndChangeAccess(pathToJsDir)
   const files = fs.readdirSync(pathToJsDir)
   files.some(file => {
     if (/^main.*\.js$/.test(file)) {
       const pathToFile = path.join(pathToJsDir, file)
+      checkAndChangeAccess(pathToFile)
       const str = fs.readFileSync(pathToFile, 'utf8')
       const res = str.replace(/API_URL:["|']http:\/\/localhost:\d+\/api["|']/g, `API_URL:"http://localhost:${port}/api"`)
       fs.writeFileSync(pathToFile, res, 'utf8')
+
+      return true
     }
+
+    return false
   })
 }
 
