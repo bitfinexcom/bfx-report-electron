@@ -1,7 +1,6 @@
 'use strict'
 
 const fs = require('fs')
-const path = require('path')
 const { Grape } = require('grenache-grape')
 const waterfall = require('async/waterfall')
 const fp = require('find-free-port')
@@ -13,7 +12,7 @@ const ports = {
   grape2DhtPort: 20001,
   grape2ApiPort: 30001,
   workerApiPort: 1337,
-  expressApiPort: 31339
+  expressApiPort: 34343
 }
 
 const getDefaultPorts = () => {
@@ -88,25 +87,6 @@ const checkAndChangeAccess = (path) => {
   }
 }
 
-const findAndReplacePortInFrontend = (root, port) => {
-  const pathToJsDir = path.join(root, 'build/static/js')
-  checkAndChangeAccess(pathToJsDir)
-  const files = fs.readdirSync(pathToJsDir)
-  files.some(file => {
-    if (/^main.*\.js$/.test(file)) {
-      const pathToFile = path.join(pathToJsDir, file)
-      checkAndChangeAccess(pathToFile)
-      const str = fs.readFileSync(pathToFile, 'utf8')
-      const res = str.replace(/API_URL:["|']http:\/\/localhost:\d+\/api["|']/g, `API_URL:"http://localhost:${port}/api"`)
-      fs.writeFileSync(pathToFile, res, 'utf8')
-
-      return true
-    }
-
-    return false
-  })
-}
-
 const bootTwoGrapes = (locPorts = ports, cb) => {
   const confGrape1 = {
     dht_port: locPorts.grape1DhtPort,
@@ -154,6 +134,5 @@ module.exports = {
   killGrapes,
   getFreePort,
   getDefaultPorts,
-  checkAndChangeAccess,
-  findAndReplacePortInFrontend
+  checkAndChangeAccess
 }
