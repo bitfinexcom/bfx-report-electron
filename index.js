@@ -15,7 +15,7 @@ let ipc = null
 const runServer = () => {
   ipc = fork(serverPath, [], {
     cwd: process.cwd(),
-    stdio: ['inherit', 'inherit', 'inherit', 'ipc']
+    silent: false
   })
 }
 
@@ -24,13 +24,7 @@ const createMenu = () => {
     {
       label: 'Application',
       submenu: [
-        {
-          label: 'Quit',
-          accelerator: 'CmdOrCtrl+Q',
-          click () {
-            app.quit()
-          }
-        }
+        { label: 'Quit', accelerator: 'CmdOrCtrl+Q', click: () => app.quit() }
       ]
     },
     {
@@ -42,11 +36,7 @@ const createMenu = () => {
         { label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:' },
         { label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
         { label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
-        {
-          label: 'Select All',
-          accelerator: 'CmdOrCtrl+A',
-          selector: 'selectAll:'
-        }
+        { label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:' }
       ]
     }
   ]
@@ -54,7 +44,7 @@ const createMenu = () => {
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate))
 }
 
-const createWindow = () => {
+const createWindow = (pathname = path.join(__dirname, '/bfx-report-ui/build/index.html')) => {
   mainWindow = new BrowserWindow({
     autoHideMenuBar: true,
     width: 1000,
@@ -65,7 +55,7 @@ const createWindow = () => {
   })
 
   const startUrl = url.format({
-    pathname: path.join(__dirname, '/bfx-report-ui/build/index.html'),
+    pathname,
     protocol: 'file:',
     slashes: true
   })
@@ -73,7 +63,7 @@ const createWindow = () => {
   mainWindow.loadURL(startUrl)
 
   mainWindow.on('close', () => {
-    ipc.kill('SIGINT')
+    if (ipc) ipc.kill('SIGINT')
   })
 
   mainWindow.on('closed', () => {
@@ -84,15 +74,37 @@ const createWindow = () => {
 }
 
 app.on('ready', () => {
+  const pathToLayoutError = path.join(__dirname, 'layout-error')
+  const pathToLayoutAppInitErr = path.join(pathToLayoutError, 'app-init-error.html')
+  const pathToLayoutExprPortReq = path.join(pathToLayoutError, 'express-port-required.html')
+
   try {
     runServer()
   } catch (err) {
-    console.log('---err---', err)
+    createWindow(pathToLayoutAppInitErr)
+
+    return
   }
 
-  ipc.on('message', mess => {
-    if (mess && mess.state === 'ready:server') {
-      createWindow()
+  ipc.once('message', mess => {
+    if (!mess || typeof mess.state !== 'string') {
+      createWindow(pathToLayoutAppInitErr)
+
+      return
+    }
+
+    switch (mess.state) {
+      case 'ready:server':
+        createWindow()
+        break
+
+      case 'error:express-port-required':
+        createWindow(pathToLayoutExprPortReq)
+        break
+
+      case 'error:app-init':
+        createWindow(pathToLayoutAppInitErr)
+        break
     }
   })
 })
@@ -100,11 +112,5 @@ app.on('ready', () => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
-  }
-})
-
-app.on('activate', () => {
-  if (mainWindow === null) {
-    createWindow()
   }
 })

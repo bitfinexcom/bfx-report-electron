@@ -6,7 +6,6 @@ const { writeFileSync } = require('fs')
 const EventEmitter = require('events')
 
 const root = path.join(__dirname, 'bfx-report')
-const rootUI = path.join(__dirname, 'bfx-report-ui')
 const pathToConfDir = path.join(root, 'config')
 const pathToConfFacs = path.join(pathToConfDir, 'facs')
 const pathToConfFacsGrc = path.join(pathToConfFacs, 'grc.config.json')
@@ -21,8 +20,7 @@ const {
   killGrapes,
   getDefaultPorts,
   getFreePort,
-  checkAndChangeAccess,
-  findAndReplacePortInFrontend
+  checkAndChangeAccess
 } = require('./helpers')
 
 const emitter = new EventEmitter()
@@ -30,56 +28,64 @@ let ipc = null
 let grapes = null
 
 void (async () => {
-  const defaultPorts = getDefaultPorts()
-  const ports = await getFreePort(defaultPorts)
-  const grape = `http://127.0.0.1:${ports.grape2ApiPort}`
+  try {
+    const defaultPorts = getDefaultPorts()
+    const ports = await getFreePort(defaultPorts)
+    const grape = `http://127.0.0.1:${ports.grape2ApiPort}`
 
-  confFacsGrc.p0.grape = grape
-  confFacsGrc.p1.grape = grape
+    confFacsGrc.p0.grape = grape
+    confFacsGrc.p1.grape = grape
 
-  checkAndChangeAccess(pathToConfFacs)
-  checkAndChangeAccess(pathToConfFacsGrc)
-  writeFileSync(pathToConfFacsGrc, JSON.stringify(confFacsGrc))
+    if (defaultPorts.expressApiPort !== ports.expressApiPort) {
+      process.send({ state: 'error:express-port-required' })
 
-  process.env.NODE_CONFIG = JSON.stringify({
-    app: {
-      port: ports.expressApiPort
-    },
-    grenacheClient: {
-      grape
+      return
     }
-  })
 
-  findAndReplacePortInFrontend(rootUI, ports.expressApiPort)
+    checkAndChangeAccess(pathToConfFacs)
+    checkAndChangeAccess(pathToConfFacsGrc)
+    writeFileSync(pathToConfFacsGrc, JSON.stringify(confFacsGrc))
 
-  bootTwoGrapes(ports, (err, g) => {
-    if (err) throw err
-
-    grapes = g
-
-    const modulePath = path.join(root, 'worker.js')
-
-    ipc = fork(modulePath, [
-      `--env=${process.env.NODE_ENV}`,
-      '--wtype=wrk-report-service-api',
-      `--apiPort=${ports.workerApiPort}`,
-      '--dbID=1',
-      '--csvFolder=../../../csv'
-    ], {
-      cwd: process.cwd(),
-      silent: false
+    process.env.NODE_CONFIG = JSON.stringify({
+      app: {
+        port: ports.expressApiPort
+      },
+      grenacheClient: {
+        grape
+      }
     })
-    ipc.on('close', () => {
-      killGrapes(grapes, () => {
-        process.nextTick(() => {
-          process.exit(0)
+
+    bootTwoGrapes(ports, (err, g) => {
+      if (err) throw err
+
+      grapes = g
+
+      const modulePath = path.join(root, 'worker.js')
+
+      ipc = fork(modulePath, [
+        `--env=${process.env.NODE_ENV}`,
+        '--wtype=wrk-report-service-api',
+        `--apiPort=${ports.workerApiPort}`,
+        '--dbID=1',
+        '--csvFolder=../../../csv'
+      ], {
+        cwd: process.cwd(),
+        silent: false
+      })
+      ipc.on('close', () => {
+        killGrapes(grapes, () => {
+          process.nextTick(() => {
+            process.exit(0)
+          })
         })
       })
+      grapes[0].once('announce', () => {
+        emitter.emit('ready:grapes-worker', { ipc, grapes })
+      })
     })
-    grapes[0].once('announce', () => {
-      emitter.emit('ready:grapes-worker', { ipc, grapes })
-    })
-  })
+  } catch (err) {
+    process.send({ state: 'error:app-init' })
+  }
 })()
 
 process.on('SIGINT', () => ipc && ipc.kill())
@@ -87,11 +93,15 @@ process.on('SIGHUP', () => ipc && ipc.kill())
 process.on('SIGTERM', () => ipc && ipc.kill())
 
 emitter.once('ready:grapes-worker', () => {
-  const { app } = require(path.join(root, 'app.js'))
+  try {
+    const { app } = require(path.join(root, 'app.js'))
 
-  app.once('listened', server => {
-    emitter.emit('ready:server', server)
-  })
+    app.once('listened', server => {
+      emitter.emit('ready:server', server)
+    })
+  } catch (err) {
+    process.send({ state: 'error:app-init' })
+  }
 })
 
 emitter.once('ready:server', () => {
