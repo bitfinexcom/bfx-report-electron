@@ -13,15 +13,16 @@
   },
   "devDependencies": {
     "ajv": "^6.5.1",
-    "electron": "^2.0.2",
-    "electron-builder": "^20.15.1",
+    "electron": "^2.0.11",
+    "electron-builder": "^20.28.4",
+    "electron-rebuild": "^1.8.2",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.12.0",
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
-    "standard": "^11.0.1"
+    "standard": "^12.0.1"
   },
   "standard": {
     "globals": [
@@ -32,6 +33,8 @@
     ]
   },
   "scripts": {
+    "postinstall": "electron-builder install-app-deps",
+    "electron-rebuild": "electron-rebuild",
     "dist-win": "electron-builder build --win",
     "dist-linux": "electron-builder build --linux",
     "dist-mac": "electron-builder build --mac",
@@ -42,29 +45,18 @@
     "extends": null,
     "asar": false,
     "productName": "bfx-report",
-    "appId": "bitfinex.report.com",
+    "appId": "com.report.bitfinex",
     "files": [
       "**/*",
-      "build/icons",
-      "!bfx-report",
       "!bfx-report-ui",
+      "bfx-report-ui/build",
       {
-        "from": "bfx-report",
-        "to": "bfx-report",
+        "from": "bfx-report/node_modules",
+        "to": "bfx-report/node_modules",
         "filter": [
           "**/*",
-          "!test",
-          "!logs",
-          "!.git",
-          "!.idea",
-          "!.vscode"
-        ]
-      },
-      {
-        "from": "bfx-report-ui",
-        "to": "bfx-report-ui",
-        "filter": [
-          "build"
+          "!.bin",
+          "!**/node_modules/.bin"
         ]
       }
     ],
