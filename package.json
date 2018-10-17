@@ -1,6 +1,6 @@
 {
   "name": "bfx-report-electron",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Reporting tool",
   "author": "bitfinex.com",
   "main": "index.js",
@@ -33,12 +33,12 @@
     ]
   },
   "scripts": {
-    "postinstall": "electron-builder install-app-deps",
-    "electron-rebuild": "electron-rebuild",
+    "start": "npm run init&&npm run dist-linux&& npm run dist-win&& npm run dist-mac",
+    "init": "./init.sh",
     "dist-win": "electron-builder build --win",
     "dist-linux": "electron-builder build --linux",
     "dist-mac": "electron-builder build --mac",
-    "electron": "export DEBUG=*&&electron .",
+    "electron": "export NODE_ENV=development&&export DEBUG=*&&electron .",
     "test": "standard"
   },
   "build": {
@@ -48,6 +48,12 @@
     "appId": "com.report.bitfinex",
     "files": [
       "**/*",
+      "!init.sh",
+      "!README.md",
+      "!bfx-report/README.md",
+      "!bfx-report/pm2.config.js",
+      "!bfx-report/.mocha.opts",
+      "!bfx-report/test",
       "!bfx-report-ui",
       "bfx-report-ui/build",
       {
@@ -56,7 +62,24 @@
         "filter": [
           "**/*",
           "!.bin",
-          "!**/node_modules/.bin"
+          "!**/node_modules/.bin",
+          "!**/*.md",
+          "!**/LICENSE",
+          "!**/CHANGELOG",
+          "!**/test"
+        ]
+      },
+      {
+        "from": "bfx-report/node_modules/bfx-api-node-rest/node_modules",
+        "to": "bfx-report/node_modules/bfx-api-node-rest/node_modules",
+        "filter": [
+          "**/*",
+          "!.bin",
+          "!**/node_modules/.bin",
+          "!**/*.md",
+          "!**/LICENSE",
+          "!**/CHANGELOG",
+          "!**/test"
         ]
       }
     ],
