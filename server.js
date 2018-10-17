@@ -11,7 +11,7 @@ const pathToConfFacs = path.join(pathToConfDir, 'facs')
 const pathToConfFacsGrc = path.join(pathToConfFacs, 'grc.config.json')
 const confFacsGrc = require(pathToConfFacsGrc)
 
-process.env.NODE_ENV = 'production'
+if (!process.env.NODE_ENV) process.env.NODE_ENV = 'production'
 process.send = process.send || (() => {})
 process.env.NODE_CONFIG_DIR = pathToConfDir
 
@@ -66,8 +66,10 @@ void (async () => {
         `--env=${process.env.NODE_ENV}`,
         '--wtype=wrk-report-service-api',
         `--apiPort=${ports.workerApiPort}`,
-        '--dbID=1',
-        '--csvFolder=../../../csv'
+        '--dbId=1',
+        '--csvFolder=../../../csv',
+        '--isSchedulerEnabled=true',
+        '--isElectronjsEnv=true'
       ], {
         cwd: process.cwd(),
         silent: false
