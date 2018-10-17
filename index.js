@@ -7,7 +7,15 @@ const { fork } = require('child_process')
 
 const { app, BrowserWindow, Menu } = electron
 
-let mainWindow
+const isDevEnv = process.env.NODE_ENV === 'development'
+
+let mainWindow = null
+let parrentWindow = null
+
+const pathToLayouts = path.join(__dirname, 'layouts')
+const pathToLayoutAppInit = path.join(pathToLayouts, 'app-init.html')
+const pathToLayoutAppInitErr = path.join(pathToLayouts, 'app-init-error.html')
+const pathToLayoutExprPortReq = path.join(pathToLayouts, 'express-port-required.html')
 
 const serverPath = path.join(__dirname, 'server.js')
 let ipc = null
@@ -44,15 +52,23 @@ const createMenu = () => {
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate))
 }
 
-const createWindow = (pathname = path.join(__dirname, '/bfx-report-ui/build/index.html')) => {
-  mainWindow = new BrowserWindow({
+const createWindow = (
+  pathname = path.join(__dirname, '/bfx-report-ui/build/index.html'),
+  props = {}
+) => {
+  const _props = {
     autoHideMenuBar: true,
     width: 1000,
     height: 650,
     minWidth: 1000,
     minHeight: 650,
-    icon: path.join(__dirname, 'build/icons/512.png')
-  })
+    icon: path.join(__dirname, 'build/icons/512.png'),
+    backgroundColor: '#394b59',
+    show: false,
+    ...props
+  }
+
+  const window = new BrowserWindow(_props)
 
   const startUrl = url.format({
     pathname,
@@ -60,50 +76,82 @@ const createWindow = (pathname = path.join(__dirname, '/bfx-report-ui/build/inde
     slashes: true
   })
 
-  mainWindow.loadURL(startUrl)
+  window.loadURL(startUrl)
 
-  mainWindow.on('close', () => {
+  window.on('close', () => {
     if (ipc) ipc.kill('SIGINT')
   })
+  window.once('ready-to-show', () => {
+    window.maximize()
+    window.show()
+  })
 
-  mainWindow.on('closed', () => {
-    mainWindow = null
+  return window
+}
+
+const createParrentWindow = () => {
+  parrentWindow = createWindow(pathToLayoutAppInit)
+
+  parrentWindow.on('closed', () => {
+    parrentWindow = null
   })
 
   createMenu()
 }
 
+const createMainWindow = (pathname) => {
+  mainWindow = createWindow(
+    pathname,
+    {
+      parent: parrentWindow,
+      modal: true
+    }
+  )
+
+  if (isDevEnv) {
+    mainWindow.webContents.openDevTools()
+  }
+
+  mainWindow.on('closed', () => {
+    mainWindow = null
+
+    parrentWindow.close()
+    parrentWindow = null
+  })
+  mainWindow.once('ready-to-show', () => {
+    parrentWindow.hide()
+  })
+}
+
 app.on('ready', () => {
-  const pathToLayoutError = path.join(__dirname, 'layout-error')
-  const pathToLayoutAppInitErr = path.join(pathToLayoutError, 'app-init-error.html')
-  const pathToLayoutExprPortReq = path.join(pathToLayoutError, 'express-port-required.html')
+  createParrentWindow()
 
   try {
     runServer()
   } catch (err) {
-    createWindow(pathToLayoutAppInitErr)
+    createMainWindow(pathToLayoutAppInitErr)
 
     return
   }
 
   ipc.once('message', mess => {
     if (!mess || typeof mess.state !== 'string') {
-      createWindow(pathToLayoutAppInitErr)
+      createMainWindow(pathToLayoutAppInitErr)
 
       return
     }
 
     switch (mess.state) {
       case 'ready:server':
-        createWindow()
+        createMainWindow()
         break
 
       case 'error:express-port-required':
-        createWindow(pathToLayoutExprPortReq)
+        createMainWindow(pathToLayoutExprPortReq)
         break
 
       case 'error:app-init':
-        createWindow(pathToLayoutAppInitErr)
+        createMainWindow(pathToLayoutAppInitErr)
         break
     }
   })
