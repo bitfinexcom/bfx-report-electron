@@ -8,6 +8,10 @@ const { fork } = require('child_process')
 const { app, BrowserWindow, Menu } = electron
 
 const isDevEnv = process.env.NODE_ENV === 'development'
+const env = {
+  ...process.env,
+  ELECTRON_VERSION: process.versions.electron
+}
 
 let mainWindow = null
 let parrentWindow = null
@@ -22,6 +26,7 @@ let ipc = null
 
 const runServer = () => {
   ipc = fork(serverPath, [], {
+    env,
     cwd: process.cwd(),
     silent: false
   })
