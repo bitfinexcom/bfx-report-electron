@@ -14,6 +14,12 @@ const confFacsGrc = require(pathToConfFacsGrc)
 if (!process.env.NODE_ENV) process.env.NODE_ENV = 'production'
 process.send = process.send || (() => {})
 process.env.NODE_CONFIG_DIR = pathToConfDir
+process.versions.electron = process.env.ELECTRON_VERSION
+
+const env = {
+  ...process.env,
+  ELECTRON_VERSION: process.versions.electron
+}
 
 const {
   bootTwoGrapes,
@@ -71,6 +77,7 @@ void (async () => {
         '--isSchedulerEnabled=true',
         '--isElectronjsEnv=true'
       ], {
+        env,
         cwd: process.cwd(),
         silent: false
       })
