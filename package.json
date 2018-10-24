@@ -22,6 +22,7 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
+    "node-pre-gyp": "^0.11.0",
     "standard": "^12.0.1"
   },
   "standard": {
@@ -35,9 +36,13 @@
   "scripts": {
     "start": "npm run init&&npm run dist-linux&& npm run dist-win&& npm run dist-mac",
     "init": "./init.sh",
-    "dist-win": "electron-builder build --win",
-    "dist-linux": "electron-builder build --linux",
-    "dist-mac": "electron-builder build --mac",
+    "reinstall-win-deps": "cd ./bfx-report&&rm -rf node_modules&&rm -f package-lock.json&&npm i --production --target_platform=win32 --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron",
+    "reinstall-linux-deps": "cd ./bfx-report&&rm -rf node_modules&&rm -f package-lock.json&&npm i --production --target_platform=linux --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron",
+    "reinstall-mac-deps": "cd ./bfx-report&&rm -rf node_modules&&rm -f package-lock.json&&npm i --production --target_platform=darwin --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron",
+    "dist-win": "npm run reinstall-win-deps&&electron-builder build --win",
+    "dist-linux": "npm run reinstall-linux-deps&&electron-builder build --linux",
+    "dist-mac": "npm run reinstall-mac-deps&&electron-builder build --mac",
+    "postinstall": "electron-builder install-app-deps",
     "electron": "export NODE_ENV=development&&export DEBUG=*&&electron .",
     "test": "standard"
   },
