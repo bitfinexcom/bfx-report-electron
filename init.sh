@@ -6,7 +6,7 @@ backendFolder="$PWD/bfx-report"
 rm -f ./package-lock.json
 rm -rf ./node_modules
 npm i
-./node_modules/.bin/electron-rebuild
+./node_modules/.bin/electron-rebuild -f --arch=x64 -v=2.0.0 --dist-url=https://atom.io/download/electron
 
 rm -rf $frontendFolder
 mkdir $frontendFolder
@@ -25,7 +25,8 @@ rm -rf $backendFolder
 mkdir $backendFolder
 cd $backendFolder
 git clone git@github.com:bitfinexcom/bfx-report.git .
-npm i --production
+npm i --production --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron"
+
 cp config/schedule.json.example config/schedule.json
 cp config/default.json.example config/default.json
 cp config/common.json.example config/common.json
