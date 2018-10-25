@@ -13,6 +13,7 @@ mkdir $frontendFolder
 cd $frontendFolder
 git clone git@github.com:bitfinexcom/bfx-report-ui.git .
 npm i
+
 sed -i -e "s/API_URL: .*,/API_URL: \'http:\/\/localhost:34343\/api\',/g" $frontendFolder/src/var/config.js
 sed -i -e "s/KEY_URL: .*,/KEY_URL: \'https:\/\/test.bitfinex.com\/api\',/g" $frontendFolder/src/var/config.js
 sed -i -e "s/showSyncMode: .*,/showSyncMode: true,/g" $frontendFolder/src/var/config.js
@@ -25,7 +26,7 @@ rm -rf $backendFolder
 mkdir $backendFolder
 cd $backendFolder
 git clone git@github.com:bitfinexcom/bfx-report.git .
-npm i --production --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron"
+npm i --production --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron
 
 cp config/schedule.json.example config/schedule.json
 cp config/default.json.example config/default.json
