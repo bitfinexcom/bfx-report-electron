@@ -4,6 +4,7 @@ const electron = require('electron')
 const path = require('path')
 const url = require('url')
 const { fork } = require('child_process')
+const serve = require('electron-serve')
 
 const { app, BrowserWindow, Menu } = electron
 
@@ -15,6 +16,9 @@ const env = {
 
 let mainWindow = null
 let parrentWindow = null
+
+const publicDir = path.join(__dirname, 'bfx-report-ui/build')
+const loadURL = serve({ directory: publicDir })
 
 const pathToLayouts = path.join(__dirname, 'layouts')
 const pathToLayoutAppInit = path.join(pathToLayouts, 'app-init.html')
@@ -58,7 +62,7 @@ const createMenu = () => {
 }
 
 const createWindow = (
-  pathname = path.join(__dirname, '/bfx-report-ui/build/index.html'),
+  pathname = null,
   props = {}
 ) => {
   const _props = {
@@ -75,11 +79,17 @@ const createWindow = (
 
   const window = new BrowserWindow(_props)
 
-  const startUrl = url.format({
-    pathname,
-    protocol: 'file:',
-    slashes: true
-  })
+  const startUrl = pathname
+    ? url.format({
+      pathname,
+      protocol: 'file:',
+      slashes: true
+    })
+    : 'app://-'
+
+  if (!pathname) {
+    loadURL(window)
+  }
 
   window.loadURL(startUrl)
 

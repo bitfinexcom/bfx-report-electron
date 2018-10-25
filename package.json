@@ -8,6 +8,7 @@
   "dependencies": {
     "async": "^2.6.1",
     "bittorrent-dht": "^8.4.0",
+    "electron-serve": "^0.2.0",
     "find-free-port": "^2.0.0",
     "grenache-grape": "^0.9.8"
   },
@@ -55,6 +56,8 @@
       "**/*",
       "!init.sh",
       "!README.md",
+      "build/icons",
+      "bfx-report",
       "!bfx-report/README.md",
       "!bfx-report/pm2.config.js",
       "!bfx-report/.mocha.opts",
