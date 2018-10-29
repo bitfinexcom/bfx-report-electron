@@ -1,6 +1,6 @@
 {
   "name": "bfx-report-electron",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Reporting tool",
   "author": "bitfinex.com",
   "main": "index.js",
@@ -8,6 +8,7 @@
   "dependencies": {
     "async": "^2.6.1",
     "bittorrent-dht": "^8.4.0",
+    "electron-serve": "^0.2.0",
     "find-free-port": "^2.0.0",
     "grenache-grape": "^0.9.8"
   },
@@ -22,6 +23,7 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.1.0",
+    "node-pre-gyp": "^0.11.0",
     "standard": "^12.0.1"
   },
   "standard": {
@@ -33,12 +35,16 @@
     ]
   },
   "scripts": {
+    "start": "npm run init&&npm run dist-linux&& npm run dist-win&& npm run dist-mac",
+    "init": "./init.sh",
+    "reinstall-win-deps": "cd ./bfx-report&&rm -rf node_modules&&rm -f package-lock.json&&npm i --production --target_platform=win32 --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron",
+    "reinstall-linux-deps": "cd ./bfx-report&&rm -rf node_modules&&rm -f package-lock.json&&npm i --production --target_platform=linux --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron",
+    "reinstall-mac-deps": "cd ./bfx-report&&rm -rf node_modules&&rm -f package-lock.json&&npm i --production --target_platform=darwin --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron",
+    "dist-win": "npm run reinstall-win-deps&&electron-builder build --win",
+    "dist-linux": "npm run reinstall-linux-deps&&electron-builder build --linux",
+    "dist-mac": "npm run reinstall-mac-deps&&electron-builder build --mac",
     "postinstall": "electron-builder install-app-deps",
-    "electron-rebuild": "electron-rebuild",
-    "dist-win": "electron-builder build --win",
-    "dist-linux": "electron-builder build --linux",
-    "dist-mac": "electron-builder build --mac",
-    "electron": "export DEBUG=*&&electron .",
+    "electron": "export NODE_ENV=development&&export DEBUG=*&&electron .",
     "test": "standard"
   },
   "build": {
@@ -48,6 +54,14 @@
     "appId": "com.report.bitfinex",
     "files": [
       "**/*",
+      "!init.sh",
+      "!README.md",
+      "build/icons",
+      "bfx-report",
+      "!bfx-report/README.md",
+      "!bfx-report/pm2.config.js",
+      "!bfx-report/.mocha.opts",
+      "!bfx-report/test",
       "!bfx-report-ui",
       "bfx-report-ui/build",
       {
@@ -56,7 +70,24 @@
         "filter": [
           "**/*",
           "!.bin",
-          "!**/node_modules/.bin"
+          "!**/node_modules/.bin",
+          "!**/*.md",
+          "!**/LICENSE",
+          "!**/CHANGELOG",
+          "!**/test"
+        ]
+      },
+      {
+        "from": "bfx-report/node_modules/bfx-api-node-rest/node_modules",
+        "to": "bfx-report/node_modules/bfx-api-node-rest/node_modules",
+        "filter": [
+          "**/*",
+          "!.bin",
+          "!**/node_modules/.bin",
+          "!**/*.md",
+          "!**/LICENSE",
+          "!**/CHANGELOG",
+          "!**/test"
         ]
       }
     ],
@@ -67,8 +98,7 @@
       "category": "Network",
       "target": [
         "dir",
-        "zip",
-        "deb"
+        "zip"
       ]
     },
     "win": {
