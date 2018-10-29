@@ -11,9 +11,15 @@ const pathToConfFacs = path.join(pathToConfDir, 'facs')
 const pathToConfFacsGrc = path.join(pathToConfFacs, 'grc.config.json')
 const confFacsGrc = require(pathToConfFacsGrc)
 
-process.env.NODE_ENV = 'production'
+if (!process.env.NODE_ENV) process.env.NODE_ENV = 'production'
 process.send = process.send || (() => {})
 process.env.NODE_CONFIG_DIR = pathToConfDir
+process.versions.electron = process.env.ELECTRON_VERSION
+
+const env = {
+  ...process.env,
+  ELECTRON_VERSION: process.versions.electron
+}
 
 const {
   bootTwoGrapes,
@@ -66,9 +72,12 @@ void (async () => {
         `--env=${process.env.NODE_ENV}`,
         '--wtype=wrk-report-service-api',
         `--apiPort=${ports.workerApiPort}`,
-        '--dbID=1',
-        '--csvFolder=../../../csv'
+        '--dbId=1',
+        '--csvFolder=../../../csv',
+        '--isSchedulerEnabled=true',
+        '--isElectronjsEnv=true'
       ], {
+        env,
         cwd: process.cwd(),
         silent: false
       })
