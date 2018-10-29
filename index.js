@@ -14,8 +14,11 @@ const env = {
   ELECTRON_VERSION: process.versions.electron
 }
 
-let mainWindow = null
-let parrentWindow = null
+const wins = {
+  mainWindow: null,
+  loadingWindow: null,
+  errorWindow: null
+}
 
 const publicDir = path.join(__dirname, 'bfx-report-ui/build')
 const loadURL = serve({ directory: publicDir })
@@ -62,22 +65,30 @@ const createMenu = () => {
 }
 
 const createWindow = (
+  cb,
   pathname = null,
+  winName = 'mainWindow',
   props = {}
 ) => {
+  const point = electron.screen.getCursorScreenPoint()
+  const { bounds, workAreaSize } = electron.screen.getDisplayNearestPoint(point)
+  const { width, height } = workAreaSize
+  const { x, y } = bounds
   const _props = {
     autoHideMenuBar: true,
-    width: 1000,
-    height: 650,
+    width,
+    height,
     minWidth: 1000,
     minHeight: 650,
+    x,
+    y,
     icon: path.join(__dirname, 'build/icons/512.png'),
     backgroundColor: '#394b59',
     show: false,
     ...props
   }
 
-  const window = new BrowserWindow(_props)
+  wins[winName] = new BrowserWindow(_props)
 
   const startUrl = pathname
     ? url.format({
@@ -88,92 +99,166 @@ const createWindow = (
     : 'app://-'
 
   if (!pathname) {
-    loadURL(window)
+    loadURL(wins[winName])
   }
 
-  window.loadURL(startUrl)
+  wins[winName].loadURL(startUrl)
 
-  window.on('close', () => {
+  wins[winName].on('close', () => {
+    wins[winName] = null
+
     if (ipc) ipc.kill('SIGINT')
   })
-  window.once('ready-to-show', () => {
-    window.maximize()
-    window.show()
-  })
-
-  return window
-}
-
-const createParrentWindow = () => {
-  parrentWindow = createWindow(pathToLayoutAppInit)
-
-  parrentWindow.on('closed', () => {
-    parrentWindow = null
-  })
-
-  createMenu()
-}
-
-const createMainWindow = (pathname) => {
-  mainWindow = createWindow(
-    pathname,
-    {
-      parent: parrentWindow,
-      modal: true
-    }
-  )
-
-  if (isDevEnv) {
-    mainWindow.webContents.openDevTools()
-  }
-
-  mainWindow.on('closed', () => {
-    mainWindow = null
-
-    parrentWindow.close()
-    parrentWindow = null
-  })
-  mainWindow.once('ready-to-show', () => {
-    parrentWindow.hide()
-  })
-}
-
-app.on('ready', () => {
-  createParrentWindow()
-
-  try {
-    runServer()
-  } catch (err) {
-    createMainWindow(pathToLayoutAppInitErr)
-
-    return
-  }
-
-  ipc.once('message', mess => {
-    if (!mess || typeof mess.state !== 'string') {
-      createMainWindow(pathToLayoutAppInitErr)
+  wins[winName].once('ready-to-show', () => {
+    if (!pathname) {
+      createLoadingWindow(cb)
 
       return
     }
 
-    switch (mess.state) {
-      case 'ready:server':
-        createMainWindow()
-        break
+    wins[winName].show()
 
-      case 'error:express-port-required':
-        createMainWindow(pathToLayoutExprPortReq)
-        break
-
-      case 'error:app-init':
-        createMainWindow(pathToLayoutAppInitErr)
-        break
+    if (typeof cb === 'function') {
+      cb()
     }
   })
-})
+}
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
+const createMainWindow = (cb) => {
+  createWindow(cb)
+
+  if (isDevEnv) {
+    wins.mainWindow.webContents.openDevTools()
+  }
+
+  createMenu()
+}
+
+const createChildWindow = (
+  pathname,
+  winName,
+  cb,
+  {
+    width = 500,
+    height = 500,
+    frame = false
+  } = {}
+) => {
+  const point = electron.screen.getCursorScreenPoint()
+  const { bounds } = electron.screen.getDisplayNearestPoint(point)
+  const x = Math.ceil(bounds.x + ((bounds.width - width) / 2))
+  const y = Math.ceil(bounds.y + ((bounds.height - height) / 2))
+
+  createWindow(
+    cb,
+    pathname,
+    winName,
+    {
+      width,
+      height,
+      minWidth: width,
+      minHeight: height,
+      x,
+      y,
+      resizable: false,
+      center: true,
+      parent: wins.mainWindow,
+      frame
+    }
+  )
+
+  wins[winName].on('closed', () => {
+    if (wins.mainWindow) {
+      wins.mainWindow.close()
+    }
+
+    wins.mainWindow = null
+  })
+}
+
+const createLoadingWindow = (cb) => {
+  createChildWindow(
+    pathToLayoutAppInit,
+    'loadingWindow',
+    cb
+  )
+}
+
+const createErrorWindow = (pathname) => {
+  createChildWindow(
+    pathname,
+    'errorWindow',
+    () => {
+      if (wins.loadingWindow) {
+        wins.loadingWindow.hide()
+      }
+    },
+    {
+      height: 200,
+      frame: true
+    }
+  )
+}
+
+const shouldQuit = app.makeSingleInstance(() => {
+  if (wins.mainWindow) {
+    if (wins.mainWindow.isMinimized()) {
+      wins.mainWindow.restore()
+    }
+
+    wins.mainWindow.focus()
   }
 })
+
+const initialize = () => {
+  app.on('ready', () => {
+    createMainWindow(() => {
+      try {
+        runServer()
+      } catch (err) {
+        createErrorWindow(pathToLayoutAppInitErr)
+
+        return
+      }
+
+      ipc.once('message', async (mess) => {
+        if (!mess || typeof mess.state !== 'string') {
+          createErrorWindow(pathToLayoutAppInitErr)
+
+          return
+        }
+
+        switch (mess.state) {
+          case 'ready:server':
+            wins.mainWindow.maximize()
+            wins.mainWindow.show()
+
+            if (wins.loadingWindow) {
+              wins.loadingWindow.hide()
+            }
+            break
+
+          case 'error:express-port-required':
+            createErrorWindow(pathToLayoutExprPortReq)
+            break
+
+          case 'error:app-init':
+            createErrorWindow(pathToLayoutAppInitErr)
+            break
+        }
+      })
+    })
+  })
+
+  app.on('window-all-closed', () => {
+    if (process.platform !== 'darwin') {
+      app.quit()
+    }
+  })
+}
+
+if (shouldQuit) {
+  app.quit()
+} else {
+  initialize()
+}
