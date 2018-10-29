@@ -98,8 +98,7 @@
       "category": "Network",
       "target": [
         "dir",
-        "zip",
-        "deb"
+        "zip"
       ]
     },
     "win": {
