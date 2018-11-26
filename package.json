@@ -1,6 +1,6 @@
 {
   "name": "bfx-report-electron",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Reporting tool",
   "author": "bitfinex.com",
   "main": "index.js",
@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "ajv": "^6.5.1",
-    "electron": "^2.0.11",
+    "electron": "2.0.11",
     "electron-builder": "^20.28.4",
     "electron-rebuild": "^1.8.2",
     "eslint": "^4.19.1",
@@ -37,6 +37,7 @@
   "scripts": {
     "start": "npm run init&&npm run dist-linux&& npm run dist-win&& npm run dist-mac",
     "init": "./init.sh",
+    "reinstall-deps": "cd ./bfx-report&&rm -rf node_modules&&rm -f package-lock.json&&npm i --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron",
     "reinstall-win-deps": "cd ./bfx-report&&rm -rf node_modules&&rm -f package-lock.json&&npm i --production --target_platform=win32 --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron",
     "reinstall-linux-deps": "cd ./bfx-report&&rm -rf node_modules&&rm -f package-lock.json&&npm i --production --target_platform=linux --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron",
     "reinstall-mac-deps": "cd ./bfx-report&&rm -rf node_modules&&rm -f package-lock.json&&npm i --production --target_platform=darwin --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron",
