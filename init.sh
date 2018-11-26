@@ -1,12 +1,18 @@
 #!/bin/bash
 
+export NODE_PATH=src/
+export PUBLIC_URL=/
+export REACT_APP_PLATFORM=localhost
+export REACT_APP_TITLE=Bitfinex Reports
+export REACT_APP_LOGO_PATH=favicon.ico
+
 frontendFolder="$PWD/bfx-report-ui"
 backendFolder="$PWD/bfx-report"
 
 rm -f ./package-lock.json
 rm -rf ./node_modules
 npm i
-./node_modules/.bin/electron-rebuild -f --arch=x64 -v=2.0.0 --dist-url=https://atom.io/download/electron
+./node_modules/.bin/electron-rebuild -f --arch=x64 -v=2.0.11 --dist-url=https://atom.io/download/electron
 
 rm -rf $frontendFolder
 mkdir $frontendFolder
@@ -17,9 +23,6 @@ npm i
 sed -i -e "s/API_URL: .*,/API_URL: \'http:\/\/localhost:34343\/api\',/g" $frontendFolder/src/var/config.js
 sed -i -e "s/KEY_URL: .*,/KEY_URL: \'https:\/\/test.bitfinex.com\/api\',/g" $frontendFolder/src/var/config.js
 sed -i -e "s/showSyncMode: .*,/showSyncMode: true,/g" $frontendFolder/src/var/config.js
-export REACT_APP_PLATFORM=localhost
-export PUBLIC_URL=./
-export NODE_PATH=src/
 npm run build
 
 rm -rf $backendFolder
