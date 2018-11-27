@@ -4,7 +4,7 @@
 
 ### Install
 
-- install libraries. Once the project is cloned, execute the following commands from the root directory of the project:
+- Install libraries. Once the project is cloned, execute the following commands from the root directory of the project:
 
 ```console
 npm install
@@ -26,7 +26,7 @@ npm run electron
 
 For doing builds for other platforms please have “Multi Platform Build” in consideration: https://www.electron.build/multi-platform-build
 
-- individual:
+- Individual:
 ```console
 npm run dist-linux
 npm run dist-win
