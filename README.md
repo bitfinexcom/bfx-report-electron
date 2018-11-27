@@ -10,7 +10,7 @@
 npm install
 ```
 
-- Install dependcies and configured them: :
+- Install dependcies and configured them:
 
 ```console
 npm run init
@@ -24,7 +24,7 @@ npm run electron
 
 ### Build distributions
 
-For doing builds for other platforms please have this “Multi Platform Build” in consideration: https://www.electron.build/multi-platform-build
+For doing builds for other platforms please have “Multi Platform Build” in consideration: https://www.electron.build/multi-platform-build
 
 - individual:
 ```console
