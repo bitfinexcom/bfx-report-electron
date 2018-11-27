@@ -4,13 +4,15 @@
 
 ### Install
 
-- Install libraries. Once the project is cloned, execute the following commands from the root directory of the project:
+Execute the following commands from the root directory of the project:
+
+- Install libraries.
 
 ```console
 npm install
 ```
 
-- Install dependcies and configured them:
+- Install dependcies and configured them.
 
 ```console
 npm run init
