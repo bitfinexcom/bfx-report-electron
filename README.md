@@ -33,7 +33,7 @@ npm run dist-win
 npm run dist-mac
 ```
 
-- linux + win + mac:
+- Linux + Windows + MacOs:
 ```console
 npm start
 ```
