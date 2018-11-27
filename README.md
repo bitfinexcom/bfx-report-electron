@@ -27,11 +27,17 @@ npm run electron
 ### Build distributions
 
 For doing builds for other platforms please have “Multi Platform Build” in consideration: https://www.electron.build/multi-platform-build
+For creating the distributions please run the following commands, after the execution is finished the file would be in */dist* folder
 
 - Individual:
 ```console
+# Distribution for Linux
 npm run dist-linux
+
+# Distribution for Windows
 npm run dist-win
+
+# Distribution for MacOs
 npm run dist-mac
 ```
 
