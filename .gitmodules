@@ -1,0 +1,8 @@
+[submodule "bfx-report"]
+	path = bfx-report
+	url = https://github.com/bitfinexcom/bfx-report.git
+	branch = master
+[submodule "bfx-report-ui"]
+	path = bfx-report-ui
+	url = https://github.com/bitfinexcom/bfx-report-ui.git
+	branch = master
