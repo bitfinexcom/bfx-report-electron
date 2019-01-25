@@ -4,7 +4,7 @@
   "description": "Reporting tool",
   "author": "bitfinex.com",
   "main": "index.js",
-  "private": true,
+  "license": "Apache-2.0",
   "dependencies": {
     "async": "^2.6.1",
     "bittorrent-dht": "^8.4.0",
