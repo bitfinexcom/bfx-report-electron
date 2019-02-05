@@ -62,11 +62,13 @@
       "build/icons",
       "bfx-report",
       "!bfx-report/README.md",
-      "!bfx-report/pm2.config.js",
       "!bfx-report/.mocha.opts",
       "!bfx-report/test",
       "!bfx-report-ui",
       "bfx-report-ui/build",
+      "bfx-report-ui/bfx-report-express",
+      "!bfx-report-ui/bfx-report-express/README.md",
+      "!bfx-report-ui/bfx-report-express/pm2.config.js",
       {
         "from": "bfx-report/node_modules",
         "to": "bfx-report/node_modules",
@@ -83,6 +85,19 @@
       {
         "from": "bfx-report/node_modules/bfx-api-node-rest/node_modules",
         "to": "bfx-report/node_modules/bfx-api-node-rest/node_modules",
+        "filter": [
+          "**/*",
+          "!.bin",
+          "!**/node_modules/.bin",
+          "!**/*.md",
+          "!**/LICENSE",
+          "!**/CHANGELOG",
+          "!**/test"
+        ]
+      },
+      {
+        "from": "bfx-report-ui/bfx-report-express/node_modules",
+        "to": "bfx-report-ui/bfx-report-express/node_modules",
         "filter": [
           "**/*",
           "!.bin",
