@@ -6,6 +6,8 @@ const { writeFileSync } = require('fs')
 const EventEmitter = require('events')
 
 const root = path.join(__dirname, 'bfx-report')
+const expressRoot = path.join(__dirname, 'bfx-report-ui/bfx-report-express')
+const pathToExpressConfDir = path.join(expressRoot, 'config')
 const pathToConfDir = path.join(root, 'config')
 const pathToConfFacs = path.join(pathToConfDir, 'facs')
 const pathToConfFacsGrc = path.join(pathToConfFacs, 'grc.config.json')
@@ -13,7 +15,7 @@ const confFacsGrc = require(pathToConfFacsGrc)
 
 if (!process.env.NODE_ENV) process.env.NODE_ENV = 'production'
 process.send = process.send || (() => {})
-process.env.NODE_CONFIG_DIR = pathToConfDir
+process.env.NODE_CONFIG_DIR = pathToExpressConfDir
 process.versions.electron = process.env.ELECTRON_VERSION
 
 const env = {
@@ -103,7 +105,7 @@ process.on('SIGTERM', () => ipc && ipc.kill())
 
 emitter.once('ready:grapes-worker', () => {
   try {
-    const { app } = require(path.join(root, 'app.js'))
+    const { app } = require(expressRoot)
 
     app.once('listened', server => {
       emitter.emit('ready:server', server)

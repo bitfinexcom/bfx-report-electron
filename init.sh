@@ -36,6 +36,7 @@ if [ $isDevEnv != 0 ]; then
 fi
 
 frontendFolder="$PWD/bfx-report-ui"
+expressFolder="$frontendFolder/bfx-report-express"
 backendFolder="$PWD/bfx-report"
 
 rm -f ./package-lock.json
@@ -54,6 +55,10 @@ git pull --recurse-submodules
 git submodule update --remote
 
 cd $frontendFolder
+git submodule sync
+git submodule update --init --recursive
+git pull --recurse-submodules
+git submodule update --remote
 npm i
 
 sed -i -e "s/API_URL: .*,/API_URL: \'http:\/\/localhost:34343\/api\',/g" $frontendFolder/src/var/config.js
@@ -64,13 +69,16 @@ if [ $isDevEnv != 0 ]; then
 fi
 
 sed -i -e "s/showSyncMode: .*,/showSyncMode: true,/g" $frontendFolder/src/var/config.js
+cp $expressFolder/config/default.json.example $expressFolder/config/default.json
 npm run build
+
+cd $expressFolder
+npm i --production --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron
 
 cd $backendFolder
 npm i --production --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron
 
 cp config/schedule.json.example config/schedule.json
-cp config/default.json.example config/default.json
 cp config/common.json.example config/common.json
 cp config/service.report.json.example config/service.report.json
 cp config/facs/grc.config.json.example config/facs/grc.config.json
