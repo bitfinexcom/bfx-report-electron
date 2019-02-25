@@ -9,6 +9,7 @@
     "async": "^2.6.1",
     "bittorrent-dht": "^8.4.0",
     "electron-serve": "^0.2.0",
+    "electron-window-state": "^5.0.3",
     "find-free-port": "^2.0.0",
     "grenache-grape": "^0.9.8"
   },
