@@ -5,7 +5,7 @@ const path = require('path')
 const url = require('url')
 const { fork } = require('child_process')
 const serve = require('electron-serve')
-const windowStateKeeper = require('electron-window-state')
+const windowStateKeeper = require('./helpers/electron-window-state')
 
 const { app, BrowserWindow, Menu } = electron
 
@@ -78,18 +78,6 @@ const createWindow = (
     height: defaultHeight
   } = workAreaSize
   const {
-    maxWidth,
-    maxHeight
-  } = electron.screen.getAllDisplays().reduce((
-    { maxWidth, maxHeight },
-    { workAreaSize: { width, height } }
-  ) => {
-    return {
-      maxWidth: maxWidth + width,
-      maxHeight: maxHeight + height
-    }
-  }, { maxWidth: 0, maxHeight: 0 })
-  const {
     width,
     height,
     x,
@@ -105,10 +93,10 @@ const createWindow = (
     height,
     minWidth: 1000,
     minHeight: 650,
-    x: (x >= maxWidth || x === 0)
+    x: !x
       ? bounds.x
       : x,
-    y: (y >= maxHeight || y === 0)
+    y: !y
       ? bounds.y
       : y,
     icon: path.join(__dirname, 'build/icons/512.png'),
