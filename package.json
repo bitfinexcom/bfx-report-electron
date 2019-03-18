@@ -1,6 +1,6 @@
 {
   "name": "bfx-report-electron",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Reporting tool",
   "author": "bitfinex.com",
   "main": "index.js",
