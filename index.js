@@ -5,6 +5,7 @@ const path = require('path')
 const url = require('url')
 const { fork } = require('child_process')
 const serve = require('electron-serve')
+const windowStateKeeper = require('./helpers/electron-window-state')
 
 const { app, BrowserWindow, Menu } = electron
 
@@ -72,16 +73,32 @@ const createWindow = (
 ) => {
   const point = electron.screen.getCursorScreenPoint()
   const { bounds, workAreaSize } = electron.screen.getDisplayNearestPoint(point)
-  const { width, height } = workAreaSize
-  const { x, y } = bounds
+  const {
+    width: defaultWidth,
+    height: defaultHeight
+  } = workAreaSize
+  const {
+    width,
+    height,
+    x,
+    y,
+    manage
+  } = windowStateKeeper({
+    defaultWidth,
+    defaultHeight
+  })
   const _props = {
     autoHideMenuBar: true,
     width,
     height,
     minWidth: 1000,
     minHeight: 650,
-    x,
-    y,
+    x: !x
+      ? bounds.x
+      : x,
+    y: !y
+      ? bounds.y
+      : y,
     icon: path.join(__dirname, 'build/icons/512.png'),
     backgroundColor: '#394b59',
     show: false,
@@ -109,6 +126,7 @@ const createWindow = (
 
     if (ipc) ipc.kill('SIGINT')
   })
+
   wins[winName].once('ready-to-show', () => {
     if (!pathname) {
       createLoadingWindow(cb)
@@ -122,6 +140,10 @@ const createWindow = (
       cb()
     }
   })
+
+  if (winName === 'mainWindow') {
+    manage(wins[winName])
+  }
 }
 
 const createMainWindow = (cb) => {
@@ -230,7 +252,6 @@ const initialize = () => {
 
         switch (mess.state) {
           case 'ready:server':
-            wins.mainWindow.maximize()
             wins.mainWindow.show()
 
             if (wins.loadingWindow) {
