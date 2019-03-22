@@ -151,9 +151,6 @@ module.exports = (options) => {
   }
 
   const manage = (win) => {
-    if (config.maximize && state.isMaximized) {
-      win.maximize()
-    }
     if (config.fullScreen && state.isFullScreen) {
       win.setFullScreen(true)
     }

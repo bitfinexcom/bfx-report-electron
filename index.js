@@ -31,6 +31,7 @@ const pathToLayoutExprPortReq = path.join(pathToLayouts, 'express-port-required.
 
 const serverPath = path.join(__dirname, 'server.js')
 let ipc = null
+let isMainWinMaximized = false
 
 const runServer = () => {
   ipc = fork(serverPath, [], {
@@ -77,16 +78,20 @@ const createWindow = (
     width: defaultWidth,
     height: defaultHeight
   } = workAreaSize
+  const isMainWindow = winName === 'mainWindow'
   const {
-    width,
-    height,
+    width = defaultWidth,
+    height = defaultHeight,
     x,
     y,
+    isMaximized,
     manage
-  } = windowStateKeeper({
-    defaultWidth,
-    defaultHeight
-  })
+  } = isMainWindow
+    ? windowStateKeeper({
+      defaultWidth,
+      defaultHeight
+    })
+    : {}
   const _props = {
     autoHideMenuBar: true,
     width,
@@ -141,7 +146,9 @@ const createWindow = (
     }
   })
 
-  if (winName === 'mainWindow') {
+  if (isMainWindow) {
+    isMainWinMaximized = isMaximized
+
     manage(wins[winName])
   }
 }
@@ -252,6 +259,10 @@ const initialize = () => {
 
         switch (mess.state) {
           case 'ready:server':
+            if (isMainWinMaximized) {
+              wins.mainWindow.maximize()
+            }
+
             wins.mainWindow.show()
 
             if (wins.loadingWindow) {
