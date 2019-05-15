@@ -229,16 +229,6 @@ const createErrorWindow = (pathname) => {
   )
 }
 
-const shouldQuit = app.makeSingleInstance(() => {
-  if (wins.mainWindow) {
-    if (wins.mainWindow.isMinimized()) {
-      wins.mainWindow.restore()
-    }
-
-    wins.mainWindow.focus()
-  }
-})
-
 const initialize = () => {
   app.on('ready', () => {
     createMainWindow(() => {
@@ -289,8 +279,14 @@ const initialize = () => {
   })
 }
 
-if (shouldQuit) {
-  app.quit()
-} else {
-  initialize()
-}
+app.requestSingleInstanceLock()
+initialize()
+app.on('second-instance', () => {
+  if (wins.mainWindow) {
+    if (wins.mainWindow.isMinimized()) {
+      wins.mainWindow.restore()
+    }
+
+    wins.mainWindow.focus()
+  }
+})

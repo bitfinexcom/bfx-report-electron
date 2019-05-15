@@ -35,14 +35,16 @@ if [ $isDevEnv != 0 ]; then
   echo "Developer environment is turned on"
 fi
 
+electronVer="4.2.0"
+arch="x64"
+root=$PWD
 frontendFolder="$PWD/bfx-report-ui"
 expressFolder="$frontendFolder/bfx-report-express"
-backendFolder="$PWD/bfx-report"
+backendFolder="$PWD/bfx-reports-framework"
 
 rm -f ./package-lock.json
 rm -rf ./node_modules
 npm i
-./node_modules/.bin/electron-rebuild -f --arch=x64 -v=2.0.11 --dist-url=https://atom.io/download/electron
 
 rm -rf $frontendFolder
 rm -rf $backendFolder
@@ -68,15 +70,17 @@ if [ $isDevEnv != 0 ]; then
 	sed -i -e "s/KEY_URL: .*,/KEY_URL: \'https:\/\/test.bitfinex.com\/api\',/g" $frontendFolder/src/var/config.js
 fi
 
+sed -i -e "s/showAuthPage: .*,/showAuthPage: true,/g" $frontendFolder/src/var/config.js
 sed -i -e "s/showSyncMode: .*,/showSyncMode: true,/g" $frontendFolder/src/var/config.js
+sed -i -e "s/showFrameworkMode: .*,/showFrameworkMode: true,/g" $frontendFolder/src/var/config.js
 cp $expressFolder/config/default.json.example $expressFolder/config/default.json
 npm run build
 
 cd $expressFolder
-npm i --production --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron
+npm i --production --target=$electronVer --runtime=electron --arch=$arch --dist-url=$ATOM_ELECTRON_URL
 
 cd $backendFolder
-npm i --production --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron
+npm i --production --target=$electronVer --runtime=electron --arch=$arch --dist-url=$ATOM_ELECTRON_URL
 
 cp config/schedule.json.example config/schedule.json
 cp config/common.json.example config/common.json
@@ -91,3 +95,8 @@ fi
 touch db/lokue_queue_1_aggregator.db.json
 touch db/lokue_queue_1_processor.db.json
 touch db/db-sqlite_sync_m0.db
+
+cd $root
+./node_modules/.bin/electron-rebuild -p -t "dev,prod,optional" -a=$arch -v=$electronVer -d=$ATOM_ELECTRON_URL -m $backendFolder
+./node_modules/.bin/electron-rebuild -p -t "dev,prod,optional" -a=$arch -v=$electronVer -d=$ATOM_ELECTRON_URL -m $expressFolder
+./node_modules/.bin/electron-rebuild -p -t "dev,prod,optional" -a=$arch -v=$electronVer -d=$ATOM_ELECTRON_URL
