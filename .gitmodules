@@ -2,3 +2,6 @@
 	path = bfx-report-ui
 	url = https://github.com/bitfinexcom/bfx-report-ui.git
 	branch = master
+[submodule "bfx-reports-framework"]
+	path = bfx-reports-framework
+	url = https://github.com/bitfinexcom/bfx-reports-framework.git
