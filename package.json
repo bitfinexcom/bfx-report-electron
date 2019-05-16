@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "ajv": "^6.5.1",
-    "electron": "4.2.0",
+    "electron": "3.1.9",
     "electron-builder": "^20.28.4",
     "electron-rebuild": "^1.8.2",
     "eslint": "^4.19.1",
@@ -39,21 +39,16 @@
     "startDev": "npm run initDev&&npm run dist-linux&& npm run dist-win&& npm run dist-mac",
     "init": "./init.sh",
     "initDev": "./init.sh -d",
-    "rebuild-modules": "./node_modules/.bin/electron-rebuild -p -t \"dev,prod,optional\" -a=x64 -v=4.2.0 -d=https://atom.io/download/electron -m ./bfx-reports-framework&&./node_modules/.bin/electron-rebuild -p -t \"dev,prod,optional\" -a=x64 -v=4.2.0 -d=https://atom.io/download/electron -m ./bfx-report-ui/bfx-report-express&&./node_modules/.bin/electron-rebuild -p -t \"dev,prod,optional\" -a=x64 -v=4.2.0 -d=https://atom.io/download/electron",
-    "reinstall-win-deps": "cd ./bfx-reports-framework&&rm -rf node_modules&&rm -f package-lock.json&&npm i --production --target_platform=win32 --target=4.2.0 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron",
-    "reinstall-linux-deps": "cd ./bfx-reports-framework&&rm -rf node_modules&&rm -f package-lock.json&&npm i --production --target_platform=linux --target=4.2.0 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron",
-    "reinstall-mac-deps": "cd ./bfx-reports-framework&&rm -rf node_modules&&rm -f package-lock.json&&npm i --production --target_platform=darwin --target=4.2.0 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron",
-    "dist-win": "npm run reinstall-win-deps&&npm run rebuild-modules&&electron-builder build --win",
-    "dist-linux": "npm run reinstall-linux-deps&&npm run rebuild-modules&&electron-builder build --linux",
-    "dist-mac": "npm run reinstall-mac-deps&&npm run rebuild-modules&&electron-builder build --mac",
-    "postinstall": "electron-builder install-app-deps",
+    "dist-win": "./reinstall-deps.sh win32&&electron-builder build --win",
+    "dist-linux": "./reinstall-deps.sh linux&&electron-builder build --linux",
+    "dist-mac": "./reinstall-deps.sh darwin&&electron-builder build --mac",
     "electron": "export NODE_ENV=development&&export DEBUG=*&&electron .",
     "test": "standard"
   },
   "build": {
     "extends": null,
     "asar": false,
-    "productName": "bfx-report",
+    "productName": "bfx-report-electron",
     "appId": "com.report.bitfinex",
     "files": [
       "**/*",
@@ -85,6 +80,19 @@
       {
         "from": "bfx-reports-framework/node_modules/bfx-api-node-rest/node_modules",
         "to": "bfx-reports-framework/node_modules/bfx-api-node-rest/node_modules",
+        "filter": [
+          "**/*",
+          "!.bin",
+          "!**/node_modules/.bin",
+          "!**/*.md",
+          "!**/LICENSE",
+          "!**/CHANGELOG",
+          "!**/test"
+        ]
+      },
+      {
+        "from": "bfx-reports-framework/node_modules/bfx-report",
+        "to": "bfx-reports-framework/node_modules/bfx-report",
         "filter": [
           "**/*",
           "!.bin",

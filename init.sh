@@ -8,6 +8,8 @@ export REACT_APP_PLATFORM=localhost
 export REACT_APP_TITLE=Bitfinex Reports
 export REACT_APP_LOGO_PATH=favicon.ico
 
+ROOT=$PWD
+
 programname=$0
 isDevEnv=0
 
@@ -35,16 +37,9 @@ if [ $isDevEnv != 0 ]; then
   echo "Developer environment is turned on"
 fi
 
-electronVer="4.2.0"
-arch="x64"
-root=$PWD
-frontendFolder="$PWD/bfx-report-ui"
+frontendFolder="$ROOT/bfx-report-ui"
 expressFolder="$frontendFolder/bfx-report-express"
-backendFolder="$PWD/bfx-reports-framework"
-
-rm -f ./package-lock.json
-rm -rf ./node_modules
-npm i
+backendFolder="$ROOT/bfx-reports-framework"
 
 rm -rf $frontendFolder
 rm -rf $backendFolder
@@ -57,6 +52,7 @@ git pull --recurse-submodules
 git submodule update --remote
 
 cd $frontendFolder
+
 git submodule sync
 git submodule update --init --recursive
 git pull --recurse-submodules
@@ -73,14 +69,11 @@ fi
 sed -i -e "s/showAuthPage: .*,/showAuthPage: true,/g" $frontendFolder/src/var/config.js
 sed -i -e "s/showSyncMode: .*,/showSyncMode: true,/g" $frontendFolder/src/var/config.js
 sed -i -e "s/showFrameworkMode: .*,/showFrameworkMode: true,/g" $frontendFolder/src/var/config.js
-cp $expressFolder/config/default.json.example $expressFolder/config/default.json
 npm run build
 
-cd $expressFolder
-npm i --production --target=$electronVer --runtime=electron --arch=$arch --dist-url=$ATOM_ELECTRON_URL
+cp $expressFolder/config/default.json.example $expressFolder/config/default.json
 
 cd $backendFolder
-npm i --production --target=$electronVer --runtime=electron --arch=$arch --dist-url=$ATOM_ELECTRON_URL
 
 cp config/schedule.json.example config/schedule.json
 cp config/common.json.example config/common.json
@@ -96,7 +89,6 @@ touch db/lokue_queue_1_aggregator.db.json
 touch db/lokue_queue_1_processor.db.json
 touch db/db-sqlite_sync_m0.db
 
-cd $root
-./node_modules/.bin/electron-rebuild -p -t "dev,prod,optional" -a=$arch -v=$electronVer -d=$ATOM_ELECTRON_URL -m $backendFolder
-./node_modules/.bin/electron-rebuild -p -t "dev,prod,optional" -a=$arch -v=$electronVer -d=$ATOM_ELECTRON_URL -m $expressFolder
-./node_modules/.bin/electron-rebuild -p -t "dev,prod,optional" -a=$arch -v=$electronVer -d=$ATOM_ELECTRON_URL
+cd $ROOT
+
+bash ./reinstall-deps.sh
