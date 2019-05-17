@@ -1,11 +1,11 @@
 #!/bin/bash
 
-export IOJS_ORG_MIRROR=https://atom.io/download/electron
-export ATOM_ELECTRON_URL=https://atom.io/download/electron
-
-ELECTRON_VER="3.1.9"
+ELECTRON_VER="2.0.18"
 ARCH="x64"
 ROOT=$PWD
+
+export IOJS_ORG_MIRROR=https://atom.io/download/electron
+export ATOM_ELECTRON_URL=https://atom.io/download/electron
 
 unameOut="$(uname -s)"
 
@@ -20,7 +20,7 @@ esac
 
 targetPlatform=$machine
 
-if [ $# -eq 1 ]
+if [ $# -ge 1 ]
 then
   targetPlatform=$1
 fi
@@ -30,8 +30,9 @@ expressFolder="$ROOT/bfx-report-ui/bfx-report-express"
 
 function npmInstall {
   local prevFolder=$PWD
+  local isDevNeeded=0
 
-  if [ $# -eq 1 ]
+  if [ $# -ge 1 ]
   then
     cd $1
   fi
@@ -39,14 +40,20 @@ function npmInstall {
   rm -f ./package-lock.json
   rm -rf ./node_modules
 
+  if [ $# -ge 2 ] && [ $2 == "--isDevNeeded" ]
+  then
+    npm i --development
+  fi
+
   npm i --production \
     --target_platform=$targetPlatform \
     --target=$ELECTRON_VER \
-    --runtime=electron \
-    --arch=$arch \
+    --runtime="electron" \
+    --arch=$ARCH \
+    --target_arch=$ARCH \
     --dist-url=$ATOM_ELECTRON_URL
 
-  if [ $# -eq 1 ]
+  if [ $# -ge 1 ]
   then
     cd $prevFolder
   fi
@@ -57,11 +64,11 @@ function postInstall {
   local types="dev,prod,optional"
   local folder=$prevFolder
 
-  if [ $# -eq 1 ]
+  if [ $# -ge 1 ]
   then
     folder=$1
   fi
-  if [ $# -eq 2 ]
+  if [ $# -ge 2 ]
   then
     types=$2
   fi
@@ -70,21 +77,19 @@ function postInstall {
 
   ./node_modules/.bin/electron-rebuild -f -p \
     -t $types \
-    -a=$ARCH \
-    -v=$ELECTRON_VER \
-    -d=$ATOM_ELECTRON_URL \
+    -a $ARCH \
+    -v $ELECTRON_VER \
+    -d $ATOM_ELECTRON_URL \
     -m $folder
 
   cd $prevFolder
 }
 
-npmInstall $backendFolder
-npmInstall $expressFolder
-npmInstall $ROOT
-
-cd $ROOT
-npm i --development
-
-postInstall $backendFolder
-postInstall $expressFolder
+npmInstall $ROOT "--isDevNeeded"
 postInstall $ROOT "prod"
+
+npmInstall $backendFolder
+postInstall $backendFolder
+
+npmInstall $expressFolder
+postInstall $expressFolder
