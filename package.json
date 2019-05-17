@@ -8,14 +8,14 @@
   "dependencies": {
     "async": "^2.6.1",
     "bittorrent-dht": "^8.4.0",
-    "electron-serve": "^0.2.0",
+    "electron-serve": "0.2.0",
     "find-free-port": "^2.0.0",
     "grenache-grape": "^0.9.8"
   },
   "devDependencies": {
     "ajv": "^6.5.1",
-    "electron": "3.1.9",
-    "electron-builder": "^20.28.4",
+    "electron": "2.0.18",
+    "electron-builder": "20.28.4",
     "electron-rebuild": "^1.8.2",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
@@ -53,10 +53,13 @@
     "files": [
       "**/*",
       "!init.sh",
+      "!reinstall-deps.sh",
       "!README.md",
       "build/icons",
       "bfx-reports-framework",
+      "!bfx-reports-framework/init.sh",
       "!bfx-reports-framework/README.md",
+      "!bfx-reports-framework/bfx-report-ui",
       "!bfx-reports-framework/.mocha.opts",
       "!bfx-reports-framework/test",
       "!bfx-report-ui",
