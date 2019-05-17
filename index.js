@@ -21,8 +21,6 @@ const wins = {
   errorWindow: null
 }
 
-const gotTheLock = app.requestSingleInstanceLock()
-
 const publicDir = path.join(__dirname, 'bfx-report-ui/build')
 const loadURL = serve({ directory: publicDir })
 
@@ -231,17 +229,17 @@ const createErrorWindow = (pathname) => {
   )
 }
 
-const initialize = () => {
-  app.on('second-instance', () => {
-    if (wins.mainWindow) {
-      if (wins.mainWindow.isMinimized()) {
-        wins.mainWindow.restore()
-      }
-
-      wins.mainWindow.focus()
+const shouldQuit = app.makeSingleInstance(() => {
+  if (wins.mainWindow) {
+    if (wins.mainWindow.isMinimized()) {
+      wins.mainWindow.restore()
     }
-  })
 
+    wins.mainWindow.focus()
+  }
+})
+
+const initialize = () => {
   app.on('ready', () => {
     createMainWindow(() => {
       try {
@@ -291,8 +289,8 @@ const initialize = () => {
   })
 }
 
-if (gotTheLock) {
-  initialize()
-} else {
+if (shouldQuit) {
   app.quit()
+} else {
+  initialize()
 }
