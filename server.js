@@ -5,7 +5,7 @@ const path = require('path')
 const { writeFileSync } = require('fs')
 const EventEmitter = require('events')
 
-const root = path.join(__dirname, 'bfx-report')
+const root = path.join(__dirname, 'bfx-reports-framework')
 const expressRoot = path.join(__dirname, 'bfx-report-ui/bfx-report-express')
 const pathToExpressConfDir = path.join(expressRoot, 'config')
 const pathToConfDir = path.join(root, 'config')
@@ -72,7 +72,7 @@ void (async () => {
 
       ipc = fork(modulePath, [
         `--env=${process.env.NODE_ENV}`,
-        '--wtype=wrk-report-service-api',
+        '--wtype=wrk-report-framework-api',
         `--apiPort=${ports.workerApiPort}`,
         '--dbId=1',
         '--csvFolder=../../../csv',

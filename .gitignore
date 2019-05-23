@@ -4,8 +4,8 @@ node_modules/
 npm-debug.log
 bfx-report-ui/*
 !bfx-report-ui/.gitkeep
-bfx-report/*
-!bfx-report/.gitkeep
+bfx-reports-framework/*
+!bfx-reports-framework/.gitkeep
 dist/*
 !dist/.gitkeep
 package-lock.json

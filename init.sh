@@ -8,6 +8,8 @@ export REACT_APP_PLATFORM=localhost
 export REACT_APP_TITLE=Bitfinex Reports
 export REACT_APP_LOGO_PATH=favicon.ico
 
+ROOT=$PWD
+
 programname=$0
 isDevEnv=0
 
@@ -35,14 +37,9 @@ if [ $isDevEnv != 0 ]; then
   echo "Developer environment is turned on"
 fi
 
-frontendFolder="$PWD/bfx-report-ui"
+frontendFolder="$ROOT/bfx-report-ui"
 expressFolder="$frontendFolder/bfx-report-express"
-backendFolder="$PWD/bfx-report"
-
-rm -f ./package-lock.json
-rm -rf ./node_modules
-npm i
-./node_modules/.bin/electron-rebuild -f --arch=x64 -v=2.0.11 --dist-url=https://atom.io/download/electron
+backendFolder="$ROOT/bfx-reports-framework"
 
 rm -rf $frontendFolder
 rm -rf $backendFolder
@@ -55,6 +52,7 @@ git pull --recurse-submodules
 git submodule update --remote
 
 cd $frontendFolder
+
 git submodule sync
 git submodule update --init --recursive
 git pull --recurse-submodules
@@ -68,15 +66,14 @@ if [ $isDevEnv != 0 ]; then
 	sed -i -e "s/KEY_URL: .*,/KEY_URL: \'https:\/\/test.bitfinex.com\/api\',/g" $frontendFolder/src/var/config.js
 fi
 
+sed -i -e "s/showAuthPage: .*,/showAuthPage: true,/g" $frontendFolder/src/var/config.js
 sed -i -e "s/showSyncMode: .*,/showSyncMode: true,/g" $frontendFolder/src/var/config.js
-cp $expressFolder/config/default.json.example $expressFolder/config/default.json
+sed -i -e "s/showFrameworkMode: .*,/showFrameworkMode: true,/g" $frontendFolder/src/var/config.js
 npm run build
 
-cd $expressFolder
-npm i --production --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron
+cp $expressFolder/config/default.json.example $expressFolder/config/default.json
 
 cd $backendFolder
-npm i --production --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron
 
 cp config/schedule.json.example config/schedule.json
 cp config/common.json.example config/common.json
@@ -91,3 +88,7 @@ fi
 touch db/lokue_queue_1_aggregator.db.json
 touch db/lokue_queue_1_processor.db.json
 touch db/db-sqlite_sync_m0.db
+
+cd $ROOT
+
+bash ./reinstall-deps.sh

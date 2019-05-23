@@ -1,6 +1,6 @@
 {
   "name": "bfx-report-electron",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Reporting tool",
   "author": "bitfinex.com",
   "main": "index.js",
@@ -8,14 +8,14 @@
   "dependencies": {
     "async": "^2.6.1",
     "bittorrent-dht": "^8.4.0",
-    "electron-serve": "^0.2.0",
+    "electron-serve": "0.2.0",
     "find-free-port": "^2.0.0",
     "grenache-grape": "^0.9.8"
   },
   "devDependencies": {
     "ajv": "^6.5.1",
-    "electron": "2.0.11",
-    "electron-builder": "^20.28.4",
+    "electron": "2.0.18",
+    "electron-builder": "20.28.4",
     "electron-rebuild": "^1.8.2",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
@@ -39,39 +39,37 @@
     "startDev": "npm run initDev&&npm run dist-linux&& npm run dist-win&& npm run dist-mac",
     "init": "./init.sh",
     "initDev": "./init.sh -d",
-    "reinstall-deps": "cd ./bfx-report&&rm -rf node_modules&&rm -f package-lock.json&&npm i --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron",
-    "reinstall-win-deps": "cd ./bfx-report&&rm -rf node_modules&&rm -f package-lock.json&&npm i --production --target_platform=win32 --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron",
-    "reinstall-linux-deps": "cd ./bfx-report&&rm -rf node_modules&&rm -f package-lock.json&&npm i --production --target_platform=linux --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron",
-    "reinstall-mac-deps": "cd ./bfx-report&&rm -rf node_modules&&rm -f package-lock.json&&npm i --production --target_platform=darwin --target=2.0.11 --runtime=electron --arch=x64 --dist-url=https://atom.io/download/electron",
-    "dist-win": "npm run reinstall-win-deps&&electron-builder build --win",
-    "dist-linux": "npm run reinstall-linux-deps&&electron-builder build --linux",
-    "dist-mac": "npm run reinstall-mac-deps&&electron-builder build --mac",
-    "postinstall": "electron-builder install-app-deps",
+    "dist-win": "./reinstall-deps.sh win32&&electron-builder build --win",
+    "dist-linux": "./reinstall-deps.sh linux&&electron-builder build --linux",
+    "dist-mac": "./reinstall-deps.sh darwin&&electron-builder build --mac",
     "electron": "export NODE_ENV=development&&export DEBUG=*&&electron .",
     "test": "standard"
   },
   "build": {
     "extends": null,
     "asar": false,
-    "productName": "bfx-report",
+    "productName": "bfx-report-electron",
     "appId": "com.report.bitfinex",
     "files": [
       "**/*",
       "!init.sh",
+      "!reinstall-deps.sh",
       "!README.md",
       "build/icons",
-      "bfx-report",
-      "!bfx-report/README.md",
-      "!bfx-report/.mocha.opts",
-      "!bfx-report/test",
+      "bfx-reports-framework",
+      "!bfx-reports-framework/init.sh",
+      "!bfx-reports-framework/README.md",
+      "!bfx-reports-framework/bfx-report-ui",
+      "!bfx-reports-framework/.mocha.opts",
+      "!bfx-reports-framework/test",
       "!bfx-report-ui",
       "bfx-report-ui/build",
       "bfx-report-ui/bfx-report-express",
       "!bfx-report-ui/bfx-report-express/README.md",
       "!bfx-report-ui/bfx-report-express/pm2.config.js",
       {
-        "from": "bfx-report/node_modules",
-        "to": "bfx-report/node_modules",
+        "from": "bfx-reports-framework/node_modules",
+        "to": "bfx-reports-framework/node_modules",
         "filter": [
           "**/*",
           "!.bin",
@@ -83,8 +81,21 @@
         ]
       },
       {
-        "from": "bfx-report/node_modules/bfx-api-node-rest/node_modules",
-        "to": "bfx-report/node_modules/bfx-api-node-rest/node_modules",
+        "from": "bfx-reports-framework/node_modules/bfx-api-node-rest/node_modules",
+        "to": "bfx-reports-framework/node_modules/bfx-api-node-rest/node_modules",
+        "filter": [
+          "**/*",
+          "!.bin",
+          "!**/node_modules/.bin",
+          "!**/*.md",
+          "!**/LICENSE",
+          "!**/CHANGELOG",
+          "!**/test"
+        ]
+      },
+      {
+        "from": "bfx-reports-framework/node_modules/bfx-report",
+        "to": "bfx-reports-framework/node_modules/bfx-report",
         "filter": [
           "**/*",
           "!.bin",
