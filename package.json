@@ -138,6 +138,7 @@
       "publisherName": "Reporting tool"
     },
     "mac": {
+      "hardenedRuntime": true,
       "artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
       "category": "public.app-category.productivity",
       "target": [
