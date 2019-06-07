@@ -1,5 +1,19 @@
 # bfx-report-electron
 
+## Binaries
+
+Already complied binaries can be found on release section [release section](https://github.com/bitfinexcom/bfx-report-electron/releases). </br>
+Download the correspondent binary according your operating system.</br>  
+
+#### <font color="red">macOS Mojave known issue</font></br>
+On macOS Mojave software is not running on double click.</br>
+As to run it from macOs open a console from folder where software was exported to and run:
+
+```
+./bfx-report-electron
+```
+We are actually working on a solution for this.
+
 ## Setup
 
 ### Install
