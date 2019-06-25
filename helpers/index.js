@@ -12,6 +12,7 @@ const ports = {
   grape2DhtPort: 20001,
   grape2ApiPort: 30001,
   workerApiPort: 1337,
+  workerWsPort: 1455,
   expressApiPort: 34343
 }
 

@@ -74,6 +74,7 @@ void (async () => {
         `--env=${process.env.NODE_ENV}`,
         '--wtype=wrk-report-framework-api',
         `--apiPort=${ports.workerApiPort}`,
+        `--wsPort=${ports.workerWsPort}`,
         '--dbId=1',
         '--csvFolder=../../../csv',
         '--isSchedulerEnabled=true',
