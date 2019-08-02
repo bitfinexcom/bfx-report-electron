@@ -12,6 +12,7 @@ const ports = {
   grape2DhtPort: 20001,
   grape2ApiPort: 30001,
   workerApiPort: 1337,
+  workerWsPort: 1455,
   expressApiPort: 34343
 }
 
@@ -87,36 +88,40 @@ const checkAndChangeAccess = (path) => {
   }
 }
 
-const bootTwoGrapes = (locPorts = ports, cb) => {
-  const confGrape1 = {
-    dht_port: locPorts.grape1DhtPort,
-    dht_bootstrap: [`127.0.0.1:${locPorts.grape2DhtPort}`],
-    api_port: locPorts.grape1ApiPort
-  }
-  const confGrape2 = {
-    dht_port: locPorts.grape2DhtPort,
-    dht_bootstrap: [`127.0.0.1:${locPorts.grape1DhtPort}`],
-    api_port: locPorts.grape2ApiPort
-  }
-
-  const grape1 = new Grape(confGrape1)
-  const grape2 = new Grape(confGrape2)
-
-  waterfall(
-    [
-      cb => {
-        grape1.start()
-        grape1.once('ready', cb)
-      },
-      cb => {
-        grape2.start()
-        grape2.once('node', cb)
-      }
-    ],
-    () => {
-      cb(null, [grape1, grape2])
+const bootTwoGrapes = (locPorts = ports) => {
+  return new Promise((resolve, reject) => {
+    const confGrape1 = {
+      dht_port: locPorts.grape1DhtPort,
+      dht_bootstrap: [`127.0.0.1:${locPorts.grape2DhtPort}`],
+      api_port: locPorts.grape1ApiPort
     }
-  )
+    const confGrape2 = {
+      dht_port: locPorts.grape2DhtPort,
+      dht_bootstrap: [`127.0.0.1:${locPorts.grape1DhtPort}`],
+      api_port: locPorts.grape2ApiPort
+    }
+
+    const grape1 = new Grape(confGrape1)
+    const grape2 = new Grape(confGrape2)
+
+    waterfall(
+      [
+        cb => {
+          grape1.start()
+          grape1.once('ready', cb)
+        },
+        cb => {
+          grape2.start()
+          grape2.once('node', cb)
+        }
+      ],
+      (err) => {
+        if (err) reject(err)
+
+        resolve([grape1, grape2])
+      }
+    )
+  })
 }
 
 const killGrapes = (grapes, done = () => {}) => {

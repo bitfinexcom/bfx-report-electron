@@ -32,8 +32,6 @@ const {
 } = require('./helpers')
 
 const emitter = new EventEmitter()
-let ipc = null
-let grapes = null
 
 void (async () => {
   try {
@@ -63,45 +61,85 @@ void (async () => {
       }
     })
 
-    bootTwoGrapes(ports, (err, g) => {
-      if (err) throw err
+    const grapes = await bootTwoGrapes(ports)
 
-      grapes = g
+    const modulePath = path.join(root, 'worker.js')
 
-      const modulePath = path.join(root, 'worker.js')
-
-      ipc = fork(modulePath, [
-        `--env=${process.env.NODE_ENV}`,
-        '--wtype=wrk-report-framework-api',
-        `--apiPort=${ports.workerApiPort}`,
-        '--dbId=1',
-        '--csvFolder=../../../csv',
-        '--isSchedulerEnabled=true',
-        '--isElectronjsEnv=true'
-      ], {
-        env,
-        cwd: process.cwd(),
-        silent: false
-      })
-      ipc.on('close', () => {
-        killGrapes(grapes, () => {
-          process.nextTick(() => {
-            process.exit(0)
-          })
+    const ipc = fork(modulePath, [
+      `--env=${process.env.NODE_ENV}`,
+      '--wtype=wrk-report-framework-api',
+      `--apiPort=${ports.workerApiPort}`,
+      `--wsPort=${ports.workerWsPort}`,
+      '--dbId=1',
+      '--csvFolder=../../../csv',
+      '--isSchedulerEnabled=true',
+      '--isElectronjsEnv=true'
+    ], {
+      env,
+      cwd: process.cwd(),
+      silent: false
+    })
+    ipc.on('close', () => {
+      killGrapes(grapes, () => {
+        process.nextTick(() => {
+          process.exit(0)
         })
       })
-      grapes[0].once('announce', () => {
-        emitter.emit('ready:grapes-worker', { ipc, grapes })
-      })
     })
+
+    const announcePromise = new Promise((resolve, reject) => {
+      grapes[0].once('error', reject)
+      grapes[1].once('error', reject)
+
+      let count = 0
+
+      const handler = () => {
+        count += 1
+
+        if (count < 2) return
+
+        grapes[0].removeListener('error', reject)
+        grapes[0].removeListener('announce', handler)
+        grapes[1].removeListener('error', reject)
+
+        resolve()
+      }
+
+      grapes[0].on('announce', handler)
+    })
+    const ipcReadyPromise = new Promise((resolve, reject) => {
+      ipc.once('error', reject)
+
+      const handler = (mess) => {
+        if (
+          !mess ||
+          typeof mess !== 'object' ||
+          typeof mess.state !== 'string' ||
+          mess.state !== 'ready:worker'
+        ) {
+          return
+        }
+
+        ipc.removeListener('error', reject)
+        ipc.removeListener('message', handler)
+
+        resolve()
+      }
+
+      ipc.on('message', handler)
+    })
+
+    await Promise.all([announcePromise, ipcReadyPromise])
+
+    emitter.emit('ready:grapes-worker', { ipc, grapes })
+
+    process.on('SIGINT', () => ipc && ipc.kill())
+    process.on('SIGHUP', () => ipc && ipc.kill())
+    process.on('SIGTERM', () => ipc && ipc.kill())
   } catch (err) {
     process.send({ state: 'error:app-init' })
   }
 })()
-
-process.on('SIGINT', () => ipc && ipc.kill())
-process.on('SIGHUP', () => ipc && ipc.kill())
-process.on('SIGTERM', () => ipc && ipc.kill())
 
 emitter.once('ready:grapes-worker', () => {
   try {
