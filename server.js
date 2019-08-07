@@ -73,7 +73,8 @@ void (async () => {
       '--dbId=1',
       '--csvFolder=../../../csv',
       '--isSchedulerEnabled=true',
-      '--isElectronjsEnv=true'
+      '--isElectronjsEnv=true',
+      '--isLoggerDisabled=true'
     ], {
       env,
       cwd: process.cwd(),
