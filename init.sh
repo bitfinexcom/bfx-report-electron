@@ -7,6 +7,7 @@ export PUBLIC_URL=/
 export REACT_APP_PLATFORM=localhost
 export REACT_APP_TITLE=Bitfinex Reports
 export REACT_APP_LOGO_PATH=favicon.ico
+export REACT_APP_ELECTRON=true
 
 ROOT=$PWD
 
@@ -60,6 +61,7 @@ git submodule update --remote
 npm i
 
 sed -i -e "s/API_URL: .*,/API_URL: \'http:\/\/localhost:34343\/api\',/g" $frontendFolder/src/var/config.js
+sed -i -e "s/WS_ADDRESS: .*,/WS_ADDRESS: \'ws:\/\/localhost:34343\/ws\',/g" $frontendFolder/src/var/config.js
 echo "SKIP_PREFLIGHT_CHECK=true" >> $frontendFolder/.env
 
 if [ $isDevEnv != 0 ]; then
