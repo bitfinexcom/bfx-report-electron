@@ -287,6 +287,11 @@ const initialize = () => {
             if (wins.loadingWindow) {
               wins.loadingWindow.hide()
             }
+
+            wins.mainWindow.webContents
+              .executeJavaScript(
+                'try { document.querySelector(".bp3-button.bp3-intent-success").click() } catch (e) { console.log(e) }'
+              )
             break
 
           case 'error:express-port-required':
