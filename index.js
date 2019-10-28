@@ -49,7 +49,9 @@ const createMenu = () => {
         { label: 'Quit', accelerator: 'CmdOrCtrl+Q', click: () => app.quit() },
         { type: 'separator' },
         {
-          label: 'Open dev tools', accelerator: 'CmdOrCtrl+D', click: () => {
+          label: 'Open dev tools',
+          accelerator: 'CmdOrCtrl+D',
+          click: () => {
             if (!wins.mainWindow) {
               return
             }
@@ -58,7 +60,9 @@ const createMenu = () => {
           }
         },
         {
-          label: 'Refresh page', accelerator: 'CmdOrCtrl+R', click: () => {
+          label: 'Refresh page',
+          accelerator: 'CmdOrCtrl+R',
+          click: () => {
             if (!wins.mainWindow) {
               return
             }
