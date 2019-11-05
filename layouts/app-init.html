@@ -23,16 +23,22 @@
     .lds-roller {
       display: inline-block;
       position: absolute;
-      width: 64px;
-      height: 64px;
+      width: 128px;
+      height: 128px;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity .5s ease-in-out;
+    }
+
+    .show-roller {
+      opacity: 1;
     }
 
     .lds-roller div {
-      animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-      transform-origin: 32px 32px;
+      animation: lds-roller 2.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      transform-origin: 64px 64px;
     }
 
     .lds-roller div:after {
@@ -51,8 +57,8 @@
     }
 
     .lds-roller div:nth-child(1):after {
-      top: 50px;
-      left: 50px;
+      top: 100px;
+      left: 100px;
     }
 
     .lds-roller div:nth-child(2) {
@@ -60,8 +66,8 @@
     }
 
     .lds-roller div:nth-child(2):after {
-      top: 54px;
-      left: 45px;
+      top: 108px;
+      left: 90px;
     }
 
     .lds-roller div:nth-child(3) {
@@ -69,8 +75,8 @@
     }
 
     .lds-roller div:nth-child(3):after {
-      top: 57px;
-      left: 39px;
+      top: 113px;
+      left: 77px;
     }
 
     .lds-roller div:nth-child(4) {
@@ -78,8 +84,8 @@
     }
 
     .lds-roller div:nth-child(4):after {
-      top: 58px;
-      left: 32px;
+      top: 115px;
+      left: 64px;
     }
 
     .lds-roller div:nth-child(5) {
@@ -87,8 +93,8 @@
     }
 
     .lds-roller div:nth-child(5):after {
-      top: 57px;
-      left: 25px;
+      top: 113px;
+      left: 51px;
     }
 
     .lds-roller div:nth-child(6) {
@@ -96,8 +102,8 @@
     }
 
     .lds-roller div:nth-child(6):after {
-      top: 54px;
-      left: 19px;
+      top: 108px;
+      left: 38px;
     }
 
     .lds-roller div:nth-child(7) {
@@ -105,8 +111,8 @@
     }
 
     .lds-roller div:nth-child(7):after {
-      top: 50px;
-      left: 14px;
+      top: 100px;
+      left: 28px;
     }
 
     .lds-roller div:nth-child(8) {
@@ -114,8 +120,30 @@
     }
 
     .lds-roller div:nth-child(8):after {
-      top: 45px;
-      left: 10px;
+      top: 90px;
+      left: 20px;
+    }
+
+    .logo-img {
+      width: 64px;
+      height: 64px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .logo {
+      display: inline-block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      animation: logo-shower 3s ease-in-out;
+      width: 200px;
+      height: 200px;
+      background-color: #394b59;
     }
 
     @keyframes lds-roller {
@@ -125,6 +153,24 @@
 
       100% {
         transform: rotate(360deg);
+      }
+    }
+
+    @keyframes logo-shower {
+      0% {
+        opacity: 0;
+      }
+
+      40% {
+        opacity: 1;
+      }
+
+      60% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
       }
     }
   </style>
@@ -141,6 +187,21 @@
     <div></div>
     <div></div>
   </div>
+  <div class="logo">
+    <img class="logo-img" src="../build/icons/512.png" alt="logo">
+  </div>
 </body>
+
+<script>
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      const rollers = document.getElementsByClassName('lds-roller')
+
+      for (const roller of rollers) {
+        roller.classList.add("show-roller")
+      }
+    }, 2500)
+  })
+</script>
 
 </html>
