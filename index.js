@@ -5,7 +5,9 @@ const path = require('path')
 const url = require('url')
 const { fork } = require('child_process')
 const serve = require('electron-serve')
-const windowStateKeeper = require('./helpers/electron-window-state')
+const {
+  windowStateKeeper
+} = require('./helpers')
 
 const { app, BrowserWindow, Menu } = electron
 
