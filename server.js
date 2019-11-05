@@ -138,6 +138,7 @@ const emitter = new EventEmitter()
     process.on('SIGHUP', () => ipc && ipc.kill())
     process.on('SIGTERM', () => ipc && ipc.kill())
   } catch (err) {
+    console.error(err)
     process.send({ state: 'error:app-init' })
   }
 })()
@@ -150,6 +151,7 @@ emitter.once('ready:grapes-worker', () => {
       emitter.emit('ready:server', server)
     })
   } catch (err) {
+    console.error(err)
     process.send({ state: 'error:app-init' })
   }
 })

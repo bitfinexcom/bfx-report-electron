@@ -6,7 +6,9 @@ const url = require('url')
 const { fork } = require('child_process')
 const serve = require('electron-serve')
 const {
-  windowStateKeeper
+  windowStateKeeper,
+  exportDB,
+  importDB
 } = require('./helpers')
 
 const { app, BrowserWindow, Menu } = electron
@@ -31,6 +33,8 @@ const pathToLayoutAppInit = path.join(pathToLayouts, 'app-init.html')
 const pathToLayoutAppInitErr = path.join(pathToLayouts, 'app-init-error.html')
 const pathToLayoutExprPortReq = path.join(pathToLayouts, 'express-port-required.html')
 
+const dbPath = path.join(__dirname, 'bfx-reports-framework/db')
+const dbFileName = 'db-sqlite_sync_m0.db'
 const serverPath = path.join(__dirname, 'server.js')
 let ipc = null
 let isMainWinMaximized = false
@@ -84,6 +88,21 @@ const createMenu = () => {
         { label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
         { label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
         { label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:' }
+      ]
+    },
+    {
+      label: 'Tools',
+      submenu: [
+        {
+          label: 'Export DB',
+          accelerator: 'CmdOrCtrl+L',
+          click: exportDB(dbPath, dbFileName)
+        },
+        {
+          label: 'Import DB',
+          accelerator: 'CmdOrCtrl+E',
+          click: importDB(dbPath, dbFileName)
+        }
       ]
     }
   ]
@@ -270,6 +289,7 @@ const initialize = () => {
       try {
         runServer()
       } catch (err) {
+        console.error(err)
         createErrorWindow(pathToLayoutAppInitErr)
 
         return
@@ -277,6 +297,7 @@ const initialize = () => {
 
       ipc.once('message', async (mess) => {
         if (!mess || typeof mess.state !== 'string') {
+          console.error(new Error('ERR_IPC_MESSAGE'))
           createErrorWindow(pathToLayoutAppInitErr)
 
           return

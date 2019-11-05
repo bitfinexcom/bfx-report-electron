@@ -12,6 +12,8 @@ const {
   checkAndChangeAccess
 } = require('./utils')
 const windowStateKeeper = require('./window-state-keeper')
+const exportDB = require('./export-db')
+const importDB = require('./import-db')
 
 module.exports = {
   bootTwoGrapes,
@@ -19,5 +21,7 @@ module.exports = {
   getFreePort,
   getDefaultPorts,
   checkAndChangeAccess,
-  windowStateKeeper
+  windowStateKeeper,
+  exportDB,
+  importDB
 }

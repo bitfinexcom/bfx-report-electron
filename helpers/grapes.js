@@ -3,6 +3,9 @@
 const { Grape } = require('grenache-grape')
 const waterfall = require('async/waterfall')
 
+const { getDefaultPorts } = require('./ports')
+const ports = getDefaultPorts()
+
 const bootTwoGrapes = (locPorts = ports) => {
   const {
     grape1DhtPort,
