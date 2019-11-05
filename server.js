@@ -33,7 +33,7 @@ const {
 
 const emitter = new EventEmitter()
 
-void (async () => {
+;(async () => {
   try {
     const defaultPorts = getDefaultPorts()
     const ports = await getFreePort(defaultPorts)
