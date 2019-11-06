@@ -2,7 +2,13 @@
 
 const electron = require('electron')
 
-module.exports = (dbPath, dbFileName) => {
+const pauseApp = require('./pause-app')
+const relaunch = require('./relaunch')
+
+module.exports = ({
+  dbPath,
+  dbFileName
+}) => {
   const dialog = electron.dialog || electron.remote.dialog
   const app = electron.app || electron.remote.app
 
@@ -18,6 +24,16 @@ module.exports = (dbPath, dbFileName) => {
       (files) => {
         // TODO:
         console.log('[---files---]:', files)
+
+        pauseApp()
+          .then(() => {
+            setTimeout(() => {
+              relaunch()
+            }, 3000)
+          })
+          .catch((err) => {
+            console.error(err)
+          })
       }
     )
   }

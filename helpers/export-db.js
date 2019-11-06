@@ -2,7 +2,10 @@
 
 const electron = require('electron')
 
-module.exports = (dbPath, dbFileName) => {
+module.exports = ({
+  dbPath,
+  dbFileName
+}) => {
   const dialog = electron.dialog || electron.remote.dialog
   const app = electron.app || electron.remote.app
 
