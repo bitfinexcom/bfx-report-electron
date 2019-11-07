@@ -28,6 +28,7 @@ const {
 } = require('./window-creators')
 const initializeApp = require('./initialize-app')
 const makeSingleInstance = require('./make-single-instance')
+const showErrorModalDialog = require('./show-error-modal-dialog')
 
 module.exports = {
   bootTwoGrapes,
@@ -49,5 +50,6 @@ module.exports = {
   createLoadingWindow,
   createErrorWindow,
   initializeApp,
-  makeSingleInstance
+  makeSingleInstance,
+  showErrorModalDialog
 }
