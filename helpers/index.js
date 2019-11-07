@@ -29,6 +29,9 @@ const {
 const initializeApp = require('./initialize-app')
 const makeSingleInstance = require('./make-single-instance')
 const showErrorModalDialog = require('./show-error-modal-dialog')
+const {
+  zip
+} = require('./archiver')
 
 module.exports = {
   bootTwoGrapes,
@@ -51,5 +54,6 @@ module.exports = {
   createErrorWindow,
   initializeApp,
   makeSingleInstance,
-  showErrorModalDialog
+  showErrorModalDialog,
+  zip
 }
