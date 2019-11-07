@@ -2,6 +2,8 @@
 
 const electron = require('electron')
 
+const { InvalidFilePathError } = require('./errors')
+
 module.exports = (err) => {
   const dialog = electron.dialog || electron.remote.dialog
 
@@ -22,6 +24,13 @@ module.exports = (err) => {
       : title
 
     dialog.showErrorBox(title, content)
+
+    return
+  }
+  if (err instanceof InvalidFilePathError) {
+    const title = 'Invalid file path'
+
+    dialog.showErrorBox(title, '')
 
     return
   }

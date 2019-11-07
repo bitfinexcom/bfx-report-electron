@@ -3,6 +3,7 @@
 const path = require('path')
 const electron = require('electron')
 
+const { InvalidFilePathError } = require('./errors')
 const { zip } = require('./archiver')
 const showErrorModalDialog = require('./show-error-modal-dialog')
 
@@ -31,7 +32,7 @@ module.exports = ({ dbPath }) => {
             !file ||
             typeof file !== 'string'
           ) {
-            throw new Error('ERR_INVALID_FILE_PATH')
+            throw new InvalidFilePathError()
           }
 
           await zip(file, dbPath)
