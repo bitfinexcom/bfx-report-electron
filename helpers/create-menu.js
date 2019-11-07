@@ -9,8 +9,8 @@ const wins = require('./windows')
 const exportDB = require('./export-db')
 const importDB = require('./import-db')
 
-const dbPath = path.join(__dirname, '../bfx-reports-framework/db')
 const dbFileName = 'db-sqlite_sync_m0.db'
+const dbPath = path.join(__dirname, '../bfx-reports-framework/db', dbFileName)
 
 module.exports = () => {
   const menuTemplate = [
@@ -61,12 +61,12 @@ module.exports = () => {
         {
           label: 'Export DB',
           accelerator: 'CmdOrCtrl+L',
-          click: exportDB({ dbPath, dbFileName })
+          click: exportDB({ dbPath })
         },
         {
           label: 'Import DB',
           accelerator: 'CmdOrCtrl+E',
-          click: importDB({ dbPath, dbFileName })
+          click: importDB({ dbPath })
         }
       ]
     }
