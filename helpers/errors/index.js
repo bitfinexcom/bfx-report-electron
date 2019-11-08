@@ -23,8 +23,15 @@ class InvalidFileNameInArchiveError extends BaseError {
   }
 }
 
+class DbImportingError extends BaseError {
+  constructor (message = 'ERR_DB_HAS_NOT_IMPORTED') {
+    super(message)
+  }
+}
+
 module.exports = {
   BaseError,
   InvalidFilePathError,
-  InvalidFileNameInArchiveError
+  InvalidFileNameInArchiveError,
+  DbImportingError
 }
