@@ -30,7 +30,8 @@ const initializeApp = require('./initialize-app')
 const makeSingleInstance = require('./make-single-instance')
 const showErrorModalDialog = require('./show-error-modal-dialog')
 const {
-  zip
+  zip,
+  unzip
 } = require('./archiver')
 
 module.exports = {
@@ -55,5 +56,6 @@ module.exports = {
   initializeApp,
   makeSingleInstance,
   showErrorModalDialog,
-  zip
+  zip,
+  unzip
 }

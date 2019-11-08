@@ -11,7 +11,8 @@
     "bittorrent-dht": "^8.4.0",
     "electron-serve": "0.2.0",
     "find-free-port": "^2.0.0",
-    "grenache-grape": "^0.9.8"
+    "grenache-grape": "^0.9.8",
+    "yauzl": "^2.10.0"
   },
   "devDependencies": {
     "ajv": "^6.5.1",

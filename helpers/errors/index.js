@@ -17,7 +17,14 @@ class InvalidFilePathError extends BaseError {
   }
 }
 
+class InvalidFileNameInArchiveError extends BaseError {
+  constructor (message = 'ERR_INVALID_FILE_NAME_IN_ARCHIVE') {
+    super(message)
+  }
+}
+
 module.exports = {
   BaseError,
-  InvalidFilePathError
+  InvalidFilePathError,
+  InvalidFileNameInArchiveError
 }
