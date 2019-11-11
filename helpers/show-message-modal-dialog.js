@@ -4,10 +4,13 @@ const electron = require('electron')
 
 module.exports = (win, opts = {}) => {
   return new Promise((resolve, reject) => {
-    const dialog = electron.dialog || electron.remote.dialog
-
     try {
-      dialog.showMessageBox(win, {
+      const dialog = electron.dialog || electron.remote.dialog
+      const _win = win && typeof win === 'object'
+        ? win
+        : electron.BrowserWindow.getFocusedWindow()
+
+      dialog.showMessageBox(_win, {
         type: 'info',
         buttons: ['Cancel', 'OK'],
         defaultId: 1,

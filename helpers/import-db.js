@@ -54,8 +54,10 @@ module.exports = ({ dbPath }) => {
   const dbFileName = path.basename(dbPath)
 
   return () => {
+    const win = electron.BrowserWindow.getFocusedWindow()
+
     dialog.showOpenDialog(
-      null,
+      win,
       {
         title: 'ZIP file with DB',
         defaultPath: app.getPath('documents'),

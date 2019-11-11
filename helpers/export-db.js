@@ -20,8 +20,10 @@ module.exports = ({ dbPath }) => {
   )
 
   return () => {
+    const win = electron.BrowserWindow.getFocusedWindow()
+
     dialog.showSaveDialog(
-      null,
+      win,
       {
         title: 'ZIP file with DB',
         defaultPath,
@@ -37,7 +39,7 @@ module.exports = ({ dbPath }) => {
           }
 
           await zip(file, dbPath)
-          await showMessageModalDialog(null, {
+          await showMessageModalDialog(win, {
             buttons: ['OK'],
             defaultId: 0,
             title: 'Database export',
