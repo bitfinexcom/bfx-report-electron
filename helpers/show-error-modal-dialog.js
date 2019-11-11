@@ -5,7 +5,8 @@ const electron = require('electron')
 const {
   InvalidFilePathError,
   InvalidFileNameInArchiveError,
-  DbImportingError
+  DbImportingError,
+  InvalidFolderPathError
 } = require('./errors')
 
 module.exports = (err) => {
@@ -45,7 +46,10 @@ module.exports = (err) => {
 
     return
   }
-  if (err instanceof DbImportingError) {
+  if (
+    err instanceof DbImportingError ||
+    err instanceof InvalidFolderPathError
+  ) {
     const title = 'The database has not imported'
 
     dialog.showErrorBox(title, '')

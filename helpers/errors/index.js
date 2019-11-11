@@ -29,9 +29,16 @@ class DbImportingError extends BaseError {
   }
 }
 
+class InvalidFolderPathError extends BaseError {
+  constructor (message = 'ERR_INVALID_FOLDER_PATH') {
+    super(message)
+  }
+}
+
 module.exports = {
   BaseError,
   InvalidFilePathError,
   InvalidFileNameInArchiveError,
-  DbImportingError
+  DbImportingError,
+  InvalidFolderPathError
 }
