@@ -2,22 +2,12 @@
 
 const wins = require('./windows')
 const { serverIpc } = require('./ipcs')
-
-const _showLoadingWindow = () => {
-  if (
-    !wins.loadingWindow ||
-    typeof wins.loadingWindow !== 'object' ||
-    wins.loadingWindow.isDestroyed() ||
-    wins.loadingWindow.isVisible()
-  ) {
-    return
-  }
-
-  wins.loadingWindow.show()
-}
+const {
+  showLoadingWindow
+} = require('./change-loading-win-visibility-state')
 
 module.exports = () => {
-  _showLoadingWindow()
+  showLoadingWindow()
 
   const winsArr = Object.entries(wins)
   const promises = winsArr.map(([winName, win]) => {

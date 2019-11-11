@@ -34,6 +34,10 @@ const {
   zip,
   unzip
 } = require('./archiver')
+const {
+  showLoadingWindow,
+  hideLoadingWindow
+} = require('./change-loading-win-visibility-state')
 
 module.exports = {
   bootTwoGrapes,
@@ -59,5 +63,7 @@ module.exports = {
   showErrorModalDialog,
   showMessageModalDialog,
   zip,
-  unzip
+  unzip,
+  showLoadingWindow,
+  hideLoadingWindow
 }
