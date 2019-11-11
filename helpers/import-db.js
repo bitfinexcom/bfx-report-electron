@@ -92,7 +92,7 @@ module.exports = ({ dbPath }) => {
 
           relaunch()
         } catch (err) {
-          showErrorModalDialog(err)
+          showErrorModalDialog(win, 'Database import', err)
 
           console.error(err)
           relaunch()

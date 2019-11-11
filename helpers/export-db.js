@@ -53,7 +53,7 @@ module.exports = ({ dbPath }) => {
             message: 'Exported successfully'
           })
         } catch (err) {
-          showErrorModalDialog(err)
+          showErrorModalDialog(win, 'Database export', err)
 
           console.error(err)
         }

@@ -1,48 +1,56 @@
 'use strict'
 
-const electron = require('electron')
-
 const {
   InvalidFilePathError,
   InvalidFileNameInArchiveError,
   DbImportingError,
   InvalidFolderPathError
 } = require('./errors')
+const showMessageModalDialog = require('./show-message-modal-dialog')
 
-module.exports = (err) => {
-  const dialog = electron.dialog || electron.remote.dialog
+const _showErrorBox = (win, title = '', message = '') => {
+  return showMessageModalDialog(win, {
+    type: 'error',
+    buttons: ['Cancel'],
+    defaultId: 0,
+    cancelId: 0,
+    title,
+    message
+  })
+}
 
+module.exports = (win, title = 'Error', err) => {
   if (err.code === 'ENOENT') {
-    const title = 'No such file or directory'
+    const message = 'No such file or directory'
     const content = (err.syscall && err.path)
-      ? `${title}, ${err.syscall}: '${err.path}'`
-      : title
+      ? `${message}, ${err.syscall}: '${err.path}'`
+      : message
 
-    dialog.showErrorBox(title, content)
+    _showErrorBox(win, title, content)
 
     return
   }
   if (err.code === 'EACCES') {
-    const title = 'Permission denied'
+    const message = 'Permission denied'
     const content = (err.syscall && err.path)
-      ? `${title}, ${err.syscall}: '${err.path}'`
-      : title
+      ? `${message}, ${err.syscall}: '${err.path}'`
+      : message
 
-    dialog.showErrorBox(title, content)
+    _showErrorBox(win, title, content)
 
     return
   }
   if (err instanceof InvalidFilePathError) {
-    const title = 'Invalid file path'
+    const message = 'Invalid file path'
 
-    dialog.showErrorBox(title, '')
+    _showErrorBox(win, title, message)
 
     return
   }
   if (err instanceof InvalidFileNameInArchiveError) {
-    const title = 'Invalid file name in archive'
+    const message = 'Invalid file name in archive'
 
-    dialog.showErrorBox(title, '')
+    _showErrorBox(win, title, message)
 
     return
   }
@@ -50,12 +58,12 @@ module.exports = (err) => {
     err instanceof DbImportingError ||
     err instanceof InvalidFolderPathError
   ) {
-    const title = 'The database has not imported'
+    const message = 'The database has not imported'
 
-    dialog.showErrorBox(title, '')
+    _showErrorBox(win, title, message)
 
     return
   }
 
-  dialog.showErrorBox('Error', 'An unexpected exception occurred')
+  _showErrorBox(win, title, 'An unexpected exception occurred')
 }
