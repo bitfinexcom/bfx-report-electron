@@ -6,6 +6,7 @@ const electron = require('electron')
 const { InvalidFilePathError } = require('./errors')
 const { zip } = require('./archiver')
 const showErrorModalDialog = require('./show-error-modal-dialog')
+const showMessageModalDialog = require('./show-message-modal-dialog')
 
 const DEFAULT_FILE_NAME = 'bfx-report-db-archive'
 
@@ -36,6 +37,12 @@ module.exports = ({ dbPath }) => {
           }
 
           await zip(file, dbPath)
+          await showMessageModalDialog(null, {
+            buttons: ['OK'],
+            defaultId: 0,
+            title: 'Database export',
+            message: 'Exported successfully'
+          })
         } catch (err) {
           showErrorModalDialog(err)
 
