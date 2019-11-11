@@ -7,6 +7,10 @@ const { InvalidFilePathError } = require('./errors')
 const { zip } = require('./archiver')
 const showErrorModalDialog = require('./show-error-modal-dialog')
 const showMessageModalDialog = require('./show-message-modal-dialog')
+const {
+  showLoadingWindow,
+  hideLoadingWindow
+} = require('./change-loading-win-visibility-state')
 
 const DEFAULT_FILE_NAME = 'bfx-report-db-archive'
 
@@ -38,7 +42,10 @@ module.exports = ({ dbPath }) => {
             throw new InvalidFilePathError()
           }
 
+          showLoadingWindow()
           await zip(file, dbPath)
+          hideLoadingWindow()
+
           await showMessageModalDialog(win, {
             buttons: ['OK'],
             defaultId: 0,
