@@ -35,16 +35,16 @@ module.exports = ({ dbPath }) => {
       },
       async (file) => {
         try {
-          if (
-            !file ||
-            typeof file !== 'string'
-          ) {
+          if (!file) {
+            return
+          }
+          if (typeof file !== 'string') {
             throw new InvalidFilePathError()
           }
 
-          showLoadingWindow()
+          await showLoadingWindow()
           await zip(file, dbPath)
-          hideLoadingWindow()
+          await hideLoadingWindow()
 
           await showMessageModalDialog(win, {
             buttons: ['OK'],
@@ -53,7 +53,8 @@ module.exports = ({ dbPath }) => {
             message: 'Exported successfully'
           })
         } catch (err) {
-          showErrorModalDialog(win, 'Database export', err)
+          await hideLoadingWindow()
+          await showErrorModalDialog(win, 'Database export', err)
 
           console.error(err)
         }

@@ -72,9 +72,13 @@ module.exports = ({ dbPath }) => {
         try {
           if (
             !Array.isArray(files) ||
-            files.length === 0 ||
-            files.some(file => (!file || typeof file !== 'string'))
+            files.length === 0
           ) {
+            return
+          }
+          if (files.some(file => (
+            !file || typeof file !== 'string'
+          ))) {
             throw new InvalidFilePathError()
           }
 
@@ -92,7 +96,7 @@ module.exports = ({ dbPath }) => {
 
           relaunch()
         } catch (err) {
-          showErrorModalDialog(win, 'Database import', err)
+          await showErrorModalDialog(win, 'Database import', err)
 
           console.error(err)
           relaunch()

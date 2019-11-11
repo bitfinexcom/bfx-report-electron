@@ -6,8 +6,8 @@ const {
   showLoadingWindow
 } = require('./change-loading-win-visibility-state')
 
-module.exports = () => {
-  showLoadingWindow()
+module.exports = async () => {
+  await showLoadingWindow()
 
   const winsArr = Object.entries(wins)
   const promises = winsArr.map(([winName, win]) => {

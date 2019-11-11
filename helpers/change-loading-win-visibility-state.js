@@ -2,7 +2,7 @@
 
 const wins = require('./windows')
 
-const showLoadingWindow = () => {
+const showLoadingWindow = async () => {
   if (
     !wins.loadingWindow ||
     typeof wins.loadingWindow !== 'object' ||
@@ -12,10 +12,17 @@ const showLoadingWindow = () => {
     return
   }
 
-  wins.loadingWindow.show()
+  return new Promise((resolve, reject) => {
+    try {
+      wins.loadingWindow.once('focus', resolve)
+      wins.loadingWindow.show()
+    } catch (err) {
+      reject(err)
+    }
+  })
 }
 
-const hideLoadingWindow = () => {
+const hideLoadingWindow = async () => {
   if (
     !wins.loadingWindow ||
     typeof wins.loadingWindow !== 'object' ||
@@ -25,7 +32,14 @@ const hideLoadingWindow = () => {
     return
   }
 
-  wins.loadingWindow.hide()
+  return new Promise((resolve, reject) => {
+    try {
+      wins.loadingWindow.once('hide', resolve)
+      wins.loadingWindow.hide()
+    } catch (err) {
+      reject(err)
+    }
+  })
 }
 
 module.exports = {

@@ -26,9 +26,7 @@ module.exports = (win, title = 'Error', err) => {
       ? `${message}, ${err.syscall}: '${err.path}'`
       : message
 
-    _showErrorBox(win, title, content)
-
-    return
+    return _showErrorBox(win, title, content)
   }
   if (err.code === 'EACCES') {
     const message = 'Permission denied'
@@ -36,23 +34,17 @@ module.exports = (win, title = 'Error', err) => {
       ? `${message}, ${err.syscall}: '${err.path}'`
       : message
 
-    _showErrorBox(win, title, content)
-
-    return
+    return _showErrorBox(win, title, content)
   }
   if (err instanceof InvalidFilePathError) {
     const message = 'Invalid file path'
 
-    _showErrorBox(win, title, message)
-
-    return
+    return _showErrorBox(win, title, message)
   }
   if (err instanceof InvalidFileNameInArchiveError) {
     const message = 'Invalid file name in archive'
 
-    _showErrorBox(win, title, message)
-
-    return
+    return _showErrorBox(win, title, message)
   }
   if (
     err instanceof DbImportingError ||
@@ -60,10 +52,10 @@ module.exports = (win, title = 'Error', err) => {
   ) {
     const message = 'The database has not imported'
 
-    _showErrorBox(win, title, message)
-
-    return
+    return _showErrorBox(win, title, message)
   }
 
-  _showErrorBox(win, title, 'An unexpected exception occurred')
+  const message = 'An unexpected exception occurred'
+
+  return _showErrorBox(win, title, message)
 }
