@@ -20,4 +20,7 @@ if (shouldQuit) {
   app.quit()
 } else {
   initializeApp()
+    .catch((err) => {
+      console.error(err)
+    })
 }

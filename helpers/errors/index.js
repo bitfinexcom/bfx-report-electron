@@ -35,10 +35,31 @@ class InvalidFolderPathError extends BaseError {
   }
 }
 
+class RunningExpressOnPortError extends BaseError {
+  constructor (message = 'ERR_EXPRESS_PORT_IS_REQUIRED') {
+    super(message)
+  }
+}
+
+class IpcMessageError extends BaseError {
+  constructor (message = 'ERR_IPC_MESSAGE') {
+    super(message)
+  }
+}
+
+class AppInitializationError extends BaseError {
+  constructor (message = 'ERR_APP_HAS_NOT_INITIALIZED') {
+    super(message)
+  }
+}
+
 module.exports = {
   BaseError,
   InvalidFilePathError,
   InvalidFileNameInArchiveError,
   DbImportingError,
-  InvalidFolderPathError
+  InvalidFolderPathError,
+  RunningExpressOnPortError,
+  IpcMessageError,
+  AppInitializationError
 }

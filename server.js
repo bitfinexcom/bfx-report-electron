@@ -31,6 +31,10 @@ const {
   checkAndChangeAccess
 } = require('./helpers')
 
+const {
+  RunningExpressOnPortError
+} = require('./helpers/errors')
+
 const emitter = new EventEmitter()
 
 ;(async () => {
@@ -43,7 +47,10 @@ const emitter = new EventEmitter()
     confFacsGrc.p1.grape = grape
 
     if (defaultPorts.expressApiPort !== ports.expressApiPort) {
-      process.send({ state: 'error:express-port-required' })
+      process.send({
+        state: 'error:express-port-required',
+        err: new RunningExpressOnPortError()
+      })
 
       return
     }
@@ -138,8 +145,7 @@ const emitter = new EventEmitter()
     process.on('SIGHUP', () => ipc && ipc.kill())
     process.on('SIGTERM', () => ipc && ipc.kill())
   } catch (err) {
-    console.error(err)
-    process.send({ state: 'error:app-init' })
+    process.send({ state: 'error:app-init', err })
   }
 })()
 
@@ -151,8 +157,7 @@ emitter.once('ready:grapes-worker', () => {
       emitter.emit('ready:server', server)
     })
   } catch (err) {
-    console.error(err)
-    process.send({ state: 'error:app-init' })
+    process.send({ state: 'error:app-init', err })
   }
 })
 

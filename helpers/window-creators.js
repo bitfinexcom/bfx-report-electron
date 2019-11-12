@@ -23,7 +23,10 @@ const _createWindow = (
   props = {}
 ) => {
   const point = electron.screen.getCursorScreenPoint()
-  const { bounds, workAreaSize } = electron.screen.getDisplayNearestPoint(point)
+  const {
+    bounds,
+    workAreaSize
+  } = electron.screen.getDisplayNearestPoint(point)
   const {
     width: defaultWidth,
     height: defaultHeight
@@ -89,7 +92,7 @@ const _createWindow = (
 
   wins[winName].once('ready-to-show', () => {
     if (!pathname) {
-      createLoadingWindow(cb)
+      _createLoadingWindow(cb)
 
       return
     }
@@ -109,9 +112,9 @@ const _createWindow = (
 }
 
 const _createChildWindow = (
+  cb,
   pathname,
   winName,
-  cb,
   {
     width = 500,
     height = 500,
@@ -151,16 +154,23 @@ const _createChildWindow = (
 }
 
 const createMainWindow = (cb) => {
-  _createWindow(cb)
+  return new Promise((resolve, reject) => {
+    try {
+      _createWindow(() => {
+        if (isDevEnv) {
+          wins.mainWindow.webContents.openDevTools()
+        }
 
-  if (isDevEnv) {
-    wins.mainWindow.webContents.openDevTools()
-  }
-
-  createMenu()
+        createMenu()
+        resolve()
+      })
+    } catch (err) {
+      reject(err)
+    }
+  })
 }
 
-const createLoadingWindow = (cb) => {
+const _createLoadingWindow = (cb) => {
   if (
     wins.loadingWindow &&
     typeof wins.loadingWindow === 'object' &&
@@ -175,9 +185,9 @@ const createLoadingWindow = (cb) => {
   }
 
   _createChildWindow(
+    cb,
     pathToLayoutAppInit,
     'loadingWindow',
-    cb,
     {
       width: 350,
       height: 350
@@ -186,23 +196,30 @@ const createLoadingWindow = (cb) => {
 }
 
 const createErrorWindow = (pathname) => {
-  _createChildWindow(
-    pathname,
-    'errorWindow',
-    () => {
-      if (wins.loadingWindow) {
-        wins.loadingWindow.hide()
-      }
-    },
-    {
-      height: 200,
-      frame: true
+  return new Promise((resolve, reject) => {
+    try {
+      _createChildWindow(
+        () => {
+          if (wins.loadingWindow) {
+            wins.loadingWindow.hide()
+          }
+
+          resolve()
+        },
+        pathname,
+        'errorWindow',
+        {
+          height: 200,
+          frame: true
+        }
+      )
+    } catch (err) {
+      reject(err)
     }
-  )
+  })
 }
 
 module.exports = {
   createMainWindow,
-  createLoadingWindow,
   createErrorWindow
 }

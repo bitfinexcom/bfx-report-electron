@@ -23,7 +23,6 @@ const relaunch = require('./relaunch')
 const appStates = require('./app-states')
 const {
   createMainWindow,
-  createLoadingWindow,
   createErrorWindow
 } = require('./window-creators')
 const initializeApp = require('./initialize-app')
@@ -56,7 +55,6 @@ module.exports = {
   relaunch,
   appStates,
   createMainWindow,
-  createLoadingWindow,
   createErrorWindow,
   initializeApp,
   makeSingleInstance,
