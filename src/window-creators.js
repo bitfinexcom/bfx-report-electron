@@ -1,6 +1,7 @@
 'use strict'
 
 const electron = require('electron')
+const serve = require('electron-serve')
 const path = require('path')
 const url = require('url')
 
@@ -12,6 +13,9 @@ const ipcs = require('./ipcs')
 const appStates = require('./app-states')
 const windowStateKeeper = require('./window-state-keeper')
 const createMenu = require('./create-menu')
+
+const publicDir = path.join(__dirname, '../bfx-report-ui/build')
+const loadURL = serve({ directory: publicDir })
 
 const pathToLayouts = path.join(__dirname, 'layouts')
 const pathToLayoutAppInit = path.join(pathToLayouts, 'app-init.html')
@@ -74,7 +78,8 @@ const _createWindow = (
     : 'app://-'
 
   if (!pathname) {
-    appStates.loadURL(wins[winName])
+    // appStates.loadURL(wins[winName])
+    loadURL(wins[winName]) // TODO:
   }
 
   wins[winName].loadURL(startUrl)

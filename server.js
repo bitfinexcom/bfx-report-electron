@@ -29,11 +29,11 @@ const {
   getDefaultPorts,
   getFreePort,
   checkAndChangeAccess
-} = require('./helpers')
+} = require('./src/helpers')
 
 const {
   RunningExpressOnPortError
-} = require('./helpers/errors')
+} = require('./src/errors')
 
 const emitter = new EventEmitter()
 
