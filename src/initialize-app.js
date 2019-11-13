@@ -39,9 +39,7 @@ const _ipcMessToPromise = (ipc) => {
 module.exports = () => {
   return new Promise((resolve, reject) => {
     app.on('window-all-closed', () => {
-      if (process.platform !== 'darwin') {
-        app.quit()
-      }
+      app.quit()
     })
     app.on('ready', async () => {
       try {
@@ -77,6 +75,7 @@ module.exports = () => {
               } catch (e) { console.log(e) }`
             )
 
+          resolve()
           return
         }
 
