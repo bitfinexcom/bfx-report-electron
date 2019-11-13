@@ -59,8 +59,9 @@ module.exports = ({ dbPath }) => {
     dialog.showOpenDialog(
       win,
       {
-        title: 'ZIP file with DB',
+        title: 'Database import',
         defaultPath: app.getPath('documents'),
+        buttonLabel: 'Import',
         properties: [
           'openFile',
           'createDirectory',

@@ -29,8 +29,9 @@ module.exports = ({ dbPath }) => {
     dialog.showSaveDialog(
       win,
       {
-        title: 'ZIP file with DB',
+        title: 'Database export',
         defaultPath,
+        buttonLabel: 'Export',
         filters: [{ name: 'ZIP', extensions: ['zip'] }]
       },
       async (file) => {
