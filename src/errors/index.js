@@ -53,6 +53,12 @@ class AppInitializationError extends BaseError {
   }
 }
 
+class FreePortError extends BaseError {
+  constructor (message = 'ERR_NO_FREE_PORT') {
+    super(message)
+  }
+}
+
 module.exports = {
   BaseError,
   InvalidFilePathError,
@@ -61,5 +67,6 @@ module.exports = {
   InvalidFolderPathError,
   RunningExpressOnPortError,
   IpcMessageError,
-  AppInitializationError
+  AppInitializationError,
+  FreePortError
 }

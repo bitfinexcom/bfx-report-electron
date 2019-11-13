@@ -3,6 +3,10 @@
 const fp = require('find-free-port')
 const DHT = require('bittorrent-dht')
 
+const {
+  FreePortError
+} = require('../errors')
+
 const getDefaultPorts = () => {
   return {
     grape1DhtPort: 20002,
@@ -35,7 +39,7 @@ const getFreePort = async (ports = {}) => {
     while (true) {
       count += 1
 
-      if (count > 100) throw new Error('NO_FREE_PORT')
+      if (count > 100) throw new FreePortError()
 
       const freePort = (await fp(port, '127.0.0.1'))[0]
       if (/dht/i.test(key)) {
