@@ -17,7 +17,8 @@ const DEFAULT_FILE_NAME = 'bfx-report-db-archive'
 module.exports = ({ dbPath }) => {
   const dialog = electron.dialog || electron.remote.dialog
   const app = electron.app || electron.remote.app
-  const timestamp = (new Date()).toISOString().split('.')[0]
+  const _timestamp = (new Date()).toISOString().split('.')[0]
+  const timestamp = _timestamp.replace(/[:]/g, '-')
   const defaultPath = path.join(
     app.getPath('documents'),
     `${DEFAULT_FILE_NAME}-${timestamp}`
