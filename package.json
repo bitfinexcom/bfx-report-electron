@@ -9,6 +9,7 @@
     "archiver": "^3.1.1",
     "async": "^2.6.1",
     "bittorrent-dht": "^8.4.0",
+    "bfx-svc-test-helper": "git+https://github.com/bitfinexcom/bfx-svc-test-helper.git",
     "electron-serve": "0.2.0",
     "find-free-port": "^2.0.0",
     "grenache-grape": "^0.9.8",
