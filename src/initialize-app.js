@@ -16,6 +16,7 @@ const {
 const {
   hideLoadingWindow
 } = require('./change-loading-win-visibility-state')
+const showMigrationsModalDialog = require('./show-migrations-modal-dialog')
 const {
   RunningExpressOnPortError,
   IpcMessageError,
@@ -47,20 +48,26 @@ module.exports = () => {
         runServer()
 
         const mess = await _ipcMessToPromise(ipcs.serverIpc)
+        const {
+          state,
+          isMigrationsError,
+          isMigrationsReady,
+          err
+        } = { ...mess }
 
-        if (!mess || typeof mess.state !== 'string') {
+        if (typeof state !== 'string') {
           throw new IpcMessageError()
         }
-        if (mess.state === 'error:express-port-required') {
+        if (state === 'error:express-port-required') {
           await createErrorWindow(pathToLayoutExprPortReq)
-          reject(mess.err || new RunningExpressOnPortError())
+          reject(err || new RunningExpressOnPortError())
 
           return
         }
-        if (mess.state === 'error:app-init') {
-          throw mess.err || new AppInitializationError()
+        if (state === 'error:app-init') {
+          throw err || new AppInitializationError()
         }
-        if (mess.state === 'ready:server') {
+        if (state === 'ready:server') {
           if (appStates.isMainWinMaximized) {
             wins.mainWindow.maximize()
           }
@@ -74,6 +81,11 @@ module.exports = () => {
                 document.querySelector(".bp3-button.bp3-intent-success").click() \
               } catch (e) { console.log(e) }`
             )
+
+          await showMigrationsModalDialog(
+            isMigrationsError,
+            isMigrationsReady
+          )
 
           resolve()
           return
