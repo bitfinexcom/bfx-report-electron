@@ -22,6 +22,7 @@ const env = {
   ...process.env,
   ELECTRON_VERSION: process.versions.electron
 }
+const isNotDevEnv = process.env.NODE_ENV !== 'development'
 
 const {
   bootTwoGrapes,
@@ -36,6 +37,9 @@ const {
 } = require('./src/errors')
 
 const emitter = new EventEmitter()
+
+let isMigrationsReady = false
+let isMigrationsError = false
 
 ;(async () => {
   try {
@@ -81,7 +85,7 @@ const emitter = new EventEmitter()
       '--csvFolder=../../../csv',
       '--isSchedulerEnabled=true',
       '--isElectronjsEnv=true',
-      '--isLoggerDisabled=true'
+      `--isLoggerDisabled=${isNotDevEnv}`
     ], {
       env,
       cwd: process.cwd(),
@@ -119,12 +123,15 @@ const emitter = new EventEmitter()
       ipc.once('error', reject)
 
       const handler = (mess) => {
-        if (
-          !mess ||
-          typeof mess !== 'object' ||
-          typeof mess.state !== 'string' ||
-          mess.state !== 'ready:worker'
-        ) {
+        const { state } = { ...mess }
+
+        if (state === 'error:migrations') {
+          isMigrationsError = true
+        }
+        if (state === 'ready:migrations') {
+          isMigrationsReady = true
+        }
+        if (state !== 'ready:worker') {
           return
         }
 
@@ -162,7 +169,11 @@ emitter.once('ready:grapes-worker', () => {
 })
 
 emitter.once('ready:server', () => {
-  process.send({ state: 'ready:server' })
+  process.send({
+    state: 'ready:server',
+    isMigrationsError,
+    isMigrationsReady
+  })
 })
 
 module.exports = emitter
