@@ -77,9 +77,7 @@ module.exports = () => {
 
           wins.mainWindow.webContents
             .executeJavaScript(
-              `try { \
-                document.querySelector(".bp3-button.bp3-intent-success").click() \
-              } catch (e) { console.log(e) }`
+              'try { document.querySelector(".bp3-button.bp3-intent-success").click() } catch (e) { console.log(e) }'
             )
 
           await showMigrationsModalDialog(
