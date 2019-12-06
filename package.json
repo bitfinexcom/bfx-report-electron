@@ -31,8 +31,8 @@
     ]
   },
   "scripts": {
-    "start": "npm run init&&npm run dist-linux&& npm run dist-win&& npm run dist-mac",
-    "startDev": "npm run initDev&&npm run dist-linux&& npm run dist-win&& npm run dist-mac",
+    "start": "./init.sh -s&&npm run dist-linux&&npm run dist-win&&npm run dist-mac",
+    "startDev": "./init.sh -d -s&&npm run dist-linux&&npm run dist-win&&npm run dist-mac",
     "init": "./init.sh",
     "initDev": "./init.sh -d",
     "dist-win": "./reinstall-deps.sh win32&&electron-builder build --win",

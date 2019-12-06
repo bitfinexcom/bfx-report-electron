@@ -1,7 +1,7 @@
 #!/bin/bash
 
-export IOJS_ORG_MIRROR=https://atom.io/download/electron
-export ATOM_ELECTRON_URL=https://atom.io/download/electron
+set -x
+
 export NODE_PATH=src/
 export PUBLIC_URL=/
 export REACT_APP_PLATFORM=localhost
@@ -13,6 +13,7 @@ ROOT=$PWD
 
 programname=$0
 isDevEnv=0
+isNotSkippedReiDeps=1
 
 function usage {
   echo "Usage: $programname [-d] | [-h]"
@@ -24,6 +25,8 @@ function usage {
 while [ "$1" != "" ]; do
   case $1 in
     -d | --dev )    isDevEnv=1
+                    ;;
+    -s | --skip-rei-deps )    isNotSkippedReiDeps=0
                     ;;
     -h | --help )   usage
                     exit
@@ -93,4 +96,6 @@ touch db/db-sqlite_sync_m0.db
 
 cd $ROOT
 
-bash ./reinstall-deps.sh
+if [ $isNotSkippedReiDeps != 0 ]; then
+  bash ./reinstall-deps.sh
+fi
