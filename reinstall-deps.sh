@@ -1,11 +1,11 @@
 #!/bin/bash
 
+set -x
+
 ELECTRON_VER="2.0.18"
 ARCH="x64"
 ROOT=$PWD
-
-export IOJS_ORG_MIRROR=https://atom.io/download/electron
-export ATOM_ELECTRON_URL=https://atom.io/download/electron
+DIST_URL=https://atom.io/download/electron
 
 unameOut="$(uname -s)"
 
@@ -28,6 +28,73 @@ fi
 backendFolder="$ROOT/bfx-reports-framework"
 expressFolder="$ROOT/bfx-report-ui/bfx-report-express"
 
+function getModuleVersion {
+  local prevFolder=$PWD
+  local dep=""
+  local version=""
+
+  if [ $# -ge 1 ]
+  then
+    dep=$1
+  else
+    return
+  fi
+  if [ $# -ge 2 ]
+  then
+    cd $2
+  fi
+
+  version=$(cat package.json \
+    | grep $dep \
+    | head -1 \
+    | awk -F: '{ print $2 }' \
+    | sed 's/[",]//g' \
+    | tr -d '[[:space:]]')
+
+  if [ $# -ge 1 ]
+  then
+    cd $prevFolder
+  fi
+
+  echo $version
+}
+
+function npmInstallDep {
+  local prevFolder=$PWD
+  local dep=""
+  local version=""
+
+  if [ $# -ge 1 ]
+  then
+    cd $1
+  fi
+  if [ $# -ge 2 ]
+  then
+    dep=$2
+  else
+    return
+  fi
+  if [ $# -ge 3 ]
+  then
+    version="@$3"
+  fi
+
+  rm -rf ./node_modules/$dep
+
+  npm i "$dep$version" \
+    --no-save \
+    --target_platform=$targetPlatform \
+    --target=$ELECTRON_VER \
+    --runtime="electron" \
+    --target_arch=$ARCH \
+    --dist-url=$DIST_URL
+
+  if [ $# -ge 1 ]
+  then
+    cd $prevFolder
+  fi
+}
+
 function npmInstall {
   local prevFolder=$PWD
   local isDevNeeded=0
@@ -45,13 +112,7 @@ function npmInstall {
     npm i --development
   fi
 
-  npm i --production \
-    --target_platform=$targetPlatform \
-    --target=$ELECTRON_VER \
-    --runtime="electron" \
-    --arch=$ARCH \
-    --target_arch=$ARCH \
-    --dist-url=$ATOM_ELECTRON_URL
+  npm i --production
 
   if [ $# -ge 1 ]
   then
@@ -75,11 +136,11 @@ function postInstall {
 
   cd $ROOT
 
-  ./node_modules/.bin/electron-rebuild -f -p \
+  ./node_modules/.bin/electron-rebuild -p \
     -t $types \
     -a $ARCH \
     -v $ELECTRON_VER \
-    -d $ATOM_ELECTRON_URL \
+    -d $DIST_URL \
     -m $folder
 
   cd $prevFolder
@@ -88,8 +149,10 @@ function postInstall {
 npmInstall $ROOT "--isDevNeeded"
 postInstall $ROOT "prod"
 
-npmInstall $backendFolder
-postInstall $backendFolder
-
 npmInstall $expressFolder
 postInstall $expressFolder
+
+npmInstall $backendFolder
+postInstall $backendFolder
+sqliteVer=$(getModuleVersion "sqlite3" $backendFolder)
+npmInstallDep $backendFolder "sqlite3" $sqliteVer
