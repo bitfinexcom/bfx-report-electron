@@ -90,10 +90,6 @@ if [ $isDevEnv != 0 ]; then
   sed -i -e "s/\"restUrl\": .*,/\"restUrl\": \"https:\/\/test.bitfinex.com\",/g" $backendFolder/config/service.report.json
 fi
 
-touch db/lokue_queue_1_aggregator.db.json
-touch db/lokue_queue_1_processor.db.json
-touch db/db-sqlite_sync_m0.db
-
 cd $ROOT
 
 if [ $isNotSkippedReiDeps != 0 ]; then
