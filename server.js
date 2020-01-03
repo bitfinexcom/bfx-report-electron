@@ -4,7 +4,6 @@ const { fork } = require('child_process')
 const path = require('path')
 const { writeFileSync } = require('fs')
 const EventEmitter = require('events')
-const electron = require('electron')
 
 const root = path.join(__dirname, 'bfx-reports-framework')
 const expressRoot = path.join(__dirname, 'bfx-report-ui/bfx-report-express')
@@ -45,8 +44,7 @@ let isMigrationsError = false
 
 ;(async () => {
   try {
-    const app = electron.app || electron.remote.app
-    const pathToUserData = app.getPath('userData')
+    const pathToUserData = process.env.PATH_TO_USER_DATA
     const defaultPorts = getDefaultPorts()
     const ports = await getFreePort(defaultPorts)
     const grape = `http://127.0.0.1:${ports.grape2ApiPort}`
