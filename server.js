@@ -30,7 +30,8 @@ const {
   killGrapes,
   getDefaultPorts,
   getFreePort,
-  checkAndChangeAccess
+  checkAndChangeAccess,
+  serializeError
 } = require('./src/helpers')
 
 const {
@@ -56,7 +57,7 @@ let isMigrationsError = false
     if (defaultPorts.expressApiPort !== ports.expressApiPort) {
       process.send({
         state: 'error:express-port-required',
-        err: new RunningExpressOnPortError()
+        err: serializeError(new RunningExpressOnPortError())
       })
 
       return
@@ -158,7 +159,10 @@ let isMigrationsError = false
     process.on('SIGHUP', () => ipc && ipc.kill())
     process.on('SIGTERM', () => ipc && ipc.kill())
   } catch (err) {
-    process.send({ state: 'error:app-init', err })
+    process.send({
+      state: 'error:app-init',
+      err: serializeError(err)
+    })
   }
 })()
 
@@ -170,7 +174,10 @@ emitter.once('ready:grapes-worker', () => {
       emitter.emit('ready:server', server)
     })
   } catch (err) {
-    process.send({ state: 'error:app-init', err })
+    process.send({
+      state: 'error:app-init',
+      err: serializeError(err)
+    })
   }
 })
 

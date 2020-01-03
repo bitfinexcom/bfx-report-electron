@@ -10,6 +10,29 @@ const checkAndChangeAccess = (path) => {
   }
 }
 
+const serializeError = (err) => {
+  if (!(err instanceof Error)) {
+    return err
+  }
+
+  return {
+    toJSON () {
+      return Object.keys(err).reduce((obj, key) => {
+        console.log('[key]:', key)
+        obj[key] = err[key]
+
+        return obj
+      }, {
+        name: err.name,
+        message: err.message,
+        stack: err.stack,
+        isError: true
+      })
+    }
+  }
+}
+
 module.exports = {
-  checkAndChangeAccess
+  checkAndChangeAccess,
+  serializeError
 }

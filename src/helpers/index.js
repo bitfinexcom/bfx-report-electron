@@ -9,7 +9,8 @@ const {
   getDefaultPorts
 } = require('./ports')
 const {
-  checkAndChangeAccess
+  checkAndChangeAccess,
+  serializeError
 } = require('./utils')
 
 module.exports = {
@@ -17,5 +18,6 @@ module.exports = {
   killGrapes,
   getFreePort,
   getDefaultPorts,
-  checkAndChangeAccess
+  checkAndChangeAccess,
+  serializeError
 }
