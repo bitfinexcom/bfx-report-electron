@@ -22,6 +22,9 @@ const {
   IpcMessageError,
   AppInitializationError
 } = require('./errors')
+const {
+  deserializeError
+} = require('./helpers')
 
 const pathToLayouts = path.join(__dirname, 'layouts')
 const pathToLayoutAppInitErr = path.join(pathToLayouts, 'app-init-error.html')
@@ -30,7 +33,17 @@ const pathToLayoutExprPortReq = path.join(pathToLayouts, 'express-port-required.
 const _ipcMessToPromise = (ipc) => {
   return new Promise((resolve, reject) => {
     try {
-      ipc.once('message', resolve)
+      ipc.once('message', (mess) => {
+        if (
+          mess ||
+          typeof mess === 'object' ||
+          typeof mess.err === 'string'
+        ) {
+          mess.err = deserializeError(mess.err)
+        }
+
+        resolve(mess)
+      })
     } catch (err) {
       reject(err)
     }

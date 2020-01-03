@@ -32,7 +32,24 @@ const serializeError = (err) => {
   }
 }
 
+const deserializeError = (err) => {
+  if (
+    !err ||
+    typeof err !== 'object' ||
+    !err.isError
+  ) {
+    return err
+  }
+
+  return Object.keys(err).reduce((error, key) => {
+    error[key] = err[key]
+
+    return error
+  }, new Error())
+}
+
 module.exports = {
   checkAndChangeAccess,
-  serializeError
+  serializeError,
+  deserializeError
 }
