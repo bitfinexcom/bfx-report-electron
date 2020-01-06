@@ -1,15 +1,5 @@
 'use strict'
 
-const fs = require('fs')
-
-const checkAndChangeAccess = (path) => {
-  try {
-    fs.accessSync(path, fs.constants.R_OK | fs.constants.W_OK)
-  } catch (err) {
-    fs.chmodSync(path, '766')
-  }
-}
-
 const serializeError = (err) => {
   if (!(err instanceof Error)) {
     return err
@@ -49,7 +39,6 @@ const deserializeError = (err) => {
 }
 
 module.exports = {
-  checkAndChangeAccess,
   serializeError,
   deserializeError
 }

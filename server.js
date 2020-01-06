@@ -2,7 +2,6 @@
 
 const { fork } = require('child_process')
 const path = require('path')
-const { writeFileSync } = require('fs')
 const EventEmitter = require('events')
 
 const root = path.join(__dirname, 'bfx-reports-framework')
@@ -29,7 +28,6 @@ const {
   killGrapes,
   getDefaultPorts,
   getFreePort,
-  checkAndChangeAccess,
   serializeError
 } = require('./src/helpers')
 
@@ -61,10 +59,6 @@ let isMigrationsError = false
       return
     }
 
-    checkAndChangeAccess(pathToConfFacs)
-    checkAndChangeAccess(pathToConfFacsGrc)
-    writeFileSync(pathToConfFacsGrc, JSON.stringify(confFacsGrc))
-
     process.env.NODE_CONFIG = JSON.stringify({
       app: {
         port: ports.expressApiPort
@@ -90,7 +84,8 @@ let isMigrationsError = false
       `--csvFolder=${pathToUserData}/csv`,
       `--tempFolder=${pathToUserData}/temp`,
       `--logsFolder=${pathToUserData}/logs`,
-      `--dbFolder=${pathToUserData}`
+      `--dbFolder=${pathToUserData}`,
+      `--grape=${grape}`
     ], {
       env,
       cwd: process.cwd(),
