@@ -43,6 +43,9 @@ let isMigrationsError = false
 ;(async () => {
   try {
     const pathToUserData = process.env.PATH_TO_USER_DATA
+    const pathToCsvFolder = process.platform === 'darwin'
+      ? pathToUserData
+      : '../../..'
     const defaultPorts = getDefaultPorts()
     const ports = await getFreePort(defaultPorts)
     const grape = `http://127.0.0.1:${ports.grape2ApiPort}`
@@ -81,7 +84,7 @@ let isMigrationsError = false
       '--isSchedulerEnabled=true',
       '--isElectronjsEnv=true',
       `--isLoggerDisabled=${isNotDevEnv}`,
-      `--csvFolder=${pathToUserData}/csv`,
+      `--csvFolder=${pathToCsvFolder}/csv`,
       `--tempFolder=${pathToUserData}/temp`,
       `--logsFolder=${pathToUserData}/logs`,
       `--dbFolder=${pathToUserData}`,
