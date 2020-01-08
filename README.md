@@ -5,15 +5,6 @@
 Already complied binaries can be found on release section [release section](https://github.com/bitfinexcom/bfx-report-electron/releases). </br>
 Download the correspondent binary according your operating system.</br>  
 
-#### <font color="red">macOS Mojave known issue</font></br>
-On macOS Mojave software is not running on double click.</br>
-As to run it from macOs open a console from folder where software was exported to and run:
-
-```
-./bfx-report-electron
-```
-We are actually working on a solution for this.
-
 ## Setup
 
 ### Install
@@ -44,6 +35,7 @@ For doing builds for other platforms please have “Multi Platform Build” in c
 For creating the distributions please run the following commands, after the execution is finished the file would be in */dist* folder
 
 - Individual:
+
 ```console
 #Distribution for Linux
 npm run dist-linux
@@ -56,6 +48,11 @@ npm run dist-mac
 ```
 
 - Linux + Windows + MacOs:
+
 ```console
 npm start
 ```
+
+## Export CSV reports
+
+Exported CSV reports are contained in the root folder of the application in `csv` directory for Linux and Windows releases, and in `~/Library/Application Support/bfx-report-electron/csv` directory for Mac release
