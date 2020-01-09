@@ -2,7 +2,6 @@
 
 const { fork } = require('child_process')
 const path = require('path')
-const { writeFileSync } = require('fs')
 const EventEmitter = require('events')
 
 const root = path.join(__dirname, 'bfx-reports-framework')
@@ -29,7 +28,7 @@ const {
   killGrapes,
   getDefaultPorts,
   getFreePort,
-  checkAndChangeAccess
+  serializeError
 } = require('./src/helpers')
 
 const {
@@ -43,6 +42,10 @@ let isMigrationsError = false
 
 ;(async () => {
   try {
+    const pathToUserData = process.env.PATH_TO_USER_DATA
+    const pathToCsvFolder = process.platform === 'darwin'
+      ? pathToUserData
+      : '../../..'
     const defaultPorts = getDefaultPorts()
     const ports = await getFreePort(defaultPorts)
     const grape = `http://127.0.0.1:${ports.grape2ApiPort}`
@@ -53,15 +56,11 @@ let isMigrationsError = false
     if (defaultPorts.expressApiPort !== ports.expressApiPort) {
       process.send({
         state: 'error:express-port-required',
-        err: new RunningExpressOnPortError()
+        err: serializeError(new RunningExpressOnPortError())
       })
 
       return
     }
-
-    checkAndChangeAccess(pathToConfFacs)
-    checkAndChangeAccess(pathToConfFacsGrc)
-    writeFileSync(pathToConfFacsGrc, JSON.stringify(confFacsGrc))
 
     process.env.NODE_CONFIG = JSON.stringify({
       app: {
@@ -82,10 +81,14 @@ let isMigrationsError = false
       `--apiPort=${ports.workerApiPort}`,
       `--wsPort=${ports.workerWsPort}`,
       '--dbId=1',
-      '--csvFolder=../../../csv',
       '--isSchedulerEnabled=true',
       '--isElectronjsEnv=true',
-      `--isLoggerDisabled=${isNotDevEnv}`
+      `--isLoggerDisabled=${isNotDevEnv}`,
+      `--csvFolder=${pathToCsvFolder}/csv`,
+      `--tempFolder=${pathToUserData}/temp`,
+      `--logsFolder=${pathToUserData}/logs`,
+      `--dbFolder=${pathToUserData}`,
+      `--grape=${grape}`
     ], {
       env,
       cwd: process.cwd(),
@@ -152,7 +155,10 @@ let isMigrationsError = false
     process.on('SIGHUP', () => ipc && ipc.kill())
     process.on('SIGTERM', () => ipc && ipc.kill())
   } catch (err) {
-    process.send({ state: 'error:app-init', err })
+    process.send({
+      state: 'error:app-init',
+      err: serializeError(err)
+    })
   }
 })()
 
@@ -164,7 +170,10 @@ emitter.once('ready:grapes-worker', () => {
       emitter.emit('ready:server', server)
     })
   } catch (err) {
-    process.send({ state: 'error:app-init', err })
+    process.send({
+      state: 'error:app-init',
+      err: serializeError(err)
+    })
   }
 })
 

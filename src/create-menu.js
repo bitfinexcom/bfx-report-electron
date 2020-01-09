@@ -10,9 +10,11 @@ const exportDB = require('./export-db')
 const importDB = require('./import-db')
 
 const dbFileName = 'db-sqlite_sync_m0.db'
-const dbPath = path.join(__dirname, '../bfx-reports-framework/db', dbFileName)
 
 module.exports = () => {
+  const pathToUserData = app.getPath('userData')
+  const dbPath = path.join(pathToUserData, dbFileName)
+
   const menuTemplate = [
     {
       label: 'Application',
