@@ -3,6 +3,7 @@
 const { fork } = require('child_process')
 const path = require('path')
 const EventEmitter = require('events')
+const { grapes: createGrapes } = require('bfx-svc-test-helper')
 
 const root = path.join(__dirname, 'bfx-reports-framework')
 const expressRoot = path.join(__dirname, 'bfx-report-ui/bfx-report-express')
@@ -24,8 +25,6 @@ const env = {
 const isNotDevEnv = process.env.NODE_ENV !== 'development'
 
 const {
-  bootTwoGrapes,
-  killGrapes,
   getDefaultPorts,
   getFreePort,
   serializeError
@@ -47,13 +46,21 @@ let isMigrationsError = false
       ? pathToUserData
       : '../../..'
     const defaultPorts = getDefaultPorts()
-    const ports = await getFreePort(defaultPorts)
-    const grape = `http://127.0.0.1:${ports.grape2ApiPort}`
+    const {
+      grape1DhtPort,
+      grape1ApiPort,
+      grape2DhtPort,
+      grape2ApiPort,
+      workerApiPort,
+      workerWsPort,
+      expressApiPort
+    } = await getFreePort(defaultPorts)
+    const grape = `http://127.0.0.1:${grape2ApiPort}`
 
     confFacsGrc.p0.grape = grape
     confFacsGrc.p1.grape = grape
 
-    if (defaultPorts.expressApiPort !== ports.expressApiPort) {
+    if (defaultPorts.expressApiPort !== expressApiPort) {
       process.send({
         state: 'error:express-port-required',
         err: serializeError(new RunningExpressOnPortError())
@@ -64,22 +71,35 @@ let isMigrationsError = false
 
     process.env.NODE_CONFIG = JSON.stringify({
       app: {
-        port: ports.expressApiPort
+        port: expressApiPort
       },
       grenacheClient: {
         grape
       }
     })
 
-    const grapes = await bootTwoGrapes(ports)
+    const confGrape1 = {
+      dht_port: grape1DhtPort,
+      dht_bootstrap: [`127.0.0.1:${grape2DhtPort}`],
+      api_port: grape1ApiPort
+    }
+    const confGrape2 = {
+      dht_port: grape2DhtPort,
+      dht_bootstrap: [`127.0.0.1:${grape1DhtPort}`],
+      api_port: grape2ApiPort
+    }
+    const grapes = createGrapes({
+      ports: [confGrape1, confGrape2]
+    })
+    await grapes.start()
 
     const modulePath = path.join(root, 'worker.js')
 
     const ipc = fork(modulePath, [
       `--env=${process.env.NODE_ENV}`,
       '--wtype=wrk-report-framework-api',
-      `--apiPort=${ports.workerApiPort}`,
-      `--wsPort=${ports.workerWsPort}`,
+      `--apiPort=${workerApiPort}`,
+      `--wsPort=${workerWsPort}`,
       '--dbId=1',
       '--isSchedulerEnabled=true',
       '--isElectronjsEnv=true',
@@ -95,33 +115,14 @@ let isMigrationsError = false
       silent: false
     })
     ipc.on('close', () => {
-      killGrapes(grapes, () => {
+      grapes.stop(() => {
         process.nextTick(() => {
           process.exit(0)
         })
       })
     })
 
-    const announcePromise = new Promise((resolve, reject) => {
-      grapes[0].once('error', reject)
-      grapes[1].once('error', reject)
-
-      let count = 0
-
-      const handler = () => {
-        count += 1
-
-        if (count < 2) return
-
-        grapes[0].removeListener('error', reject)
-        grapes[0].removeListener('announce', handler)
-        grapes[1].removeListener('error', reject)
-
-        resolve()
-      }
-
-      grapes[0].on('announce', handler)
-    })
+    const announcePromise = grapes.onAnnounce('rest:report:api')
     const ipcReadyPromise = new Promise((resolve, reject) => {
       ipc.once('error', reject)
 
