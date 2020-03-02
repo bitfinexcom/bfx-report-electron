@@ -45,7 +45,7 @@
   "build": {
     "extends": null,
     "asar": false,
-    "productName": "bfx-report-electron",
+    "productName": "Bitfinex Report",
     "appId": "com.report.bitfinex",
     "files": [
       "**/*",
