@@ -22,7 +22,6 @@ const env = {
   ...process.env,
   ELECTRON_VERSION: process.versions.electron
 }
-const isNotDevEnv = process.env.NODE_ENV !== 'development'
 
 const {
   getDefaultPorts,
@@ -103,7 +102,7 @@ let isMigrationsError = false
       '--dbId=1',
       '--isSchedulerEnabled=true',
       '--isElectronjsEnv=true',
-      `--isLoggerDisabled=${isNotDevEnv}`,
+      '--isLoggerDisabled=false',
       `--csvFolder=${pathToCsvFolder}/csv`,
       `--tempFolder=${pathToUserData}/temp`,
       `--logsFolder=${pathToUserData}/logs`,
