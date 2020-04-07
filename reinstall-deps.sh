@@ -2,7 +2,38 @@
 
 set -x
 
-ELECTRON_VER="2.0.18"
+function getModuleVersion {
+  local prevFolder=$PWD
+  local dep=""
+  local version=""
+
+  if [ $# -ge 1 ]
+  then
+    dep=$1
+  else
+    return
+  fi
+  if [ $# -ge 2 ]
+  then
+    cd $2
+  fi
+
+  version=$(cat package.json \
+    | grep \"$dep\" \
+    | head -1 \
+    | awk -F: '{ print $2 }' \
+    | sed 's/[",]//g' \
+    | tr -d '[[:space:]]')
+
+  if [ $# -ge 1 ]
+  then
+    cd $prevFolder
+  fi
+
+  echo $version
+}
+
+ELECTRON_VER=$(getModuleVersion "electron" $PWD)
 ARCH="x64"
 ROOT=$PWD
 DIST_URL=https://atom.io/download/electron
@@ -22,42 +53,11 @@ targetPlatform=$machine
 
 if [ $# -ge 1 ]
 then
-  targetPlatform=$1
+  targetPlatform=$1 | sed 's/win$/win32/' | sed 's/mac/darwin/'
 fi
 
 backendFolder="$ROOT/bfx-reports-framework"
 expressFolder="$ROOT/bfx-report-ui/bfx-report-express"
-
-function getModuleVersion {
-  local prevFolder=$PWD
-  local dep=""
-  local version=""
-
-  if [ $# -ge 1 ]
-  then
-    dep=$1
-  else
-    return
-  fi
-  if [ $# -ge 2 ]
-  then
-    cd $2
-  fi
-
-  version=$(cat package.json \
-    | grep $dep \
-    | head -1 \
-    | awk -F: '{ print $2 }' \
-    | sed 's/[",]//g' \
-    | tr -d '[[:space:]]')
-
-  if [ $# -ge 1 ]
-  then
-    cd $prevFolder
-  fi
-
-  echo $version
-}
 
 function npmInstallDep {
   local prevFolder=$PWD

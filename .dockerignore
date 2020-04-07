@@ -1,0 +1,8 @@
+**/node_modules
+.env
+.env.example
+docker-compose.yml
+Dockerfile.linux-builder
+Dockerfile.win-builder
+Dockerfile.mac-builder
+dist

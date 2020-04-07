@@ -14,6 +14,7 @@ ROOT=$PWD
 programname=$0
 isDevEnv=0
 isNotSkippedReiDeps=1
+targetPlatform=0
 
 function usage {
   echo "Usage: $programname [-d] | [-h]"
@@ -27,6 +28,8 @@ while [ "$1" != "" ]; do
     -d | --dev )    isDevEnv=1
                     ;;
     -s | --skip-rei-deps )    isNotSkippedReiDeps=0
+                    ;;
+    -p | --target-platform )  targetPlatform=$2; shift
                     ;;
     -h | --help )   usage
                     exit
@@ -93,5 +96,12 @@ fi
 cd $ROOT
 
 if [ $isNotSkippedReiDeps != 0 ]; then
-  bash ./reinstall-deps.sh
+  if [ $targetPlatform != 0 ]
+  then
+    bash ./reinstall-deps.sh $targetPlatform
+    ./node_modules/.bin/electron-builder build --$targetPlatform 2>/dev/null
+    exit 0
+  else
+    bash ./reinstall-deps.sh
+  fi
 fi

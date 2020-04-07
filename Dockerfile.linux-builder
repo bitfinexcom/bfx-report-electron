@@ -1,0 +1,6 @@
+FROM electronuserland/builder:10
+
+COPY . .
+
+ENTRYPOINT ["./init.sh"]
+CMD ["-p", "linux"]

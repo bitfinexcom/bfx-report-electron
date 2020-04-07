@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+  linux-builder:
+    container_name: linux-builder
+    build:
+      context: .
+      dockerfile: Dockerfile.linux-builder
+    environment:
+      ELECTRON_CACHE: /root/.cache/electron
+      ELECTRON_BUILDER_CACHE: /root/.cache/electron-builder
+    volumes:
+      - ./dist:/project/dist
+      - ~/.cache/electron:/root/.cache/electron
+      - ~/.cache/electron-builder:/root/.cache/electron-builder
+
+  win-builder:
+    container_name: win-builder
+    build:
+      context: .
+      dockerfile: Dockerfile.win-builder
+    environment:
+      ELECTRON_CACHE: /root/.cache/electron
+      ELECTRON_BUILDER_CACHE: /root/.cache/electron-builder
+    volumes:
+      - ./dist:/project/dist
+      - ~/.cache/electron:/root/.cache/electron
+      - ~/.cache/electron-builder:/root/.cache/electron-builder
+
+  mac-builder:
+    container_name: mac-builder
+    build:
+      context: .
+      dockerfile: Dockerfile.mac-builder
+    environment:
+      ELECTRON_CACHE: /root/.cache/electron
+      ELECTRON_BUILDER_CACHE: /root/.cache/electron-builder
+    volumes:
+      - ./dist:/project/dist
+      - ~/.cache/electron:/root/.cache/electron
+      - ~/.cache/electron-builder:/root/.cache/electron-builder
