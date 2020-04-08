@@ -1,6 +1,14 @@
 version: '3.7'
 
 services:
+  ui-builder:
+    container_name: ui-builder
+    build:
+      context: .
+      dockerfile: Dockerfile.ui-builder
+    volumes:
+      - ui-build:/project/bfx-report-ui/build
+
   linux-builder:
     container_name: linux-builder
     build:
@@ -10,9 +18,12 @@ services:
       ELECTRON_CACHE: /root/.cache/electron
       ELECTRON_BUILDER_CACHE: /root/.cache/electron-builder
     volumes:
+      - ui-build:/project/bfx-report-ui/build
       - ./dist:/project/dist
       - ~/.cache/electron:/root/.cache/electron
       - ~/.cache/electron-builder:/root/.cache/electron-builder
+    depends_on:
+      - ui-builder
 
   win-builder:
     container_name: win-builder
@@ -23,9 +34,12 @@ services:
       ELECTRON_CACHE: /root/.cache/electron
       ELECTRON_BUILDER_CACHE: /root/.cache/electron-builder
     volumes:
+      - ui-build:/project/bfx-report-ui/build
       - ./dist:/project/dist
       - ~/.cache/electron:/root/.cache/electron
       - ~/.cache/electron-builder:/root/.cache/electron-builder
+    depends_on:
+      - ui-builder
 
   mac-builder:
     container_name: mac-builder
@@ -36,6 +50,12 @@ services:
       ELECTRON_CACHE: /root/.cache/electron
       ELECTRON_BUILDER_CACHE: /root/.cache/electron-builder
     volumes:
+      - ui-build:/project/bfx-report-ui/build
       - ./dist:/project/dist
       - ~/.cache/electron:/root/.cache/electron
       - ~/.cache/electron-builder:/root/.cache/electron-builder
+    depends_on:
+      - ui-builder
+
+volumes:
+  ui-build:

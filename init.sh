@@ -2,19 +2,13 @@
 
 set -x
 
-export NODE_PATH=src/
-export PUBLIC_URL=/
-export REACT_APP_PLATFORM=localhost
-export REACT_APP_TITLE=Bitfinex Reports
-export REACT_APP_LOGO_PATH=favicon.ico
-export REACT_APP_ELECTRON=true
-
 ROOT=$PWD
 
 programname=$0
 isDevEnv=0
 isNotSkippedReiDeps=1
 targetPlatform=0
+isSkippedUIBuild=0
 
 function usage {
   echo "Usage: $programname [-d] | [-h]"
@@ -30,6 +24,8 @@ while [ "$1" != "" ]; do
     -s | --skip-rei-deps )    isNotSkippedReiDeps=0
                     ;;
     -p | --target-platform )  targetPlatform=$2; shift
+                    ;;
+    -u | --skip-ui-build )    isSkippedUIBuild=1
                     ;;
     -h | --help )   usage
                     exit
@@ -48,39 +44,26 @@ frontendFolder="$ROOT/bfx-report-ui"
 expressFolder="$frontendFolder/bfx-report-express"
 backendFolder="$ROOT/bfx-reports-framework"
 
-rm -rf $frontendFolder
-rm -rf $backendFolder
-mkdir $frontendFolder
-mkdir $backendFolder
-
 mkdir $ROOT/dist 2>/dev/null
 chmod a+xwr $ROOT/dist 2>/dev/null
 
+git submodule foreach --recursive git reset --hard HEAD
 git submodule sync
 git submodule update --init --recursive
 git pull --recurse-submodules
 git submodule update --remote
+git submodule foreach --recursive git clean -f
 
-cd $frontendFolder
+if [ $isSkippedUIBuild == 0 ]
+then
+  devFlag=""
 
-git submodule sync
-git submodule update --init --recursive
-git pull --recurse-submodules
-git submodule update --remote
-npm i
+  if [ $isDevEnv == 0 ]; then
+    devFlag="-d"
+  fi
 
-sed -i -e "s/API_URL: .*,/API_URL: \'http:\/\/localhost:34343\/api\',/g" $frontendFolder/src/var/config.js
-sed -i -e "s/WS_ADDRESS: .*,/WS_ADDRESS: \'ws:\/\/localhost:34343\/ws\',/g" $frontendFolder/src/var/config.js
-echo "SKIP_PREFLIGHT_CHECK=true" >> $frontendFolder/.env
-
-if [ $isDevEnv != 0 ]; then
-	sed -i -e "s/KEY_URL: .*,/KEY_URL: \'https:\/\/test.bitfinex.com\/api\',/g" $frontendFolder/src/var/config.js
+  bash ./build-ui.sh $devFlag
 fi
-
-sed -i -e "s/showAuthPage: .*,/showAuthPage: true,/g" $frontendFolder/src/var/config.js
-sed -i -e "s/showSyncMode: .*,/showSyncMode: true,/g" $frontendFolder/src/var/config.js
-sed -i -e "s/showFrameworkMode: .*,/showFrameworkMode: true,/g" $frontendFolder/src/var/config.js
-npm run build
 
 cp $expressFolder/config/default.json.example $expressFolder/config/default.json
 
@@ -102,6 +85,16 @@ if [ $isNotSkippedReiDeps != 0 ]; then
   if [ $targetPlatform != 0 ]
   then
     bash ./reinstall-deps.sh $targetPlatform
+
+    if [ $isSkippedUIBuild != 0 ]
+    then
+      file="$frontendFolder/build/READY"
+
+      while !(test -f "$file"); do
+        sleep 0.5
+      done
+    fi
+
     ./node_modules/.bin/electron-builder build --$targetPlatform 2>/dev/null
     chmod -R a+wr ./dist
 

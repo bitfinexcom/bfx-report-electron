@@ -3,4 +3,4 @@ FROM electronuserland/builder:wine-05.18
 COPY . .
 
 ENTRYPOINT ["./init.sh"]
-CMD ["-p", "win"]
+CMD ["-p", "win", "-u"]

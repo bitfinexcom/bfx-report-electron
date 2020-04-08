@@ -1,0 +1,6 @@
+FROM electronuserland/builder:10
+
+COPY . .
+
+ENTRYPOINT ["./build-ui.sh"]
+CMD ["-i"]
