@@ -53,6 +53,9 @@ rm -rf $backendFolder
 mkdir $frontendFolder
 mkdir $backendFolder
 
+mkdir $ROOT/dist 2>/dev/null
+chmod a+xwr $ROOT/dist 2>/dev/null
+
 git submodule sync
 git submodule update --init --recursive
 git pull --recurse-submodules
@@ -100,6 +103,8 @@ if [ $isNotSkippedReiDeps != 0 ]; then
   then
     bash ./reinstall-deps.sh $targetPlatform
     ./node_modules/.bin/electron-builder build --$targetPlatform 2>/dev/null
+    chmod -R a+wr ./dist
+
     exit 0
   else
     bash ./reinstall-deps.sh

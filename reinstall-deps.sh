@@ -53,7 +53,7 @@ targetPlatform=$machine
 
 if [ $# -ge 1 ]
 then
-  targetPlatform=$1 | sed 's/win$/win32/' | sed 's/mac/darwin/'
+  targetPlatform=$(echo $1 | sed -e 's/win$/win32/' -e 's/mac/darwin/')
 fi
 
 backendFolder="$ROOT/bfx-reports-framework"
