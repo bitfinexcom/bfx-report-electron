@@ -99,6 +99,10 @@ function npmInstall {
   local prevFolder=$PWD
   local isDevNeeded=0
 
+  if ! [ -s "./package.json" ]; then
+    exit 1
+  fi
+
   if [ $# -ge 1 ]
   then
     cd $1

@@ -10,10 +10,15 @@ export REACT_APP_LOGO_PATH=favicon.ico
 export REACT_APP_ELECTRON=true
 
 ROOT=$PWD
+frontendFolder="$ROOT/bfx-report-ui"
+uiBuildFolder=/ui-build
+uiReadyFile="$uiBuildFolder/READY"
 
 programname=$0
 isDevEnv=0
 isInitedSubmodules=0
+
+rm -f $uiReadyFile
 
 function usage {
   echo "Usage: $programname [-d] | [-h]"
@@ -41,18 +46,21 @@ if [ $isDevEnv != 0 ]; then
   echo "Developer environment is turned on"
 fi
 
-frontendFolder="$ROOT/bfx-report-ui"
-
 if [ $isInitedSubmodules != 0 ]; then
+  git submodule foreach --recursive git git clean -fdx
   git submodule foreach --recursive git reset --hard HEAD
   git submodule sync
   git submodule update --init --recursive
+  git config url."https://github.com/".insteadOf git@github.com:
   git pull --recurse-submodules
-  git submodule update --remote
-  git submodule foreach --recursive git clean -f
+  git submodule update --remote --recursive
 fi
 
 cd $frontendFolder
+
+if ! [ -s "$frontendFolder/package.json" ]; then
+  exit 1
+fi
 
 npm i
 
@@ -68,4 +76,5 @@ sed -i -e "s/showSyncMode: .*,/showSyncMode: true,/g" $frontendFolder/src/var/co
 sed -i -e "s/showFrameworkMode: .*,/showFrameworkMode: true,/g" $frontendFolder/src/var/config.js
 npm run build
 
-touch $frontendFolder/build/READY
+mv -f $frontendFolder/build/* $uiBuildFolder
+touch $uiReadyFile

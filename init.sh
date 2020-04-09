@@ -43,16 +43,19 @@ fi
 frontendFolder="$ROOT/bfx-report-ui"
 expressFolder="$frontendFolder/bfx-report-express"
 backendFolder="$ROOT/bfx-reports-framework"
+uiBuildFolder=/ui-build
+uiReadyFile="$uiBuildFolder/READY"
 
 mkdir $ROOT/dist 2>/dev/null
 chmod a+xwr $ROOT/dist 2>/dev/null
 
+git submodule foreach --recursive git clean -fdx
 git submodule foreach --recursive git reset --hard HEAD
 git submodule sync
 git submodule update --init --recursive
+git config url."https://github.com/".insteadOf git@github.com:
 git pull --recurse-submodules
-git submodule update --remote
-git submodule foreach --recursive git clean -f
+git submodule update --remote --recursive
 
 if [ $isSkippedUIBuild == 0 ]
 then
@@ -88,15 +91,18 @@ if [ $isNotSkippedReiDeps != 0 ]; then
 
     if [ $isSkippedUIBuild != 0 ]
     then
-      file="$frontendFolder/build/READY"
-
-      while !(test -f "$file"); do
+      while !(test -f "$uiReadyFile"); do
         sleep 0.5
       done
     fi
 
-    ./node_modules/.bin/electron-builder build --$targetPlatform 2>/dev/null
-    chmod -R a+wr ./dist
+    mkdir $frontendFolder/build 2>/dev/null
+    cp -avr $uiBuildFolder/* $frontendFolder/build
+    chmod -R a+xwr $frontendFolder/build
+    ./node_modules/.bin/electron-builder build --$targetPlatform
+    chmod -R a+xwr ./dist
+    mv -f ./dist/*.zip /dist
+    chmod -R a+xwr /dist 2>/dev/null
 
     exit 0
   else
