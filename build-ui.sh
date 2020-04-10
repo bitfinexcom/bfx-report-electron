@@ -18,7 +18,7 @@ programname=$0
 isDevEnv=0
 isInitedSubmodules=0
 
-rm -f $uiReadyFile
+rm -rf $uiBuildFolder/*
 
 function usage {
   echo "Usage: $programname [-d] | [-h]"

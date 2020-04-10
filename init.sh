@@ -17,6 +17,27 @@ function usage {
   exit 1
 }
 
+function getConfValue {
+  local dep=""
+  local value=""
+
+  if [ $# -ge 1 ]
+  then
+    dep=$1
+  else
+    exit 1
+  fi
+
+  version=$(cat $ROOT/package.json \
+    | grep \"$dep\" \
+    | head -1 \
+    | awk -F: '{ print $2 }' \
+    | sed 's/[",]//g' \
+    | tr -d '[[:space:]]')
+
+  echo $version
+}
+
 while [ "$1" != "" ]; do
   case $1 in
     -d | --dev )    isDevEnv=1
@@ -97,11 +118,29 @@ if [ $isNotSkippedReiDeps != 0 ]; then
     fi
 
     mkdir $frontendFolder/build 2>/dev/null
+    rm -rf $frontendFolder/build/*
     cp -avr $uiBuildFolder/* $frontendFolder/build
     chmod -R a+xwr $frontendFolder/build
     ./node_modules/.bin/electron-builder build --$targetPlatform
     chmod -R a+xwr ./dist
-    mv -f ./dist/*.zip /dist
+
+    productName=$(getConfValue "productName")
+    version=$(getConfValue "version")
+    arch="x64"
+
+    unpackedFolder=$(ls -d $ROOT/dist/*/ | grep $targetPlatform | head -1)
+    zipFile="$ROOT/dist/$productName-$version-$arch-$targetPlatform.zip"
+
+    if ! [ -d $unpackedFolder ]; then
+      exit 1
+    fi
+
+    cd $unpackedFolder
+    7z a -tzip $zipFile . -mmt | grep -v "Compressing"
+    cd $ROOT
+
+    rm -rf /dist/*$targetPlatform*
+    mv -f ./dist/*$targetPlatform*.zip /dist
     chmod -R a+xwr /dist 2>/dev/null
 
     exit 0
