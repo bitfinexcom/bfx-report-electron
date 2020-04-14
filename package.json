@@ -1,6 +1,6 @@
 {
   "name": "bfx-report-electron",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "description": "Reporting tool",
   "author": "bitfinex.com",
   "main": "index.js",
@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "electron": "2.0.18",
-    "electron-builder": "21.2.0",
+    "electron-builder": "22.4.1",
     "electron-rebuild": "^1.8.2",
     "node-gyp": "6.0.1",
     "node-pre-gyp": "^0.11.0",
@@ -123,14 +123,12 @@
       "maintainer": "<bitfinex.com>",
       "category": "Network",
       "target": [
-        "dir",
-        "zip"
+        "dir"
       ]
     },
     "win": {
       "target": [
-        "dir",
-        "zip"
+        "dir"
       ],
       "publisherName": "Reporting tool"
     },
@@ -139,29 +137,8 @@
       "artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
       "category": "public.app-category.productivity",
       "target": [
-        "dmg",
-        "zip"
+        "dir"
       ]
-    },
-    "dmg": {
-      "iconSize": 100,
-      "contents": [
-        {
-          "x": 380,
-          "y": 280,
-          "type": "link",
-          "path": "/Applications"
-        },
-        {
-          "x": 110,
-          "y": 280,
-          "type": "file"
-        }
-      ],
-      "window": {
-        "width": 500,
-        "height": 500
-      }
     }
   }
 }

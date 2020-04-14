@@ -1,0 +1,57 @@
+version: '3.7'
+
+services:
+  ui-builder:
+    container_name: ui-builder
+    build:
+      context: .
+      dockerfile: Dockerfile.ui-builder
+    volumes:
+      - ui-build:/ui-build
+
+  linux-builder:
+    container_name: linux-builder
+    build:
+      context: .
+      dockerfile: Dockerfile.linux-builder
+    environment:
+      ELECTRON_CACHE: /root/.cache/electron
+      ELECTRON_BUILDER_CACHE: /root/.cache/electron-builder
+    volumes:
+      - ui-build:/ui-build
+      - ./dist:/dist
+      - electron-cache:/root/.cache/electron
+      - electron-builder-cache:/root/.cache/electron-builder
+
+  win-builder:
+    container_name: win-builder
+    build:
+      context: .
+      dockerfile: Dockerfile.win-builder
+    environment:
+      ELECTRON_CACHE: /root/.cache/electron
+      ELECTRON_BUILDER_CACHE: /root/.cache/electron-builder
+    volumes:
+      - ui-build:/ui-build
+      - ./dist:/dist
+      - electron-cache:/root/.cache/electron
+      - electron-builder-cache:/root/.cache/electron-builder
+
+  mac-builder:
+    container_name: mac-builder
+    build:
+      context: .
+      dockerfile: Dockerfile.mac-builder
+    environment:
+      ELECTRON_CACHE: /root/.cache/electron
+      ELECTRON_BUILDER_CACHE: /root/.cache/electron-builder
+    volumes:
+      - ui-build:/ui-build
+      - ./dist:/dist
+      - electron-cache:/root/.cache/electron
+      - electron-builder-cache:/root/.cache/electron-builder
+
+volumes:
+  ui-build:
+  electron-cache:
+  electron-builder-cache:

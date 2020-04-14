@@ -2,18 +2,13 @@
 
 set -x
 
-export NODE_PATH=src/
-export PUBLIC_URL=/
-export REACT_APP_PLATFORM=localhost
-export REACT_APP_TITLE=Bitfinex Reports
-export REACT_APP_LOGO_PATH=favicon.ico
-export REACT_APP_ELECTRON=true
-
 ROOT=$PWD
 
 programname=$0
 isDevEnv=0
 isNotSkippedReiDeps=1
+targetPlatform=0
+isSkippedUIBuild=0
 
 function usage {
   echo "Usage: $programname [-d] | [-h]"
@@ -22,11 +17,36 @@ function usage {
   exit 1
 }
 
+function getConfValue {
+  local dep=""
+  local value=""
+
+  if [ $# -ge 1 ]
+  then
+    dep=$1
+  else
+    exit 1
+  fi
+
+  version=$(cat $ROOT/package.json \
+    | grep \"$dep\" \
+    | head -1 \
+    | awk -F: '{ print $2 }' \
+    | sed 's/[",]//g' \
+    | tr -d '[[:space:]]')
+
+  echo $version
+}
+
 while [ "$1" != "" ]; do
   case $1 in
     -d | --dev )    isDevEnv=1
                     ;;
     -s | --skip-rei-deps )    isNotSkippedReiDeps=0
+                    ;;
+    -p | --target-platform )  targetPlatform=$2; shift
+                    ;;
+    -u | --skip-ui-build )    isSkippedUIBuild=1
                     ;;
     -h | --help )   usage
                     exit
@@ -44,37 +64,30 @@ fi
 frontendFolder="$ROOT/bfx-report-ui"
 expressFolder="$frontendFolder/bfx-report-express"
 backendFolder="$ROOT/bfx-reports-framework"
+uiBuildFolder=/ui-build
+uiReadyFile="$uiBuildFolder/READY"
 
-rm -rf $frontendFolder
-rm -rf $backendFolder
-mkdir $frontendFolder
-mkdir $backendFolder
+mkdir $ROOT/dist 2>/dev/null
+chmod a+xwr $ROOT/dist 2>/dev/null
 
+git submodule foreach --recursive git clean -fdx
+git submodule foreach --recursive git reset --hard HEAD
 git submodule sync
 git submodule update --init --recursive
+git config url."https://github.com/".insteadOf git@github.com:
 git pull --recurse-submodules
-git submodule update --remote
+git submodule update --remote --recursive
 
-cd $frontendFolder
+if [ $isSkippedUIBuild == 0 ]
+then
+  devFlag=""
 
-git submodule sync
-git submodule update --init --recursive
-git pull --recurse-submodules
-git submodule update --remote
-npm i
+  if [ $isDevEnv == 0 ]; then
+    devFlag="-d"
+  fi
 
-sed -i -e "s/API_URL: .*,/API_URL: \'http:\/\/localhost:34343\/api\',/g" $frontendFolder/src/var/config.js
-sed -i -e "s/WS_ADDRESS: .*,/WS_ADDRESS: \'ws:\/\/localhost:34343\/ws\',/g" $frontendFolder/src/var/config.js
-echo "SKIP_PREFLIGHT_CHECK=true" >> $frontendFolder/.env
-
-if [ $isDevEnv != 0 ]; then
-	sed -i -e "s/KEY_URL: .*,/KEY_URL: \'https:\/\/test.bitfinex.com\/api\',/g" $frontendFolder/src/var/config.js
+  bash ./build-ui.sh $devFlag
 fi
-
-sed -i -e "s/showAuthPage: .*,/showAuthPage: true,/g" $frontendFolder/src/var/config.js
-sed -i -e "s/showSyncMode: .*,/showSyncMode: true,/g" $frontendFolder/src/var/config.js
-sed -i -e "s/showFrameworkMode: .*,/showFrameworkMode: true,/g" $frontendFolder/src/var/config.js
-npm run build
 
 cp $expressFolder/config/default.json.example $expressFolder/config/default.json
 
@@ -93,5 +106,45 @@ fi
 cd $ROOT
 
 if [ $isNotSkippedReiDeps != 0 ]; then
-  bash ./reinstall-deps.sh
+  if [ $targetPlatform != 0 ]
+  then
+    bash ./reinstall-deps.sh $targetPlatform
+
+    if [ $isSkippedUIBuild != 0 ]
+    then
+      while !(test -f "$uiReadyFile"); do
+        sleep 0.5
+      done
+    fi
+
+    mkdir $frontendFolder/build 2>/dev/null
+    rm -rf $frontendFolder/build/*
+    cp -avr $uiBuildFolder/* $frontendFolder/build
+    chmod -R a+xwr $frontendFolder/build
+    ./node_modules/.bin/electron-builder build --$targetPlatform
+    chmod -R a+xwr ./dist
+
+    productName=$(getConfValue "productName")
+    version=$(getConfValue "version")
+    arch="x64"
+
+    unpackedFolder=$(ls -d $ROOT/dist/*/ | grep $targetPlatform | head -1)
+    zipFile="$ROOT/dist/$productName-$version-$arch-$targetPlatform.zip"
+
+    if ! [ -d $unpackedFolder ]; then
+      exit 1
+    fi
+
+    cd $unpackedFolder
+    7z a -tzip $zipFile . -mmt | grep -v "Compressing"
+    cd $ROOT
+
+    rm -rf /dist/*$targetPlatform*
+    mv -f ./dist/*$targetPlatform*.zip /dist
+    chmod -R a+xwr /dist 2>/dev/null
+
+    exit 0
+  else
+    bash ./reinstall-deps.sh
+  fi
 fi
