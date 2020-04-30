@@ -57,8 +57,10 @@ module.exports = () => {
     })
     app.on('ready', async () => {
       try {
-        await createMainWindow()
-        runServer()
+        const pathToUserData = app.getPath('userData')
+
+        await createMainWindow({ pathToUserData })
+        runServer({ pathToUserData })
 
         const mess = await _ipcMessToPromise(ipcs.serverIpc)
         const {

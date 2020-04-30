@@ -22,8 +22,11 @@ const pathToLayoutAppInit = path.join(pathToLayouts, 'app-init.html')
 
 const _createWindow = (
   cb,
-  pathname = null,
-  winName = 'mainWindow',
+  {
+    pathname = null,
+    winName = 'mainWindow',
+    pathToUserData
+  },
   props = {}
 ) => {
   const point = electron.screen.getCursorScreenPoint()
@@ -46,7 +49,8 @@ const _createWindow = (
   } = isMainWindow
     ? windowStateKeeper({
       defaultWidth,
-      defaultHeight
+      defaultHeight,
+      path: pathToUserData
     })
     : {}
   const _props = {
@@ -78,8 +82,7 @@ const _createWindow = (
     : 'app://-'
 
   if (!pathname) {
-    // appStates.loadURL(wins[winName])
-    loadURL(wins[winName]) // TODO:
+    loadURL(wins[winName])
   }
 
   wins[winName].loadURL(startUrl)
@@ -133,8 +136,10 @@ const _createChildWindow = (
 
   _createWindow(
     cb,
-    pathname,
-    winName,
+    {
+      pathname,
+      winName
+    },
     {
       width,
       height,
@@ -158,17 +163,20 @@ const _createChildWindow = (
   })
 }
 
-const createMainWindow = (cb) => {
+const createMainWindow = ({ pathToUserData }) => {
   return new Promise((resolve, reject) => {
     try {
-      _createWindow(() => {
-        if (isDevEnv) {
-          wins.mainWindow.webContents.openDevTools()
-        }
+      _createWindow(
+        () => {
+          if (isDevEnv) {
+            wins.mainWindow.webContents.openDevTools()
+          }
 
-        createMenu()
-        resolve()
-      })
+          createMenu({ pathToUserData })
+          resolve()
+        },
+        { pathToUserData }
+      )
     } catch (err) {
       reject(err)
     }

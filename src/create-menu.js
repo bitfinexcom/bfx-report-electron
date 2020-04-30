@@ -11,8 +11,7 @@ const importDB = require('./import-db')
 
 const dbFileName = 'db-sqlite_sync_m0.db'
 
-module.exports = () => {
-  const pathToUserData = app.getPath('userData')
+module.exports = ({ pathToUserData }) => {
   const dbPath = path.join(pathToUserData, dbFileName)
 
   const menuTemplate = [
