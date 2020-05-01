@@ -29,6 +29,12 @@ class DbImportingError extends BaseError {
   }
 }
 
+class DbRemovingError extends BaseError {
+  constructor (message = 'ERR_DB_HAS_NOT_REMOVED') {
+    super(message)
+  }
+}
+
 class InvalidFolderPathError extends BaseError {
   constructor (message = 'ERR_INVALID_FOLDER_PATH') {
     super(message)
@@ -76,6 +82,7 @@ module.exports = {
   InvalidFilePathError,
   InvalidFileNameInArchiveError,
   DbImportingError,
+  DbRemovingError,
   InvalidFolderPathError,
   RunningExpressOnPortError,
   IpcMessageError,

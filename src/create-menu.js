@@ -7,6 +7,7 @@ const { app, Menu } = electron
 const wins = require('./windows')
 const exportDB = require('./export-db')
 const importDB = require('./import-db')
+const removeDB = require('./remove-db')
 
 module.exports = ({ pathToUserData }) => {
   const menuTemplate = [
@@ -56,13 +57,18 @@ module.exports = ({ pathToUserData }) => {
       submenu: [
         {
           label: 'Export DB',
-          accelerator: 'CmdOrCtrl+L',
+          accelerator: 'CmdOrCtrl+E',
           click: exportDB({ pathToUserData })
         },
         {
           label: 'Import DB',
-          accelerator: 'CmdOrCtrl+E',
+          accelerator: 'CmdOrCtrl+I',
           click: importDB({ pathToUserData })
+        },
+        {
+          label: 'Remove DB',
+          accelerator: 'CmdOrCtrl+R',
+          click: removeDB({ pathToUserData })
         }
       ]
     }

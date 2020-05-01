@@ -4,6 +4,7 @@ const {
   InvalidFilePathError,
   InvalidFileNameInArchiveError,
   DbImportingError,
+  DbRemovingError,
   InvalidFolderPathError
 } = require('./errors')
 const showMessageModalDialog = require('./show-message-modal-dialog')
@@ -51,6 +52,11 @@ module.exports = (win, title = 'Error', err) => {
     err instanceof InvalidFolderPathError
   ) {
     const message = 'The database has not imported'
+
+    return _showErrorBox(win, title, message)
+  }
+  if (err instanceof DbRemovingError) {
+    const message = 'The database has not removed'
 
     return _showErrorBox(win, title, message)
   }
