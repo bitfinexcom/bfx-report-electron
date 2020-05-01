@@ -18,7 +18,13 @@ const showErrorModalDialog = require('./show-error-modal-dialog')
 const pauseApp = require('./pause-app')
 const relaunch = require('./relaunch')
 
-const _rmDb = async (dir, exclude = []) => {
+const _rm = async (
+  dir,
+  {
+    exclude = [],
+    include = []
+  }
+) => {
   if (
     !dir ||
     typeof dir !== 'string' ||
@@ -29,9 +35,20 @@ const _rmDb = async (dir, exclude = []) => {
 
   const files = await readdir(dir)
   const promisesArr = files.map(async (file) => {
-    if (exclude.every(exFile => exFile !== file)) {
-      return unlink(path.join(dir, file))
+    if (
+      Array.isArray(exclude) &&
+      exclude.some(exFile => new RegExp(exFile).test(file))
+    ) {
+      return
     }
+    if (
+      Array.isArray(include) &&
+      include.every(inFile => !(new RegExp(inFile).test(file)))
+    ) {
+      return
+    }
+
+    return unlink(path.join(dir, file))
   })
 
   return Promise.all(promisesArr)
@@ -39,7 +56,13 @@ const _rmDb = async (dir, exclude = []) => {
 
 const _rmDbExcludeMain = async (folderPath, dbFileName) => {
   try {
-    await _rmDb(folderPath, ['.gitkeep', dbFileName])
+    await _rm(
+      folderPath,
+      {
+        exclude: [dbFileName],
+        include: ['.db']
+      }
+    )
 
     return true
   } catch (err) {
