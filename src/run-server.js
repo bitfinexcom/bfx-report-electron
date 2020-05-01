@@ -7,11 +7,12 @@ const ipcs = require('./ipcs')
 
 const serverPath = path.join(__dirname, '../server.js')
 
-module.exports = ({ pathToUserData }) => {
+module.exports = ({ pathToUserData, secretKey }) => {
   const env = {
     ...process.env,
     ELECTRON_VERSION: process.versions.electron,
-    PATH_TO_USER_DATA: pathToUserData
+    PATH_TO_USER_DATA: pathToUserData,
+    SECRET_KEY: secretKey
   }
   const ipc = fork(serverPath, [], {
     env,

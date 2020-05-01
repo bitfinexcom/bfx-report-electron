@@ -17,6 +17,10 @@ const { unzip } = require('./archiver')
 const showErrorModalDialog = require('./show-error-modal-dialog')
 const pauseApp = require('./pause-app')
 const relaunch = require('./relaunch')
+const {
+  DB_FILE_NAME,
+  SECRET_KEY_FILE_NAME
+} = require('./const')
 
 const _rm = async (
   dir,
@@ -70,11 +74,9 @@ const _rmDbExcludeMain = async (folderPath, dbFileName) => {
   }
 }
 
-module.exports = ({ dbPath }) => {
+module.exports = ({ pathToUserData }) => {
   const dialog = electron.dialog || electron.remote.dialog
   const app = electron.app || electron.remote.app
-  const folderPath = path.dirname(dbPath)
-  const dbFileName = path.basename(dbPath)
 
   return () => {
     const win = electron.BrowserWindow.getFocusedWindow()
@@ -107,14 +109,14 @@ module.exports = ({ dbPath }) => {
           }
 
           await pauseApp()
-          await _rmDbExcludeMain(folderPath, dbFileName)
+          await _rmDbExcludeMain(pathToUserData, DB_FILE_NAME)
           const extractedfileNames = await unzip(
             files[0],
-            folderPath,
-            { extractFiles: [dbFileName] }
+            pathToUserData,
+            { extractFiles: [DB_FILE_NAME, SECRET_KEY_FILE_NAME] }
           )
 
-          if (extractedfileNames.every(file => file !== dbFileName)) {
+          if (extractedfileNames.every(file => file !== DB_FILE_NAME)) {
             throw new DbImportingError(DbImportingError)
           }
 

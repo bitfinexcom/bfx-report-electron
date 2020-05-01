@@ -1,7 +1,6 @@
 'use strict'
 
 const electron = require('electron')
-const path = require('path')
 
 const { app, Menu } = electron
 
@@ -9,11 +8,7 @@ const wins = require('./windows')
 const exportDB = require('./export-db')
 const importDB = require('./import-db')
 
-const dbFileName = 'db-sqlite_sync_m0.db'
-
 module.exports = ({ pathToUserData }) => {
-  const dbPath = path.join(pathToUserData, dbFileName)
-
   const menuTemplate = [
     {
       label: 'Application',
@@ -62,12 +57,12 @@ module.exports = ({ pathToUserData }) => {
         {
           label: 'Export DB',
           accelerator: 'CmdOrCtrl+L',
-          click: exportDB({ dbPath })
+          click: exportDB({ pathToUserData })
         },
         {
           label: 'Import DB',
           accelerator: 'CmdOrCtrl+E',
-          click: importDB({ dbPath })
+          click: importDB({ pathToUserData })
         }
       ]
     }

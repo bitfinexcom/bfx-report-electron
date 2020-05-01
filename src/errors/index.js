@@ -59,6 +59,18 @@ class FreePortError extends BaseError {
   }
 }
 
+class WrongPathToUserDataError extends BaseError {
+  constructor (message = 'ERR_WRONG_PATH_TO_USER_DATA') {
+    super(message)
+  }
+}
+
+class WrongSecretKeyError extends BaseError {
+  constructor (message = 'ERR_WRONG_SECRET_KEY') {
+    super(message)
+  }
+}
+
 module.exports = {
   BaseError,
   InvalidFilePathError,
@@ -68,5 +80,7 @@ module.exports = {
   RunningExpressOnPortError,
   IpcMessageError,
   AppInitializationError,
-  FreePortError
+  FreePortError,
+  WrongPathToUserDataError,
+  WrongSecretKeyError
 }
