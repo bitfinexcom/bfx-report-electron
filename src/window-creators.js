@@ -163,7 +163,10 @@ const _createChildWindow = (
   })
 }
 
-const createMainWindow = ({ pathToUserData }) => {
+const createMainWindow = ({
+  pathToUserData,
+  pathToUserDocuments
+}) => {
   return new Promise((resolve, reject) => {
     try {
       _createWindow(
@@ -172,7 +175,7 @@ const createMainWindow = ({ pathToUserData }) => {
             wins.mainWindow.webContents.openDevTools()
           }
 
-          createMenu({ pathToUserData })
+          createMenu({ pathToUserData, pathToUserDocuments })
           resolve()
         },
         { pathToUserData }

@@ -32,9 +32,11 @@ const _rmDbExcludeMain = async (folderPath, dbFileName) => {
   }
 }
 
-module.exports = ({ pathToUserData }) => {
+module.exports = ({
+  pathToUserData,
+  pathToUserDocuments
+}) => {
   const dialog = electron.dialog || electron.remote.dialog
-  const app = electron.app || electron.remote.app
 
   return () => {
     const win = electron.BrowserWindow.getFocusedWindow()
@@ -43,7 +45,7 @@ module.exports = ({ pathToUserData }) => {
       win,
       {
         title: 'Database import',
-        defaultPath: app.getPath('documents'),
+        defaultPath: pathToUserDocuments,
         buttonLabel: 'Import',
         properties: [
           'openFile',

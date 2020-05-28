@@ -71,6 +71,12 @@ class WrongPathToUserDataError extends BaseError {
   }
 }
 
+class WrongPathToUserDocumentsError extends BaseError {
+  constructor (message = 'ERR_WRONG_PATH_TO_USER_DOCUMENTS') {
+    super(message)
+  }
+}
+
 class WrongSecretKeyError extends BaseError {
   constructor (message = 'ERR_WRONG_SECRET_KEY') {
     super(message)
@@ -89,5 +95,6 @@ module.exports = {
   AppInitializationError,
   FreePortError,
   WrongPathToUserDataError,
+  WrongPathToUserDocumentsError,
   WrongSecretKeyError
 }

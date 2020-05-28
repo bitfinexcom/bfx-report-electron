@@ -63,12 +63,21 @@ module.exports = () => {
     app.on('ready', async () => {
       try {
         const pathToUserData = app.getPath('userData')
+        const pathToUserDocuments = app.getPath('documents')
+
         const secretKey = await makeOrReadSecretKey(
           { pathToUserData }
         )
 
-        await createMainWindow({ pathToUserData })
-        runServer({ pathToUserData, secretKey })
+        await createMainWindow({
+          pathToUserData,
+          pathToUserDocuments
+        })
+        runServer({
+          pathToUserData,
+          pathToUserDocuments,
+          secretKey
+        })
 
         const mess = await _ipcMessToPromise(ipcs.serverIpc)
         const {

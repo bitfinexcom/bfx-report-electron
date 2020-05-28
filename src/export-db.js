@@ -17,17 +17,20 @@ const {
   SECRET_KEY_FILE_NAME
 } = require('./const')
 
-module.exports = ({ pathToUserData }) => {
-  const dbPath = path.join(pathToUserData, DB_FILE_NAME)
-  const secretKeyPath = path.join(pathToUserData, SECRET_KEY_FILE_NAME)
+module.exports = ({
+  pathToUserData,
+  pathToUserDocuments
+}) => {
   const dialog = electron.dialog || electron.remote.dialog
-  const app = electron.app || electron.remote.app
+
   const _timestamp = (new Date()).toISOString().split('.')[0]
   const timestamp = _timestamp.replace(/[:]/g, '-')
   const defaultPath = path.join(
-    app.getPath('documents'),
+    pathToUserDocuments,
     `${DEFAULT_ARCHIVE_DB_FILE_NAME}-${timestamp}`
   )
+  const dbPath = path.join(pathToUserData, DB_FILE_NAME)
+  const secretKeyPath = path.join(pathToUserData, SECRET_KEY_FILE_NAME)
 
   return () => {
     const win = electron.BrowserWindow.getFocusedWindow()

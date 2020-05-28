@@ -9,7 +9,10 @@ const exportDB = require('./export-db')
 const importDB = require('./import-db')
 const removeDB = require('./remove-db')
 
-module.exports = ({ pathToUserData }) => {
+module.exports = ({
+  pathToUserData,
+  pathToUserDocuments
+}) => {
   const menuTemplate = [
     {
       label: 'Application',
@@ -58,12 +61,12 @@ module.exports = ({ pathToUserData }) => {
         {
           label: 'Export DB',
           accelerator: 'CmdOrCtrl+E',
-          click: exportDB({ pathToUserData })
+          click: exportDB({ pathToUserData, pathToUserDocuments })
         },
         {
           label: 'Import DB',
           accelerator: 'CmdOrCtrl+I',
-          click: importDB({ pathToUserData })
+          click: importDB({ pathToUserData, pathToUserDocuments })
         },
         {
           label: 'Remove DB',
