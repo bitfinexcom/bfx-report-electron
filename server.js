@@ -32,7 +32,7 @@ const {
 const {
   RunningExpressOnPortError,
   WrongPathToUserDataError,
-  WrongPathToUserDocumentsError,
+  WrongPathToUserCsvError,
   WrongSecretKeyError
 } = require('./src/errors')
 
@@ -44,7 +44,7 @@ let isMigrationsError = false
 ;(async () => {
   try {
     const pathToUserData = process.env.PATH_TO_USER_DATA
-    const pathToUserDocuments = process.env.PATH_TO_USER_DOCUMENTS
+    const pathToUserCsv = process.env.PATH_TO_USER_CSV
     const secretKey = process.env.SECRET_KEY
 
     if (!secretKey) {
@@ -53,13 +53,13 @@ let isMigrationsError = false
     if (!pathToUserData) {
       throw new WrongPathToUserDataError()
     }
-    if (!pathToUserDocuments) {
-      throw new WrongPathToUserDocumentsError()
+    if (!pathToUserCsv) {
+      throw new WrongPathToUserCsvError()
     }
 
     const pathToCsvFolder = process.platform === 'darwin'
-      ? path.join(pathToUserDocuments, 'BitfinexReports')
-      : '../../../csv'
+      ? path.join(pathToUserCsv, 'BitfinexReports')
+      : path.join(pathToUserCsv, 'csv')
     const defaultPorts = getDefaultPorts()
     const {
       grape1DhtPort,

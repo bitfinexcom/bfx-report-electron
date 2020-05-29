@@ -4,19 +4,20 @@ const { fork } = require('child_process')
 const path = require('path')
 
 const ipcs = require('./ipcs')
+const { getConfigsKeeperByName } = require('./configs-keeper')
 
 const serverPath = path.join(__dirname, '../server.js')
 
 module.exports = ({
   pathToUserData,
-  pathToUserDocuments,
   secretKey
 }) => {
   const env = {
     ...process.env,
     ELECTRON_VERSION: process.versions.electron,
     PATH_TO_USER_DATA: pathToUserData,
-    PATH_TO_USER_DOCUMENTS: pathToUserDocuments,
+    PATH_TO_USER_CSV: getConfigsKeeperByName('main')
+      .getConfigByName('pathToUserCsv'),
     SECRET_KEY: secretKey
   }
   const ipc = fork(serverPath, [], {

@@ -71,8 +71,8 @@ class WrongPathToUserDataError extends BaseError {
   }
 }
 
-class WrongPathToUserDocumentsError extends BaseError {
-  constructor (message = 'ERR_WRONG_PATH_TO_USER_DOCUMENTS') {
+class WrongPathToUserCsvError extends BaseError {
+  constructor (message = 'ERR_WRONG_PATH_TO_USER_CSV') {
     super(message)
   }
 }
@@ -95,6 +95,6 @@ module.exports = {
   AppInitializationError,
   FreePortError,
   WrongPathToUserDataError,
-  WrongPathToUserDocumentsError,
+  WrongPathToUserCsvError,
   WrongSecretKeyError
 }

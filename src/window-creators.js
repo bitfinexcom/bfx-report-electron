@@ -24,9 +24,8 @@ const _createWindow = (
   cb,
   {
     pathname = null,
-    winName = 'mainWindow',
-    pathToUserData
-  },
+    winName = 'mainWindow'
+  } = {},
   props = {}
 ) => {
   const point = electron.screen.getCursorScreenPoint()
@@ -49,8 +48,7 @@ const _createWindow = (
   } = isMainWindow
     ? windowStateKeeper({
       defaultWidth,
-      defaultHeight,
-      path: pathToUserData
+      defaultHeight
     })
     : {}
   const _props = {
@@ -177,8 +175,7 @@ const createMainWindow = ({
 
           createMenu({ pathToUserData, pathToUserDocuments })
           resolve()
-        },
-        { pathToUserData }
+        }
       )
     } catch (err) {
       reject(err)
