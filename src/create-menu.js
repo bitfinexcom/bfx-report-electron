@@ -8,6 +8,7 @@ const wins = require('./windows')
 const exportDB = require('./export-db')
 const importDB = require('./import-db')
 const removeDB = require('./remove-db')
+const changeReportsFolder = require('./change-reports-folder')
 
 module.exports = ({
   pathToUserData,
@@ -72,6 +73,11 @@ module.exports = ({
           label: 'Remove DB',
           accelerator: 'CmdOrCtrl+R',
           click: removeDB({ pathToUserData })
+        },
+        {
+          label: 'Change reports folder',
+          accelerator: 'CmdOrCtrl+F',
+          click: changeReportsFolder({ pathToUserDocuments })
         }
       ]
     }

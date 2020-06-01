@@ -57,9 +57,10 @@ let isMigrationsError = false
       throw new WrongPathToUserCsvError()
     }
 
-    const pathToCsvFolder = process.platform === 'darwin'
-      ? path.join(pathToUserCsv, 'BitfinexReports')
-      : path.join(pathToUserCsv, 'csv')
+    const isRelativePath = pathToUserCsv.startsWith('..')
+    const pathToCsvFolder = isRelativePath
+      ? path.join(pathToUserCsv, 'csv')
+      : path.join(pathToUserCsv, 'BitfinexReports')
     const defaultPorts = getDefaultPorts()
     const {
       grape1DhtPort,

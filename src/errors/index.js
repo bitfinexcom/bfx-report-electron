@@ -83,6 +83,12 @@ class WrongSecretKeyError extends BaseError {
   }
 }
 
+class ReportsFolderChangingError extends BaseError {
+  constructor (message = 'ERR_REPORTS_FOLDER_HAS_NOT_CHANGED') {
+    super(message)
+  }
+}
+
 module.exports = {
   BaseError,
   InvalidFilePathError,
@@ -96,5 +102,6 @@ module.exports = {
   FreePortError,
   WrongPathToUserDataError,
   WrongPathToUserCsvError,
-  WrongSecretKeyError
+  WrongSecretKeyError,
+  ReportsFolderChangingError
 }

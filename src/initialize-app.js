@@ -73,7 +73,7 @@ module.exports = () => {
           {
             pathToUserCsv: process.platform === 'darwin'
               ? pathToUserDocuments
-              : '../../../..'
+              : '../../..'
           }
         )
         const secretKey = await makeOrReadSecretKey(
