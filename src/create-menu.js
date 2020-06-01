@@ -22,7 +22,7 @@ module.exports = ({
         { type: 'separator' },
         {
           label: 'Open dev tools',
-          accelerator: 'CmdOrCtrl+D',
+          accelerator: 'CmdOrCtrl+T',
           click: () => {
             if (!wins.mainWindow) {
               return
@@ -71,7 +71,7 @@ module.exports = ({
         },
         {
           label: 'Remove DB',
-          accelerator: 'CmdOrCtrl+R',
+          accelerator: 'CmdOrCtrl+D',
           click: removeDB({ pathToUserData })
         },
         {
