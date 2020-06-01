@@ -77,7 +77,7 @@ module.exports = ({
           )
 
           if (extractedfileNames.every(file => file !== DB_FILE_NAME)) {
-            throw new DbImportingError(DbImportingError)
+            throw new DbImportingError()
           }
 
           relaunch()
