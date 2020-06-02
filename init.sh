@@ -3,12 +3,18 @@
 set -x
 
 ROOT=$PWD
+branch=master
 
 programname=$0
 isDevEnv=0
 isNotSkippedReiDeps=1
 targetPlatform=0
 isSkippedUIBuild=0
+
+if [ "$BRANCH" != "" ]
+then
+  branch=$BRANCH
+fi
 
 function usage {
   echo "Usage: $programname [-d] | [-h]"
@@ -19,6 +25,7 @@ function usage {
 
 function getConfValue {
   local dep=""
+  local path=$ROOT
   local value=""
 
   if [ $# -ge 1 ]
@@ -28,11 +35,17 @@ function getConfValue {
     exit 1
   fi
 
-  version=$(cat $ROOT/package.json \
+  if [ $# -ge 2 ]
+  then
+    path=$2
+  fi
+
+  version=$(cat $path/package.json \
     | grep \"$dep\" \
     | head -1 \
-    | awk -F: '{ print $2 }' \
+    | awk -F: '{ print $2$3 }' \
     | sed 's/[",]//g' \
+    | sed 's/#.*$//' \
     | tr -d '[[:space:]]')
 
   echo $version
@@ -72,11 +85,16 @@ chmod a+xwr $ROOT/dist 2>/dev/null
 
 git submodule foreach --recursive git clean -fdx
 git submodule foreach --recursive git reset --hard HEAD
-git submodule sync
+git submodule sync --recursive
 git submodule update --init --recursive
 git config url."https://github.com/".insteadOf git@github.com:
+git submodule foreach --recursive git checkout $branch
 git pull --recurse-submodules
-git submodule update --remote --recursive
+
+if [ $branch == "master" ]
+then
+  git submodule update --remote --recursive
+fi
 
 if [ $isSkippedUIBuild == 0 ]
 then
@@ -101,6 +119,13 @@ sed -i -e "s/\"syncMode\": false/\"syncMode\": true/g" $backendFolder/config/ser
 
 if [ $isDevEnv != 0 ]; then
   sed -i -e "s/\"restUrl\": .*,/\"restUrl\": \"https:\/\/test.bitfinex.com\",/g" $backendFolder/config/service.report.json
+fi
+
+bfxReportDep=$(getConfValue "bfx-report" $backendFolder)
+
+if [ $branch != "master" ]
+then
+  # TODO:
 fi
 
 cd $ROOT

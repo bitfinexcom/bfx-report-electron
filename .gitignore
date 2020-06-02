@@ -9,3 +9,4 @@ bfx-reports-framework/*
 dist/*
 !dist/.gitkeep
 package-lock.json
+.env

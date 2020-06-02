@@ -13,10 +13,16 @@ ROOT=$PWD
 frontendFolder="$ROOT/bfx-report-ui"
 uiBuildFolder=/ui-build
 uiReadyFile="$uiBuildFolder/READY"
+branch=master
 
 programname=$0
 isDevEnv=0
 isInitedSubmodules=0
+
+if [ "$BRANCH" != "" ]
+then
+  branch=$BRANCH
+fi
 
 rm -rf $uiBuildFolder/*
 
@@ -49,11 +55,16 @@ fi
 if [ $isInitedSubmodules != 0 ]; then
   git submodule foreach --recursive git clean -fdx
   git submodule foreach --recursive git reset --hard HEAD
-  git submodule sync
+  git submodule sync --recursive
   git submodule update --init --recursive
   git config url."https://github.com/".insteadOf git@github.com:
+  git submodule foreach --recursive git checkout $branch
   git pull --recurse-submodules
-  git submodule update --remote --recursive
+
+  if [ $branch == "master" ]
+  then
+    git submodule update --remote --recursive
+  fi
 fi
 
 cd $frontendFolder

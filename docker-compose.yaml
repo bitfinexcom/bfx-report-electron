@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.ui-builder
+    environment:
+      BRANCH: ${BRANCH}
     volumes:
       - ui-build:/ui-build
 
@@ -17,6 +19,7 @@ services:
     environment:
       ELECTRON_CACHE: /root/.cache/electron
       ELECTRON_BUILDER_CACHE: /root/.cache/electron-builder
+      BRANCH: ${BRANCH}
     volumes:
       - ui-build:/ui-build
       - ./dist:/dist
@@ -31,6 +34,7 @@ services:
     environment:
       ELECTRON_CACHE: /root/.cache/electron
       ELECTRON_BUILDER_CACHE: /root/.cache/electron-builder
+      BRANCH: ${BRANCH}
     volumes:
       - ui-build:/ui-build
       - ./dist:/dist
@@ -45,6 +49,7 @@ services:
     environment:
       ELECTRON_CACHE: /root/.cache/electron
       ELECTRON_BUILDER_CACHE: /root/.cache/electron-builder
+      BRANCH: ${BRANCH}
     volumes:
       - ui-build:/ui-build
       - ./dist:/dist
