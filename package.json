@@ -32,13 +32,13 @@
     ]
   },
   "scripts": {
-    "start": "./init.sh -s&&npm run dist-linux&&npm run dist-win&&npm run dist-mac",
-    "startDev": "./init.sh -d -s&&npm run dist-linux&&npm run dist-win&&npm run dist-mac",
-    "init": "./init.sh",
-    "initDev": "./init.sh -d",
-    "dist-win": "./reinstall-deps.sh win32&&electron-builder build --win",
-    "dist-linux": "./reinstall-deps.sh linux&&electron-builder build --linux",
-    "dist-mac": "./reinstall-deps.sh darwin&&electron-builder build --mac",
+    "start": "./scripts/init.sh -s&&npm run dist-linux&&npm run dist-win&&npm run dist-mac",
+    "startDev": "./scripts/init.sh -d -s&&npm run dist-linux&&npm run dist-win&&npm run dist-mac",
+    "init": "./scripts/init.sh",
+    "initDev": "./scripts/init.sh -d",
+    "dist-win": "./scripts/reinstall-deps.sh win32&&electron-builder build --win",
+    "dist-linux": "./scripts/reinstall-deps.sh linux&&electron-builder build --linux",
+    "dist-mac": "./scripts/reinstall-deps.sh darwin&&electron-builder build --mac",
     "electron": "export NODE_ENV=development&&export DEBUG=*&&electron .",
     "test": "standard"
   },
@@ -49,8 +49,7 @@
     "appId": "com.report.bitfinex",
     "files": [
       "**/*",
-      "!init.sh",
-      "!reinstall-deps.sh",
+      "!scripts",
       "!README.md",
       "build/icons",
       "bfx-reports-framework",

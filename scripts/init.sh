@@ -2,8 +2,12 @@
 
 set -x
 
-ROOT=$PWD
+ROOT="$PWD"
 branch=master
+
+source $ROOT/scripts/get-conf-value.sh
+source $ROOT/scripts/escape-string.sh
+source $ROOT/scripts/update-submodules.sh
 
 programname=$0
 isDevEnv=0
@@ -21,34 +25,6 @@ function usage {
   echo "  -d      turn on developer environment"
   echo "  -h      display help"
   exit 1
-}
-
-function getConfValue {
-  local dep=""
-  local path=$ROOT
-  local value=""
-
-  if [ $# -ge 1 ]
-  then
-    dep=$1
-  else
-    exit 1
-  fi
-
-  if [ $# -ge 2 ]
-  then
-    path=$2
-  fi
-
-  version=$(cat $path/package.json \
-    | grep \"$dep\" \
-    | head -1 \
-    | awk -F: '{ print $2$3 }' \
-    | sed 's/[",]//g' \
-    | sed 's/#.*$//' \
-    | tr -d '[[:space:]]')
-
-  echo $version
 }
 
 while [ "$1" != "" ]; do
@@ -83,18 +59,7 @@ uiReadyFile="$uiBuildFolder/READY"
 mkdir $ROOT/dist 2>/dev/null
 chmod a+xwr $ROOT/dist 2>/dev/null
 
-git submodule foreach --recursive git clean -fdx
-git submodule foreach --recursive git reset --hard HEAD
-git submodule sync --recursive
-git submodule update --init --recursive
-git config url."https://github.com/".insteadOf git@github.com:
-git submodule foreach --recursive git checkout $branch
-git pull --recurse-submodules
-
-if [ $branch == "master" ]
-then
-  git submodule update --remote --recursive
-fi
+updateSubmodules $branch
 
 if [ $isSkippedUIBuild == 0 ]
 then
@@ -104,7 +69,7 @@ then
     devFlag="-d"
   fi
 
-  bash ./build-ui.sh $devFlag
+  bash $ROOT/scripts/build-ui.sh $devFlag
 fi
 
 cp $expressFolder/config/default.json.example $expressFolder/config/default.json
@@ -122,10 +87,13 @@ if [ $isDevEnv != 0 ]; then
 fi
 
 bfxReportDep=$(getConfValue "bfx-report" $backendFolder)
+escapedBfxReportDep=$(escapeString $bfxReportDep)
 
-if [ $branch != "master" ]
+if [ $branch == "master" ]
 then
-  # TODO:
+  sed -i -e "s/\"bfx-report\": .*,/\"bfx-report\": \"$escapedBfxReportDep\",/g" $backendFolder/package.json
+else
+  sed -i -e "s/\"bfx-report\": .*,/\"bfx-report\": \"$escapedBfxReportDep\#$branch\",/g" $backendFolder/package.json
 fi
 
 cd $ROOT
@@ -133,7 +101,7 @@ cd $ROOT
 if [ $isNotSkippedReiDeps != 0 ]; then
   if [ $targetPlatform != 0 ]
   then
-    bash ./reinstall-deps.sh $targetPlatform
+    bash $ROOT/scripts/reinstall-deps.sh $targetPlatform
 
     if [ $isSkippedUIBuild != 0 ]
     then
@@ -149,8 +117,8 @@ if [ $isNotSkippedReiDeps != 0 ]; then
     ./node_modules/.bin/electron-builder build --$targetPlatform
     chmod -R a+xwr ./dist
 
-    productName=$(getConfValue "productName")
-    version=$(getConfValue "version")
+    productName=$(getConfValue "productName" $ROOT)
+    version=$(getConfValue "version" $ROOT)
     arch="x64"
 
     unpackedFolder=$(ls -d $ROOT/dist/*/ | grep $targetPlatform | head -1)
@@ -170,6 +138,6 @@ if [ $isNotSkippedReiDeps != 0 ]; then
 
     exit 0
   else
-    bash ./reinstall-deps.sh
+    bash $ROOT/scripts/reinstall-deps.sh
   fi
 fi

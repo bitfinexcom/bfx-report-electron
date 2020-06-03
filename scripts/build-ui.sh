@@ -9,11 +9,13 @@ export REACT_APP_TITLE=Bitfinex Reports
 export REACT_APP_LOGO_PATH=favicon.ico
 export REACT_APP_ELECTRON=true
 
-ROOT=$PWD
+ROOT="$PWD"
 frontendFolder="$ROOT/bfx-report-ui"
 uiBuildFolder=/ui-build
 uiReadyFile="$uiBuildFolder/READY"
 branch=master
+
+source $ROOT/scripts/update-submodules.sh
 
 programname=$0
 isDevEnv=0
@@ -53,18 +55,7 @@ if [ $isDevEnv != 0 ]; then
 fi
 
 if [ $isInitedSubmodules != 0 ]; then
-  git submodule foreach --recursive git clean -fdx
-  git submodule foreach --recursive git reset --hard HEAD
-  git submodule sync --recursive
-  git submodule update --init --recursive
-  git config url."https://github.com/".insteadOf git@github.com:
-  git submodule foreach --recursive git checkout $branch
-  git pull --recurse-submodules
-
-  if [ $branch == "master" ]
-  then
-    git submodule update --remote --recursive
-  fi
+  updateSubmodules $branch
 fi
 
 cd $frontendFolder
