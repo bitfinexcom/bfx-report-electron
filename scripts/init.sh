@@ -119,10 +119,17 @@ if [ $isNotSkippedReiDeps != 0 ]; then
 
     productName=$(getConfValue "productName" $ROOT)
     version=$(getConfValue "version" $ROOT)
+    versionEnding=""
+
+    if [ $branch != 'master' ]
+    then
+      versionEnding="-$branch"
+    fi
+
     arch="x64"
 
     unpackedFolder=$(ls -d $ROOT/dist/*/ | grep $targetPlatform | head -1)
-    zipFile="$ROOT/dist/$productName-$version-$arch-$targetPlatform.zip"
+    zipFile="$ROOT/dist/$productName-$version$versionEnding-$arch-$targetPlatform.zip"
 
     if ! [ -d $unpackedFolder ]; then
       exit 1
