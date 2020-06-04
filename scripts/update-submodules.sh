@@ -26,4 +26,11 @@ function updateSubmodules {
     git submodule foreach --recursive git fetch origin
     git submodule foreach --recursive git reset --hard origin/$branch
   fi
+
+  git config --unset url."https://github.com/".insteadOf
 }
+
+if [ $# -ge 2 ] && [ $1 == "-b" ] && [ $2 != "" ]
+then
+  updateSubmodules $2
+fi
