@@ -24,9 +24,8 @@ const _createWindow = (
   cb,
   {
     pathname = null,
-    winName = 'mainWindow',
-    pathToUserData
-  },
+    winName = 'mainWindow'
+  } = {},
   props = {}
 ) => {
   const point = electron.screen.getCursorScreenPoint()
@@ -49,8 +48,7 @@ const _createWindow = (
   } = isMainWindow
     ? windowStateKeeper({
       defaultWidth,
-      defaultHeight,
-      path: pathToUserData
+      defaultHeight
     })
     : {}
   const _props = {
@@ -163,7 +161,10 @@ const _createChildWindow = (
   })
 }
 
-const createMainWindow = ({ pathToUserData }) => {
+const createMainWindow = ({
+  pathToUserData,
+  pathToUserDocuments
+}) => {
   return new Promise((resolve, reject) => {
     try {
       _createWindow(
@@ -172,10 +173,9 @@ const createMainWindow = ({ pathToUserData }) => {
             wins.mainWindow.webContents.openDevTools()
           }
 
-          createMenu({ pathToUserData })
+          createMenu({ pathToUserData, pathToUserDocuments })
           resolve()
-        },
-        { pathToUserData }
+        }
       )
     } catch (err) {
       reject(err)

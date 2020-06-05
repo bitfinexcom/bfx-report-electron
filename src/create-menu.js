@@ -8,8 +8,12 @@ const wins = require('./windows')
 const exportDB = require('./export-db')
 const importDB = require('./import-db')
 const removeDB = require('./remove-db')
+const changeReportsFolder = require('./change-reports-folder')
 
-module.exports = ({ pathToUserData }) => {
+module.exports = ({
+  pathToUserData,
+  pathToUserDocuments
+}) => {
   const menuTemplate = [
     {
       label: 'Application',
@@ -18,7 +22,7 @@ module.exports = ({ pathToUserData }) => {
         { type: 'separator' },
         {
           label: 'Open dev tools',
-          accelerator: 'CmdOrCtrl+D',
+          accelerator: 'CmdOrCtrl+T',
           click: () => {
             if (!wins.mainWindow) {
               return
@@ -58,17 +62,22 @@ module.exports = ({ pathToUserData }) => {
         {
           label: 'Export DB',
           accelerator: 'CmdOrCtrl+E',
-          click: exportDB({ pathToUserData })
+          click: exportDB({ pathToUserData, pathToUserDocuments })
         },
         {
           label: 'Import DB',
           accelerator: 'CmdOrCtrl+I',
-          click: importDB({ pathToUserData })
+          click: importDB({ pathToUserData, pathToUserDocuments })
         },
         {
           label: 'Remove DB',
-          accelerator: 'CmdOrCtrl+R',
+          accelerator: 'CmdOrCtrl+D',
           click: removeDB({ pathToUserData })
+        },
+        {
+          label: 'Change reports folder',
+          accelerator: 'CmdOrCtrl+F',
+          click: changeReportsFolder({ pathToUserDocuments })
         }
       ]
     }

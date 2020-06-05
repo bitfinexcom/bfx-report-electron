@@ -4,38 +4,14 @@ const electron = require('electron')
 
 const {
   InvalidFilePathError,
-  DbImportingError
+  ReportsFolderChangingError
 } = require('./errors')
-const { unzip } = require('./archiver')
 const showErrorModalDialog = require('./show-error-modal-dialog')
 const pauseApp = require('./pause-app')
 const relaunch = require('./relaunch')
-const { rm } = require('./helpers')
-const {
-  DB_FILE_NAME,
-  SECRET_KEY_FILE_NAME
-} = require('./const')
+const { getConfigsKeeperByName } = require('./configs-keeper')
 
-const _rmDbExcludeMain = async (folderPath, dbFileName) => {
-  try {
-    await rm(
-      folderPath,
-      {
-        exclude: [dbFileName],
-        include: ['.db']
-      }
-    )
-
-    return true
-  } catch (err) {
-    return false
-  }
-}
-
-module.exports = ({
-  pathToUserData,
-  pathToUserDocuments
-}) => {
+module.exports = ({ pathToUserDocuments }) => {
   const dialog = electron.dialog || electron.remote.dialog
 
   return () => {
@@ -44,15 +20,15 @@ module.exports = ({
     dialog.showOpenDialog(
       win,
       {
-        title: 'Database import',
+        title: 'Change reports folder',
         defaultPath: pathToUserDocuments,
-        buttonLabel: 'Import',
+        buttonLabel: 'Select',
         properties: [
-          'openFile',
+          'openDirectory',
           'createDirectory',
+          'promptToCreate',
           'treatPackageAsDirectory'
-        ],
-        filters: [{ name: 'ZIP', extensions: ['zip'] }]
+        ]
       },
       async (files) => {
         try {
@@ -69,20 +45,16 @@ module.exports = ({
           }
 
           await pauseApp()
-          await _rmDbExcludeMain(pathToUserData, DB_FILE_NAME)
-          const extractedfileNames = await unzip(
-            files[0],
-            pathToUserData,
-            { extractFiles: [DB_FILE_NAME, SECRET_KEY_FILE_NAME] }
-          )
+          const isSaved = await getConfigsKeeperByName('main')
+            .saveConfigs({ pathToUserCsv: files[0] })
 
-          if (extractedfileNames.every(file => file !== DB_FILE_NAME)) {
-            throw new DbImportingError()
+          if (!isSaved) {
+            throw new ReportsFolderChangingError()
           }
 
           relaunch()
         } catch (err) {
-          await showErrorModalDialog(win, 'Database import', err)
+          await showErrorModalDialog(win, 'Change reports folder', err)
 
           console.error(err)
           relaunch()

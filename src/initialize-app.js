@@ -21,6 +21,9 @@ const showMigrationsModalDialog = require(
 )
 const makeOrReadSecretKey = require('./make-or-read-secret-key')
 const {
+  configsKeeperFactory
+} = require('./configs-keeper')
+const {
   RunningExpressOnPortError,
   IpcMessageError,
   AppInitializationError
@@ -63,12 +66,28 @@ module.exports = () => {
     app.on('ready', async () => {
       try {
         const pathToUserData = app.getPath('userData')
+        const pathToUserDocuments = app.getPath('documents')
+
+        configsKeeperFactory(
+          { pathToUserData },
+          {
+            pathToUserCsv: process.platform === 'darwin'
+              ? pathToUserDocuments
+              : '../../..'
+          }
+        )
         const secretKey = await makeOrReadSecretKey(
           { pathToUserData }
         )
 
-        await createMainWindow({ pathToUserData })
-        runServer({ pathToUserData, secretKey })
+        await createMainWindow({
+          pathToUserData,
+          pathToUserDocuments
+        })
+        runServer({
+          pathToUserData,
+          secretKey
+        })
 
         const mess = await _ipcMessToPromise(ipcs.serverIpc)
         const {
