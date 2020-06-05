@@ -6,12 +6,14 @@ const {
 } = require('./ports')
 const {
   serializeError,
-  deserializeError
+  deserializeError,
+  rm
 } = require('./utils')
 
 module.exports = {
   getFreePort,
   getDefaultPorts,
   serializeError,
-  deserializeError
+  deserializeError,
+  rm
 }

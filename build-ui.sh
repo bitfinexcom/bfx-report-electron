@@ -47,7 +47,7 @@ if [ $isDevEnv != 0 ]; then
 fi
 
 if [ $isInitedSubmodules != 0 ]; then
-  git submodule foreach --recursive git git clean -fdx
+  git submodule foreach --recursive git clean -fdx
   git submodule foreach --recursive git reset --hard HEAD
   git submodule sync
   git submodule update --init --recursive

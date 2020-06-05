@@ -1,45 +1,30 @@
 'use strict'
 
-const path = require('path')
-const { promisify } = require('util')
-const fs = require('fs')
 const electron = require('electron')
-
-const readdir = promisify(fs.readdir)
-const unlink = promisify(fs.unlink)
 
 const {
   InvalidFilePathError,
-  DbImportingError,
-  InvalidFolderPathError
+  DbImportingError
 } = require('./errors')
 const { unzip } = require('./archiver')
 const showErrorModalDialog = require('./show-error-modal-dialog')
 const pauseApp = require('./pause-app')
 const relaunch = require('./relaunch')
-
-const _rmDb = async (dir, exclude = []) => {
-  if (
-    !dir ||
-    typeof dir !== 'string' ||
-    dir === '/'
-  ) {
-    throw new InvalidFolderPathError()
-  }
-
-  const files = await readdir(dir)
-  const promisesArr = files.map(async (file) => {
-    if (exclude.every(exFile => exFile !== file)) {
-      return unlink(path.join(dir, file))
-    }
-  })
-
-  return Promise.all(promisesArr)
-}
+const { rm } = require('./helpers')
+const {
+  DB_FILE_NAME,
+  SECRET_KEY_FILE_NAME
+} = require('./const')
 
 const _rmDbExcludeMain = async (folderPath, dbFileName) => {
   try {
-    await _rmDb(folderPath, ['.gitkeep', dbFileName])
+    await rm(
+      folderPath,
+      {
+        exclude: [dbFileName],
+        include: ['.db']
+      }
+    )
 
     return true
   } catch (err) {
@@ -47,11 +32,9 @@ const _rmDbExcludeMain = async (folderPath, dbFileName) => {
   }
 }
 
-module.exports = ({ dbPath }) => {
+module.exports = ({ pathToUserData }) => {
   const dialog = electron.dialog || electron.remote.dialog
   const app = electron.app || electron.remote.app
-  const folderPath = path.dirname(dbPath)
-  const dbFileName = path.basename(dbPath)
 
   return () => {
     const win = electron.BrowserWindow.getFocusedWindow()
@@ -84,14 +67,14 @@ module.exports = ({ dbPath }) => {
           }
 
           await pauseApp()
-          await _rmDbExcludeMain(folderPath, dbFileName)
+          await _rmDbExcludeMain(pathToUserData, DB_FILE_NAME)
           const extractedfileNames = await unzip(
             files[0],
-            folderPath,
-            { extractFiles: [dbFileName] }
+            pathToUserData,
+            { extractFiles: [DB_FILE_NAME, SECRET_KEY_FILE_NAME] }
           )
 
-          if (extractedfileNames.every(file => file !== dbFileName)) {
+          if (extractedfileNames.every(file => file !== DB_FILE_NAME)) {
             throw new DbImportingError(DbImportingError)
           }
 

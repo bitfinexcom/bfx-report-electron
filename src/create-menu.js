@@ -1,20 +1,15 @@
 'use strict'
 
 const electron = require('electron')
-const path = require('path')
 
 const { app, Menu } = electron
 
 const wins = require('./windows')
 const exportDB = require('./export-db')
 const importDB = require('./import-db')
+const removeDB = require('./remove-db')
 
-const dbFileName = 'db-sqlite_sync_m0.db'
-
-module.exports = () => {
-  const pathToUserData = app.getPath('userData')
-  const dbPath = path.join(pathToUserData, dbFileName)
-
+module.exports = ({ pathToUserData }) => {
   const menuTemplate = [
     {
       label: 'Application',
@@ -62,13 +57,18 @@ module.exports = () => {
       submenu: [
         {
           label: 'Export DB',
-          accelerator: 'CmdOrCtrl+L',
-          click: exportDB({ dbPath })
+          accelerator: 'CmdOrCtrl+E',
+          click: exportDB({ pathToUserData })
         },
         {
           label: 'Import DB',
-          accelerator: 'CmdOrCtrl+E',
-          click: importDB({ dbPath })
+          accelerator: 'CmdOrCtrl+I',
+          click: importDB({ pathToUserData })
+        },
+        {
+          label: 'Remove DB',
+          accelerator: 'CmdOrCtrl+R',
+          click: removeDB({ pathToUserData })
         }
       ]
     }

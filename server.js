@@ -30,7 +30,9 @@ const {
 } = require('./src/helpers')
 
 const {
-  RunningExpressOnPortError
+  RunningExpressOnPortError,
+  WrongPathToUserDataError,
+  WrongSecretKeyError
 } = require('./src/errors')
 
 const emitter = new EventEmitter()
@@ -41,6 +43,15 @@ let isMigrationsError = false
 ;(async () => {
   try {
     const pathToUserData = process.env.PATH_TO_USER_DATA
+    const secretKey = process.env.SECRET_KEY
+
+    if (!secretKey) {
+      throw new WrongSecretKeyError()
+    }
+    if (!pathToUserData) {
+      throw new WrongPathToUserDataError()
+    }
+
     const pathToCsvFolder = process.platform === 'darwin'
       ? pathToUserData
       : '../../..'
@@ -107,7 +118,8 @@ let isMigrationsError = false
       `--tempFolder=${pathToUserData}/temp`,
       `--logsFolder=${pathToUserData}/logs`,
       `--dbFolder=${pathToUserData}`,
-      `--grape=${grape}`
+      `--grape=${grape}`,
+      `--secretKey=${secretKey}`
     ], {
       env,
       cwd: process.cwd(),
