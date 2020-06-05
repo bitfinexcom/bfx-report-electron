@@ -7,5 +7,5 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY . .
 
-ENTRYPOINT ["./init.sh"]
+ENTRYPOINT ["./scripts/init.sh"]
 CMD ["-p", "win", "-u"]

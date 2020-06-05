@@ -64,7 +64,7 @@ const _createWindow = (
       ? bounds.y
       : y,
     icon: path.join(__dirname, '../build/icons/512.png'),
-    backgroundColor: '#394b59',
+    backgroundColor: '#102331',
     show: false,
     ...props
   }

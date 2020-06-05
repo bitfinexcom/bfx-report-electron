@@ -2,40 +2,12 @@
 
 set -x
 
-function getModuleVersion {
-  local prevFolder=$PWD
-  local dep=""
-  local version=""
+ROOT="$PWD"
 
-  if [ $# -ge 1 ]
-  then
-    dep=$1
-  else
-    return
-  fi
-  if [ $# -ge 2 ]
-  then
-    cd $2
-  fi
+source $ROOT/scripts/get-conf-value.sh
 
-  version=$(cat package.json \
-    | grep \"$dep\" \
-    | head -1 \
-    | awk -F: '{ print $2 }' \
-    | sed 's/[",]//g' \
-    | tr -d '[[:space:]]')
-
-  if [ $# -ge 1 ]
-  then
-    cd $prevFolder
-  fi
-
-  echo $version
-}
-
-ELECTRON_VER=$(getModuleVersion "electron" $PWD)
 ARCH="x64"
-ROOT=$PWD
+ELECTRON_VER=$(getConfValue "electron" $ROOT)
 DIST_URL=https://atom.io/download/electron
 
 unameOut="$(uname -s)"

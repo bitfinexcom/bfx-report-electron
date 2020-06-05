@@ -9,14 +9,22 @@ export REACT_APP_TITLE=Bitfinex Reports
 export REACT_APP_LOGO_PATH=favicon.ico
 export REACT_APP_ELECTRON=true
 
-ROOT=$PWD
+ROOT="$PWD"
 frontendFolder="$ROOT/bfx-report-ui"
 uiBuildFolder=/ui-build
 uiReadyFile="$uiBuildFolder/READY"
+branch=master
+
+source $ROOT/scripts/update-submodules.sh
 
 programname=$0
 isDevEnv=0
 isInitedSubmodules=0
+
+if [ "$BRANCH" != "" ]
+then
+  branch=$BRANCH
+fi
 
 rm -rf $uiBuildFolder/*
 
@@ -47,13 +55,7 @@ if [ $isDevEnv != 0 ]; then
 fi
 
 if [ $isInitedSubmodules != 0 ]; then
-  git submodule foreach --recursive git clean -fdx
-  git submodule foreach --recursive git reset --hard HEAD
-  git submodule sync
-  git submodule update --init --recursive
-  git config url."https://github.com/".insteadOf git@github.com:
-  git pull --recurse-submodules
-  git submodule update --remote --recursive
+  updateSubmodules $branch
 fi
 
 cd $frontendFolder
@@ -72,7 +74,6 @@ if [ $isDevEnv != 0 ]; then
 fi
 
 sed -i -e "s/showAuthPage: .*,/showAuthPage: true,/g" $frontendFolder/src/var/config.js
-sed -i -e "s/showSyncMode: .*,/showSyncMode: true,/g" $frontendFolder/src/var/config.js
 sed -i -e "s/showFrameworkMode: .*,/showFrameworkMode: true,/g" $frontendFolder/src/var/config.js
 npm run build
 
