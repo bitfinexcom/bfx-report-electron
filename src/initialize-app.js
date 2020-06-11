@@ -16,7 +16,13 @@ const {
 const {
   hideLoadingWindow
 } = require('./change-loading-win-visibility-state')
-const showMigrationsModalDialog = require('./show-migrations-modal-dialog')
+const showMigrationsModalDialog = require(
+  './show-migrations-modal-dialog'
+)
+const makeOrReadSecretKey = require('./make-or-read-secret-key')
+const {
+  configsKeeperFactory
+} = require('./configs-keeper')
 const {
   RunningExpressOnPortError,
   IpcMessageError,
@@ -27,8 +33,10 @@ const {
 } = require('./helpers')
 
 const pathToLayouts = path.join(__dirname, 'layouts')
-const pathToLayoutAppInitErr = path.join(pathToLayouts, 'app-init-error.html')
-const pathToLayoutExprPortReq = path.join(pathToLayouts, 'express-port-required.html')
+const pathToLayoutAppInitErr = path
+  .join(pathToLayouts, 'app-init-error.html')
+const pathToLayoutExprPortReq = path
+  .join(pathToLayouts, 'express-port-required.html')
 
 const _ipcMessToPromise = (ipc) => {
   return new Promise((resolve, reject) => {
@@ -57,8 +65,29 @@ module.exports = () => {
     })
     app.on('ready', async () => {
       try {
-        await createMainWindow()
-        runServer()
+        const pathToUserData = app.getPath('userData')
+        const pathToUserDocuments = app.getPath('documents')
+
+        configsKeeperFactory(
+          { pathToUserData },
+          {
+            pathToUserCsv: process.platform === 'darwin'
+              ? pathToUserDocuments
+              : '../../..'
+          }
+        )
+        const secretKey = await makeOrReadSecretKey(
+          { pathToUserData }
+        )
+
+        await createMainWindow({
+          pathToUserData,
+          pathToUserDocuments
+        })
+        runServer({
+          pathToUserData,
+          secretKey
+        })
 
         const mess = await _ipcMessToPromise(ipcs.serverIpc)
         const {

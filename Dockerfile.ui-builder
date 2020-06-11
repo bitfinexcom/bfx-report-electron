@@ -2,5 +2,5 @@ FROM electronuserland/builder:10
 
 COPY . .
 
-ENTRYPOINT ["./build-ui.sh"]
+ENTRYPOINT ["./scripts/build-ui.sh"]
 CMD ["-i"]

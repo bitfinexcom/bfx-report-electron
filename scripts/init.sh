@@ -2,7 +2,12 @@
 
 set -x
 
-ROOT=$PWD
+ROOT="$PWD"
+branch=master
+
+source $ROOT/scripts/get-conf-value.sh
+source $ROOT/scripts/escape-string.sh
+source $ROOT/scripts/update-submodules.sh
 
 programname=$0
 isDevEnv=0
@@ -10,32 +15,16 @@ isNotSkippedReiDeps=1
 targetPlatform=0
 isSkippedUIBuild=0
 
+if [ "$BRANCH" != "" ]
+then
+  branch=$BRANCH
+fi
+
 function usage {
   echo "Usage: $programname [-d] | [-h]"
   echo "  -d      turn on developer environment"
   echo "  -h      display help"
   exit 1
-}
-
-function getConfValue {
-  local dep=""
-  local value=""
-
-  if [ $# -ge 1 ]
-  then
-    dep=$1
-  else
-    exit 1
-  fi
-
-  version=$(cat $ROOT/package.json \
-    | grep \"$dep\" \
-    | head -1 \
-    | awk -F: '{ print $2 }' \
-    | sed 's/[",]//g' \
-    | tr -d '[[:space:]]')
-
-  echo $version
 }
 
 while [ "$1" != "" ]; do
@@ -70,13 +59,7 @@ uiReadyFile="$uiBuildFolder/READY"
 mkdir $ROOT/dist 2>/dev/null
 chmod a+xwr $ROOT/dist 2>/dev/null
 
-git submodule foreach --recursive git clean -fdx
-git submodule foreach --recursive git reset --hard HEAD
-git submodule sync
-git submodule update --init --recursive
-git config url."https://github.com/".insteadOf git@github.com:
-git pull --recurse-submodules
-git submodule update --remote --recursive
+updateSubmodules $branch
 
 if [ $isSkippedUIBuild == 0 ]
 then
@@ -86,7 +69,7 @@ then
     devFlag="-d"
   fi
 
-  bash ./build-ui.sh $devFlag
+  bash $ROOT/scripts/build-ui.sh $devFlag
 fi
 
 cp $expressFolder/config/default.json.example $expressFolder/config/default.json
@@ -103,12 +86,22 @@ if [ $isDevEnv != 0 ]; then
   sed -i -e "s/\"restUrl\": .*,/\"restUrl\": \"https:\/\/test.bitfinex.com\",/g" $backendFolder/config/service.report.json
 fi
 
+bfxReportDep=$(getConfValue "bfx-report" $backendFolder)
+escapedBfxReportDep=$(escapeString $bfxReportDep)
+
+if [ $branch == "master" ]
+then
+  sed -i -e "s/\"bfx-report\": .*,/\"bfx-report\": \"$escapedBfxReportDep\",/g" $backendFolder/package.json
+else
+  sed -i -e "s/\"bfx-report\": .*,/\"bfx-report\": \"$escapedBfxReportDep\#$branch\",/g" $backendFolder/package.json
+fi
+
 cd $ROOT
 
 if [ $isNotSkippedReiDeps != 0 ]; then
   if [ $targetPlatform != 0 ]
   then
-    bash ./reinstall-deps.sh $targetPlatform
+    bash $ROOT/scripts/reinstall-deps.sh $targetPlatform
 
     if [ $isSkippedUIBuild != 0 ]
     then
@@ -124,12 +117,19 @@ if [ $isNotSkippedReiDeps != 0 ]; then
     ./node_modules/.bin/electron-builder build --$targetPlatform
     chmod -R a+xwr ./dist
 
-    productName=$(getConfValue "productName")
-    version=$(getConfValue "version")
+    productName=$(getConfValue "productName" $ROOT)
+    version=$(getConfValue "version" $ROOT)
+    versionEnding=""
+
+    if [ $branch != 'master' ]
+    then
+      versionEnding="-$branch"
+    fi
+
     arch="x64"
 
     unpackedFolder=$(ls -d $ROOT/dist/*/ | grep $targetPlatform | head -1)
-    zipFile="$ROOT/dist/$productName-$version-$arch-$targetPlatform.zip"
+    zipFile="$ROOT/dist/$productName-$version$versionEnding-$arch-$targetPlatform.zip"
 
     if ! [ -d $unpackedFolder ]; then
       exit 1
@@ -145,6 +145,6 @@ if [ $isNotSkippedReiDeps != 0 ]; then
 
     exit 0
   else
-    bash ./reinstall-deps.sh
+    bash $ROOT/scripts/reinstall-deps.sh
   fi
 fi

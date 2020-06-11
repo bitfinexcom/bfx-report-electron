@@ -11,18 +11,26 @@ const {
   showLoadingWindow,
   hideLoadingWindow
 } = require('./change-loading-win-visibility-state')
+const {
+  DEFAULT_ARCHIVE_DB_FILE_NAME,
+  DB_FILE_NAME,
+  SECRET_KEY_FILE_NAME
+} = require('./const')
 
-const DEFAULT_FILE_NAME = 'bfx-report-db-archive'
-
-module.exports = ({ dbPath }) => {
+module.exports = ({
+  pathToUserData,
+  pathToUserDocuments
+}) => {
   const dialog = electron.dialog || electron.remote.dialog
-  const app = electron.app || electron.remote.app
+
   const _timestamp = (new Date()).toISOString().split('.')[0]
   const timestamp = _timestamp.replace(/[:]/g, '-')
   const defaultPath = path.join(
-    app.getPath('documents'),
-    `${DEFAULT_FILE_NAME}-${timestamp}`
+    pathToUserDocuments,
+    `${DEFAULT_ARCHIVE_DB_FILE_NAME}-${timestamp}`
   )
+  const dbPath = path.join(pathToUserData, DB_FILE_NAME)
+  const secretKeyPath = path.join(pathToUserData, SECRET_KEY_FILE_NAME)
 
   return () => {
     const win = electron.BrowserWindow.getFocusedWindow()
@@ -45,7 +53,7 @@ module.exports = ({ dbPath }) => {
           }
 
           await showLoadingWindow()
-          await zip(file, dbPath)
+          await zip(file, [dbPath, secretKeyPath])
           await hideLoadingWindow()
 
           await showMessageModalDialog(win, {

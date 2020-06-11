@@ -1,6 +1,6 @@
 {
   "name": "bfx-report-electron",
-  "version": "0.10.5",
+  "version": "0.11.0",
   "description": "Reporting tool",
   "author": "bitfinex.com",
   "main": "index.js",
@@ -8,11 +8,12 @@
   "dependencies": {
     "archiver": "^3.1.1",
     "async": "^2.6.1",
-    "bittorrent-dht": "^8.4.0",
     "bfx-svc-test-helper": "git+https://github.com/bitfinexcom/bfx-svc-test-helper.git",
+    "bittorrent-dht": "^8.4.0",
     "electron-serve": "0.2.0",
     "find-free-port": "^2.0.0",
     "grenache-grape": "^0.9.8",
+    "lodash": "^4.17.15",
     "yauzl": "^2.10.0"
   },
   "devDependencies": {
@@ -32,13 +33,13 @@
     ]
   },
   "scripts": {
-    "start": "./init.sh -s&&npm run dist-linux&&npm run dist-win&&npm run dist-mac",
-    "startDev": "./init.sh -d -s&&npm run dist-linux&&npm run dist-win&&npm run dist-mac",
-    "init": "./init.sh",
-    "initDev": "./init.sh -d",
-    "dist-win": "./reinstall-deps.sh win32&&electron-builder build --win",
-    "dist-linux": "./reinstall-deps.sh linux&&electron-builder build --linux",
-    "dist-mac": "./reinstall-deps.sh darwin&&electron-builder build --mac",
+    "start": "./scripts/init.sh -s&&npm run dist-linux&&npm run dist-win&&npm run dist-mac",
+    "startDev": "./scripts/init.sh -d -s&&npm run dist-linux&&npm run dist-win&&npm run dist-mac",
+    "init": "./scripts/init.sh",
+    "initDev": "./scripts/init.sh -d",
+    "dist-win": "./scripts/reinstall-deps.sh win32&&electron-builder build --win",
+    "dist-linux": "./scripts/reinstall-deps.sh linux&&electron-builder build --linux",
+    "dist-mac": "./scripts/reinstall-deps.sh darwin&&electron-builder build --mac",
     "electron": "export NODE_ENV=development&&export DEBUG=*&&electron .",
     "test": "standard"
   },
@@ -49,8 +50,7 @@
     "appId": "com.report.bitfinex",
     "files": [
       "**/*",
-      "!init.sh",
-      "!reinstall-deps.sh",
+      "!scripts",
       "!README.md",
       "build/icons",
       "bfx-reports-framework",

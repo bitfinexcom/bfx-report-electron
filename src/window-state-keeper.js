@@ -1,16 +1,10 @@
 'use strict'
 
-const path = require('path')
 const electron = require('electron')
-const {
-  writeFileSync,
-  mkdirSync,
-  accessSync,
-  constants: { F_OK, W_OK }
-} = require('fs')
+
+const { getConfigsKeeperByName } = require('./configs-keeper')
 
 module.exports = (options) => {
-  const app = electron.app || electron.remote.app
   const screen = electron.screen || electron.remote.screen
 
   let state = null
@@ -19,13 +13,10 @@ module.exports = (options) => {
 
   const eventHandlingDelay = 100
   const config = {
-    file: 'window-state.json',
-    path: app.getPath('userData'),
     maximize: true,
     fullScreen: true,
     ...options
   }
-  const fullStoreFileName = path.join(config.path, config.file)
 
   const isNormal = (win) => {
     return !win.isMaximized() &&
@@ -123,17 +114,9 @@ module.exports = (options) => {
       updateState(win)
     }
 
-    try {
-      const dir = path.dirname(fullStoreFileName)
-
-      try {
-        accessSync(dir, F_OK | W_OK)
-      } catch (err) {
-        mkdirSync(dir, { recursive: true })
-      }
-
-      writeFileSync(fullStoreFileName, JSON.stringify(state))
-    } catch (err) {}
+    getConfigsKeeperByName('main')
+      .setConfigs({ windowState: state })
+      .saveConfigsSync()
   }
 
   const stateChangeHandler = () => {
@@ -174,9 +157,8 @@ module.exports = (options) => {
     }
   }
 
-  try {
-    state = require(fullStoreFileName)
-  } catch (err) {}
+  state = getConfigsKeeperByName('main')
+    .getConfigByName('windowState')
 
   validateState()
 
