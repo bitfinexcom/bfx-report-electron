@@ -2,19 +2,10 @@
 
 const electron = require('electron')
 const path = require('path')
-const fs = require('fs')
 
 const { app } = electron
 
-const pathToTriggerElectronLoad = path.join(
-  __dirname,
-  '../bfx-report-ui/build/triggerElectronLoad.js'
-)
-const triggerElectronLoadStr = fs.readFileSync(
-  pathToTriggerElectronLoad,
-  'utf8'
-)
-
+const triggerElectronLoad = require('./trigger-electron-load')
 const wins = require('./windows')
 const ipcs = require('./ipcs')
 const runServer = require('./run-server')
@@ -127,8 +118,7 @@ module.exports = () => {
           wins.mainWindow.show()
           hideLoadingWindow()
 
-          wins.mainWindow.webContents
-            .executeJavaScript(triggerElectronLoadStr)
+          triggerElectronLoad()
 
           await showMigrationsModalDialog(
             isMigrationsError,
