@@ -11,6 +11,7 @@ export REACT_APP_ELECTRON=true
 
 ROOT="$PWD"
 frontendFolder="$ROOT/bfx-report-ui"
+pathToTriggerElectronLoad="$frontendFolder/src/utils/triggerElectronLoad.js"
 uiBuildFolder=/ui-build
 uiReadyFile="$uiBuildFolder/READY"
 branch=master
@@ -78,4 +79,5 @@ sed -i -e "s/showFrameworkMode: .*,/showFrameworkMode: true,/g" $frontendFolder/
 npm run build
 
 mv -f $frontendFolder/build/* $uiBuildFolder
+cp $pathToTriggerElectronLoad $uiBuildFolder/triggerElectronLoad.js
 touch $uiReadyFile

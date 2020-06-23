@@ -9,6 +9,7 @@ const exportDB = require('./export-db')
 const importDB = require('./import-db')
 const removeDB = require('./remove-db')
 const changeReportsFolder = require('./change-reports-folder')
+const triggerElectronLoad = require('./trigger-electron-load')
 
 module.exports = ({
   pathToUserData,
@@ -40,6 +41,7 @@ module.exports = ({
             }
 
             wins.mainWindow.reload()
+            triggerElectronLoad()
           }
         }
       ]
