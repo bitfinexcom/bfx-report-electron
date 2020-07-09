@@ -10,6 +10,7 @@ const importDB = require('./import-db')
 const removeDB = require('./remove-db')
 const changeReportsFolder = require('./change-reports-folder')
 const triggerElectronLoad = require('./trigger-electron-load')
+const showAboutModalDialog = require('./show-about-modal-dialog')
 
 module.exports = ({
   pathToUserData,
@@ -80,6 +81,16 @@ module.exports = ({
           label: 'Change reports folder',
           accelerator: 'CmdOrCtrl+F',
           click: changeReportsFolder({ pathToUserDocuments })
+        }
+      ]
+    },
+    {
+      label: 'Help',
+      submenu: [
+        {
+          label: 'About',
+          accelerator: 'CmdOrCtrl+H',
+          click: showAboutModalDialog()
         }
       ]
     }
