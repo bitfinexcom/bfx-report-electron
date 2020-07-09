@@ -4,6 +4,7 @@ set -x
 
 ROOT="$PWD"
 branch=master
+lastCommitFileName=lastCommit.json
 
 source $ROOT/scripts/get-conf-value.sh
 source $ROOT/scripts/escape-string.sh
@@ -60,6 +61,12 @@ mkdir $ROOT/dist 2>/dev/null
 chmod a+xwr $ROOT/dist 2>/dev/null
 
 updateSubmodules $branch
+
+TZ=UTC git show \
+  --quiet \
+  --date='format-local:%Y-%m-%dT%H:%M:%SZ' \
+  --format="{\"hash\":\"%H\",\"date\":\"%cd\"}" \
+  > $ROOT/$lastCommitFileName
 
 if [ $isSkippedUIBuild == 0 ]
 then
