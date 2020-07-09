@@ -47,23 +47,25 @@
     "extends": null,
     "asar": false,
     "productName": "Bitfinex Report",
+    "artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
     "appId": "com.report.bitfinex",
     "files": [
       "**/*",
-      "!scripts",
-      "!README.md",
       "build/icons",
       "bfx-reports-framework",
+      "!.dockerignore",
+      "!scripts",
       "!bfx-reports-framework/init.sh",
-      "!bfx-reports-framework/README.md",
       "!bfx-reports-framework/bfx-report-ui",
-      "!bfx-reports-framework/.mocha.opts",
       "!bfx-reports-framework/test",
       "!bfx-report-ui",
       "bfx-report-ui/build",
       "bfx-report-ui/bfx-report-express",
-      "!bfx-report-ui/bfx-report-express/README.md",
       "!bfx-report-ui/bfx-report-express/pm2.config.js",
+      "!**/.gitmodules",
+      "!**/.npmrc",
+      "!**/.mocharc.json",
+      "!**/README.md",
       {
         "from": "bfx-reports-framework/node_modules",
         "to": "bfx-reports-framework/node_modules",
@@ -118,7 +120,6 @@
       }
     ],
     "linux": {
-      "artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
       "description": "Reporting tool",
       "maintainer": "<bitfinex.com>",
       "category": "Network",
@@ -134,7 +135,6 @@
     },
     "mac": {
       "hardenedRuntime": true,
-      "artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
       "category": "public.app-category.productivity",
       "target": [
         "dir"
