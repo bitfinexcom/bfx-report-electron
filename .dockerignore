@@ -10,7 +10,10 @@ bfx-report-ui/build
 bfx-report-ui/bfx-report-express/logs/*.log
 bfx-report-ui/bfx-report-express/config/*.json
 docker-compose.yaml
+Dockerfile.ui-builder
 Dockerfile.linux-builder
 Dockerfile.win-builder
 Dockerfile.mac-builder
 dist
+.env.example
+lastCommit.json
