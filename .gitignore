@@ -10,3 +10,4 @@ dist/*
 !dist/.gitkeep
 package-lock.json
 .env
+lastCommit.json
