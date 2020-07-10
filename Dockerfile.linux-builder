@@ -1,6 +1,7 @@
-FROM electronuserland/builder:10
+FROM electronuserland/builder:12
 
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get update -y \
+  && apt-get install -y --no-install-recommends \
     p7zip-full \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
