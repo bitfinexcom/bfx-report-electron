@@ -1,6 +1,12 @@
 'use strict'
 
-const electron = require('electron')
+const {
+  dialog,
+  remote,
+  shell,
+  clipboard,
+  BrowserWindow
+} = require('electron')
 const path = require('path')
 const os = require('os')
 
@@ -15,10 +21,10 @@ try {
 } catch (e) {}
 
 module.exports = () => {
-  const dialog = electron.dialog || electron.remote.dialog
+  const _dialog = dialog || remote.dialog
 
   return () => {
-    const win = electron.BrowserWindow.getFocusedWindow()
+    const win = BrowserWindow.getFocusedWindow()
     const productName = 'Bitfinex Report'
 
     const type = os.type()
@@ -36,25 +42,30 @@ V8: ${process.versions.v8}${EOL}\
 OS: ${type} ${arch} ${release}\
 `
 
-    dialog.showMessageBox(
+    _dialog.showMessageBox(
       win,
       {
         type: 'info',
         title: productName,
         message: productName,
         detail,
-        buttons: ['Copy', 'OK'],
-        defaultId: 1,
-        cancelId: 1,
+        buttons: ['Copy', 'GitHub', 'OK'],
+        defaultId: 2,
+        cancelId: 2,
         icon: path.join(__dirname, '../build/icons/64x64.png')
       },
       async (btnId) => {
         try {
-          if (btnId === 1) {
+          if (btnId === 2) {
             return
           }
+          if (btnId === 1) {
+            shell.openExternal(
+              packageJson.repository || 'https://github.com'
+            )
+          }
 
-          electron.clipboard.writeText(detail)
+          clipboard.writeText(detail)
         } catch (err) {
           console.error(err)
         }
