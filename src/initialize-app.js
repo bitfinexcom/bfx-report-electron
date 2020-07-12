@@ -5,6 +5,7 @@ const path = require('path')
 
 const { app } = electron
 
+const triggerElectronLoad = require('./trigger-electron-load')
 const wins = require('./windows')
 const ipcs = require('./ipcs')
 const runServer = require('./run-server')
@@ -117,10 +118,7 @@ module.exports = () => {
           wins.mainWindow.show()
           hideLoadingWindow()
 
-          wins.mainWindow.webContents
-            .executeJavaScript(
-              'try { document.querySelector(".bp3-button.bp3-intent-success").click() } catch (e) { console.log(e) }'
-            )
+          triggerElectronLoad()
 
           await showMigrationsModalDialog(
             isMigrationsError,
