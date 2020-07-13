@@ -1,19 +1,23 @@
 'use strict'
 
-const electron = require('electron')
-
-const { app } = electron
+const { app } = require('electron')
 
 const windows = require('./windows')
 
 module.exports = () => {
-  return app.makeSingleInstance(() => {
-    if (windows.mainWindow) {
-      if (windows.mainWindow.isMinimized()) {
-        windows.mainWindow.restore()
-      }
+  const isGottenLock = app.requestSingleInstanceLock()
 
-      windows.mainWindow.focus()
-    }
-  })
+  if (isGottenLock) {
+    app.on('second-instance', () => {
+      if (windows.mainWindow) {
+        if (windows.mainWindow.isMinimized()) {
+          windows.mainWindow.restore()
+        }
+
+        windows.mainWindow.focus()
+      }
+    })
+  }
+
+  return !isGottenLock
 }
