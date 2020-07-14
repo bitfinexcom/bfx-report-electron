@@ -21,7 +21,7 @@ const _showErrorBox = (win, title = '', message = '') => {
   })
 }
 
-module.exports = (win, title = 'Error', err) => {
+module.exports = async (win, title = 'Error', err) => {
   if (err.code === 'ENOENT') {
     const message = 'No such file or directory'
     const content = (err.syscall && err.path)

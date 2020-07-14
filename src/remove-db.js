@@ -37,12 +37,14 @@ module.exports = ({ pathToUserData }) => {
     const win = electron.BrowserWindow.getFocusedWindow()
 
     try {
-      const pushedBtnId = await showMessageModalDialog(win, {
+      const {
+        btnId
+      } = await showMessageModalDialog(win, {
         type: 'question',
         title: 'Remove database',
         message: 'Are you sure to remove the database?'
       })
-      const isOkBtnPushed = pushedBtnId === 1
+      const isOkBtnPushed = btnId === 1
 
       if (!isOkBtnPushed) {
         return
@@ -52,7 +54,11 @@ module.exports = ({ pathToUserData }) => {
       await _rmDb(pathToUserData)
       relaunch()
     } catch (err) {
-      await showErrorModalDialog(win, 'Remove database', err)
+      try {
+        await showErrorModalDialog(win, 'Remove database', err)
+      } catch (err) {
+        console.error(err)
+      }
 
       console.error(err)
       relaunch()
