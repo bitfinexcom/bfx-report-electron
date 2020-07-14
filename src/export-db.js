@@ -32,43 +32,52 @@ module.exports = ({
   const dbPath = path.join(pathToUserData, DB_FILE_NAME)
   const secretKeyPath = path.join(pathToUserData, SECRET_KEY_FILE_NAME)
 
-  return () => {
+  return async () => {
     const win = electron.BrowserWindow.getFocusedWindow()
 
-    dialog.showSaveDialog(
-      win,
-      {
-        title: 'Database export',
-        defaultPath,
-        buttonLabel: 'Export',
-        filters: [{ name: 'ZIP', extensions: ['zip'] }]
-      },
-      async (file) => {
-        try {
-          if (!file) {
-            return
-          }
-          if (typeof file !== 'string') {
-            throw new InvalidFilePathError()
-          }
-
-          await showLoadingWindow()
-          await zip(file, [dbPath, secretKeyPath])
-          await hideLoadingWindow()
-
-          await showMessageModalDialog(win, {
-            buttons: ['OK'],
-            defaultId: 0,
-            title: 'Database export',
-            message: 'Exported successfully'
-          })
-        } catch (err) {
-          await hideLoadingWindow()
-          await showErrorModalDialog(win, 'Database export', err)
-
-          console.error(err)
+    try {
+      const {
+        canceled,
+        filePath
+      } = await dialog.showSaveDialog(
+        win,
+        {
+          title: 'Database export',
+          defaultPath,
+          buttonLabel: 'Export',
+          filters: [{ name: 'ZIP', extensions: ['zip'] }]
         }
+      )
+
+      if (
+        canceled ||
+        !filePath
+      ) {
+        return
       }
-    )
+      if (typeof filePath !== 'string') {
+        throw new InvalidFilePathError()
+      }
+
+      await showLoadingWindow()
+      await zip(filePath, [dbPath, secretKeyPath])
+      await hideLoadingWindow()
+
+      await showMessageModalDialog(win, {
+        buttons: ['OK'],
+        defaultId: 0,
+        title: 'Database export',
+        message: 'Exported successfully'
+      })
+    } catch (err) {
+      try {
+        await hideLoadingWindow()
+        await showErrorModalDialog(win, 'Database export', err)
+      } catch (err) {
+        console.error(err)
+      }
+
+      console.error(err)
+    }
   }
 }
