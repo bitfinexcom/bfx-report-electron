@@ -1,6 +1,11 @@
-FROM electronuserland/builder:12
+FROM electronuserland/builder
 
-RUN apt-get update -y \
+ENV NODE_VERSION 12.14.1
+
+COPY ./scripts/install-nodejs.sh ./scripts/install-nodejs.sh
+
+RUN ./scripts/install-nodejs.sh $NODE_VERSION \
+  && apt-get update -y \
   && apt-get install -y --no-install-recommends \
     p7zip-full \
   && apt-get clean \
