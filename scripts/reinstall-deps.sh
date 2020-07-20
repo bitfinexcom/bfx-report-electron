@@ -130,5 +130,5 @@ postInstall $expressFolder
 
 npmInstall $backendFolder
 postInstall $backendFolder
-sqliteVer=$(getModuleVersion "sqlite3" $backendFolder)
+sqliteVer=$(getConfValue "sqlite3" $backendFolder)
 npmInstallDep $backendFolder "sqlite3" $sqliteVer
