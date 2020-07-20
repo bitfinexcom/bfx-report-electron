@@ -8,7 +8,7 @@ source $ROOT/scripts/get-conf-value.sh
 
 ARCH="x64"
 ELECTRON_VER=$(getConfValue "electron" $ROOT)
-DIST_URL=https://atom.io/download/electron
+DIST_URL=https://electronjs.org/headers
 
 unameOut="$(uname -s)"
 
