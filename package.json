@@ -46,6 +46,7 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "build": {
+    "npmRebuild": false,
     "extends": null,
     "asar": false,
     "productName": "Bitfinex Report",
