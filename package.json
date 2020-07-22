@@ -11,6 +11,7 @@
     "async": "^2.6.1",
     "bfx-svc-test-helper": "git+https://github.com/bitfinexcom/bfx-svc-test-helper.git",
     "bittorrent-dht": "^8.4.0",
+    "ed25519-supercop": "1.2.0",
     "electron-serve": "^1.0.0",
     "find-free-port": "^2.0.0",
     "grenache-grape": "^0.9.8",
