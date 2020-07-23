@@ -125,6 +125,7 @@
       }
     ],
     "linux": {
+      "executableName": "app",
       "description": "Reporting tool",
       "maintainer": "<bitfinex.com>",
       "category": "Network",

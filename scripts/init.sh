@@ -143,6 +143,15 @@ if [ $isNotSkippedReiDeps != 0 ]; then
     fi
 
     cd $unpackedFolder
+
+    if [ $targetPlatform == "linux" ]
+    then
+      cp -f "$ROOT/build/linux-launcher/Bitfinex Report.desktop" "Bitfinex Report.desktop"
+      cp -f "$ROOT/build/linux-launcher/launcher.sh" "launcher.sh"
+      chmod +x "Bitfinex Report.desktop"
+      chmod +x "launcher.sh"
+    fi
+
     7z a -tzip $zipFile . -mmt | grep -v "Compressing"
     cd $ROOT
 
