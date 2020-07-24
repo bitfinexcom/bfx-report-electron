@@ -2,13 +2,6 @@
 
 set -x
 
-export NODE_PATH=src/
-export PUBLIC_URL=/
-export REACT_APP_PLATFORM=localhost
-export REACT_APP_TITLE=Bitfinex Reports
-export REACT_APP_LOGO_PATH=favicon.ico
-export REACT_APP_ELECTRON=true
-
 ROOT="$PWD"
 frontendFolder="$ROOT/bfx-report-ui"
 pathToTriggerElectronLoad="$frontendFolder/src/utils/triggerElectronLoad.js"
@@ -64,6 +57,9 @@ cd $frontendFolder
 if ! [ -s "$frontendFolder/package.json" ]; then
   exit 1
 fi
+
+cp -f "$frontendFolder/.env.example" "$frontendFolder/.env"
+sed -i -e "s/REACT_APP_ELECTRON=.*/REACT_APP_ELECTRON=true/g" $frontendFolder/.env
 
 npm i
 
