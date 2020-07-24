@@ -27,7 +27,7 @@ module.exports = ({
   const timestamp = _timestamp.replace(/[:]/g, '-')
   const defaultPath = path.join(
     pathToUserDocuments,
-    `${DEFAULT_ARCHIVE_DB_FILE_NAME}-${timestamp}`
+    `${DEFAULT_ARCHIVE_DB_FILE_NAME}-${timestamp}.zip`
   )
   const dbPath = path.join(pathToUserData, DB_FILE_NAME)
   const secretKeyPath = path.join(pathToUserData, SECRET_KEY_FILE_NAME)
