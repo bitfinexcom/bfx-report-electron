@@ -1,20 +1,29 @@
 'use strict'
 
+const electron = require('electron')
+
 const wins = require('./windows')
 
 const showLoadingWindow = async () => {
   if (
     !wins.loadingWindow ||
     typeof wins.loadingWindow !== 'object' ||
-    wins.loadingWindow.isDestroyed() ||
-    wins.loadingWindow.isVisible()
+    wins.loadingWindow.isDestroyed()
   ) {
+    return
+  }
+  if (!wins.loadingWindow.isFocused()) {
+    const win = electron.BrowserWindow.getFocusedWindow()
+
+    wins.loadingWindow.setParentWindow(win)
+  }
+  if (wins.loadingWindow.isVisible()) {
     return
   }
 
   return new Promise((resolve, reject) => {
     try {
-      wins.loadingWindow.once('focus', resolve)
+      wins.loadingWindow.once('show', resolve)
       wins.loadingWindow.show()
     } catch (err) {
       reject(err)
