@@ -5,6 +5,9 @@ const electron = require('electron')
 const wins = require('./windows')
 
 const showLoadingWindow = async () => {
+  const screen = electron.screen || electron.remote.screen
+  const { getCursorScreenPoint, getDisplayNearestPoint } = screen
+
   if (
     !wins.loadingWindow ||
     typeof wins.loadingWindow !== 'object' ||
@@ -20,6 +23,20 @@ const showLoadingWindow = async () => {
   if (wins.loadingWindow.isVisible()) {
     return
   }
+
+  const {
+    workArea
+  } = getDisplayNearestPoint(getCursorScreenPoint())
+  const {
+    height,
+    width
+  } = wins.loadingWindow.getBounds()
+  wins.loadingWindow.setBounds({
+    ...workArea,
+    height,
+    width
+  })
+  wins.loadingWindow.center()
 
   return new Promise((resolve, reject) => {
     try {
