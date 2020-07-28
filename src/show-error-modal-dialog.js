@@ -52,17 +52,17 @@ module.exports = async (win, title = 'Error', err) => {
     err instanceof DbImportingError ||
     err instanceof InvalidFolderPathError
   ) {
-    const message = 'The database has not imported'
+    const message = 'The database has not been imported'
 
     return _showErrorBox(win, title, message)
   }
   if (err instanceof DbRemovingError) {
-    const message = 'The database has not removed'
+    const message = 'The database has not been removed'
 
     return _showErrorBox(win, title, message)
   }
   if (err instanceof ReportsFolderChangingError) {
-    const message = 'The reports folder has not changed'
+    const message = 'The reports folder has not been changed'
 
     return _showErrorBox(win, title, message)
   }
