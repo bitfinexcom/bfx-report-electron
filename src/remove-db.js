@@ -42,7 +42,7 @@ module.exports = ({ pathToUserData }) => {
       } = await showMessageModalDialog(win, {
         type: 'question',
         title: 'Remove database',
-        message: 'Are you sure to remove the database?'
+        message: 'Are you sure you want to remove the database?'
       })
       const isOkBtnPushed = btnId === 1
 
