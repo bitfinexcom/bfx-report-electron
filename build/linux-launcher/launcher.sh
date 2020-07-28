@@ -6,14 +6,18 @@ if [ ! -z "$1" ]; then
   ROOT=$1
 fi
 
-cd $ROOT
-
 desktopFilePath="Bitfinex Report.desktop"
 bakDesktopFilePath="$desktopFilePath-bak"
 iconPath="$ROOT/resources/app/build/icon.png"
+logFilePath="$ROOT/error.log"
 
-cp "$desktopFilePath" "$bakDesktopFilePath"
-sed -i -e "s,Icon=.*,Icon=$iconPath,g" "$desktopFilePath"
-rm -f "$bakDesktopFilePath"
+{
+  cp "$ROOT/$desktopFilePath" "$ROOT/$bakDesktopFilePath" \
+  && sed -i -e "s,Icon=.*,Icon=$iconPath,g" "$ROOT/$desktopFilePath" \
+  && rm -f "$ROOT/$bakDesktopFilePath"
+} || {
+  echo "Error setting icon path">>"$logFilePath"
+}
 
-./app 2>>$ROOT/error.log
+cd "$ROOT"
+./app 2>>"$logFilePath"
