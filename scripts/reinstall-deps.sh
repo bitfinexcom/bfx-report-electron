@@ -123,18 +123,7 @@ function postInstall {
 }
 
 npmInstall $ROOT "--isDevNeeded"
-ed25519SupercopBinBasePath="$targetPlatform-$ARCH/electron.abi80.node"
-ed25519SupercopBinVendorPath="$ROOT/build/vendors/ed25519-supercop/$ed25519SupercopBinBasePath"
-ed25519SupercopBinPrebuildPath="$ROOT/node_modules/ed25519-supercop/prebuilds/$ed25519SupercopBinBasePath"
-ed25519SupercopBinPath="$ROOT/node_modules/ed25519-supercop/build/Release/supercop.node"
-
-if ! [ -f "$ed25519SupercopBinVendorPath" ]; then
-  exit 1
-fi
-
-cp -f $ed25519SupercopBinVendorPath $ed25519SupercopBinPrebuildPath
 postInstall $ROOT "prod"
-cp -f $ed25519SupercopBinVendorPath $ed25519SupercopBinPath
 
 npmInstall $expressFolder
 postInstall $expressFolder
@@ -143,3 +132,5 @@ npmInstall $backendFolder
 postInstall $backendFolder
 sqliteVer=$(getConfValue "sqlite3" $backendFolder)
 npmInstallDep $backendFolder "sqlite3" $sqliteVer
+
+rm -rf "$ROOT/node_modules/ed25519-supercop/build"
