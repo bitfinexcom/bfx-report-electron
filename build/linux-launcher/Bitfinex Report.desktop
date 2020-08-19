@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Bitfinex Report
+Exec=sh -c "`dirname %k`/launcher.sh `dirname %k`"
+Icon=application-x-executable
+Terminal=false
+Type=Application
+Categories=Network;
+Name[en_US]=Bitfinex Report

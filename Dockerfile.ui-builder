@@ -1,4 +1,10 @@
-FROM electronuserland/builder:10
+FROM electronuserland/builder
+
+ENV NODE_VERSION 12.14.1
+
+COPY ./scripts/install-nodejs.sh ./scripts/install-nodejs.sh
+
+RUN ./scripts/install-nodejs.sh $NODE_VERSION
 
 COPY . .
 

@@ -20,8 +20,7 @@ const loadURL = serve({ directory: publicDir })
 const pathToLayouts = path.join(__dirname, 'layouts')
 const pathToLayoutAppInit = path.join(pathToLayouts, 'app-init.html')
 
-const _createWindow = (
-  cb,
+const _createWindow = async (
   {
     pathname = null,
     winName = 'mainWindow'
@@ -63,7 +62,7 @@ const _createWindow = (
     y: !y
       ? bounds.y
       : y,
-    icon: path.join(__dirname, '../build/icons/512.png'),
+    icon: path.join(__dirname, '../build/icons/512x512.png'),
     backgroundColor: '#102331',
     show: false,
     ...props
@@ -80,10 +79,8 @@ const _createWindow = (
     : 'app://-'
 
   if (!pathname) {
-    loadURL(wins[winName])
+    await loadURL(wins[winName])
   }
-
-  wins[winName].loadURL(startUrl)
 
   wins[winName].on('closed', () => {
     wins[winName] = null
@@ -96,29 +93,36 @@ const _createWindow = (
     }
   })
 
-  wins[winName].once('ready-to-show', () => {
-    if (!pathname) {
-      _createLoadingWindow(cb)
-
-      return
-    }
-
-    wins[winName].show()
-
-    if (typeof cb === 'function') {
-      cb()
-    }
+  const readyToShowPromise = new Promise((resolve) => {
+    wins[winName].once('ready-to-show', resolve)
   })
+  const didFinishLoadPromise = wins[winName]
+    .loadURL(startUrl)
 
-  if (isMainWindow) {
-    appStates.isMainWinMaximized = isMaximized
+  await Promise.all([
+    readyToShowPromise,
+    didFinishLoadPromise
+  ])
 
-    manage(wins[winName])
+  const res = {
+    isMaximized,
+    isMainWindow,
+    manage,
+    win: wins[winName]
   }
+
+  if (!pathname) {
+    await _createLoadingWindow()
+
+    return res
+  }
+
+  wins[winName].show()
+
+  return res
 }
 
-const _createChildWindow = (
-  cb,
+const _createChildWindow = async (
   pathname,
   winName,
   {
@@ -132,8 +136,7 @@ const _createChildWindow = (
   const x = Math.ceil(bounds.x + ((bounds.width - width) / 2))
   const y = Math.ceil(bounds.y + ((bounds.height - height) / 2))
 
-  _createWindow(
-    cb,
+  const winProps = await _createWindow(
     {
       pathname,
       winName
@@ -152,38 +155,42 @@ const _createChildWindow = (
     }
   )
 
-  wins[winName].on('closed', () => {
+  winProps.win.on('closed', () => {
     if (wins.mainWindow) {
       wins.mainWindow.close()
     }
 
     wins.mainWindow = null
   })
+
+  return winProps
 }
 
-const createMainWindow = ({
+const createMainWindow = async ({
   pathToUserData,
   pathToUserDocuments
 }) => {
-  return new Promise((resolve, reject) => {
-    try {
-      _createWindow(
-        () => {
-          if (isDevEnv) {
-            wins.mainWindow.webContents.openDevTools()
-          }
+  const winProps = await _createWindow()
+  const {
+    win,
+    manage,
+    isMaximized
+  } = winProps
 
-          createMenu({ pathToUserData, pathToUserDocuments })
-          resolve()
-        }
-      )
-    } catch (err) {
-      reject(err)
-    }
-  })
+  if (isDevEnv) {
+    wins.mainWindow.webContents.openDevTools()
+  }
+
+  createMenu({ pathToUserData, pathToUserDocuments })
+
+  appStates.isMainWinMaximized = isMaximized
+
+  manage(win)
+
+  return winProps
 }
 
-const _createLoadingWindow = (cb) => {
+const _createLoadingWindow = async () => {
   if (
     wins.loadingWindow &&
     typeof wins.loadingWindow === 'object' &&
@@ -192,13 +199,10 @@ const _createLoadingWindow = (cb) => {
   ) {
     wins.loadingWindow.show()
 
-    if (typeof cb === 'function') {
-      cb()
-    }
+    return {}
   }
 
-  _createChildWindow(
-    cb,
+  const winProps = await _createChildWindow(
     pathToLayoutAppInit,
     'loadingWindow',
     {
@@ -206,30 +210,25 @@ const _createLoadingWindow = (cb) => {
       height: 350
     }
   )
+
+  return winProps
 }
 
-const createErrorWindow = (pathname) => {
-  return new Promise((resolve, reject) => {
-    try {
-      _createChildWindow(
-        () => {
-          if (wins.loadingWindow) {
-            wins.loadingWindow.hide()
-          }
-
-          resolve()
-        },
-        pathname,
-        'errorWindow',
-        {
-          height: 200,
-          frame: true
-        }
-      )
-    } catch (err) {
-      reject(err)
+const createErrorWindow = async (pathname) => {
+  const winProps = await _createChildWindow(
+    pathname,
+    'errorWindow',
+    {
+      height: 200,
+      frame: true
     }
-  })
+  )
+
+  if (wins.loadingWindow) {
+    wins.loadingWindow.hide()
+  }
+
+  return winProps
 }
 
 module.exports = {

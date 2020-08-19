@@ -16,13 +16,8 @@ const confFacsGrc = require(pathToConfFacsGrc)
 if (!process.env.NODE_ENV) process.env.NODE_ENV = 'production'
 process.send = process.send || (() => {})
 process.env.NODE_CONFIG_DIR = pathToExpressConfDir
-process.versions.electron = process.env.ELECTRON_VERSION
 
-const env = {
-  ...process.env,
-  ELECTRON_VERSION: process.versions.electron
-}
-
+const env = { ...process.env }
 const {
   getDefaultPorts,
   getFreePort,

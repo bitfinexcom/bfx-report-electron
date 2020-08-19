@@ -11,17 +11,18 @@
     "async": "^2.6.1",
     "bfx-svc-test-helper": "git+https://github.com/bitfinexcom/bfx-svc-test-helper.git",
     "bittorrent-dht": "^8.4.0",
-    "electron-serve": "0.2.0",
+    "ed25519-supercop": "^2.0.1",
+    "electron-serve": "^1.0.0",
     "find-free-port": "^2.0.0",
     "grenache-grape": "^0.9.8",
     "lodash": "^4.17.15",
     "yauzl": "^2.10.0"
   },
   "devDependencies": {
-    "electron": "2.0.18",
+    "electron": "9.1.1",
     "electron-builder": "22.7.0",
     "electron-rebuild": "^1.8.2",
-    "node-gyp": "6.0.1",
+    "node-gyp": "7.0.0",
     "node-pre-gyp": "^0.11.0",
     "standard": "^14.3.1"
   },
@@ -45,6 +46,7 @@
     "test": "standard"
   },
   "build": {
+    "npmRebuild": false,
     "extends": null,
     "asar": false,
     "productName": "Bitfinex Report",
@@ -53,6 +55,7 @@
     "files": [
       "**/*",
       "build/icons",
+      "build/icon.*",
       "bfx-reports-framework",
       "!.dockerignore",
       "!scripts",
@@ -121,6 +124,7 @@
       }
     ],
     "linux": {
+      "executableName": "app",
       "description": "Reporting tool",
       "maintainer": "<bitfinex.com>",
       "category": "Network",
