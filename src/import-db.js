@@ -38,56 +38,63 @@ module.exports = ({
 }) => {
   const dialog = electron.dialog || electron.remote.dialog
 
-  return () => {
+  return async () => {
     const win = electron.BrowserWindow.getFocusedWindow()
 
-    dialog.showOpenDialog(
-      win,
-      {
-        title: 'Database import',
-        defaultPath: pathToUserDocuments,
-        buttonLabel: 'Import',
-        properties: [
-          'openFile',
-          'createDirectory',
-          'treatPackageAsDirectory'
-        ],
-        filters: [{ name: 'ZIP', extensions: ['zip'] }]
-      },
-      async (files) => {
-        try {
-          if (
-            !Array.isArray(files) ||
-            files.length === 0
-          ) {
-            return
-          }
-          if (files.some(file => (
-            !file || typeof file !== 'string'
-          ))) {
-            throw new InvalidFilePathError()
-          }
-
-          await pauseApp()
-          await _rmDbExcludeMain(pathToUserData, DB_FILE_NAME)
-          const extractedfileNames = await unzip(
-            files[0],
-            pathToUserData,
-            { extractFiles: [DB_FILE_NAME, SECRET_KEY_FILE_NAME] }
-          )
-
-          if (extractedfileNames.every(file => file !== DB_FILE_NAME)) {
-            throw new DbImportingError()
-          }
-
-          relaunch()
-        } catch (err) {
-          await showErrorModalDialog(win, 'Database import', err)
-
-          console.error(err)
-          relaunch()
+    try {
+      const {
+        filePaths,
+        canceled
+      } = await dialog.showOpenDialog(
+        win,
+        {
+          title: 'Database import',
+          defaultPath: pathToUserDocuments,
+          buttonLabel: 'Import',
+          properties: [
+            'openFile',
+            'createDirectory',
+            'treatPackageAsDirectory'
+          ],
+          filters: [{ name: 'ZIP', extensions: ['zip'] }]
         }
+      )
+
+      if (
+        canceled ||
+        !Array.isArray(filePaths) ||
+        filePaths.length === 0
+      ) {
+        return
       }
-    )
+      if (filePaths.some(file => (
+        !file || typeof file !== 'string'
+      ))) {
+        throw new InvalidFilePathError()
+      }
+
+      await pauseApp()
+      await _rmDbExcludeMain(pathToUserData, DB_FILE_NAME)
+      const extractedfileNames = await unzip(
+        filePaths[0],
+        pathToUserData,
+        { extractFiles: [DB_FILE_NAME, SECRET_KEY_FILE_NAME] }
+      )
+
+      if (extractedfileNames.every(file => file !== DB_FILE_NAME)) {
+        throw new DbImportingError()
+      }
+
+      relaunch()
+    } catch (err) {
+      try {
+        await showErrorModalDialog(win, 'Database import', err)
+      } catch (err) {
+        console.error(err)
+      }
+
+      console.error(err)
+      relaunch()
+    }
   }
 }

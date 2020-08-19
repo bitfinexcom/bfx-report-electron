@@ -14,7 +14,6 @@ module.exports = ({
 }) => {
   const env = {
     ...process.env,
-    ELECTRON_VERSION: process.versions.electron,
     PATH_TO_USER_DATA: pathToUserData,
     PATH_TO_USER_CSV: getConfigsKeeperByName('main')
       .getConfigByName('pathToUserCsv'),
