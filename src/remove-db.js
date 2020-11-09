@@ -21,7 +21,9 @@ const _rmDb = async (pathToUserData) => {
         include: [
           DB_FILE_NAME,
           SECRET_KEY_FILE_NAME,
-          '.db'
+          '.db',
+          '.db-shm',
+          '.db-wal'
         ]
       }
     )
