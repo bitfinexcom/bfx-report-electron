@@ -59,19 +59,31 @@ if ! [ -s "$frontendFolder/package.json" ]; then
 fi
 
 cp -f "$frontendFolder/.env.example" "$frontendFolder/.env"
-sed -i -e "s/REACT_APP_ELECTRON=.*/REACT_APP_ELECTRON=true/g" $frontendFolder/.env
+sed -i -e \
+  "s/REACT_APP_ELECTRON=.*/REACT_APP_ELECTRON=true/g" \
+  $frontendFolder/.env
 
 npm i
 
-sed -i -e "s/API_URL: .*,/API_URL: \'http:\/\/localhost:34343\/api\',/g" $frontendFolder/src/var/config.js
-sed -i -e "s/WS_ADDRESS: .*,/WS_ADDRESS: \'ws:\/\/localhost:34343\/ws\',/g" $frontendFolder/src/var/config.js
+sed -i -e \
+  "s/API_URL: .*,/API_URL: \'http:\/\/localhost:34343\/api\',/g" \
+  $frontendFolder/src/var/config.js
+sed -i -e \
+  "s/WS_ADDRESS: .*,/WS_ADDRESS: \'ws:\/\/localhost:34343\/ws\',/g" \
+  $frontendFolder/src/var/config.js
 
 if [ $isDevEnv != 0 ]; then
-	sed -i -e "s/KEY_URL: .*,/KEY_URL: \'https:\/\/test.bitfinex.com\/api\',/g" $frontendFolder/src/var/config.js
+	sed -i -e \
+    "s/KEY_URL: .*,/KEY_URL: \'https:\/\/test.bitfinex.com\/api\',/g" \
+    $frontendFolder/src/var/config.js
 fi
 
-sed -i -e "s/showAuthPage: .*,/showAuthPage: true,/g" $frontendFolder/src/var/config.js
-sed -i -e "s/showFrameworkMode: .*,/showFrameworkMode: true,/g" $frontendFolder/src/var/config.js
+sed -i -e \
+  "s/showAuthPage: .*,/showAuthPage: true,/g" \
+  $frontendFolder/src/var/config.js
+sed -i -e \
+  "s/showFrameworkMode: .*,/showFrameworkMode: true,/g" \
+  $frontendFolder/src/var/config.js
 npm run build
 
 mv -f $frontendFolder/build/* $uiBuildFolder

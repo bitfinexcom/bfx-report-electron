@@ -100,6 +100,8 @@ function postInstall {
   local prevFolder=$PWD
   local types="dev,prod,optional"
   local folder=$prevFolder
+  local modules=""
+  local distUrl=""
 
   if [ $# -ge 1 ]
   then
@@ -107,30 +109,42 @@ function postInstall {
   fi
   if [ $# -ge 2 ]
   then
-    types=$2
+    modules="-o $2"
+  fi
+  if [ $3 == "-d" ]
+  then
+    distUrl="-d $DIST_URL"
+  fi
+  if [ $# -ge 4 ]
+  then
+    types=$4
   fi
 
   cd $ROOT
 
-  ./node_modules/.bin/electron-rebuild -p \
+  ./node_modules/.bin/electron-rebuild \
     -t $types \
     -a $ARCH \
     -v $ELECTRON_VER \
-    -d $DIST_URL \
-    -m $folder
+    $distUrl \
+    -m $folder \
+    $modules \
+    -f
 
   cd $prevFolder
 }
 
 npmInstall $ROOT "--isDevNeeded"
-postInstall $ROOT "prod"
+postInstall $ROOT heapdump -d
+postInstall $ROOT ed25519-supercop
 
 npmInstall $expressFolder
-postInstall $expressFolder
+postInstall $expressFolder heapdump -d
 
 npmInstall $backendFolder
-postInstall $backendFolder
 sqliteVer=$(getConfValue "sqlite3" $backendFolder)
 npmInstallDep $backendFolder "sqlite3" $sqliteVer
+postInstall $backendFolder heapdump -d
+postInstall $backendFolder better-sqlite3
 
 rm -rf "$ROOT/node_modules/ed25519-supercop/build"
