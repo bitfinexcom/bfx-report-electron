@@ -19,7 +19,6 @@ const serializeError = (err) => {
   return {
     toJSON () {
       return Object.keys(err).reduce((obj, key) => {
-        console.log('[key]:', key)
         obj[key] = err[key]
 
         return obj
