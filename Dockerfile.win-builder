@@ -1,6 +1,6 @@
 FROM electronuserland/builder:wine
 
-ENV NODE_VERSION 12.14.1
+ENV NODE_VERSION 12.16.3
 
 COPY ./scripts/install-nodejs.sh ./scripts/install-nodejs.sh
 

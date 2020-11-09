@@ -19,10 +19,10 @@
     "yauzl": "^2.10.0"
   },
   "devDependencies": {
-    "electron": "9.1.1",
-    "electron-builder": "22.7.0",
-    "electron-rebuild": "^1.8.2",
-    "node-gyp": "7.0.0",
+    "electron": "10.1.5",
+    "electron-builder": "22.9.1",
+    "electron-rebuild": "^2.0.2",
+    "node-gyp": "7.1.2",
     "node-pre-gyp": "^0.11.0",
     "standard": "^14.3.1"
   },
