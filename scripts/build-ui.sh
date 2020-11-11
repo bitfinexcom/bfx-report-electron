@@ -63,7 +63,7 @@ sed -i -e \
   "s/REACT_APP_ELECTRON=.*/REACT_APP_ELECTRON=true/g" \
   $frontendFolder/.env
 
-npm i
+npm i --no-audit
 
 sed -i -e \
   "s/API_URL: .*,/API_URL: \'http:\/\/localhost:34343\/api\',/g" \
