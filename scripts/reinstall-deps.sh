@@ -57,5 +57,14 @@ rm -f ./package-lock.json
 rm -rf ./node_modules
 npm i --production --no-audit
 
+if [ $targetPlatform == 'win32' ]
+then
+  betterSqlite3BinPath=$backendFolder/node_modules/better-sqlite3/build/Release
+  binArch=$ROOT/build/better-sqlite3-prebuild-bin-win/better_sqlite3.zip
+
+  rm -rf $betterSqlite3BinPath/better_sqlite3.node
+  7z x $binArch -o$betterSqlite3BinPath
+fi
+
 cd $ROOT
 rm -rf "$ROOT/node_modules/ed25519-supercop/build"
