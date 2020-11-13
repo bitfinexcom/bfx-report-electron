@@ -2,6 +2,8 @@
 
 const { app } = require('electron')
 
+app.allowRendererProcessReuse = true
+
 const initializeApp = require('./src/initialize-app')
 const makeSingleInstance = require('./src/make-single-instance')
 
