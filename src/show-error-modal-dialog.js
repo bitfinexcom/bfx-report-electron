@@ -13,7 +13,7 @@ const showMessageModalDialog = require('./show-message-modal-dialog')
 const _showErrorBox = (win, title = '', message = '') => {
   return showMessageModalDialog(win, {
     type: 'error',
-    buttons: ['Cancel'],
+    buttons: ['OK'],
     defaultId: 0,
     cancelId: 0,
     title,
