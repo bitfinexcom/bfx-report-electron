@@ -22,7 +22,7 @@ const _rmDbExcludeMain = async (folderPath, dbFileName) => {
       folderPath,
       {
         exclude: [dbFileName],
-        include: ['.db']
+        include: ['.db', '.db-shm', '.db-wal']
       }
     )
 

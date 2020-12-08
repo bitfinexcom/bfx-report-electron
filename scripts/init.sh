@@ -4,6 +4,7 @@ set -x
 
 ROOT="$PWD"
 branch=master
+dbDriver=better-sqlite
 lastCommitFileName=lastCommit.json
 
 source $ROOT/scripts/get-conf-value.sh
@@ -19,6 +20,10 @@ isSkippedUIBuild=0
 if [ "$BRANCH" != "" ]
 then
   branch=$BRANCH
+fi
+if [ "$DB_DRIVER" != "" ]
+then
+  dbDriver=$DB_DRIVER
 fi
 
 function usage {
@@ -79,7 +84,8 @@ then
   bash $ROOT/scripts/build-ui.sh $devFlag
 fi
 
-cp $expressFolder/config/default.json.example $expressFolder/config/default.json
+cp $expressFolder/config/default.json.example \
+  $expressFolder/config/default.json
 
 cd $backendFolder
 
@@ -87,10 +93,17 @@ cp config/schedule.json.example config/schedule.json
 cp config/common.json.example config/common.json
 cp config/service.report.json.example config/service.report.json
 cp config/facs/grc.config.json.example config/facs/grc.config.json
-sed -i -e "s/\"syncMode\": false/\"syncMode\": true/g" $backendFolder/config/service.report.json
+sed -i -e \
+  "s/\"syncMode\": false/\"syncMode\": true/g" \
+  $backendFolder/config/service.report.json
+sed -i -e \
+  "s/\"dbDriver\": \".*\"/\"dbDriver\": \"$dbDriver\"/g" \
+  $backendFolder/config/service.report.json
 
 if [ $isDevEnv != 0 ]; then
-  sed -i -e "s/\"restUrl\": .*,/\"restUrl\": \"https:\/\/test.bitfinex.com\",/g" $backendFolder/config/service.report.json
+  sed -i -e \
+    "s/\"restUrl\": \".*\"/\"restUrl\": \"https:\/\/test.bitfinex.com\"/g" \
+    $backendFolder/config/service.report.json
 fi
 
 bfxReportDep=$(getConfValue "bfx-report" $backendFolder)
@@ -98,9 +111,13 @@ escapedBfxReportDep=$(escapeString $bfxReportDep)
 
 if [ $branch == "master" ]
 then
-  sed -i -e "s/\"bfx-report\": .*,/\"bfx-report\": \"$escapedBfxReportDep\",/g" $backendFolder/package.json
+  sed -i -e \
+    "s/\"bfx-report\": \".*\"/\"bfx-report\": \"$escapedBfxReportDep\"/g" \
+    $backendFolder/package.json
 else
-  sed -i -e "s/\"bfx-report\": .*,/\"bfx-report\": \"$escapedBfxReportDep\#$branch\",/g" $backendFolder/package.json
+  sed -i -e \
+    "s/\"bfx-report\": \".*\",/\"bfx-report\": \"$escapedBfxReportDep\#$branch\"/g" \
+    $backendFolder/package.json
 fi
 
 cd $ROOT
@@ -146,8 +163,12 @@ if [ $isNotSkippedReiDeps != 0 ]; then
 
     if [ $targetPlatform == "linux" ]
     then
-      cp -f "$ROOT/build/linux-launcher/Bitfinex Report.desktop" "Bitfinex Report.desktop"
-      cp -f "$ROOT/build/linux-launcher/launcher.sh" "launcher.sh"
+      cp -f \
+        "$ROOT/build/linux-launcher/Bitfinex Report.desktop" \
+        "Bitfinex Report.desktop"
+      cp -f \
+        "$ROOT/build/linux-launcher/launcher.sh" \
+        "launcher.sh"
       chmod +x "Bitfinex Report.desktop"
       chmod +x "launcher.sh"
     fi

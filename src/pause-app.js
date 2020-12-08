@@ -1,7 +1,7 @@
 'use strict'
 
 const wins = require('./windows')
-const { serverIpc } = require('./ipcs')
+const ipcs = require('./ipcs')
 const {
   showLoadingWindow
 } = require('./change-loading-win-visibility-state')
@@ -38,19 +38,19 @@ module.exports = async () => {
   const ipcPromise = new Promise((resolve, reject) => {
     try {
       if (
-        !serverIpc ||
-        typeof serverIpc !== 'object'
+        !ipcs.serverIpc ||
+        typeof ipcs.serverIpc !== 'object'
       ) {
         resolve()
 
         return
       }
 
-      serverIpc.once('close', () => {
+      ipcs.serverIpc.once('close', () => {
         resolve()
       })
 
-      serverIpc.kill('SIGINT')
+      ipcs.serverIpc.kill('SIGINT')
     } catch (err) {
       reject(err)
     }
