@@ -59,6 +59,8 @@ fi
 frontendFolder="$ROOT/bfx-report-ui"
 expressFolder="$frontendFolder/bfx-report-express"
 backendFolder="$ROOT/bfx-reports-framework"
+
+linuxLauncherFolder="$ROOT/build/linux-launcher"
 uiBuildFolder=/ui-build
 uiReadyFile="$uiBuildFolder/READY"
 
@@ -163,13 +165,21 @@ if [ $isNotSkippedReiDeps != 0 ]; then
 
     if [ $targetPlatform == "linux" ]
     then
+      # Build C executable launcher file
+      make -C $linuxLauncherFolder
+
       cp -f \
-        "$ROOT/build/linux-launcher/Bitfinex Report.desktop" \
+        "$linuxLauncherFolder/Bitfinex Report.desktop" \
         "Bitfinex Report.desktop"
       cp -f \
-        "$ROOT/build/linux-launcher/launcher.sh" \
+        "$linuxLauncherFolder/launcher" \
+        "Bitfinex Report"
+      cp -f \
+        "$linuxLauncherFolder/launcher.sh" \
         "launcher.sh"
+
       chmod +x "Bitfinex Report.desktop"
+      chmod +x "Bitfinex Report"
       chmod +x "launcher.sh"
     fi
 
