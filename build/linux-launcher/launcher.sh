@@ -7,19 +7,12 @@ if [ ! -z "$1" ]; then
 fi
 
 appFilePath="$ROOT/app"
-desktopFilePath="$ROOT/Bitfinex Report.desktop"
-iconPath="$ROOT/resources/app/build/icon.png"
-
-bakDesktopFilePath="$desktopFilePath-bak"
 logFilePath="$ROOT/error.log"
 
-{
-  cp "$desktopFilePath" "$bakDesktopFilePath" \
-  && sed -i -e "s,Exec=.*,Exec=\"$ROOT/launcher.sh\" \"$ROOT\",g" "$desktopFilePath" \
-  && sed -i -e "s,Icon=.*,Icon=$iconPath,g" "$desktopFilePath" \
-  && rm -f "$bakDesktopFilePath"
-} || {
-  echo "Error setting icon path">>"$logFilePath"
-}
+output=$("$appFilePath" 2>&1)
+mess=$(echo "$output" | grep -v WARNING)
 
-appFilePath 2>>"$logFilePath"
+if [ "$mess" != "" ]; then
+  echo $mess>>"$logFilePath"
+  ./msg-box.sh "$mess"
+fi
