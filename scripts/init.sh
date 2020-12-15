@@ -169,18 +169,18 @@ if [ $isNotSkippedReiDeps != 0 ]; then
       make -C $linuxLauncherFolder
 
       cp -f \
-        "$linuxLauncherFolder/Bitfinex Report.desktop" \
-        "Bitfinex Report.desktop"
-      cp -f \
         "$linuxLauncherFolder/launcher" \
         "Bitfinex Report"
       cp -f \
         "$linuxLauncherFolder/launcher.sh" \
         "launcher.sh"
+      cp -f \
+        "$linuxLauncherFolder/msg-box.sh" \
+        "msg-box.sh"
 
-      chmod +x "Bitfinex Report.desktop"
       chmod +x "Bitfinex Report"
       chmod +x "launcher.sh"
+      chmod +x "msg-box.sh"
     fi
 
     7z a -tzip $zipFile . -mmt | grep -v "Compressing"
