@@ -5,8 +5,6 @@
 Already complied binaries can be found on release section [release section](https://github.com/bitfinexcom/bfx-report-electron/releases). </br>
 Download the correspondent binary according your operating system.</br>
 
-> To launch on Linux needs double click by `Bitfinex Report.desktop` file in the root of the release directory and confirm that the application is from the trusted source. **Important**: The path to the application folder should not have spaces!
-
 ## Setup
 
 ### Install

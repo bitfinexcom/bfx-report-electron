@@ -20,7 +20,6 @@ case "${unameOut}" in
     *)          machine="UNKNOWN:${unameOut}"
 esac
 
-
 targetPlatform=$machine
 
 if [ $# -ge 1 ]
@@ -31,106 +30,41 @@ fi
 backendFolder="$ROOT/bfx-reports-framework"
 expressFolder="$ROOT/bfx-report-ui/bfx-report-express"
 
-function npmInstallDep {
-  local prevFolder=$PWD
-  local dep=""
-  local version=""
+cd $ROOT
+rm -f ./package-lock.json
+rm -rf ./node_modules
+npm i --development --no-audit
 
-  if [ $# -ge 1 ]
-  then
-    cd $1
-  fi
-  if [ $# -ge 2 ]
-  then
-    dep=$2
-  else
-    return
-  fi
-  if [ $# -ge 3 ]
-  then
-    version="@$3"
-  fi
+export npm_config_target_platform=$targetPlatform
+export npm_config_platform=$targetPlatform
+export npm_config_target=$ELECTRON_VER
+export npm_config_runtime="electron"
+export npm_config_target_arch=$ARCH
+export npm_config_arch=$ARCH
+export npm_config_dist_url=$DIST_URL
+export npm_config_disturl=$DIST_URL
 
-  rm -rf ./node_modules/$dep
+rm -f ./package-lock.json
+npm i --production --no-audit
 
-  npm i "$dep$version" \
-    --no-save \
-    --target_platform=$targetPlatform \
-    --target=$ELECTRON_VER \
-    --runtime="electron" \
-    --target_arch=$ARCH \
-    --dist-url=$DIST_URL
+cd $expressFolder
+rm -f ./package-lock.json
+rm -rf ./node_modules
+npm i --production --no-audit
 
-  if [ $# -ge 1 ]
-  then
-    cd $prevFolder
-  fi
-}
+cd $backendFolder
+rm -f ./package-lock.json
+rm -rf ./node_modules
+npm i --production --no-audit
 
-function npmInstall {
-  local prevFolder=$PWD
-  local isDevNeeded=0
+if [ $targetPlatform == 'win32' ]
+then
+  betterSqlite3BinPath=$backendFolder/node_modules/better-sqlite3/build/Release
+  binArch=$ROOT/build/better-sqlite3-prebuild-bin-win/better_sqlite3.zip
 
-  if ! [ -s "./package.json" ]; then
-    exit 1
-  fi
+  rm -rf $betterSqlite3BinPath/better_sqlite3.node
+  7z x $binArch -o$betterSqlite3BinPath
+fi
 
-  if [ $# -ge 1 ]
-  then
-    cd $1
-  fi
-
-  rm -f ./package-lock.json
-  rm -rf ./node_modules
-
-  if [ $# -ge 2 ] && [ $2 == "--isDevNeeded" ]
-  then
-    npm i --development
-  fi
-
-  npm i --production
-
-  if [ $# -ge 1 ]
-  then
-    cd $prevFolder
-  fi
-}
-
-function postInstall {
-  local prevFolder=$PWD
-  local types="dev,prod,optional"
-  local folder=$prevFolder
-
-  if [ $# -ge 1 ]
-  then
-    folder=$1
-  fi
-  if [ $# -ge 2 ]
-  then
-    types=$2
-  fi
-
-  cd $ROOT
-
-  ./node_modules/.bin/electron-rebuild -p \
-    -t $types \
-    -a $ARCH \
-    -v $ELECTRON_VER \
-    -d $DIST_URL \
-    -m $folder
-
-  cd $prevFolder
-}
-
-npmInstall $ROOT "--isDevNeeded"
-postInstall $ROOT "prod"
-
-npmInstall $expressFolder
-postInstall $expressFolder
-
-npmInstall $backendFolder
-postInstall $backendFolder
-sqliteVer=$(getConfValue "sqlite3" $backendFolder)
-npmInstallDep $backendFolder "sqlite3" $sqliteVer
-
+cd $ROOT
 rm -rf "$ROOT/node_modules/ed25519-supercop/build"

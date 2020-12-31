@@ -11,3 +11,5 @@ dist/*
 package-lock.json
 .env
 lastCommit.json
+build/linux-launcher/launcher
+build/linux-launcher/*.o
