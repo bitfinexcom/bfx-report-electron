@@ -40,6 +40,7 @@ let isMigrationsError = false
   try {
     const pathToUserData = process.env.PATH_TO_USER_DATA
     const pathToUserCsv = process.env.PATH_TO_USER_CSV
+    const schedulerRule = process.env.SCHEDULER_RULE
     const secretKey = process.env.SECRET_KEY
 
     if (!secretKey) {
@@ -120,7 +121,8 @@ let isMigrationsError = false
       `--logsFolder=${pathToUserData}/logs`,
       `--dbFolder=${pathToUserData}`,
       `--grape=${grape}`,
-      `--secretKey=${secretKey}`
+      `--secretKey=${secretKey}`,
+      `--schedulerRule=${schedulerRule}`
     ], {
       env,
       cwd: process.cwd(),
