@@ -6,7 +6,8 @@ const {
   DbImportingError,
   DbRemovingError,
   InvalidFolderPathError,
-  ReportsFolderChangingError
+  ReportsFolderChangingError,
+  SyncFrequencyChangingError
 } = require('./errors')
 const showMessageModalDialog = require('./show-message-modal-dialog')
 
@@ -63,6 +64,11 @@ module.exports = async (win, title = 'Error', err) => {
   }
   if (err instanceof ReportsFolderChangingError) {
     const message = 'The reports folder has not been changed'
+
+    return _showErrorBox(win, title, message)
+  }
+  if (err instanceof SyncFrequencyChangingError) {
+    const message = 'The sync frequency has not been changed'
 
     return _showErrorBox(win, title, message)
   }

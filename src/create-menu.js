@@ -9,6 +9,7 @@ const exportDB = require('./export-db')
 const importDB = require('./import-db')
 const removeDB = require('./remove-db')
 const changeReportsFolder = require('./change-reports-folder')
+const changeSyncFrequency = require('./change-sync-frequency')
 const triggerElectronLoad = require('./trigger-electron-load')
 const showAboutModalDialog = require('./show-about-modal-dialog')
 
@@ -81,6 +82,11 @@ module.exports = ({
           label: 'Change reports folder',
           accelerator: 'CmdOrCtrl+F',
           click: changeReportsFolder({ pathToUserDocuments })
+        },
+        {
+          label: 'Change sync frequency',
+          accelerator: 'CmdOrCtrl+S',
+          click: changeSyncFrequency()
         }
       ]
     },
