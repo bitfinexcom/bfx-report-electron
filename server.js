@@ -122,7 +122,7 @@ let isMigrationsError = false
       `--dbFolder=${pathToUserData}`,
       `--grape=${grape}`,
       `--secretKey=${secretKey}`,
-      `--schedulerRule=${schedulerRule}`
+      `--schedulerRule=${schedulerRule || ''}`
     ], {
       env,
       cwd: process.cwd(),
