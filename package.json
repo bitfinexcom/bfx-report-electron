@@ -12,6 +12,7 @@
     "bfx-svc-test-helper": "git+https://github.com/bitfinexcom/bfx-svc-test-helper.git",
     "bittorrent-dht": "^8.4.0",
     "ed25519-supercop": "^2.0.1",
+    "electron-alert": "^0.1.11",
     "electron-serve": "^1.0.0",
     "find-free-port": "^2.0.0",
     "grenache-grape": "^0.9.8",
