@@ -11,7 +11,19 @@ const pauseApp = require('./pause-app')
 const relaunch = require('./relaunch')
 const { getConfigsKeeperByName } = require('./configs-keeper')
 
+const _getSchedulerRule = (timeFormat, alertRes) => {
+  if (timeFormat.value === 'days') {
+    return `0 0 */${alertRes.value} * *`
+  }
+  if (timeFormat.value === 'hours') {
+    return `0 */${alertRes.value} * * *`
+  }
+
+  return `*/${alertRes.value} * * * *`
+}
+
 module.exports = () => {
+  const configsKeeper = getConfigsKeeperByName('main')
   const timeFormatAlert = new Alert()
   const alert = new Alert()
 
@@ -30,7 +42,7 @@ module.exports = () => {
     title: 'Set time format',
     type: 'question',
     input: 'radio',
-    inputValue: 'mins',
+    inputValue: 'hours',
     inputOptions: {
       mins: 'Mins',
       hours: 'Hours',
@@ -44,15 +56,8 @@ module.exports = () => {
   }
   const alertOptions = {
     title: 'Set sync frequency',
-    text: timeFormatAlertOptions.inputOptions.mins,
     type: 'question',
     input: 'range',
-    inputValue: 20,
-    inputAttributes: {
-      min: 5,
-      max: 60,
-      step: 1
-    },
     onBeforeOpen: () => {
       if (!alert.browserWindow) return
 
@@ -62,36 +67,44 @@ module.exports = () => {
   const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
 
   const getAlertOpts = (timeFormat) => {
-    const { inputAttributes } = alertOptions
     const { inputOptions } = timeFormatAlertOptions
     const text = inputOptions[timeFormat.value]
 
-    if (timeFormat.value === 'hours') {
-      return {
-        ...alertOptions,
-        text,
-        inputValue: 1,
-        inputAttributes: {
-          ...inputAttributes,
-          min: 1,
-          max: 24
-        }
-      }
-    }
     if (timeFormat.value === 'days') {
       return {
         ...alertOptions,
         text,
         inputValue: 1,
         inputAttributes: {
-          ...inputAttributes,
           min: 1,
-          max: 30
+          max: 31,
+          step: 1
+        }
+      }
+    }
+    if (timeFormat.value === 'hours') {
+      return {
+        ...alertOptions,
+        text,
+        inputValue: 1,
+        inputAttributes: {
+          min: 1,
+          max: 23,
+          step: 1
         }
       }
     }
 
-    return alertOptions
+    return {
+      ...alertOptions,
+      text,
+      inputValue: 2,
+      inputAttributes: {
+        min: 10,
+        max: 59,
+        step: 1
+      }
+    }
   }
 
   return async () => {
@@ -124,10 +137,13 @@ module.exports = () => {
         return
       }
 
-      const schedulerRule = '' // TODO:
+      const schedulerRule = _getSchedulerRule(
+        timeFormat,
+        alertRes
+      )
 
       await pauseApp()
-      const isSaved = await getConfigsKeeperByName('main')
+      const isSaved = await configsKeeper
         .saveConfigs({ schedulerRule })
 
       if (!isSaved) {
