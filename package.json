@@ -11,6 +11,7 @@
     "async": "^2.6.1",
     "bfx-svc-test-helper": "git+https://github.com/bitfinexcom/bfx-svc-test-helper.git",
     "bittorrent-dht": "^8.4.0",
+    "cron-validate": "^1.4.2",
     "ed25519-supercop": "^2.0.1",
     "electron-alert": "^0.1.11",
     "electron-serve": "^1.0.0",

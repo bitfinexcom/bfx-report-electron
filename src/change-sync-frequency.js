@@ -2,6 +2,7 @@
 
 const electron = require('electron')
 const Alert = require('electron-alert')
+const cronValidate = require('cron-validate')
 
 const {
   SyncFrequencyChangingError
@@ -20,6 +21,43 @@ const _getSchedulerRule = (timeFormat, alertRes) => {
   }
 
   return `*/${alertRes.value} * * * *`
+}
+
+const _testTime = (time) => {
+  return (
+    time &&
+    typeof time === 'string' &&
+    /^\*\/\d{1,2}$/i.test(time)
+  )
+}
+
+const _getTime = (timeFormat, time) => {
+  return {
+    timeFormat,
+    value: time.replace('*/', '')
+  }
+}
+
+const _getTimeDataFromRule = (rule) => {
+  const cronResult = cronValidate(rule)
+
+  if (!cronResult.isValid()) {
+    return { timeFormat: 'hours', value: 2 }
+  }
+
+  const value = cronResult.getValue()
+
+  if (_testTime(value.daysOfMonth)) {
+    return _getTime('days', value.daysOfMonth)
+  }
+  if (_testTime(value.hours)) {
+    return _getTime('hours', value.hours)
+  }
+  if (_testTime(value.minutes)) {
+    return _getTime('mins', value.minutes)
+  }
+
+  return { timeFormat: 'hours', value: 2 }
 }
 
 module.exports = () => {
@@ -66,7 +104,7 @@ module.exports = () => {
   }
   const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
 
-  const getAlertOpts = (timeFormat) => {
+  const getAlertOpts = (timeFormat, timeData) => {
     const { inputOptions } = timeFormatAlertOptions
     const text = inputOptions[timeFormat.value]
 
@@ -74,7 +112,8 @@ module.exports = () => {
       return {
         ...alertOptions,
         text,
-        inputValue: 1,
+        inputValue: timeFormat.value === timeData.timeFormat
+          ? timeData.value : 1,
         inputAttributes: {
           min: 1,
           max: 31,
@@ -86,7 +125,8 @@ module.exports = () => {
       return {
         ...alertOptions,
         text,
-        inputValue: 1,
+        inputValue: timeFormat.value === timeData.timeFormat
+          ? timeData.value : 2,
         inputAttributes: {
           min: 1,
           max: 23,
@@ -98,7 +138,8 @@ module.exports = () => {
     return {
       ...alertOptions,
       text,
-      inputValue: 2,
+      inputValue: timeFormat.value === timeData.timeFormat
+        ? timeData.value : 20,
       inputAttributes: {
         min: 10,
         max: 59,
@@ -113,27 +154,30 @@ module.exports = () => {
     win.once('closed', closeAlert)
 
     try {
+      const savedSchedulerRule = await configsKeeper
+        .getConfigByName('schedulerRule')
+      const timeData = _getTimeDataFromRule(savedSchedulerRule)
+
       const timeFormat = await timeFormatAlert.fireFrameless(
-        timeFormatAlertOptions, null, true, false, sound
+        {
+          ...timeFormatAlertOptions,
+          inputValue: timeData.timeFormat
+        },
+        null, true, false, sound
       )
       win.removeListener('closed', closeTimeFormatAlert)
 
-      if (
-        timeFormat.dismiss === Alert.DismissReason.cancel ||
-        timeFormat.dismiss === Alert.DismissReason.close
-      ) {
+      if (timeFormat.dismiss) {
         return
       }
 
       const alertRes = await alert.fireFrameless(
-        getAlertOpts(timeFormat), null, true, false, sound
+        getAlertOpts(timeFormat, timeData),
+        null, true, false, sound
       )
       win.removeListener('closed', closeAlert)
 
-      if (
-        timeFormat.dismiss === Alert.DismissReason.cancel ||
-        timeFormat.dismiss === Alert.DismissReason.close
-      ) {
+      if (alertRes.dismiss) {
         return
       }
 
