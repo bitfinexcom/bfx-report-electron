@@ -3,6 +3,13 @@
 const electron = require('electron')
 const Alert = require('electron-alert')
 const cronValidate = require('cron-validate')
+const path = require('path')
+const fs = require('fs')
+
+const modalDialogStyle = fs.readFileSync(path.join(
+  __dirname, 'styles/modal-dialog.css'
+))
+const style = `<style>${modalDialogStyle}</style>`
 
 const {
   SyncFrequencyChangingError
@@ -62,8 +69,8 @@ const _getTimeDataFromRule = (rule) => {
 
 module.exports = () => {
   const configsKeeper = getConfigsKeeperByName('main')
-  const timeFormatAlert = new Alert()
-  const alert = new Alert()
+  const timeFormatAlert = new Alert([style])
+  const alert = new Alert([style])
 
   const closeTimeFormatAlert = () => {
     if (!timeFormatAlert.browserWindow) return
@@ -79,6 +86,15 @@ module.exports = () => {
   const timeFormatAlertOptions = {
     title: 'Set time format',
     type: 'question',
+    background: '#172d3e',
+    customClass: {
+      title: 'titleColor',
+      content: 'textColor',
+      input: 'textColor radioInput'
+    },
+    focusConfirm: true,
+    progressSteps: [1, 2],
+    currentProgressStep: 0,
     input: 'radio',
     inputValue: 'hours',
     inputOptions: {
@@ -95,6 +111,15 @@ module.exports = () => {
   const alertOptions = {
     title: 'Set sync frequency',
     type: 'question',
+    background: '#172d3e',
+    customClass: {
+      title: 'titleColor',
+      content: 'textColor',
+      input: 'textColor'
+    },
+    focusConfirm: true,
+    progressSteps: [1, 2],
+    currentProgressStep: 1,
     input: 'range',
     onBeforeOpen: () => {
       if (!alert.browserWindow) return
