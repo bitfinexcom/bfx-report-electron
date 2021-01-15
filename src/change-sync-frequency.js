@@ -216,6 +216,10 @@ module.exports = () => {
         alertRes
       )
 
+      if (savedSchedulerRule === schedulerRule) {
+        return
+      }
+
       await pauseApp()
       const isSaved = await configsKeeper
         .saveConfigs({ schedulerRule })
