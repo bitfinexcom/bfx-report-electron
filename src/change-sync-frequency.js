@@ -7,9 +7,11 @@ const path = require('path')
 const fs = require('fs')
 
 const modalDialogStyle = fs.readFileSync(path.join(
-  __dirname, 'styles/modal-dialog.css'
+  __dirname, 'modal-dialog-src/modal-dialog.css'
 ))
-const style = `<style>${modalDialogStyle}</style>`
+const modalDialogScript = fs.readFileSync(path.join(
+  __dirname, 'modal-dialog-src/modal-dialog.js'
+))
 
 const {
   SyncFrequencyChangingError
@@ -67,10 +69,13 @@ const _getTimeDataFromRule = (rule) => {
   return { timeFormat: 'hours', value: 2 }
 }
 
+const style = `<style>${modalDialogStyle}</style>`
+const script = `<script type="text/javascript">${modalDialogScript}</script>`
+
 module.exports = () => {
   const configsKeeper = getConfigsKeeperByName('main')
   const timeFormatAlert = new Alert([style])
-  const alert = new Alert([style])
+  const alert = new Alert([style, script])
 
   const closeTimeFormatAlert = () => {
     if (!timeFormatAlert.browserWindow) return
@@ -115,7 +120,7 @@ module.exports = () => {
     customClass: {
       title: 'titleColor',
       content: 'textColor',
-      input: 'textColor'
+      input: 'textColor rangeInput'
     },
     focusConfirm: true,
     progressSteps: [1, 2],
