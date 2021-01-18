@@ -98,6 +98,7 @@ module.exports = () => {
       input: 'textColor radioInput'
     },
     focusConfirm: true,
+    showCancelButton: true,
     progressSteps: [1, 2],
     currentProgressStep: 0,
     input: 'radio',
@@ -123,6 +124,7 @@ module.exports = () => {
       input: 'textColor rangeInput'
     },
     focusConfirm: true,
+    showCancelButton: true,
     progressSteps: [1, 2],
     currentProgressStep: 1,
     input: 'range',
