@@ -39,6 +39,10 @@ const pathToLayoutAppInitErr = path
 const pathToLayoutExprPortReq = path
   .join(pathToLayouts, 'express-port-required.html')
 
+const { rule: schedulerRule } = require(
+  '../bfx-reports-framework/config/schedule.json'
+)
+
 const _ipcMessToPromise = (ipc) => {
   return new Promise((resolve, reject) => {
     try {
@@ -74,7 +78,8 @@ module.exports = () => {
           {
             pathToUserCsv: process.platform === 'darwin'
               ? pathToUserDocuments
-              : '../../..'
+              : '../../..',
+            schedulerRule
           }
         )
         const secretKey = await makeOrReadSecretKey(

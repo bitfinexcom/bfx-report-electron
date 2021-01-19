@@ -12,11 +12,14 @@ module.exports = ({
   pathToUserData,
   secretKey
 }) => {
+  const mainConfsKeeper = getConfigsKeeperByName('main')
   const env = {
     ...process.env,
     PATH_TO_USER_DATA: pathToUserData,
-    PATH_TO_USER_CSV: getConfigsKeeperByName('main')
+    PATH_TO_USER_CSV: mainConfsKeeper
       .getConfigByName('pathToUserCsv'),
+    SCHEDULER_RULE: mainConfsKeeper
+      .getConfigByName('schedulerRule'),
     SECRET_KEY: secretKey
   }
   const ipc = fork(serverPath, [], {
