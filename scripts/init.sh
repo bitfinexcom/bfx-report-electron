@@ -131,8 +131,23 @@ if [ $isNotSkippedReiDeps != 0 ]; then
 
     if [ $isSkippedUIBuild != 0 ]
     then
+      # Watch the UI build has been completed, in seconds
+      # if not successful exit with an error
+      requiredWatchTime=$((60 * 30))
+      watchTime=$requiredWatchTime
+      interval=0.5
+
       while !(test -f "$uiReadyFile"); do
-        sleep 0.5
+        isExpired=$(echo "$watchTime <= 0" | bc)
+
+        if [ $isExpired == 1 ]; then
+          echo "Exit with error due to the UI has not been built in $requiredWatchTime seconds"
+
+          exit 1
+        fi
+
+        sleep $interval
+        watchTime=$(echo "$watchTime - $interval" | bc)
       done
     fi
 
