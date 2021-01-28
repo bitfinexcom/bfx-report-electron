@@ -88,6 +88,8 @@ sed -i -e \
   "s/showFrameworkMode: false/showFrameworkMode: true/g" \
   $frontendFolder/src/config.js
 
+rm -f "$ROOT/.eslintrc"
+
 npm i --no-audit
 npm run build
 
