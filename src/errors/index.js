@@ -89,6 +89,12 @@ class ReportsFolderChangingError extends BaseError {
   }
 }
 
+class SyncFrequencyChangingError extends BaseError {
+  constructor (message = 'ERR_SYNC_FREQUENCY_HAS_NOT_CHANGED') {
+    super(message)
+  }
+}
+
 module.exports = {
   BaseError,
   InvalidFilePathError,
@@ -103,5 +109,6 @@ module.exports = {
   WrongPathToUserDataError,
   WrongPathToUserCsvError,
   WrongSecretKeyError,
-  ReportsFolderChangingError
+  ReportsFolderChangingError,
+  SyncFrequencyChangingError
 }
