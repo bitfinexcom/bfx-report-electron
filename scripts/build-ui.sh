@@ -91,6 +91,10 @@ sed -i -e \
 npm i --no-audit
 npm run build
 
+if ! [ -s "$frontendFolder/build/index.html" ]; then
+  exit 1
+fi
+
 mv -f $frontendFolder/build/* $uiBuildFolder
 cp $pathToTriggerElectronLoad $uiBuildFolder/triggerElectronLoad.js
 touch $uiReadyFile
