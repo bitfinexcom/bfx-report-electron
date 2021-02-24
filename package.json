@@ -57,6 +57,7 @@
       "**/*",
       "build/icons",
       "build/icon.*",
+      "build/loader.*",
       "bfx-reports-framework",
       "!.dockerignore",
       "!scripts",
