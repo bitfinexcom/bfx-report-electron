@@ -118,7 +118,7 @@ then
     $backendFolder/package.json
 else
   sed -i -e \
-    "s/\"bfx-report\": \".*\",/\"bfx-report\": \"$escapedBfxReportDep\#$branch\"/g" \
+    "s/\"bfx-report\": \".*\"/\"bfx-report\": \"$escapedBfxReportDep\#$branch\"/g" \
     $backendFolder/package.json
 fi
 
