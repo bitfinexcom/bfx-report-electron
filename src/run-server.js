@@ -7,6 +7,7 @@ const ipcs = require('./ipcs')
 const { getConfigsKeeperByName } = require('./configs-keeper')
 
 const serverPath = path.join(__dirname, '../server.js')
+const cwd = path.join(__dirname, '..')
 
 module.exports = ({
   pathToUserData,
@@ -24,7 +25,7 @@ module.exports = ({
   }
   const ipc = fork(serverPath, [], {
     env,
-    cwd: process.cwd(),
+    cwd,
     silent: false
   })
 

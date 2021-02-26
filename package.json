@@ -1,6 +1,6 @@
 {
   "name": "bfx-report-electron",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "repository": "https://github.com/bitfinexcom/bfx-report-electron",
   "description": "Reporting tool",
   "author": "bitfinex.com",
@@ -98,8 +98,34 @@
         ]
       },
       {
-        "from": "bfx-reports-framework/node_modules/bfx-report",
-        "to": "bfx-reports-framework/node_modules/bfx-report",
+        "from": "bfx-reports-framework/node_modules/bfx-svc-boot-js/node_modules",
+        "to": "bfx-reports-framework/node_modules/bfx-svc-boot-js/node_modules",
+        "filter": [
+          "**/*",
+          "!.bin",
+          "!**/node_modules/.bin",
+          "!**/*.md",
+          "!**/LICENSE",
+          "!**/CHANGELOG",
+          "!**/test"
+        ]
+      },
+      {
+        "from": "bfx-reports-framework/node_modules/yargs/node_modules",
+        "to": "bfx-reports-framework/node_modules/yargs/node_modules",
+        "filter": [
+          "**/*",
+          "!.bin",
+          "!**/node_modules/.bin",
+          "!**/*.md",
+          "!**/LICENSE",
+          "!**/CHANGELOG",
+          "!**/test"
+        ]
+      },
+      {
+        "from": "bfx-reports-framework/node_modules/bfx-report/node_modules",
+        "to": "bfx-reports-framework/node_modules/bfx-report/node_modules",
         "filter": [
           "**/*",
           "!.bin",
