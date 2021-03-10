@@ -1,6 +1,6 @@
 FROM electronuserland/builder
 
-ENV NODE_VERSION 12.13.0
+ENV NODE_VERSION 12.18.3
 
 COPY ./scripts/install-nodejs.sh ./scripts/install-nodejs.sh
 
