@@ -138,6 +138,32 @@
         ]
       },
       {
+        "from": "bfx-reports-framework/node_modules/request/node_modules",
+        "to": "bfx-reports-framework/node_modules/request/node_modules",
+        "filter": [
+          "**/*",
+          "!.bin",
+          "!**/node_modules/.bin",
+          "!**/*.md",
+          "!**/LICENSE",
+          "!**/CHANGELOG",
+          "!**/test"
+        ]
+      },
+      {
+        "from": "bfx-reports-framework/node_modules/lokue/node_modules",
+        "to": "bfx-reports-framework/node_modules/lokue/node_modules",
+        "filter": [
+          "**/*",
+          "!.bin",
+          "!**/node_modules/.bin",
+          "!**/*.md",
+          "!**/LICENSE",
+          "!**/CHANGELOG",
+          "!**/test"
+        ]
+      },
+      {
         "from": "bfx-report-ui/bfx-report-express/node_modules",
         "to": "bfx-report-ui/bfx-report-express/node_modules",
         "filter": [
