@@ -1,6 +1,6 @@
 {
   "name": "bfx-report-electron",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "repository": "https://github.com/bitfinexcom/bfx-report-electron",
   "description": "Reporting tool",
   "author": "bitfinex.com",
@@ -21,8 +21,8 @@
     "yauzl": "^2.10.0"
   },
   "devDependencies": {
-    "electron": "8.5.5",
-    "electron-builder": "22.9.1",
+    "electron": "11.3.0",
+    "electron-builder": "22.10.5",
     "node-gyp": "7.1.2",
     "node-pre-gyp": "^0.11.0",
     "standard": "^14.3.1"
@@ -127,6 +127,32 @@
       {
         "from": "bfx-reports-framework/node_modules/bfx-report/node_modules",
         "to": "bfx-reports-framework/node_modules/bfx-report/node_modules",
+        "filter": [
+          "**/*",
+          "!.bin",
+          "!**/node_modules/.bin",
+          "!**/*.md",
+          "!**/LICENSE",
+          "!**/CHANGELOG",
+          "!**/test"
+        ]
+      },
+      {
+        "from": "bfx-reports-framework/node_modules/request/node_modules",
+        "to": "bfx-reports-framework/node_modules/request/node_modules",
+        "filter": [
+          "**/*",
+          "!.bin",
+          "!**/node_modules/.bin",
+          "!**/*.md",
+          "!**/LICENSE",
+          "!**/CHANGELOG",
+          "!**/test"
+        ]
+      },
+      {
+        "from": "bfx-reports-framework/node_modules/lokue/node_modules",
+        "to": "bfx-reports-framework/node_modules/lokue/node_modules",
         "filter": [
           "**/*",
           "!.bin",
