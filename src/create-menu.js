@@ -12,6 +12,7 @@ const changeReportsFolder = require('./change-reports-folder')
 const changeSyncFrequency = require('./change-sync-frequency')
 const triggerElectronLoad = require('./trigger-electron-load')
 const showAboutModalDialog = require('./show-about-modal-dialog')
+const { checkForUpdates } = require('./auto-updater')
 
 module.exports = ({
   pathToUserData,
@@ -97,6 +98,11 @@ module.exports = ({
           label: 'About',
           accelerator: 'CmdOrCtrl+H',
           click: showAboutModalDialog()
+        },
+        {
+          label: 'Check for updates',
+          accelerator: 'CmdOrCtrl+U',
+          click: checkForUpdates({ menuItem: this })
         }
       ]
     }
