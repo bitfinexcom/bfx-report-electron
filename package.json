@@ -51,7 +51,7 @@
     "extends": null,
     "asar": false,
     "productName": "Bitfinex Report",
-    "artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
+    "artifactName": "BitfinexReport-${version}-x64-${os}.${ext}",
     "appId": "com.report.bitfinex",
     "files": [
       "**/*",
@@ -188,7 +188,8 @@
     },
     "win": {
       "target": [
-        "dir"
+        "dir",
+        "nsis"
       ],
       "publisherName": "Reporting tool"
     },

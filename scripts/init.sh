@@ -170,7 +170,8 @@ if [ $isNotSkippedReiDeps != 0 ]; then
     arch="x64"
 
     unpackedFolder=$(ls -d $ROOT/dist/*/ | grep $targetPlatform | head -1)
-    zipFile="$ROOT/dist/$productName-$version$versionEnding-$arch-$targetPlatform.zip"
+    artifactName="$productName-$version$versionEnding-$arch-$targetPlatform"
+    zipFile="$ROOT/dist/$artifactName.zip"
 
     if ! [ -d $unpackedFolder ]; then
       exit 1
@@ -203,6 +204,13 @@ if [ $isNotSkippedReiDeps != 0 ]; then
 
     rm -rf /dist/*$targetPlatform*
     mv -f ./dist/*$targetPlatform*.zip /dist
+
+    if [ $targetPlatform == "win" ]
+    then
+      exeFile="/dist/$artifactName.exe"
+      mv -f ./dist/*$targetPlatform*.exe "$exeFile"
+    fi
+
     chmod -R a+xwr /dist 2>/dev/null
 
     exit 0
