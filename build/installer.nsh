@@ -1,3 +1,3 @@
 !macro customInit
-  nsExec::Exec '"$LOCALAPPDATA\Bitfinex Report\Update.exe" --uninstall -s'
+  nsExec::Exec '"$LOCALAPPDATA\bfx-report-electron\Update.exe" --uninstall -s'
 !macroend
