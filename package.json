@@ -193,7 +193,8 @@
         "dir",
         "nsis"
       ],
-      "publisherName": "Reporting tool"
+      "publisherName": "Reporting tool",
+      "verifyUpdateCodeSignature": false
     },
     "mac": {
       "hardenedRuntime": true,
