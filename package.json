@@ -49,6 +49,16 @@
     "test": "standard"
   },
   "build": {
+    "publish": [
+      {
+        "provider": "github",
+        "repo": "bfx-report-electron",
+        "owner": "ZIMkaRU",
+        "channel": "latest",
+        "useMultipleRangeRequest": false
+    
+      }
+    ],
     "npmRebuild": false,
     "extends": null,
     "asar": false,

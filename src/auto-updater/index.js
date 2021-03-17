@@ -30,20 +30,12 @@ const _switchMenuItem = (isEnabled = false) => {
   menuItem.enabled = isEnabled
 }
 
-const _autoUpdaterFactory = (options) => {
+const _autoUpdaterFactory = () => {
   if (autoUpdater instanceof AppUpdater) {
     return autoUpdater
   }
-
-  const _options = {
-    provider: 'github',
-    // owner: 'bitfinexcom', // TODO: test with own repo fork
-    owner: 'ZIMkaRU',
-    ...options
-  }
-
   if (process.platform === 'win32') {
-    autoUpdater = new NsisUpdater(_options)
+    autoUpdater = new NsisUpdater()
   }
   if (process.platform === 'darwin') {
     // TODO: don't support auto-update for mac right now
@@ -105,7 +97,12 @@ const checkForUpdatesAndNotify = () => {
   _autoUpdaterFactory().checkForUpdatesAndNotify()
 }
 
+const quitAndInstall = () => {
+  _autoUpdaterFactory().quitAndInstall()
+}
+
 module.exports = {
   checkForUpdates,
-  checkForUpdatesAndNotify
+  checkForUpdatesAndNotify,
+  quitAndInstall
 }
