@@ -133,7 +133,7 @@ module.exports = () => {
             isMigrationsReady
           )
 
-          checkForUpdatesAndNotify()
+          await checkForUpdatesAndNotify()
 
           resolve()
           return

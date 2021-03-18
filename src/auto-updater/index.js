@@ -1,5 +1,6 @@
 'use strict'
 
+const electron = require('electron')
 const {
   AppImageUpdater,
   MacUpdater,
@@ -7,16 +8,65 @@ const {
   AppUpdater
 } = require('electron-updater')
 const log = require('electron-log')
+const Alert = require('electron-alert')
 
-const showMessageModalDialog = require(
-  '../show-message-modal-dialog'
-)
-
+let toast
 let autoUpdater
 let menuItem
 
-const _showUpdateStatus = ({ err, info }) => {
-  log.info(err || info)
+const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
+
+const _fireToast = (
+  opts = {},
+  hooks = {}
+) => {
+  const {
+    onOpen = () => {},
+    onClose = () => {}
+  } = { ...hooks }
+
+  if (
+    toast &&
+    toast.browserWindow
+  ) {
+    toast.browserWindow.close()
+  }
+
+  const win = electron.BrowserWindow.getFocusedWindow()
+  const alert = new Alert()
+  toast = alert
+
+  const _closeToast = () => {
+    if (!alert.browserWindow) return
+
+    alert.browserWindow.close()
+  }
+
+  win.once('closed', _closeToast)
+
+  const res = alert.fireFrameless({
+    toast: true,
+    position: 'top-end',
+    icon: 'info',
+    title: 'Update',
+    showConfirmButton: true,
+    showCancelButton: false,
+    timerProgressBar: false,
+    ...opts,
+
+    onBeforeOpen: () => {
+      if (!alert.browserWindow) return
+
+      alert.browserWindow.once('blur', _closeToast)
+    },
+    onOpen: () => onOpen(alert),
+    onClose: () => {
+      win.removeListener('closed', _closeToast)
+      onClose(alert)
+    }
+  }, null, true, false, sound)
+
+  return { res, alert }
 }
 
 const _switchMenuItem = (isEnabled = false) => {
@@ -48,33 +98,93 @@ const _autoUpdaterFactory = () => {
     return autoUpdater
   }
 
-  autoUpdater.on('error', (err) => {
-    _showUpdateStatus({ err })
+  autoUpdater.on('error', () => {
+    _fireToast({
+      title: 'Application update failed',
+      icon: 'error',
+      timer: 60000
+    })
   })
   autoUpdater.on('checking-for-update', () => {
-    _showUpdateStatus({ info: 'Checking for update...' })
+    _fireToast(
+      {
+        title: 'Checking for update',
+        icon: 'info',
+        timer: 10000,
+        timerProgressBar: true
+      },
+      {
+        onOpen: (alert) => alert.showLoading()
+      }
+    )
   })
-  autoUpdater.on('update-available', (info) => {
-    _showUpdateStatus({
-      info: `Update available: ${JSON.stringify(info)}`
-    })
+  autoUpdater.on('update-available', async (info) => {
+    try {
+      const { version } = { ...info }
+
+      const { res } = _fireToast(
+        {
+          title: `An update to v${version} is available`,
+          text: 'Starting download...',
+          icon: 'info',
+          timer: 10000,
+          timerProgressBar: true
+        }
+      )
+      const { isConfirmed, dismiss } = await res
+
+      if (
+        !isConfirmed ||
+        dismiss !== 'timer'
+      ) {
+        return
+      }
+
+      _autoUpdaterFactory()
+        .downloadUpdate()
+    } catch (err) {
+      console.error(err)
+    }
   })
   autoUpdater.on('update-not-available', (info) => {
-    _showUpdateStatus({
-      info: `Update not available: ${JSON.stringify(info)}`
-    })
+    _fireToast(
+      {
+        title: 'No updates available',
+        icon: 'success',
+        timer: 10000
+      }
+    )
   })
+  // TODO:
   autoUpdater.on('download-progress', (progressObj) => {
-    _showUpdateStatus({
-      info: `Download progress: ${JSON.stringify(progressObj)}`
-    })
+    log.info(`Download progress: ${JSON.stringify(progressObj)}`)
   })
-  autoUpdater.on('update-downloaded', (info) => {
-    _showUpdateStatus({
-      info: `Update downloaded: ${JSON.stringify(info)}`
-    })
+  autoUpdater.on('update-downloaded', async (info) => {
+    try {
+      const { version } = { ...info }
+
+      const { res } = _fireToast(
+        {
+          title: `Update v${version} downloaded`,
+          text: 'Should the app be updated right now?',
+          icon: 'info',
+          timer: 60000
+        }
+      )
+      const { isConfirmed } = await res
+
+      if (!isConfirmed) {
+        return
+      }
+
+      _autoUpdaterFactory()
+        .quitAndInstall(false, true)
+    } catch (err) {
+      console.error(err)
+    }
   })
 
+  autoUpdater.autoDownload = false
   autoUpdater.logger = log
   autoUpdater.logger.transports.file.level = 'info'
 
@@ -88,17 +198,23 @@ const checkForUpdates = (opts) => {
 
   return () => {
     _switchMenuItem(false)
-    _autoUpdaterFactory().checkForUpdates()
+
+    return _autoUpdaterFactory()
+      .checkForUpdates()
   }
 }
 
 const checkForUpdatesAndNotify = () => {
   _switchMenuItem(false)
-  _autoUpdaterFactory().checkForUpdatesAndNotify()
+
+  return _autoUpdaterFactory()
+    .checkForUpdatesAndNotify()
 }
 
+// TODO:
 const quitAndInstall = () => {
-  _autoUpdaterFactory().quitAndInstall()
+  _autoUpdaterFactory()
+    .quitAndInstall(false, true)
 }
 
 module.exports = {
