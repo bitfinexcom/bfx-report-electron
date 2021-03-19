@@ -114,7 +114,7 @@ const _autoUpdaterFactory = () => {
     _fireToast(
       {
         title: 'Checking for update',
-        icon: 'info',
+        icon: 'warning',
         timer: 10000,
         timerProgressBar: true
       },
@@ -172,8 +172,9 @@ const _autoUpdaterFactory = () => {
         {
           title: `Update v${version} downloaded`,
           text: 'Should the app be updated right now?',
-          icon: 'info',
-          timer: 60000
+          icon: 'question',
+          timer: 60000,
+          showCancelButton: true
         }
       )
       const { isConfirmed } = await res
