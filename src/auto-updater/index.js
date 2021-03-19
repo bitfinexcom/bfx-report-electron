@@ -15,6 +15,7 @@ const wins = require('../windows')
 let toast
 let autoUpdater
 let menuItem
+let uCheckInterval
 
 const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
 
@@ -85,6 +86,14 @@ const _switchMenuItem = (isEnabled = false) => {
   menuItem.enabled = isEnabled
 }
 
+const _reinitInterval = () => {
+  clearInterval(uCheckInterval)
+
+  uCheckInterval = setInterval(() => {
+    checkForUpdatesAndNotify()
+  }, 60 * 60 * 1000).unref()
+}
+
 const _autoUpdaterFactory = () => {
   if (autoUpdater instanceof AppUpdater) {
     return autoUpdater
@@ -122,6 +131,8 @@ const _autoUpdaterFactory = () => {
         onOpen: (alert) => alert.showLoading()
       }
     )
+
+    _reinitInterval()
   })
   autoUpdater.on('update-available', async (info) => {
     try {
@@ -193,6 +204,8 @@ const _autoUpdaterFactory = () => {
   autoUpdater.autoDownload = false
   autoUpdater.logger = log
   autoUpdater.logger.transports.file.level = 'info'
+
+  _reinitInterval()
 
   return autoUpdater
 }
