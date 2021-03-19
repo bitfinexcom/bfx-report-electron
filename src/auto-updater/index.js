@@ -139,7 +139,7 @@ const _autoUpdaterFactory = () => {
       const { isConfirmed, dismiss } = await res
 
       if (
-        !isConfirmed ||
+        !isConfirmed &&
         dismiss !== 'timer'
       ) {
         return
