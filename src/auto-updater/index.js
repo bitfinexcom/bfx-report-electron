@@ -16,8 +16,19 @@ let toast
 let autoUpdater
 let menuItem
 let uCheckInterval
+let isIntervalUpdate = false
 
 const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
+
+const _closeToast = (toast) => {
+  if (
+    !toast ||
+    !toast.browserWindow
+  ) return
+
+  toast.browserWindow.hide()
+  toast.browserWindow.destroy()
+}
 
 const _fireToast = (
   opts = {},
@@ -25,15 +36,10 @@ const _fireToast = (
 ) => {
   const {
     onOpen = () => {},
-    onClose = () => {}
+    onAfterClose = () => {}
   } = { ...hooks }
 
-  if (
-    toast &&
-    toast.browserWindow
-  ) {
-    toast.browserWindow.close()
-  }
+  _closeToast(toast)
 
   const win = (
     electron.BrowserWindow.getFocusedWindow() ||
@@ -42,35 +48,48 @@ const _fireToast = (
   const alert = new Alert()
   toast = alert
 
-  const _closeToast = () => {
-    if (!alert.browserWindow) return
+  const _closeAlert = () => _closeToast(alert)
 
-    alert.browserWindow.close()
+  win.once('closed', _closeAlert)
+
+  const bwOptions = {
+    frame: false,
+    transparent: true,
+    thickFrame: false,
+    closable: false,
+    hasShadow: false
   }
 
-  win.once('closed', _closeToast)
-
-  const res = alert.fireFrameless({
+  const res = alert.fire({
     toast: true,
     position: 'top-end',
-    icon: 'info',
+    allowOutsideClick: false,
+    backdrop: 'rgba(0,0,0,0.0)',
+    width: 400,
+
+    type: 'info',
     title: 'Update',
     showConfirmButton: true,
     showCancelButton: false,
     timerProgressBar: false,
     ...opts,
 
-    onBeforeOpen: () => {
-      if (!alert.browserWindow) return
-
-      alert.browserWindow.once('blur', _closeToast)
+    onOpen: () => {
+      onOpen(alert)
     },
-    onOpen: () => onOpen(alert),
     onClose: () => {
-      win.removeListener('closed', _closeToast)
-      onClose(alert)
+      if (
+        !toast ||
+        !toast.browserWindow
+      ) return
+
+      toast.browserWindow.hide()
+    },
+    onAfterClose: () => {
+      win.removeListener('closed', _closeAlert)
+      onAfterClose(alert)
     }
-  }, null, true, false, sound)
+  }, bwOptions, win, true, false, sound)
 
   return { res, alert }
 }
@@ -90,7 +109,7 @@ const _reinitInterval = () => {
   clearInterval(uCheckInterval)
 
   uCheckInterval = setInterval(() => {
-    checkForUpdatesAndNotify()
+    checkForUpdatesAndNotify({ isIntervalUpdate: true })
   }, 60 * 60 * 1000).unref()
 }
 
@@ -115,15 +134,19 @@ const _autoUpdaterFactory = () => {
   autoUpdater.on('error', () => {
     _fireToast({
       title: 'Application update failed',
-      icon: 'error',
+      type: 'error',
       timer: 60000
     })
   })
   autoUpdater.on('checking-for-update', () => {
+    if (isIntervalUpdate) {
+      return
+    }
+
     _fireToast(
       {
         title: 'Checking for update',
-        icon: 'warning',
+        type: 'warning',
         timer: 10000,
         timerProgressBar: true
       },
@@ -142,7 +165,7 @@ const _autoUpdaterFactory = () => {
         {
           title: `An update to v${version} is available`,
           text: 'Starting download...',
-          icon: 'info',
+          type: 'info',
           timer: 10000,
           timerProgressBar: true
         }
@@ -163,10 +186,14 @@ const _autoUpdaterFactory = () => {
     }
   })
   autoUpdater.on('update-not-available', (info) => {
+    if (isIntervalUpdate) {
+      return
+    }
+
     _fireToast(
       {
         title: 'No updates available',
-        icon: 'success',
+        type: 'success',
         timer: 10000
       }
     )
@@ -183,7 +210,7 @@ const _autoUpdaterFactory = () => {
         {
           title: `Update v${version} downloaded`,
           text: 'Should the app be updated right now?',
-          icon: 'question',
+          type: 'question',
           timer: 60000,
           showCancelButton: true
         }
@@ -223,7 +250,12 @@ const checkForUpdates = (opts) => {
   }
 }
 
-const checkForUpdatesAndNotify = () => {
+const checkForUpdatesAndNotify = (opts) => {
+  const {
+    isIntervalUpdate: isIntUp = false
+  } = { ...opts }
+
+  isIntervalUpdate = isIntUp
   _switchMenuItem(false)
 
   return _autoUpdaterFactory()
