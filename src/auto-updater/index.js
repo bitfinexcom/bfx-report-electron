@@ -10,6 +10,8 @@ const {
 const log = require('electron-log')
 const Alert = require('electron-alert')
 
+const wins = require('../windows')
+
 let toast
 let autoUpdater
 let menuItem
@@ -32,7 +34,10 @@ const _fireToast = (
     toast.browserWindow.close()
   }
 
-  const win = electron.BrowserWindow.getFocusedWindow()
+  const win = (
+    electron.BrowserWindow.getFocusedWindow() ||
+    wins.mainWindow
+  )
   const alert = new Alert()
   toast = alert
 
