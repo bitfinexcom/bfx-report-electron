@@ -26,10 +26,24 @@ let autoUpdater
 let menuItem
 let uCheckInterval
 let isIntervalUpdate = false
+let isProgressToastEnabled = false
 
 const style = `<style>${toastStyle}</style>`
 const script = `<script type="text/javascript">${toastScript}</script>`
 const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
+
+const _sendProgress = (progress) => {
+  if (
+    !toast ||
+    !toast.browserWindow ||
+    !Number.isFinite(progress)
+  ) return
+
+  toast.browserWindow.webContents.send(
+    'progress',
+    progress
+  )
+}
 
 const _closeToast = (toast) => {
   if (
@@ -70,8 +84,7 @@ const _fireToast = (
     closable: false,
     hasShadow: false
   }
-
-  const res = alert.fire({
+  const swalOptions = {
     toast: true,
     position: 'top-end',
     allowOutsideClick: false,
@@ -83,6 +96,7 @@ const _fireToast = (
     showConfirmButton: true,
     showCancelButton: false,
     timerProgressBar: false,
+
     ...opts,
 
     onOpen: () => {
@@ -100,7 +114,16 @@ const _fireToast = (
       win.removeListener('closed', _closeAlert)
       onAfterClose(alert)
     }
-  }, bwOptions, win, true, false, sound)
+  }
+
+  const res = alert.fire(
+    swalOptions,
+    bwOptions,
+    win,
+    true,
+    false,
+    sound
+  )
 
   return { res, alert }
 }
@@ -143,6 +166,8 @@ const _autoUpdaterFactory = () => {
   }
 
   autoUpdater.on('error', () => {
+    isProgressToastEnabled = false
+
     _fireToast({
       title: 'Application update failed',
       type: 'error',
@@ -209,13 +234,38 @@ const _autoUpdaterFactory = () => {
       }
     )
   })
-  // TODO:
   autoUpdater.on('download-progress', (progressObj) => {
-    log.info(`Download progress: ${JSON.stringify(progressObj)}`)
+    const { percent } = { ...progressObj }
+
+    if (isProgressToastEnabled) {
+      _sendProgress(percent)
+
+      return
+    }
+
+    _fireToast(
+      {
+        title: 'Downloading...',
+        type: 'info',
+        showConfirmButton: false
+      },
+      {
+        onOpen: () => {
+          _sendProgress(percent)
+
+          isProgressToastEnabled = true
+        },
+        onAfterClose: () => {
+          isProgressToastEnabled = false
+        }
+      }
+    )
   })
   autoUpdater.on('update-downloaded', async (info) => {
     try {
       const { version } = { ...info }
+
+      isProgressToastEnabled = false
 
       const { res } = _fireToast(
         {
