@@ -1,6 +1,8 @@
 'use strict'
 
 const electron = require('electron')
+const fs = require('fs')
+const path = require('path')
 const {
   AppImageUpdater,
   MacUpdater,
@@ -12,12 +14,21 @@ const Alert = require('electron-alert')
 
 const wins = require('../windows')
 
+const toastStyle = fs.readFileSync(path.join(
+  __dirname, 'toast-src/toast.css'
+))
+const toastScript = fs.readFileSync(path.join(
+  __dirname, 'toast-src/toast.js'
+))
+
 let toast
 let autoUpdater
 let menuItem
 let uCheckInterval
 let isIntervalUpdate = false
 
+const style = `<style>${toastStyle}</style>`
+const script = `<script type="text/javascript">${toastScript}</script>`
 const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
 
 const _closeToast = (toast) => {
@@ -45,7 +56,7 @@ const _fireToast = (
     electron.BrowserWindow.getFocusedWindow() ||
     wins.mainWindow
   )
-  const alert = new Alert()
+  const alert = new Alert([style, script])
   toast = alert
 
   const _closeAlert = () => _closeToast(alert)
