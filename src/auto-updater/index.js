@@ -64,6 +64,8 @@ const _fireToast = (
     onAfterClose = () => {}
   } = { ...hooks }
 
+  const height = 50
+
   _closeToast(toast)
 
   const win = (
@@ -79,17 +81,19 @@ const _fireToast = (
 
   const bwOptions = {
     frame: false,
-    transparent: true,
+    transparent: false,
     thickFrame: false,
     closable: false,
-    hasShadow: false
+    hasShadow: false,
+    backgroundColor: '#f5f8fa',
+    darkTheme: false,
+    height
   }
   const swalOptions = {
     toast: true,
     position: 'top-end',
     allowOutsideClick: false,
     backdrop: 'rgba(0,0,0,0.0)',
-    width: 400,
 
     type: 'info',
     title: 'Update',
@@ -99,16 +103,32 @@ const _fireToast = (
 
     ...opts,
 
+    onBeforeOpen: () => {
+      if (
+        !alert ||
+        !alert.browserWindow
+      ) return
+
+      alert.browserWindow.hide()
+    },
     onOpen: () => {
       onOpen(alert)
+
+      if (
+        !alert ||
+        !alert.browserWindow
+      ) return
+
+      alert.browserWindow.setBounds({ height })
+      alert.browserWindow.show()
     },
     onClose: () => {
       if (
-        !toast ||
-        !toast.browserWindow
+        !alert ||
+        !alert.browserWindow
       ) return
 
-      toast.browserWindow.hide()
+      alert.browserWindow.hide()
     },
     onAfterClose: () => {
       win.removeListener('closed', _closeAlert)
@@ -124,6 +144,13 @@ const _fireToast = (
     false,
     sound
   )
+
+  electron.ipcMain.on(alert.uid + 'reposition', () => {
+    const [x, y] = alert.browserWindow.getPosition()
+
+    alert.browserWindow.setBounds({ height })
+    alert.browserWindow.setPosition(x, y + 100)
+  })
 
   return { res, alert }
 }
@@ -183,8 +210,7 @@ const _autoUpdaterFactory = () => {
       {
         title: 'Checking for update',
         type: 'warning',
-        timer: 10000,
-        timerProgressBar: true
+        timer: 10000
       },
       {
         onOpen: (alert) => alert.showLoading()
@@ -202,8 +228,7 @@ const _autoUpdaterFactory = () => {
           title: `An update to v${version} is available`,
           text: 'Starting download...',
           type: 'info',
-          timer: 10000,
-          timerProgressBar: true
+          timer: 10000
         }
       )
       const { isConfirmed, dismiss } = await res

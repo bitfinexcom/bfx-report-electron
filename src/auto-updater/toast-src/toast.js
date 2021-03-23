@@ -4,10 +4,11 @@ window.addEventListener('load', () => {
   try {
     const { ipcRenderer } = require('electron')
 
+    const container = document.body
     const processWrapper = document.createElement('div')
 
     processWrapper.className = 'process'
-    document.body.append(processWrapper)
+    container.append(processWrapper)
 
     const resizeProgress = (per) => {
       if (!Number.isFinite(per)) {

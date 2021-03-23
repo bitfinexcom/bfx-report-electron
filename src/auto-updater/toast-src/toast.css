@@ -1,7 +1,35 @@
+body {
+  margin: 0;
+}
+
+.swal2-popup.swal2-toast {
+  flex-direction: column;
+  box-shadow: none;
+  padding: 5px 0;
+  border-radius: 0;
+  min-width: 300px;
+}
+
+.swal2-popup {
+  background-color: #f5f8fa;
+}
+
+.swal2-header {
+  border-radius: 0;
+}
+
+.swal2-content {
+  border-radius: 0;
+}
+
 .process {
   display: none;
-  position: relative;
-  height: 3px;
-  margin: auto;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  margin: 0;
   padding: 0;
+  width: 100%;
 }
