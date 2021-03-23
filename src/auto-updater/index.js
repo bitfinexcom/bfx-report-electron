@@ -64,14 +64,10 @@ const _fireToast = (
     onAfterClose = () => {}
   } = { ...hooks }
 
-  const height = 50
-
   _closeToast(toast)
 
-  const win = (
-    electron.BrowserWindow.getFocusedWindow() ||
-    wins.mainWindow
-  )
+  const height = 50
+  const win = wins.mainWindow
   const alert = new Alert([style, script])
   toast = alert
 
@@ -87,7 +83,9 @@ const _fireToast = (
     hasShadow: false,
     backgroundColor: '#f5f8fa',
     darkTheme: false,
-    height
+    height,
+    parent: win,
+    modal: false
   }
   const swalOptions = {
     toast: true,
@@ -119,7 +117,6 @@ const _fireToast = (
         !alert.browserWindow
       ) return
 
-      alert.browserWindow.setBounds({ height })
       alert.browserWindow.show()
     },
     onClose: () => {
@@ -132,6 +129,7 @@ const _fireToast = (
     },
     onAfterClose: () => {
       win.removeListener('closed', _closeAlert)
+
       onAfterClose(alert)
     }
   }
@@ -139,17 +137,23 @@ const _fireToast = (
   const res = alert.fire(
     swalOptions,
     bwOptions,
-    win,
+    null,
     true,
     false,
     sound
   )
 
   electron.ipcMain.on(alert.uid + 'reposition', () => {
-    const [x, y] = alert.browserWindow.getPosition()
+    const { x, y, width } = win.getBounds()
+    const { width: alWidth } = alert.browserWindow.getBounds()
 
-    alert.browserWindow.setBounds({ height })
-    alert.browserWindow.setPosition(x, y + 100)
+    const boundsOpts = {
+      x: (x + width) - alWidth - 1,
+      y: y + 1,
+      height
+    }
+
+    alert.browserWindow.setBounds(boundsOpts)
   })
 
   return { res, alert }
