@@ -275,12 +275,12 @@ const _autoUpdaterFactory = () => {
     _fireToast(
       {
         title: 'Downloading...',
-        type: 'info',
-        showConfirmButton: false
+        type: 'info'
       },
       {
-        onOpen: () => {
+        onOpen: (alert) => {
           _sendProgress(percent)
+          alert.showLoading()
 
           isProgressToastEnabled = true
         },
