@@ -8,6 +8,7 @@ body {
   padding: 5px 20px;
   border-radius: 0;
   min-width: 300px;
+  width: max-content;
 }
 
 .swal2-popup {
@@ -27,11 +28,6 @@ body {
   border-radius: 0;
 }
 
-.swal2-title,
-.swal2-content {
-  width: max-content;
-}
-
 .swal2-title {
   color: #82baf6;
 }
@@ -40,7 +36,8 @@ body {
   color: #f5f8fa;
 }
 
-.swal2-styled.swal2-confirm {
+.swal2-styled.swal2-confirm,
+.swal2-styled.swal2-cancel {
   border-radius: 0;
 }
 
