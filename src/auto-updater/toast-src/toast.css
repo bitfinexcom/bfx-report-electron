@@ -3,22 +3,44 @@ body {
 }
 
 .swal2-popup.swal2-toast {
-  flex-direction: column;
+  flex-direction: row;
   box-shadow: none;
-  padding: 5px 0;
+  padding: 5px 20px;
   border-radius: 0;
   min-width: 300px;
 }
 
 .swal2-popup {
-  background-color: #f5f8fa;
+  background-color: #172d3e;
 }
 
-.swal2-header {
+.swal2-popup.swal2-toast .swal2-styled,
+.swal2-popup.swal2-toast .swal2-actions {
+  margin-right: 0;
+}
+
+.swal2-popup.swal2-toast .swal2-header,
+.swal2-popup.swal2-toast .swal2-content,
+.swal2-popup.swal2-toast .swal2-actions,
+.swal2-popup.swal2-toast .swal2-footer {
+  flex-direction: row;
   border-radius: 0;
 }
 
+.swal2-title,
 .swal2-content {
+  width: max-content;
+}
+
+.swal2-title {
+  color: #82baf6;
+}
+
+.swal2-content {
+  color: #f5f8fa;
+}
+
+.swal2-styled.swal2-confirm {
   border-radius: 0;
 }
 

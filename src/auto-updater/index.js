@@ -81,7 +81,7 @@ const _fireToast = (
     thickFrame: false,
     closable: false,
     hasShadow: false,
-    backgroundColor: '#f5f8fa',
+    backgroundColor: '#172d3e',
     darkTheme: false,
     height,
     parent: win,
@@ -148,8 +148,8 @@ const _fireToast = (
     const { width: alWidth } = alert.browserWindow.getBounds()
 
     const boundsOpts = {
-      x: (x + width) - alWidth - 1,
-      y: y + 1,
+      x: (x + width) - alWidth,
+      y: y,
       height
     }
 
