@@ -170,8 +170,8 @@ const _getUpdateMenuItem = () => {
 
 const _switchMenuItem = (opts = {}) => {
   const {
-    isDisabled = false,
-    isUpdateDownloaded = false
+    isDisabled,
+    isUpdateDownloaded
   } = { ...opts }
   const menuItem = _getUpdateMenuItem()
 
@@ -180,7 +180,7 @@ const _switchMenuItem = (opts = {}) => {
   }
 
   if (typeof isDisabled === 'boolean') {
-    menuItem.enabled = !!isDisabled
+    menuItem.enabled = !isDisabled
   }
   if (typeof isUpdateDownloaded === 'boolean') {
     const label = isUpdateDownloaded
