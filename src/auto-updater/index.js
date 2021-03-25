@@ -1,6 +1,6 @@
 'use strict'
 
-const electron = require('electron')
+const { ipcMain, Menu } = require('electron')
 const fs = require('fs')
 const path = require('path')
 const {
@@ -23,7 +23,6 @@ const toastScript = fs.readFileSync(path.join(
 
 let toast
 let autoUpdater
-let menuItem
 let uCheckInterval
 let isIntervalUpdate = false
 let isProgressToastEnabled = false
@@ -143,7 +142,7 @@ const _fireToast = (
     sound
   )
 
-  electron.ipcMain.on(alert.uid + 'reposition', () => {
+  ipcMain.on(alert.uid + 'reposition', () => {
     const { x, y, width } = win.getBounds()
     const { width: alWidth } = alert.browserWindow.getBounds()
 
@@ -159,15 +158,42 @@ const _fireToast = (
   return { res, alert }
 }
 
-const _switchMenuItem = (isEnabled = false) => {
-  if (
-    !menuItem ||
-    typeof menuItem !== 'object'
-  ) {
+const _getUpdateMenuItem = () => {
+  const menu = Menu.getApplicationMenu()
+
+  if (!menu) {
     return
   }
 
-  menuItem.enabled = isEnabled
+  return menu.getMenuItemById('UPDATE_MENU_ITEM')
+}
+
+const _switchMenuItem = (opts = {}) => {
+  const {
+    isDisabled = false,
+    isUpdateDownloaded = false
+  } = { ...opts }
+  const menuItem = _getUpdateMenuItem()
+
+  if (!menuItem) {
+    return
+  }
+
+  if (typeof isDisabled === 'boolean') {
+    menuItem.enabled = !!isDisabled
+  }
+  if (typeof isUpdateDownloaded === 'boolean') {
+    const label = isUpdateDownloaded
+      ? 'Quit and install updates'
+      : 'Check for updates'
+    const click = isUpdateDownloaded
+      ? () => _autoUpdaterFactory()
+        .quitAndInstall(false, true)
+      : checkForUpdates()
+
+    menuItem.label = label
+    menuItem.click = click
+  }
 }
 
 const _reinitInterval = () => {
@@ -199,6 +225,10 @@ const _autoUpdaterFactory = () => {
   autoUpdater.on('error', () => {
     isProgressToastEnabled = false
 
+    _switchMenuItem({
+      isDisabled: false,
+      isUpdateDownloaded: false
+    })
     _fireToast({
       title: 'Application update failed',
       type: 'error',
@@ -241,6 +271,10 @@ const _autoUpdaterFactory = () => {
         !isConfirmed &&
         dismiss !== 'timer'
       ) {
+        _switchMenuItem({
+          isDisabled: false
+        })
+
         return
       }
 
@@ -251,6 +285,10 @@ const _autoUpdaterFactory = () => {
     }
   })
   autoUpdater.on('update-not-available', (info) => {
+    _switchMenuItem({
+      isDisabled: false
+    })
+
     if (isIntervalUpdate) {
       return
     }
@@ -308,6 +346,11 @@ const _autoUpdaterFactory = () => {
       const { isConfirmed } = await res
 
       if (!isConfirmed) {
+        _switchMenuItem({
+          isDisabled: false,
+          isUpdateDownloaded: true
+        })
+
         return
       }
 
@@ -328,12 +371,10 @@ const _autoUpdaterFactory = () => {
 }
 
 const checkForUpdates = (opts) => {
-  if (!menuItem) {
-    menuItem = opts.menuItem
-  }
-
   return () => {
-    _switchMenuItem(false)
+    _switchMenuItem({
+      isDisabled: true
+    })
 
     return _autoUpdaterFactory()
       .checkForUpdates()
@@ -346,20 +387,15 @@ const checkForUpdatesAndNotify = (opts) => {
   } = { ...opts }
 
   isIntervalUpdate = isIntUp
-  _switchMenuItem(false)
+  _switchMenuItem({
+    isDisabled: true
+  })
 
   return _autoUpdaterFactory()
     .checkForUpdatesAndNotify()
 }
 
-// TODO:
-const quitAndInstall = () => {
-  _autoUpdaterFactory()
-    .quitAndInstall(false, true)
-}
-
 module.exports = {
   checkForUpdates,
-  checkForUpdatesAndNotify,
-  quitAndInstall
+  checkForUpdatesAndNotify
 }

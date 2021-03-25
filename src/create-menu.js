@@ -99,10 +99,12 @@ module.exports = ({
           accelerator: 'CmdOrCtrl+H',
           click: showAboutModalDialog()
         },
+        { type: 'separator' },
         {
           label: 'Check for updates',
           accelerator: 'CmdOrCtrl+U',
-          click: checkForUpdates({ menuItem: this })
+          id: 'UPDATE_MENU_ITEM',
+          click: checkForUpdates()
         }
       ]
     }
