@@ -265,10 +265,10 @@ const _autoUpdaterFactory = () => {
           timer: 10000
         }
       )
-      const { isConfirmed, dismiss } = await res
+      const { value, dismiss } = await res
 
       if (
-        !isConfirmed &&
+        !value &&
         dismiss !== 'timer'
       ) {
         _switchMenuItem({
@@ -343,9 +343,9 @@ const _autoUpdaterFactory = () => {
           showCancelButton: true
         }
       )
-      const { isConfirmed } = await res
+      const { value } = await res
 
-      if (!isConfirmed) {
+      if (!value) {
         _switchMenuItem({
           isDisabled: false,
           isUpdateDownloaded: true
