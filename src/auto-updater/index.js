@@ -372,6 +372,7 @@ const _autoUpdaterFactory = () => {
 
 const checkForUpdates = (opts) => {
   return () => {
+    isIntervalUpdate = false
     _switchMenuItem({
       isDisabled: true
     })
