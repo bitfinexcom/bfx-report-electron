@@ -18,6 +18,18 @@ module.exports = ({
   pathToUserData,
   pathToUserDocuments
 }) => {
+  const autoUpdateMenuItem = process.platform === 'win32'
+    ? [
+      { type: 'separator' },
+      {
+        label: 'Check for updates',
+        accelerator: 'CmdOrCtrl+U',
+        id: 'UPDATE_MENU_ITEM',
+        click: checkForUpdates()
+      }
+    ]
+    : []
+
   const menuTemplate = [
     {
       label: 'Application',
@@ -99,13 +111,7 @@ module.exports = ({
           accelerator: 'CmdOrCtrl+H',
           click: showAboutModalDialog()
         },
-        { type: 'separator' },
-        {
-          label: 'Check for updates',
-          accelerator: 'CmdOrCtrl+U',
-          id: 'UPDATE_MENU_ITEM',
-          click: checkForUpdates()
-        }
+        ...autoUpdateMenuItem
       ]
     }
   ]

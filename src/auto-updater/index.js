@@ -212,14 +212,10 @@ const _autoUpdaterFactory = () => {
     autoUpdater = new NsisUpdater()
   }
   if (process.platform === 'darwin') {
-    // TODO: don't support auto-update for mac right now
-    // autoUpdater = new MacUpdater(_options)
-    return autoUpdater
+    autoUpdater = new MacUpdater()
   }
   if (process.platform === 'linux') {
-    // TODO: don't support auto-update for linux right now
-    // autoUpdater = new AppImageUpdater(_options)
-    return autoUpdater
+    autoUpdater = new AppImageUpdater()
   }
 
   autoUpdater.on('error', () => {
@@ -370,7 +366,12 @@ const _autoUpdaterFactory = () => {
   return autoUpdater
 }
 
-const checkForUpdates = (opts) => {
+// TODO: don't support update for linux and mac right now
+const checkForUpdates = () => {
+  if (process.platform === 'win32') {
+    return () => {}
+  }
+
   return () => {
     isIntervalUpdate = false
     _switchMenuItem({
@@ -382,7 +383,12 @@ const checkForUpdates = (opts) => {
   }
 }
 
+// TODO: don't support auto-update for linux and mac right now
 const checkForUpdatesAndNotify = (opts) => {
+  if (process.platform !== 'win32') {
+    return
+  }
+
   const {
     isIntervalUpdate: isIntUp = false
   } = { ...opts }
