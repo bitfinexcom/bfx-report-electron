@@ -143,8 +143,8 @@ const _fireToast = (
   )
 
   ipcMain.on(alert.uid + 'reposition', () => {
-    const { x, y, width } = win.getBounds()
-    const { width: alWidth } = alert.browserWindow.getBounds()
+    const { x, y, width } = win.getContentBounds()
+    const { width: alWidth } = alert.browserWindow.getContentBounds()
 
     const boundsOpts = {
       x: (x + width) - alWidth,
