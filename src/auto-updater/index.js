@@ -405,11 +405,13 @@ const checkForUpdatesAndNotify = (opts) => {
 // TODO: don't support update for linux and mac right now
 const quitAndInstall = () => {
   if (process.platform !== 'win32') {
-    return
+    return () => {}
   }
 
-  return _autoUpdaterFactory()
-    .quitAndInstall(false, true)
+  return () => {
+    return _autoUpdaterFactory()
+      .quitAndInstall(false, true)
+  }
 }
 
 module.exports = {
