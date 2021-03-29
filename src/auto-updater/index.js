@@ -368,7 +368,7 @@ const _autoUpdaterFactory = () => {
 
 // TODO: don't support update for linux and mac right now
 const checkForUpdates = () => {
-  if (process.platform === 'win32') {
+  if (process.platform !== 'win32') {
     return () => {}
   }
 
