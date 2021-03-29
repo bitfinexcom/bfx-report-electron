@@ -158,41 +158,41 @@ const _fireToast = (
   return { res, alert }
 }
 
-const _getUpdateMenuItem = () => {
+const _getUpdateMenuItemById = (id) => {
   const menu = Menu.getApplicationMenu()
 
-  if (!menu) {
+  if (
+    !menu ||
+    !id ||
+    typeof id !== 'string'
+  ) {
     return
   }
 
-  return menu.getMenuItemById('UPDATE_MENU_ITEM')
+  return menu.getMenuItemById(id)
 }
 
 const _switchMenuItem = (opts = {}) => {
   const {
-    isDisabled,
-    isUpdateDownloaded
+    isCheckMenuItemDisabled,
+    isInstallMenuItemVisible
   } = { ...opts }
-  const menuItem = _getUpdateMenuItem()
+  const checkMenuItem = _getUpdateMenuItemById('CHECK_UPDATE_MENU_ITEM')
+  const installMenuItem = _getUpdateMenuItemById('INSTALL_UPDATE_MENU_ITEM')
 
-  if (!menuItem) {
+  if (
+    !checkMenuItem ||
+    !installMenuItem
+  ) {
     return
   }
 
-  if (typeof isDisabled === 'boolean') {
-    menuItem.enabled = !isDisabled
+  if (typeof isCheckMenuItemDisabled === 'boolean') {
+    checkMenuItem.enabled = !isCheckMenuItemDisabled
   }
-  if (typeof isUpdateDownloaded === 'boolean') {
-    const label = isUpdateDownloaded
-      ? 'Quit and install updates'
-      : 'Check for updates'
-    const click = isUpdateDownloaded
-      ? () => _autoUpdaterFactory()
-        .quitAndInstall(false, true)
-      : checkForUpdates()
-
-    menuItem.label = label
-    menuItem.click = click
+  if (typeof isInstallMenuItemVisible === 'boolean') {
+    checkMenuItem.visible = !isInstallMenuItemVisible
+    installMenuItem.visible = isInstallMenuItemVisible
   }
 }
 
@@ -222,8 +222,8 @@ const _autoUpdaterFactory = () => {
     isProgressToastEnabled = false
 
     _switchMenuItem({
-      isDisabled: false,
-      isUpdateDownloaded: false
+      isCheckMenuItemDisabled: false,
+      isInstallMenuItemVisible: false
     })
     _fireToast({
       title: 'Application update failed',
@@ -268,7 +268,7 @@ const _autoUpdaterFactory = () => {
         dismiss !== 'timer'
       ) {
         _switchMenuItem({
-          isDisabled: false
+          isCheckMenuItemDisabled: false
         })
 
         return
@@ -282,7 +282,7 @@ const _autoUpdaterFactory = () => {
   })
   autoUpdater.on('update-not-available', (info) => {
     _switchMenuItem({
-      isDisabled: false
+      isCheckMenuItemDisabled: false
     })
 
     if (isIntervalUpdate) {
@@ -343,8 +343,8 @@ const _autoUpdaterFactory = () => {
 
       if (!value) {
         _switchMenuItem({
-          isDisabled: false,
-          isUpdateDownloaded: true
+          isCheckMenuItemDisabled: false,
+          isInstallMenuItemVisible: true
         })
 
         return
@@ -375,7 +375,7 @@ const checkForUpdates = () => {
   return () => {
     isIntervalUpdate = false
     _switchMenuItem({
-      isDisabled: true
+      isCheckMenuItemDisabled: true
     })
 
     return _autoUpdaterFactory()
@@ -395,14 +395,25 @@ const checkForUpdatesAndNotify = (opts) => {
 
   isIntervalUpdate = isIntUp
   _switchMenuItem({
-    isDisabled: true
+    isCheckMenuItemDisabled: true
   })
 
   return _autoUpdaterFactory()
     .checkForUpdatesAndNotify()
 }
 
+// TODO: don't support update for linux and mac right now
+const quitAndInstall = () => {
+  if (process.platform !== 'win32') {
+    return
+  }
+
+  return _autoUpdaterFactory()
+    .quitAndInstall(false, true)
+}
+
 module.exports = {
   checkForUpdates,
-  checkForUpdatesAndNotify
+  checkForUpdatesAndNotify,
+  quitAndInstall
 }

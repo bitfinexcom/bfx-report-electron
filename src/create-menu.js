@@ -12,20 +12,30 @@ const changeReportsFolder = require('./change-reports-folder')
 const changeSyncFrequency = require('./change-sync-frequency')
 const triggerElectronLoad = require('./trigger-electron-load')
 const showAboutModalDialog = require('./show-about-modal-dialog')
-const { checkForUpdates } = require('./auto-updater')
+const {
+  checkForUpdates,
+  quitAndInstall
+} = require('./auto-updater')
 
 module.exports = ({
   pathToUserData,
   pathToUserDocuments
 }) => {
+  // TODO: don't support update for linux and mac right now
   const autoUpdateMenuItem = process.platform === 'win32'
     ? [
       { type: 'separator' },
       {
         label: 'Check for updates',
         accelerator: 'CmdOrCtrl+U',
-        id: 'UPDATE_MENU_ITEM',
+        id: 'CHECK_UPDATE_MENU_ITEM',
         click: checkForUpdates()
+      },
+      {
+        label: 'Quit and install updates',
+        visible: false,
+        id: 'INSTALL_UPDATE_MENU_ITEM',
+        click: quitAndInstall()
       }
     ]
     : []
