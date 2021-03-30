@@ -18,8 +18,8 @@ window.addEventListener('load', () => {
       processWrapper.style.display = 'block'
       processWrapper.style.background = `linear-gradient(
         to right,
-        #3085d6 0%,
-        #3085d6 ${per}%,
+        #5ebefa 0%,
+        #5ebefa ${per}%,
         #f5f8fa ${per}%,
         #f5f8fa 100%
       )`

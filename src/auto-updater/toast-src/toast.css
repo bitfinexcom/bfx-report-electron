@@ -20,6 +20,10 @@ body {
   margin-right: 0;
 }
 
+.swal2-popup.swal2-toast .swal2-styled {
+  padding: .3125em .8em;
+}
+
 .swal2-popup.swal2-toast .swal2-header,
 .swal2-popup.swal2-toast .swal2-content,
 .swal2-popup.swal2-toast .swal2-actions,
@@ -36,9 +40,40 @@ body {
   color: #f5f8fa;
 }
 
-.swal2-styled.swal2-confirm,
+.swal2-styled.swal2-confirm {
+  border-radius: 2;
+  background-color: #82baf6;
+  transition: all 0.3s;
+}
+
+.swal2-actions .swal2-styled.swal2-confirm:hover,
+.swal2-actions .swal2-styled.swal2-confirm:focus,
+.swal2-actions .swal2-styled.swal2-confirm:active {
+  background-color: #4c88c8;
+}
+
 .swal2-styled.swal2-cancel {
-  border-radius: 0;
+  border-radius: 2;
+  background-color: #172d3e;
+  border: 1px solid #19354a;
+}
+
+.swal2-actions .swal2-styled.swal2-cancel:hover,
+.swal2-actions .swal2-styled.swal2-cancel:focus,
+.swal2-actions .swal2-styled.swal2-cancel:active {
+  background-color: #19354a;
+}
+
+.swal2-popup.swal2-toast .swal2-icon {
+  width: 2.1em;
+  min-width: 2.1em;
+  height: 2.1em;
+  font-size: 11px;
+}
+
+.swal2-actions.swal2-loading .swal2-styled.swal2-confirm {
+  width: 1.8em;
+  height: 1.8em;
 }
 
 .process {

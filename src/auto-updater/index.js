@@ -65,7 +65,7 @@ const _fireToast = (
 
   _closeToast(toast)
 
-  const height = 50
+  const height = 44
   const win = wins.mainWindow
   const alert = new Alert([style, script])
   toast = alert
