@@ -17,3 +17,4 @@ Dockerfile.mac-builder
 dist
 .env.example
 lastCommit.json
+.vscode

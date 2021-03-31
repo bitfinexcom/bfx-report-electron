@@ -14,14 +14,16 @@
     "cron-validate": "^1.4.2",
     "ed25519-supercop": "^2.0.1",
     "electron-alert": "^0.1.11",
+    "electron-log": "^4.3.2",
     "electron-serve": "^1.0.0",
+    "electron-updater": "^4.3.8",
     "find-free-port": "^2.0.0",
     "grenache-grape": "^0.9.8",
     "lodash": "^4.17.15",
     "yauzl": "^2.10.0"
   },
   "devDependencies": {
-    "electron": "11.3.0",
+    "electron": "11.4.1",
     "electron-builder": "22.10.5",
     "node-gyp": "7.1.2",
     "node-pre-gyp": "^0.11.0",
@@ -47,11 +49,20 @@
     "test": "standard"
   },
   "build": {
+    "publish": [
+      {
+        "provider": "github",
+        "repo": "bfx-report-electron",
+        "owner": "bitfinexcom",
+        "channel": "latest",
+        "useMultipleRangeRequest": false
+      }
+    ],
     "npmRebuild": false,
     "extends": null,
     "asar": false,
     "productName": "Bitfinex Report",
-    "artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
+    "artifactName": "BitfinexReport-${version}-x64-${os}.${ext}",
     "appId": "com.report.bitfinex",
     "files": [
       "**/*",
@@ -188,9 +199,11 @@
     },
     "win": {
       "target": [
-        "dir"
+        "dir",
+        "nsis"
       ],
-      "publisherName": "Reporting tool"
+      "publisherName": "Reporting tool",
+      "verifyUpdateCodeSignature": false
     },
     "mac": {
       "hardenedRuntime": true,

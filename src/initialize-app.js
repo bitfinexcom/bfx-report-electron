@@ -32,6 +32,9 @@ const {
 const {
   deserializeError
 } = require('./helpers')
+const {
+  checkForUpdatesAndNotify
+} = require('./auto-updater')
 
 const pathToLayouts = path.join(__dirname, 'layouts')
 const pathToLayoutAppInitErr = path
@@ -129,6 +132,8 @@ module.exports = () => {
             isMigrationsError,
             isMigrationsReady
           )
+
+          await checkForUpdatesAndNotify()
 
           resolve()
           return
