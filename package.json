@@ -24,6 +24,7 @@
     "yauzl": "^2.10.0"
   },
   "devDependencies": {
+    "app-builder-bin": "^3.5.13",
     "electron": "11.4.2",
     "electron-builder": "22.10.5",
     "js-yaml": "^4.0.0",
