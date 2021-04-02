@@ -7,6 +7,7 @@
   "main": "index.js",
   "license": "Apache-2.0",
   "dependencies": {
+    "@imjs/electron-differential-updater": "^5.1.4",
     "archiver": "^3.1.1",
     "async": "^2.6.1",
     "bfx-svc-test-helper": "git+https://github.com/bitfinexcom/bfx-svc-test-helper.git",
@@ -210,7 +211,8 @@
       "hardenedRuntime": true,
       "category": "public.app-category.productivity",
       "target": [
-        "dir"
+        "dir",
+        "zip"
       ]
     }
   }

@@ -21,28 +21,6 @@ module.exports = ({
   pathToUserData,
   pathToUserDocuments
 }) => {
-  // TODO: don't support update for mac right now
-  const autoUpdateMenuItem = (
-    process.platform === 'win32' ||
-    process.platform === 'linux'
-  )
-    ? [
-      { type: 'separator' },
-      {
-        label: 'Check for updates',
-        accelerator: 'CmdOrCtrl+U',
-        id: 'CHECK_UPDATE_MENU_ITEM',
-        click: checkForUpdates()
-      },
-      {
-        label: 'Quit and install updates',
-        visible: false,
-        id: 'INSTALL_UPDATE_MENU_ITEM',
-        click: quitAndInstall()
-      }
-    ]
-    : []
-
   const menuTemplate = [
     {
       label: 'Application',
@@ -124,7 +102,19 @@ module.exports = ({
           accelerator: 'CmdOrCtrl+H',
           click: showAboutModalDialog()
         },
-        ...autoUpdateMenuItem
+        { type: 'separator' },
+        {
+          label: 'Check for updates',
+          accelerator: 'CmdOrCtrl+U',
+          id: 'CHECK_UPDATE_MENU_ITEM',
+          click: checkForUpdates()
+        },
+        {
+          label: 'Quit and install updates',
+          visible: false,
+          id: 'INSTALL_UPDATE_MENU_ITEM',
+          click: quitAndInstall()
+        }
       ]
     }
   ]

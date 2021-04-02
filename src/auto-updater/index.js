@@ -7,7 +7,9 @@ const {
   MacUpdater,
   NsisUpdater,
   AppUpdater
-} = require('electron-updater')
+} = process.platform === 'darwin'
+  ? require('@imjs/electron-differential-updater')
+  : require('electron-updater')
 const log = require('electron-log')
 const Alert = require('electron-alert')
 
@@ -367,15 +369,7 @@ const _autoUpdaterFactory = () => {
   return autoUpdater
 }
 
-// TODO: don't support update for mac right now
 const checkForUpdates = () => {
-  if (
-    process.platform !== 'win32' &&
-    process.platform !== 'linux'
-  ) {
-    return () => {}
-  }
-
   return () => {
     isIntervalUpdate = false
     _switchMenuItem({
@@ -387,15 +381,7 @@ const checkForUpdates = () => {
   }
 }
 
-// TODO: don't support auto-update for mac right now
 const checkForUpdatesAndNotify = (opts) => {
-  if (
-    process.platform !== 'win32' &&
-    process.platform !== 'linux'
-  ) {
-    return
-  }
-
   const {
     isIntervalUpdate: isIntUp = false
   } = { ...opts }
@@ -409,15 +395,7 @@ const checkForUpdatesAndNotify = (opts) => {
     .checkForUpdatesAndNotify()
 }
 
-// TODO: don't support update for mac right now
 const quitAndInstall = () => {
-  if (
-    process.platform !== 'win32' &&
-    process.platform !== 'linux'
-  ) {
-    return () => {}
-  }
-
   return () => {
     return _autoUpdaterFactory()
       .quitAndInstall(false, true)
