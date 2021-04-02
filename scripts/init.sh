@@ -203,8 +203,19 @@ if [ $isNotSkippedReiDeps != 0 ]; then
       chmod +x "msg-box.sh"
     fi
 
+    if [ $targetPlatform == "mac" ]
+    then
+      rm -rf "$ROOT/dist/$targetPlatform/Bitfinex Report.app.zip"
+      rm -rf "$zipFile"
+    fi
+
     7z a -tzip $zipFile . -mmt | grep -v "Compressing"
     cd $ROOT
+
+    if [ $targetPlatform == "mac" ]
+    then
+      node $ROOT/scripts/generate-zipand-blockmap.js
+    fi
 
     rm -rf /dist/*$targetPlatform*
     mv -f ./dist/*$targetPlatform*.zip /dist
@@ -226,6 +237,14 @@ if [ $isNotSkippedReiDeps != 0 ]; then
       mv -f ./dist/latest-linux.yml "$latestYmlFile"
 
       chmod a+x "$appFile"
+    fi
+    if [ $targetPlatform == "mac" ]
+    then
+      appFile="/dist/$artifactName.zip"
+      blockmapFile="$appFile.blockmap"
+      latestYmlFile="/dist/latest-mac.yml"
+      mv -f ./dist/*$targetPlatform*.zip.blockmap "$blockmapFile"
+      mv -f ./dist/latest-mac.yml "$latestYmlFile"
     fi
 
     chmod -R a+xwr /dist 2>/dev/null
