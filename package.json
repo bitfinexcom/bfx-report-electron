@@ -194,7 +194,8 @@
       "maintainer": "<bitfinex.com>",
       "category": "Network",
       "target": [
-        "dir"
+        "dir",
+        "AppImage"
       ]
     },
     "win": {
