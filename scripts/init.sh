@@ -207,12 +207,19 @@ if [ $isNotSkippedReiDeps != 0 ]; then
 
     if [ $targetPlatform == "win" ]
     then
-      exeFile="/dist/$artifactName.exe"
-      blockmapFile="$exeFile.blockmap"
+      appFile="/dist/$artifactName.exe"
+      blockmapFile="$appFile.blockmap"
       latestYmlFile="/dist/latest.yml"
-      mv -f ./dist/*$targetPlatform*.exe "$exeFile"
+      mv -f ./dist/*$targetPlatform*.exe "$appFile"
       mv -f ./dist/*$targetPlatform*.exe.blockmap "$blockmapFile"
       mv -f ./dist/latest.yml "$latestYmlFile"
+    fi
+    if [ $targetPlatform == "linux" ]
+    then
+      appFile="/dist/$artifactName.AppImage"
+      latestYmlFile="/dist/latest-linux.yml"
+      mv -f ./dist/*$targetPlatform*.AppImage "$appFile"
+      mv -f ./dist/latest-linux.yml "$latestYmlFile"
     fi
 
     chmod -R a+xwr /dist 2>/dev/null
