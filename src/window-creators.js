@@ -63,7 +63,7 @@ const _createWindow = async (
       ? bounds.y
       : y,
     icon: path.join(__dirname, '../build/icons/512x512.png'),
-    backgroundColor: '#102331',
+    backgroundColor: '#172d3e',
     show: false,
     ...props
   }
