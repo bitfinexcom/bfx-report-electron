@@ -366,9 +366,12 @@ const _autoUpdaterFactory = () => {
   return autoUpdater
 }
 
-// TODO: don't support update for linux and mac right now
+// TODO: don't support update for mac right now
 const checkForUpdates = () => {
-  if (process.platform !== 'win32') {
+  if (
+    process.platform !== 'win32' &&
+    process.platform !== 'linux'
+  ) {
     return () => {}
   }
 
@@ -383,9 +386,12 @@ const checkForUpdates = () => {
   }
 }
 
-// TODO: don't support auto-update for linux and mac right now
+// TODO: don't support auto-update for mac right now
 const checkForUpdatesAndNotify = (opts) => {
-  if (process.platform !== 'win32') {
+  if (
+    process.platform !== 'win32' &&
+    process.platform !== 'linux'
+  ) {
     return
   }
 
@@ -402,9 +408,12 @@ const checkForUpdatesAndNotify = (opts) => {
     .checkForUpdatesAndNotify()
 }
 
-// TODO: don't support update for linux and mac right now
+// TODO: don't support update for mac right now
 const quitAndInstall = () => {
-  if (process.platform !== 'win32') {
+  if (
+    process.platform !== 'win32' &&
+    process.platform !== 'linux'
+  ) {
     return () => {}
   }
 
