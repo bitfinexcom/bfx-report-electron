@@ -12,6 +12,11 @@ const {
   version
 } = require(path.join(appDir, 'package.json'))
 
+process.env.APPIMAGE = path.join(
+  path.join(appDir, '../../..'),
+  `BitfinexReport-${version}-x64-linux.AppImage`
+)
+
 const isZipRelease = (root) => {
   const isZipReleaseFile = path.join(root, 'isZipRelease')
 
