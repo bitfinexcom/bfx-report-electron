@@ -4,7 +4,6 @@ const { ipcMain, Menu } = require('electron')
 const fs = require('fs')
 const path = require('path')
 const {
-  AppImageUpdater,
   MacUpdater,
   NsisUpdater,
   AppUpdater
@@ -12,6 +11,7 @@ const {
 const log = require('electron-log')
 const Alert = require('electron-alert')
 
+const BfxAppImageUpdater = require('./bfx.appimage.updater')
 const wins = require('../windows')
 
 const toastStyle = fs.readFileSync(path.join(
@@ -215,7 +215,7 @@ const _autoUpdaterFactory = () => {
     autoUpdater = new MacUpdater()
   }
   if (process.platform === 'linux') {
-    autoUpdater = new AppImageUpdater()
+    autoUpdater = new BfxAppImageUpdater()
   }
 
   autoUpdater.on('error', () => {
