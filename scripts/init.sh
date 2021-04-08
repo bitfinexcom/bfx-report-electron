@@ -196,6 +196,7 @@ if [ $isNotSkippedReiDeps != 0 ]; then
         "msg-box.sh"
 
       touch "$isZipReleaseFile"
+      node $ROOT/scripts/node/make-app-update-yml.js "$unpackedFolder"
 
       chmod +x "Bitfinex Report"
       chmod +x "launcher.sh"
