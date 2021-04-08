@@ -49,15 +49,14 @@
     "test": "standard"
   },
   "build": {
-    "publish": [
-      {
-        "provider": "github",
-        "repo": "bfx-report-electron",
-        "owner": "bitfinexcom",
-        "channel": "latest",
-        "useMultipleRangeRequest": false
-      }
-    ],
+    "publish": {
+      "provider": "github",
+      "repo": "bfx-report-electron",
+      "owner": "bitfinexcom",
+      "channel": "latest",
+      "useMultipleRangeRequest": false,
+      "updaterCacheDirName": "bfx-report-electron-updater"
+    },
     "npmRebuild": false,
     "extends": null,
     "asar": false,
