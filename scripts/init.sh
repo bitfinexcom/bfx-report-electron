@@ -223,6 +223,8 @@ if [ $isNotSkippedReiDeps != 0 ]; then
       latestYmlFile="/dist/latest-linux.yml"
       mv -f ./dist/*$targetPlatform*.AppImage "$appFile"
       mv -f ./dist/latest-linux.yml "$latestYmlFile"
+
+      chmod a+x "$appFile"
     fi
 
     chmod -R a+xwr /dist 2>/dev/null
