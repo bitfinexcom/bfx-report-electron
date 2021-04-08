@@ -6,6 +6,7 @@ ROOT="$PWD"
 branch=master
 dbDriver=better-sqlite
 lastCommitFileName=lastCommit.json
+isZipReleaseFile="isZipRelease"
 
 source $ROOT/scripts/get-conf-value.sh
 source $ROOT/scripts/escape-string.sh
@@ -193,6 +194,8 @@ if [ $isNotSkippedReiDeps != 0 ]; then
       cp -f \
         "$linuxLauncherFolder/msg-box.sh" \
         "msg-box.sh"
+
+      touch "$isZipReleaseFile"
 
       chmod +x "Bitfinex Report"
       chmod +x "launcher.sh"
