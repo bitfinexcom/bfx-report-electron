@@ -35,6 +35,9 @@ const {
 const {
   checkForUpdatesAndNotify
 } = require('./auto-updater')
+const {
+  isZipRelease
+} = require('./auto-updater/utils')
 
 const pathToLayouts = path.join(__dirname, 'layouts')
 const pathToLayoutAppInitErr = path
@@ -76,12 +79,20 @@ module.exports = () => {
         const pathToUserData = app.getPath('userData')
         const pathToUserDocuments = app.getPath('documents')
 
+        const pathToUserCsv = (
+          process.platform === 'darwin' ||
+          (
+            process.platform === 'linux' &&
+            !isZipRelease()
+          )
+        )
+          ? pathToUserDocuments
+          : '../../..'
+
         configsKeeperFactory(
           { pathToUserData },
           {
-            pathToUserCsv: process.platform === 'darwin'
-              ? pathToUserDocuments
-              : '../../..',
+            pathToUserCsv,
             schedulerRule
           }
         )
