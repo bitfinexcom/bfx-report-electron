@@ -78,24 +78,37 @@ module.exports = () => {
       try {
         const pathToUserData = app.getPath('userData')
         const pathToUserDocuments = app.getPath('documents')
+        const isAppImage = (
+          process.platform === 'linux' &&
+          !isZipRelease()
+        )
 
         const pathToUserCsv = (
           process.platform === 'darwin' ||
-          (
-            process.platform === 'linux' &&
-            !isZipRelease()
-          )
+          isAppImage
         )
           ? pathToUserDocuments
           : '../../..'
 
-        configsKeeperFactory(
+        const configsKeeper = configsKeeperFactory(
           { pathToUserData },
           {
             pathToUserCsv,
             schedulerRule
           }
         )
+
+        // Need to force setting pathToUserCsv for AppImage
+        // to not use internal virtual file system
+        if (isAppImage) {
+          const storedPathToUserCsv = configsKeeper
+            .getConfigByName('pathToUserCsv')
+
+          if (!path.isAbsolute(storedPathToUserCsv)) {
+            await configsKeeper.saveConfigs({ pathToUserCsv })
+          }
+        }
+
         const secretKey = await makeOrReadSecretKey(
           { pathToUserData }
         )
