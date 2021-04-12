@@ -23,7 +23,7 @@
     "yauzl": "^2.10.0"
   },
   "devDependencies": {
-    "electron": "11.4.1",
+    "electron": "11.4.2",
     "electron-builder": "22.10.5",
     "js-yaml": "^4.0.0",
     "node-gyp": "7.1.2",
