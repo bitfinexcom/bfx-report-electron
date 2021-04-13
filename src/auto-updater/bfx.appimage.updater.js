@@ -1,21 +1,52 @@
 'use strict'
 
+const path = require('path')
+const { spawn } = require('child_process')
 const {
   AppImageUpdater
 } = require('electron-updater')
 
 const {
   prepareInstall,
+  rmOldReleaseDir,
   setAppImagePathIfZipRelease
 } = require('./utils')
 
 setAppImagePathIfZipRelease()
 
 class BfxAppImageUpdater extends AppImageUpdater {
-  doInstall (...args) {
-    prepareInstall()
+  doInstall (opts) {
+    const root = prepareInstall()
+    const res = super.doInstall({
+      ...opts,
+      isForceRunAfter: root
+        ? false
+        : opts.isForceRunAfter
+    })
 
-    return super.doInstall(...args)
+    if (!root) {
+      return res
+    }
+
+    const cwd = path.join(root, '..')
+    const destination = path.join(
+      cwd,
+      path.basename(opts.installerPath)
+    )
+
+    rmOldReleaseDir(root)
+    spawn(destination, [], {
+      detached: true,
+      stdio: 'ignore',
+      env: {
+        ...process.env,
+        // string is required with AppImage
+        APPIMAGE_SILENT_INSTALL: 'true'
+      },
+      cwd
+    }).unref()
+
+    return res
   }
 }
 

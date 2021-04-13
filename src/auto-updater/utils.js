@@ -35,12 +35,24 @@ const setAppImagePathIfZipRelease = () => {
   setAppImagePath()
 }
 
-if (isZipRelease()) {
-  setAppImagePath()
+const makeTempReleaseFile = (filePath) => {
+  try {
+    fs.writeFileSync(filePath, '')
+  } catch (err) {
+    log.error(err)
+  }
 }
 
-const makeTempReleaseFile = (filePath) => {
-  fs.writeFileSync(filePath, '')
+const rmOldReleaseDir = (root) => {
+  if (!root) {
+    return
+  }
+
+  try {
+    fs.rmdirSync(root, { recursive: true })
+  } catch (err) {
+    log.error(err)
+  }
 }
 
 const prepareInstall = () => {
@@ -50,19 +62,16 @@ const prepareInstall = () => {
     return
   }
 
-  try {
-    fs.rmdirSync(root, { recursive: true })
-  } catch (err) {
-    log.error(err)
-  }
-
   const filePath = getTempReleaseFilePath(root)
   makeTempReleaseFile(filePath)
   setAppImagePath(filePath)
+
+  return root
 }
 
 module.exports = {
   isZipRelease,
   prepareInstall,
+  rmOldReleaseDir,
   setAppImagePathIfZipRelease
 }
