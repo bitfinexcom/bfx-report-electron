@@ -19,9 +19,7 @@ class BfxAppImageUpdater extends AppImageUpdater {
     const root = prepareInstall()
     const res = super.doInstall({
       ...opts,
-      isForceRunAfter: root
-        ? false
-        : opts.isForceRunAfter
+      isForceRunAfter: !root
     })
 
     if (!root) {
