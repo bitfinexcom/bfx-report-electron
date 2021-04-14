@@ -359,6 +359,7 @@ const _autoUpdaterFactory = () => {
 
   autoUpdater.autoDownload = false
   autoUpdater.logger = log
+  autoUpdater.logger.transports.console.level = 'warn'
   autoUpdater.logger.transports.file.level = 'info'
 
   _reinitInterval()
