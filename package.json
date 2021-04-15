@@ -65,7 +65,7 @@
     "asar": false,
     "productName": "Bitfinex Report",
     "artifactName": "BitfinexReport-${version}-x64-${os}.${ext}",
-    "appId": "com.report.bitfinex",
+    "appId": "com.bitfinex.report",
     "files": [
       "**/*",
       "build/icons",
@@ -192,7 +192,7 @@
     ],
     "linux": {
       "executableName": "app",
-      "description": "Reporting tool",
+      "description": "Bitfinex Report",
       "maintainer": "<bitfinex.com>",
       "category": "Network",
       "target": [
@@ -205,12 +205,16 @@
         "dir",
         "nsis"
       ],
-      "publisherName": "Reporting tool",
+      "publisherName": "Bitfinex Report",
       "verifyUpdateCodeSignature": false
     },
     "mac": {
+      "type": "development",
       "hardenedRuntime": true,
-      "category": "public.app-category.productivity",
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mas.inherit.plist",
+      "category": "public.app-category.finance",
       "target": [
         "dir",
         "zip"
