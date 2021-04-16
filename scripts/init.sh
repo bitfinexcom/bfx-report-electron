@@ -6,6 +6,7 @@ ROOT="$PWD"
 branch=master
 dbDriver=better-sqlite
 lastCommitFileName=lastCommit.json
+isZipReleaseFile="isZipRelease"
 
 source $ROOT/scripts/get-conf-value.sh
 source $ROOT/scripts/escape-string.sh
@@ -194,6 +195,9 @@ if [ $isNotSkippedReiDeps != 0 ]; then
         "$linuxLauncherFolder/msg-box.sh" \
         "msg-box.sh"
 
+      touch "$isZipReleaseFile"
+      node $ROOT/scripts/node/make-app-update-yml.js "$unpackedFolder"
+
       chmod +x "Bitfinex Report"
       chmod +x "launcher.sh"
       chmod +x "msg-box.sh"
@@ -207,12 +211,21 @@ if [ $isNotSkippedReiDeps != 0 ]; then
 
     if [ $targetPlatform == "win" ]
     then
-      exeFile="/dist/$artifactName.exe"
-      blockmapFile="$exeFile.blockmap"
+      appFile="/dist/$artifactName.exe"
+      blockmapFile="$appFile.blockmap"
       latestYmlFile="/dist/latest.yml"
-      mv -f ./dist/*$targetPlatform*.exe "$exeFile"
+      mv -f ./dist/*$targetPlatform*.exe "$appFile"
       mv -f ./dist/*$targetPlatform*.exe.blockmap "$blockmapFile"
       mv -f ./dist/latest.yml "$latestYmlFile"
+    fi
+    if [ $targetPlatform == "linux" ]
+    then
+      appFile="/dist/$artifactName.AppImage"
+      latestYmlFile="/dist/latest-linux.yml"
+      mv -f ./dist/*$targetPlatform*.AppImage "$appFile"
+      mv -f ./dist/latest-linux.yml "$latestYmlFile"
+
+      chmod a+x "$appFile"
     fi
 
     chmod -R a+xwr /dist 2>/dev/null

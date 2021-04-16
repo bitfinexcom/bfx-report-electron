@@ -35,6 +35,9 @@ const {
 const {
   checkForUpdatesAndNotify
 } = require('./auto-updater')
+const {
+  isZipRelease
+} = require('./auto-updater/utils')
 
 const pathToLayouts = path.join(__dirname, 'layouts')
 const pathToLayoutAppInitErr = path
@@ -75,16 +78,37 @@ module.exports = () => {
       try {
         const pathToUserData = app.getPath('userData')
         const pathToUserDocuments = app.getPath('documents')
+        const isAppImage = (
+          process.platform === 'linux' &&
+          !isZipRelease()
+        )
 
-        configsKeeperFactory(
+        const pathToUserCsv = (
+          process.platform === 'darwin' ||
+          isAppImage
+        )
+          ? pathToUserDocuments
+          : '../../..'
+
+        const configsKeeper = configsKeeperFactory(
           { pathToUserData },
           {
-            pathToUserCsv: process.platform === 'darwin'
-              ? pathToUserDocuments
-              : '../../..',
+            pathToUserCsv,
             schedulerRule
           }
         )
+
+        // Need to force setting pathToUserCsv for AppImage
+        // to not use internal virtual file system
+        if (isAppImage) {
+          const storedPathToUserCsv = configsKeeper
+            .getConfigByName('pathToUserCsv')
+
+          if (!path.isAbsolute(storedPathToUserCsv)) {
+            await configsKeeper.saveConfigs({ pathToUserCsv })
+          }
+        }
+
         const secretKey = await makeOrReadSecretKey(
           { pathToUserData }
         )

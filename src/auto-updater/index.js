@@ -4,7 +4,6 @@ const { ipcMain, Menu } = require('electron')
 const fs = require('fs')
 const path = require('path')
 const {
-  AppImageUpdater,
   MacUpdater,
   NsisUpdater,
   AppUpdater
@@ -12,6 +11,7 @@ const {
 const log = require('electron-log')
 const Alert = require('electron-alert')
 
+const BfxAppImageUpdater = require('./bfx.appimage.updater')
 const wins = require('../windows')
 
 const toastStyle = fs.readFileSync(path.join(
@@ -215,7 +215,7 @@ const _autoUpdaterFactory = () => {
     autoUpdater = new MacUpdater()
   }
   if (process.platform === 'linux') {
-    autoUpdater = new AppImageUpdater()
+    autoUpdater = new BfxAppImageUpdater()
   }
 
   autoUpdater.on('error', () => {
@@ -359,6 +359,7 @@ const _autoUpdaterFactory = () => {
 
   autoUpdater.autoDownload = false
   autoUpdater.logger = log
+  autoUpdater.logger.transports.console.level = 'warn'
   autoUpdater.logger.transports.file.level = 'info'
 
   _reinitInterval()
@@ -366,9 +367,12 @@ const _autoUpdaterFactory = () => {
   return autoUpdater
 }
 
-// TODO: don't support update for linux and mac right now
+// TODO: don't support update for mac right now
 const checkForUpdates = () => {
-  if (process.platform !== 'win32') {
+  if (
+    process.platform !== 'win32' &&
+    process.platform !== 'linux'
+  ) {
     return () => {}
   }
 
@@ -383,9 +387,12 @@ const checkForUpdates = () => {
   }
 }
 
-// TODO: don't support auto-update for linux and mac right now
+// TODO: don't support auto-update for mac right now
 const checkForUpdatesAndNotify = (opts) => {
-  if (process.platform !== 'win32') {
+  if (
+    process.platform !== 'win32' &&
+    process.platform !== 'linux'
+  ) {
     return
   }
 
@@ -402,9 +409,12 @@ const checkForUpdatesAndNotify = (opts) => {
     .checkForUpdatesAndNotify()
 }
 
-// TODO: don't support update for linux and mac right now
+// TODO: don't support update for mac right now
 const quitAndInstall = () => {
-  if (process.platform !== 'win32') {
+  if (
+    process.platform !== 'win32' &&
+    process.platform !== 'linux'
+  ) {
     return () => {}
   }
 

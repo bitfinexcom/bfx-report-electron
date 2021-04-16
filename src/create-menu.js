@@ -21,8 +21,11 @@ module.exports = ({
   pathToUserData,
   pathToUserDocuments
 }) => {
-  // TODO: don't support update for linux and mac right now
-  const autoUpdateMenuItem = process.platform === 'win32'
+  // TODO: don't support update for mac right now
+  const autoUpdateMenuItem = (
+    process.platform === 'win32' ||
+    process.platform === 'linux'
+  )
     ? [
       { type: 'separator' },
       {
