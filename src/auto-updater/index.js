@@ -4,16 +4,14 @@ const { ipcMain, Menu } = require('electron')
 const fs = require('fs')
 const path = require('path')
 const {
-  MacUpdater,
   NsisUpdater,
   AppUpdater
-} = process.platform === 'darwin'
-  ? require('@imjs/electron-differential-updater')
-  : require('electron-updater')
+} = require('electron-updater')
 const log = require('electron-log')
 const Alert = require('electron-alert')
 
 const BfxAppImageUpdater = require('./bfx.appimage.updater')
+const BfxMacUpdater = require('./bfx.mac.updater')
 const wins = require('../windows')
 
 const toastStyle = fs.readFileSync(path.join(
@@ -214,7 +212,7 @@ const _autoUpdaterFactory = () => {
     autoUpdater = new NsisUpdater()
   }
   if (process.platform === 'darwin') {
-    autoUpdater = new MacUpdater()
+    autoUpdater = new BfxMacUpdater()
   }
   if (process.platform === 'linux') {
     autoUpdater = new BfxAppImageUpdater()
@@ -328,7 +326,14 @@ const _autoUpdaterFactory = () => {
   })
   autoUpdater.on('update-downloaded', async (info) => {
     try {
-      const { version } = { ...info }
+      const {
+        version,
+        downloadedFile
+      } = { ...info }
+
+      if (autoUpdater instanceof BfxMacUpdater) {
+        autoUpdater.setDownloadedFilePath(downloadedFile)
+      }
 
       isProgressToastEnabled = false
 
