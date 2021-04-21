@@ -3,16 +3,19 @@
 const path = require('path')
 const fs = require('fs')
 const { spawn } = require('child_process')
-const log = require('electron-log')
-// TODO: require('@imjs/electron-differential-updater')
-const {
-  MacUpdater
-} = require('electron-updater')
+const { MacUpdater } = require('electron-updater')
 const extract = require('extract-zip')
 
 const appDir = path.dirname(require.main.filename)
 
 class BfxMacUpdater extends MacUpdater {
+  constructor (...args) {
+    super(...args)
+
+    this.quitAndInstallCalled = false
+    this.quitHandlerAdded = false
+  }
+
   setDownloadedFilePath (downloadedFilePath) {
     this.downloadedFilePath = downloadedFilePath
   }
@@ -21,8 +24,16 @@ class BfxMacUpdater extends MacUpdater {
     return this.downloadedFilePath
   }
 
-  async asyncInstaller () {
+  async install () {
     try {
+      if (this.quitAndInstallCalled) {
+        this._logger.warn('Install call ignored: quitAndInstallCalled is set to true')
+
+        return false
+      }
+
+      this.quitAndInstallCalled = true
+
       const downloadedFilePath = this.getDownloadedFilePath()
 
       const root = path.join(appDir, '../../..')
@@ -40,17 +51,35 @@ class BfxMacUpdater extends MacUpdater {
         }
       )
 
+      // TODO: double check spawning app
       spawn(exec, [], {
         detached: true,
         stdio: 'ignore',
         env: {
           ...process.env
-        },
-        cwd: root
+        }
       }).unref()
     } catch (err) {
-      log.error(err)
+      this.dispatchError(err)
+
+      return false
     }
+  }
+
+  async asyncInstaller () {
+    this._logger.info('Install on explicit quitAndInstall')
+
+    // TODO: need to emit that app is installing to stop app
+    //       and show loading spinner as zip extraction may take long time
+    const isInstalled = await this.install()
+
+    if (isInstalled) {
+      setImmediate(() => this.app.quit())
+
+      return
+    }
+
+    this.quitAndInstallCalled = false
   }
 
   quitAndInstall (...args) {
@@ -64,6 +93,36 @@ class BfxMacUpdater extends MacUpdater {
     }
 
     return this.asyncInstaller()
+  }
+
+  addQuitHandler () {
+    if (
+      this.quitHandlerAdded ||
+      !this.autoInstallOnAppQuit
+    ) {
+      return
+    }
+
+    this.quitHandlerAdded = true
+
+    this.app.onQuit((exitCode) => {
+      if (this.quitAndInstallCalled) {
+        this._logger.info('Update installer has already been triggered. Quitting application.')
+
+        return
+      }
+      if (exitCode !== 0) {
+        this._logger.info(`Update will be not installed on quit because application is quitting with exit code ${exitCode}`)
+
+        return
+      }
+
+      this._logger.info('Auto install update on quit')
+
+      this.install().catch((err) => {
+        this.dispatchError(err)
+      })
+    })
   }
 }
 
