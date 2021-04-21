@@ -8,6 +8,7 @@ const log = require('electron-log')
 const {
   MacUpdater
 } = require('electron-updater')
+const extract = require('extract-zip')
 
 const appDir = path.dirname(require.main.filename)
 
@@ -20,26 +21,25 @@ class BfxMacUpdater extends MacUpdater {
     return this.downloadedFilePath
   }
 
-  quitAndInstall (...args) {
-    const downloadedFilePath = this.getDownloadedFilePath()
-
-    if (!fs.existsSync(downloadedFilePath)) {
-      return
-    }
-    if (path.extname(downloadedFilePath) !== '.zip') {
-      return super.quitAndInstall(...args)
-    }
-
-    const root = path.join(appDir, '../..')
-    const dist = path.join(root, '..')
-    const exec = path.join(root, 'Contents/MacOS/Bitfinex Report')
-
+  async asyncInstaller () {
     try {
-      fs.rmdirSync(root, { recursive: true })
-    } catch (err) {
-      log.error(err)
-    }
-    try {
+      const downloadedFilePath = this.getDownloadedFilePath()
+
+      const root = path.join(appDir, '../..')
+      const dist = path.join(root, '..')
+      const exec = path.join(root, 'Contents/MacOS/Bitfinex Report')
+
+      await fs.promises.rmdir(root, { recursive: true })
+
+      await extract(
+        downloadedFilePath,
+        {
+          dir: dist,
+          defaultDirMode: '0o777',
+          defaultFileMode: '0o777'
+        }
+      )
+
       spawn(exec, [], {
         detached: true,
         stdio: 'ignore',
@@ -51,6 +51,19 @@ class BfxMacUpdater extends MacUpdater {
     } catch (err) {
       log.error(err)
     }
+  }
+
+  quitAndInstall (...args) {
+    const downloadedFilePath = this.getDownloadedFilePath()
+
+    if (!fs.existsSync(downloadedFilePath)) {
+      return
+    }
+    if (path.extname(downloadedFilePath) !== '.zip') {
+      return super.quitAndInstall(...args)
+    }
+
+    return this.asyncInstaller()
   }
 }
 

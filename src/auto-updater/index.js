@@ -357,7 +357,7 @@ const _autoUpdaterFactory = () => {
         return
       }
 
-      _autoUpdaterFactory()
+      await _autoUpdaterFactory()
         .quitAndInstall(false, true)
     } catch (err) {
       console.error(err)
