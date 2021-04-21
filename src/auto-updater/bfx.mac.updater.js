@@ -25,7 +25,7 @@ class BfxMacUpdater extends MacUpdater {
     try {
       const downloadedFilePath = this.getDownloadedFilePath()
 
-      const root = path.join(appDir, '../..')
+      const root = path.join(appDir, '../../..')
       const dist = path.join(root, '..')
       const exec = path.join(root, 'Contents/MacOS/Bitfinex Report')
 
