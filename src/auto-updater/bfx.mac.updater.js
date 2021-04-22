@@ -95,6 +95,12 @@ class BfxMacUpdater extends MacUpdater {
     return this.asyncInstaller()
   }
 
+  dispatchUpdateDownloaded (...args) {
+    super.dispatchUpdateDownloaded(...args)
+
+    this.addQuitHandler()
+  }
+
   addQuitHandler () {
     if (
       this.quitHandlerAdded ||
