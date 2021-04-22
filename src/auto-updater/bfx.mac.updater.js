@@ -14,6 +14,10 @@ class BfxMacUpdater extends MacUpdater {
 
     this.quitAndInstallCalled = false
     this.quitHandlerAdded = false
+
+    this.EVENT_INSTALLING_UPDATE = 'EVENT_INSTALLING_UPDATE'
+
+    this.installingUpdateEventHandlers = []
   }
 
   setDownloadedFilePath (downloadedFilePath) {
@@ -24,6 +28,10 @@ class BfxMacUpdater extends MacUpdater {
     return this.downloadedFilePath
   }
 
+  addInstallingUpdateEventHandler (handler) {
+    this.installingUpdateEventHandlers.push(handler)
+  }
+
   async install () {
     try {
       if (this.quitAndInstallCalled) {
@@ -32,6 +40,7 @@ class BfxMacUpdater extends MacUpdater {
         return false
       }
 
+      await this.dispatchInstallingUpdate()
       this.quitAndInstallCalled = true
 
       const downloadedFilePath = this.getDownloadedFilePath()
@@ -69,8 +78,6 @@ class BfxMacUpdater extends MacUpdater {
   async asyncInstaller () {
     this._logger.info('Install on explicit quitAndInstall')
 
-    // TODO: need to emit that app is installing to stop app
-    //       and show loading spinner as zip extraction may take long time
     const isInstalled = await this.install()
 
     if (isInstalled) {
@@ -93,6 +100,18 @@ class BfxMacUpdater extends MacUpdater {
     }
 
     return this.asyncInstaller()
+  }
+
+  async dispatchInstallingUpdate () {
+    this.emit(this.EVENT_INSTALLING_UPDATE)
+
+    for (const handler of this.installingUpdateEventHandlers) {
+      if (typeof handler !== 'function') {
+        return
+      }
+
+      await handler()
+    }
   }
 
   dispatchUpdateDownloaded (...args) {
