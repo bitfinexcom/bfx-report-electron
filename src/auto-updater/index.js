@@ -12,6 +12,7 @@ const Alert = require('electron-alert')
 
 const BfxAppImageUpdater = require('./bfx.appimage.updater')
 const BfxMacUpdater = require('./bfx.mac.updater')
+const pauseApp = require('./pause-app')
 const wins = require('../windows')
 
 const toastStyle = fs.readFileSync(path.join(
@@ -213,6 +214,8 @@ const _autoUpdaterFactory = () => {
   }
   if (process.platform === 'darwin') {
     autoUpdater = new BfxMacUpdater()
+
+    autoUpdater.addInstallingUpdateEventHandler(pauseApp)
   }
   if (process.platform === 'linux') {
     autoUpdater = new BfxAppImageUpdater()
