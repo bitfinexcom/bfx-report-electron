@@ -12,7 +12,7 @@ const Alert = require('electron-alert')
 
 const BfxAppImageUpdater = require('./bfx.appimage.updater')
 const BfxMacUpdater = require('./bfx.mac.updater')
-const pauseApp = require('./pause-app')
+const pauseApp = require('../pause-app')
 const wins = require('../windows')
 
 const toastStyle = fs.readFileSync(path.join(
@@ -31,6 +31,32 @@ let isProgressToastEnabled = false
 const style = `<style>${toastStyle}</style>`
 const script = `<script type="text/javascript">${toastScript}</script>`
 const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
+
+const _runProgressLoader = () => {
+  const win = wins.loadingWindow
+
+  if (
+    !win ||
+    typeof win !== 'object'
+  ) {
+    return
+  }
+
+  const duration = 3000 // ms
+  const interval = 500 // ms
+  const step = 1 / (duration / interval)
+  let progress = 0
+
+  setInterval(() => {
+    if (progress >= 1) {
+      progress = 0
+    }
+
+    progress += step
+
+    win.setProgressBar(progress)
+  }, interval).unref()
+}
 
 const _sendProgress = (progress) => {
   if (
@@ -215,7 +241,11 @@ const _autoUpdaterFactory = () => {
   if (process.platform === 'darwin') {
     autoUpdater = new BfxMacUpdater()
 
-    autoUpdater.addInstallingUpdateEventHandler(pauseApp)
+    autoUpdater.addInstallingUpdateEventHandler(() => {
+      _runProgressLoader()
+
+      return pauseApp()
+    })
   }
   if (process.platform === 'linux') {
     autoUpdater = new BfxAppImageUpdater()
