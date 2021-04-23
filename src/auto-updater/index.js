@@ -34,25 +34,27 @@ const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
 const _runProgressLoader = () => {
   const win = wins.loadingWindow
 
-  if (
-    !win ||
-    typeof win !== 'object' ||
-    win.isDestroyed()
-  ) {
-    return
-  }
-
   const duration = 3000 // ms
   const interval = 500 // ms
   const step = 1 / (duration / interval)
   let progress = 0
 
-  setInterval(() => {
+  const marker = setInterval(() => {
     if (progress >= 1) {
       progress = 0
     }
 
     progress += step
+
+    if (
+      !win ||
+      typeof win !== 'object' ||
+      win.isDestroyed()
+    ) {
+      clearInterval(marker)
+
+      return
+    }
 
     win.setProgressBar(progress)
   }, interval).unref()
