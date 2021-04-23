@@ -6,7 +6,7 @@ const { spawn } = require('child_process')
 const { MacUpdater } = require('electron-updater')
 const extract = require('extract-zip')
 
-const appDir = path.dirname(require.main.filename)
+const { rootPath: appDir } = require('electron-root-path')
 
 class BfxMacUpdater extends MacUpdater {
   constructor (...args) {
