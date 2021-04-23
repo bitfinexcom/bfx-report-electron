@@ -68,6 +68,8 @@ class BfxMacUpdater extends MacUpdater {
           ...process.env
         }
       }).unref()
+
+      return true
     } catch (err) {
       this.dispatchError(err)
 
