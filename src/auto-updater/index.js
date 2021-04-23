@@ -12,7 +12,6 @@ const Alert = require('electron-alert')
 
 const BfxAppImageUpdater = require('./bfx.appimage.updater')
 const BfxMacUpdater = require('./bfx.mac.updater')
-const pauseApp = require('../pause-app')
 const wins = require('../windows')
 
 const toastStyle = fs.readFileSync(path.join(
@@ -37,7 +36,8 @@ const _runProgressLoader = () => {
 
   if (
     !win ||
-    typeof win !== 'object'
+    typeof win !== 'object' ||
+    win.isDestroyed()
   ) {
     return
   }
@@ -94,6 +94,15 @@ const _fireToast = (
 
   const height = 44
   const win = wins.mainWindow
+
+  if (
+    !win ||
+    typeof win !== 'object' ||
+    win.isDestroyed()
+  ) {
+    return
+  }
+
   const alert = new Alert([style, script])
   toast = alert
 
@@ -242,9 +251,22 @@ const _autoUpdaterFactory = () => {
     autoUpdater = new BfxMacUpdater()
 
     autoUpdater.addInstallingUpdateEventHandler(() => {
-      _runProgressLoader()
+      if (
+        wins.loadingWindow &&
+        typeof wins.loadingWindow === 'object' &&
+        !wins.loadingWindow.isDestroyed()
+      ) {
+        wins.loadingWindow.show()
+      }
+      if (
+        wins.mainWindow &&
+        typeof wins.mainWindow === 'object' &&
+        !wins.mainWindow.isDestroyed()
+      ) {
+        wins.mainWindow.hide()
+      }
 
-      return pauseApp()
+      _runProgressLoader()
     })
   }
   if (process.platform === 'linux') {
@@ -253,6 +275,21 @@ const _autoUpdaterFactory = () => {
 
   autoUpdater.on('error', () => {
     isProgressToastEnabled = false
+
+    if (
+      wins.mainWindow &&
+      typeof wins.mainWindow === 'object' &&
+      !wins.mainWindow.isDestroyed()
+    ) {
+      wins.mainWindow.show()
+    }
+    if (
+      wins.loadingWindow &&
+      typeof wins.loadingWindow === 'object' &&
+      !wins.loadingWindow.isDestroyed()
+    ) {
+      wins.loadingWindow.hide()
+    }
 
     _switchMenuItem({
       isCheckMenuItemDisabled: false,
