@@ -2,6 +2,7 @@
 
 const { app } = require('electron')
 const path = require('path')
+const { enforceMacOSAppLocation } = require('electron-util')
 
 const triggerElectronLoad = require('./trigger-electron-load')
 const wins = require('./windows')
@@ -76,6 +77,7 @@ module.exports = async () => {
     })
 
     await app.whenReady()
+    enforceMacOSAppLocation()
 
     const pathToUserData = app.getPath('userData')
     const pathToUserDocuments = app.getPath('documents')
