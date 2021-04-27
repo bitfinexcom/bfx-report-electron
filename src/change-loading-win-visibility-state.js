@@ -4,6 +4,62 @@ const electron = require('electron')
 
 const wins = require('./windows')
 
+const _hideWindow = (win) => {
+  return new Promise((resolve, reject) => {
+    try {
+      if (
+        !win ||
+        typeof win !== 'object' ||
+        win.isDestroyed() ||
+        !win.isVisible()
+      ) {
+        resolve()
+
+        return
+      }
+
+      win.once('hide', resolve)
+
+      win.hide()
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
+
+const _showWindow = (win) => {
+  return new Promise((resolve, reject) => {
+    try {
+      if (
+        !win ||
+        typeof win !== 'object' ||
+        win.isDestroyed() ||
+        win.isVisible()
+      ) {
+        resolve()
+
+        return
+      }
+
+      win.once('show', resolve)
+
+      win.show()
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
+
+const _closeAllWindows = () => {
+  const wins = electron.BrowserWindow
+    .getAllWindows()
+    .filter((win) => win !== wins.loadingWindow)
+
+  const promises = wins.map((win) => _hideWindow(win))
+
+  return Promise.all(promises)
+}
+
 const _setParentWindow = (noParent) => {
   if (wins.loadingWindow.isFocused()) {
     return
@@ -23,9 +79,21 @@ const _setParentWindow = (noParent) => {
   wins.loadingWindow.setParentWindow(win)
 }
 
-const showLoadingWindow = async (noParent = false) => {
+const showLoadingWindow = async (opts = {}) => {
+  const {
+    isRequiredToCloseAllWins = false,
+    noParent = false
+  } = { ...opts }
+
+  if (isRequiredToCloseAllWins) {
+    _closeAllWindows()
+  }
+
   const screen = electron.screen || electron.remote.screen
-  const { getCursorScreenPoint, getDisplayNearestPoint } = screen
+  const {
+    getCursorScreenPoint,
+    getDisplayNearestPoint
+  } = screen
 
   if (
     !wins.loadingWindow ||
@@ -35,7 +103,7 @@ const showLoadingWindow = async (noParent = false) => {
     return
   }
 
-  _setParentWindow(noParent)
+  _setParentWindow(isRequiredToCloseAllWins || noParent)
 
   if (wins.loadingWindow.isVisible()) {
     return
@@ -55,34 +123,11 @@ const showLoadingWindow = async (noParent = false) => {
   })
   wins.loadingWindow.center()
 
-  return new Promise((resolve, reject) => {
-    try {
-      wins.loadingWindow.once('show', resolve)
-      wins.loadingWindow.show()
-    } catch (err) {
-      reject(err)
-    }
-  })
+  return _showWindow(wins.loadingWindow)
 }
 
-const hideLoadingWindow = async () => {
-  if (
-    !wins.loadingWindow ||
-    typeof wins.loadingWindow !== 'object' ||
-    wins.loadingWindow.isDestroyed() ||
-    !wins.loadingWindow.isVisible()
-  ) {
-    return
-  }
-
-  return new Promise((resolve, reject) => {
-    try {
-      wins.loadingWindow.once('hide', resolve)
-      wins.loadingWindow.hide()
-    } catch (err) {
-      reject(err)
-    }
-  })
+const hideLoadingWindow = () => {
+  return _hideWindow(wins.loadingWindow)
 }
 
 module.exports = {
