@@ -4,6 +4,8 @@ const electron = require('electron')
 
 const wins = require('./windows')
 
+let intervalMarker
+
 const _hideWindow = (win) => {
   return new Promise((resolve, reject) => {
     try {
@@ -79,6 +81,51 @@ const _setParentWindow = (noParent) => {
   wins.loadingWindow.setParentWindow(win)
 }
 
+const _runProgressLoader = (
+  win = wins.loadingWindow
+) => {
+  const duration = 3000 // ms
+  const interval = 500 // ms
+  const step = 1 / (duration / interval)
+  let progress = 0
+
+  intervalMarker = setInterval(() => {
+    if (progress >= 1) {
+      progress = 0
+    }
+
+    progress += step
+
+    if (
+      !win ||
+      typeof win !== 'object' ||
+      win.isDestroyed()
+    ) {
+      clearInterval(intervalMarker)
+
+      return
+    }
+
+    win.setProgressBar(progress)
+  }, interval).unref()
+}
+
+const _stopProgressLoader = (
+  win = wins.loadingWindow
+) => {
+  clearInterval(intervalMarker)
+
+  if (
+    !win ||
+    typeof win !== 'object' ||
+    win.isDestroyed()
+  ) {
+    return
+  }
+
+  win.setProgressBar(-1)
+}
+
 const showLoadingWindow = async (opts = {}) => {
   const {
     isRequiredToCloseAllWins = false,
@@ -104,6 +151,7 @@ const showLoadingWindow = async (opts = {}) => {
   }
 
   _setParentWindow(isRequiredToCloseAllWins || noParent)
+  _runProgressLoader()
 
   if (wins.loadingWindow.isVisible()) {
     return
@@ -127,6 +175,8 @@ const showLoadingWindow = async (opts = {}) => {
 }
 
 const hideLoadingWindow = () => {
+  _stopProgressLoader()
+
   return _hideWindow(wins.loadingWindow)
 }
 
