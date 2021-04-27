@@ -174,7 +174,15 @@ const showLoadingWindow = async (opts = {}) => {
   return _showWindow(wins.loadingWindow)
 }
 
-const hideLoadingWindow = () => {
+const hideLoadingWindow = async (opts = {}) => {
+  const {
+    isRequiredToShowMainWin = false
+  } = { ...opts }
+
+  if (isRequiredToShowMainWin) {
+    await _showWindow(wins.mainWindow)
+  }
+
   _stopProgressLoader()
 
   return _hideWindow(wins.loadingWindow)
