@@ -4,7 +4,26 @@ const electron = require('electron')
 
 const wins = require('./windows')
 
-const showLoadingWindow = async () => {
+const _setParentWindow = (noParent) => {
+  if (wins.loadingWindow.isFocused()) {
+    return
+  }
+
+  const win = electron.BrowserWindow.getFocusedWindow()
+
+  if (
+    noParent ||
+    Object.values(wins).every((w) => w !== win)
+  ) {
+    wins.loadingWindow.setParentWindow(null)
+
+    return
+  }
+
+  wins.loadingWindow.setParentWindow(win)
+}
+
+const showLoadingWindow = async (noParent = false) => {
   const screen = electron.screen || electron.remote.screen
   const { getCursorScreenPoint, getDisplayNearestPoint } = screen
 
@@ -15,11 +34,9 @@ const showLoadingWindow = async () => {
   ) {
     return
   }
-  if (!wins.loadingWindow.isFocused()) {
-    const win = electron.BrowserWindow.getFocusedWindow()
 
-    wins.loadingWindow.setParentWindow(win)
-  }
+  _setParentWindow(noParent)
+
   if (wins.loadingWindow.isVisible()) {
     return
   }
