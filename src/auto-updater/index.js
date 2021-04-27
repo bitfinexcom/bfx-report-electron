@@ -13,6 +13,10 @@ const Alert = require('electron-alert')
 const BfxAppImageUpdater = require('./bfx.appimage.updater')
 const BfxMacUpdater = require('./bfx.mac.updater')
 const wins = require('../windows')
+const {
+  showLoadingWindow,
+  hideLoadingWindow
+} = require('../change-loading-win-visibility-state')
 
 const toastStyle = fs.readFileSync(path.join(
   __dirname, 'toast-src/toast.css'
@@ -30,35 +34,6 @@ let isProgressToastEnabled = false
 const style = `<style>${toastStyle}</style>`
 const script = `<script type="text/javascript">${toastScript}</script>`
 const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
-
-const _runProgressLoader = () => {
-  const win = wins.loadingWindow
-
-  const duration = 3000 // ms
-  const interval = 500 // ms
-  const step = 1 / (duration / interval)
-  let progress = 0
-
-  const marker = setInterval(() => {
-    if (progress >= 1) {
-      progress = 0
-    }
-
-    progress += step
-
-    if (
-      !win ||
-      typeof win !== 'object' ||
-      win.isDestroyed()
-    ) {
-      clearInterval(marker)
-
-      return
-    }
-
-    win.setProgressBar(progress)
-  }, interval).unref()
-}
 
 const _sendProgress = (progress) => {
   if (
@@ -253,79 +228,59 @@ const _autoUpdaterFactory = () => {
     autoUpdater = new BfxMacUpdater()
 
     autoUpdater.addInstallingUpdateEventHandler(() => {
-      if (
-        wins.loadingWindow &&
-        typeof wins.loadingWindow === 'object' &&
-        !wins.loadingWindow.isDestroyed()
-      ) {
-        wins.loadingWindow.show()
-      }
-      if (
-        wins.mainWindow &&
-        typeof wins.mainWindow === 'object' &&
-        !wins.mainWindow.isDestroyed()
-      ) {
-        wins.mainWindow.hide()
-      }
-
-      _runProgressLoader()
+      return showLoadingWindow({ isRequiredToCloseAllWins: true })
     })
   }
   if (process.platform === 'linux') {
     autoUpdater = new BfxAppImageUpdater()
   }
 
-  autoUpdater.on('error', () => {
-    isProgressToastEnabled = false
+  autoUpdater.on('error', async () => {
+    try {
+      isProgressToastEnabled = false
 
-    if (
-      wins.mainWindow &&
-      typeof wins.mainWindow === 'object' &&
-      !wins.mainWindow.isDestroyed()
-    ) {
-      wins.mainWindow.show()
-    }
-    if (
-      wins.loadingWindow &&
-      typeof wins.loadingWindow === 'object' &&
-      !wins.loadingWindow.isDestroyed()
-    ) {
-      wins.loadingWindow.hide()
-    }
+      await hideLoadingWindow({ isRequiredToShowMainWin: false })
 
-    _switchMenuItem({
-      isCheckMenuItemDisabled: false,
-      isInstallMenuItemVisible: false
-    })
-    _fireToast({
-      title: 'Application update failed',
-      type: 'error',
-      timer: 60000
-    })
+      _switchMenuItem({
+        isCheckMenuItemDisabled: false,
+        isInstallMenuItemVisible: false
+      })
+      await _fireToast({
+        title: 'Application update failed',
+        type: 'error',
+        timer: 60000
+      })
+    } catch (err) {
+      console.error(err)
+    }
   })
-  autoUpdater.on('checking-for-update', () => {
-    if (isIntervalUpdate) {
-      return
-    }
-
-    _fireToast(
-      {
-        title: 'Checking for update',
-        type: 'warning',
-        timer: 10000
-      },
-      {
-        onOpen: (alert) => alert.showLoading()
+  autoUpdater.on('checking-for-update', async () => {
+    try {
+      if (isIntervalUpdate) {
+        return
       }
-    )
 
-    _reinitInterval()
+      await _fireToast(
+        {
+          title: 'Checking for update',
+          type: 'warning',
+          timer: 10000
+        },
+        {
+          onOpen: (alert) => alert.showLoading()
+        }
+      )
+
+      _reinitInterval()
+    } catch (err) {
+      console.error(err)
+    }
   })
   autoUpdater.on('update-available', async (info) => {
     try {
       const { version } = { ...info }
 
-      const { res } = _fireToast(
+      const { value, dismiss } = await _fireToast(
         {
           title: `An update to v${version} is available`,
           text: 'Starting download...',
@@ -333,7 +288,6 @@ const _autoUpdaterFactory = () => {
           timer: 10000
         }
       )
-      const { value, dismiss } = await res
 
       if (
         !value &&
@@ -346,55 +300,63 @@ const _autoUpdaterFactory = () => {
         return
       }
 
-      _autoUpdaterFactory()
+      await _autoUpdaterFactory()
         .downloadUpdate()
     } catch (err) {
       console.error(err)
     }
   })
-  autoUpdater.on('update-not-available', (info) => {
-    _switchMenuItem({
-      isCheckMenuItemDisabled: false
-    })
+  autoUpdater.on('update-not-available', async (info) => {
+    try {
+      _switchMenuItem({
+        isCheckMenuItemDisabled: false
+      })
 
-    if (isIntervalUpdate) {
-      return
-    }
-
-    _fireToast(
-      {
-        title: 'No updates available',
-        type: 'success',
-        timer: 10000
+      if (isIntervalUpdate) {
+        return
       }
-    )
-  })
-  autoUpdater.on('download-progress', (progressObj) => {
-    const { percent } = { ...progressObj }
 
-    if (isProgressToastEnabled) {
-      _sendProgress(percent)
-
-      return
-    }
-
-    _fireToast(
-      {
-        title: 'Downloading...',
-        type: 'info'
-      },
-      {
-        onOpen: (alert) => {
-          _sendProgress(percent)
-          alert.showLoading()
-
-          isProgressToastEnabled = true
-        },
-        onAfterClose: () => {
-          isProgressToastEnabled = false
+      await _fireToast(
+        {
+          title: 'No updates available',
+          type: 'success',
+          timer: 10000
         }
+      )
+    } catch (err) {
+      console.error(err)
+    }
+  })
+  autoUpdater.on('download-progress', async (progressObj) => {
+    try {
+      const { percent } = { ...progressObj }
+
+      if (isProgressToastEnabled) {
+        _sendProgress(percent)
+
+        return
       }
-    )
+
+      await _fireToast(
+        {
+          title: 'Downloading...',
+          type: 'info'
+        },
+        {
+          onOpen: (alert) => {
+            _sendProgress(percent)
+            alert.showLoading()
+
+            isProgressToastEnabled = true
+          },
+          onAfterClose: () => {
+            isProgressToastEnabled = false
+          }
+        }
+      )
+    } catch (err) {
+      console.error(err)
+    }
   })
   autoUpdater.on('update-downloaded', async (info) => {
     try {
@@ -409,7 +371,7 @@ const _autoUpdaterFactory = () => {
 
       isProgressToastEnabled = false
 
-      const { res } = _fireToast(
+      const { value } = await _fireToast(
         {
           title: `Update v${version} downloaded`,
           text: 'Should the app be updated right now?',
@@ -418,7 +380,6 @@ const _autoUpdaterFactory = () => {
           showCancelButton: true
         }
       )
-      const { value } = await res
 
       if (!value) {
         _switchMenuItem({
