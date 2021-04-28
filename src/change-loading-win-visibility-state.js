@@ -53,11 +53,11 @@ const _showWindow = (win) => {
 }
 
 const _closeAllWindows = () => {
-  const wins = electron.BrowserWindow
+  const _wins = electron.BrowserWindow
     .getAllWindows()
     .filter((win) => win !== wins.loadingWindow)
 
-  const promises = wins.map((win) => _hideWindow(win))
+  const promises = _wins.map((win) => _hideWindow(win))
 
   return Promise.all(promises)
 }
