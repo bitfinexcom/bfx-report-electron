@@ -235,8 +235,13 @@ const _autoUpdaterFactory = () => {
     autoUpdater = new BfxAppImageUpdater()
   }
 
-  autoUpdater.on('error', async () => {
+  autoUpdater.on('error', async (err) => {
     try {
+      // Skip error when can't get code signature on mac
+      if (/Could not get code signature/gi.test(err.toString())) {
+        return
+      }
+
       isProgressToastEnabled = false
 
       await hideLoadingWindow({ isRequiredToShowMainWin: false })
