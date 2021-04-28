@@ -60,7 +60,6 @@ class BfxMacUpdater extends MacUpdater {
         }
       )
 
-      // TODO: double check spawning app
       spawn(exec, [], {
         detached: true,
         stdio: 'ignore',
