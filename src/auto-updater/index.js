@@ -168,7 +168,7 @@ const _fireToast = (
     alert.browserWindow.setBounds(boundsOpts)
   })
 
-  return { res, alert }
+  return res
 }
 
 const _getUpdateMenuItemById = (id) => {
