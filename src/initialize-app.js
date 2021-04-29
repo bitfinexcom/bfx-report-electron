@@ -153,8 +153,7 @@ module.exports = async () => {
       wins.mainWindow.maximize()
     }
 
-    wins.mainWindow.show()
-    hideLoadingWindow()
+    await hideLoadingWindow({ isRequiredToShowMainWin: true })
 
     triggerElectronLoad()
 
