@@ -87,6 +87,7 @@ const _stopProgressLoader = (
 const showLoadingWindow = async (opts = {}) => {
   const {
     isRequiredToCloseAllWins = false,
+    isNotRunProgressLoaderRequired = false,
     noParent = false
   } = { ...opts }
 
@@ -110,7 +111,10 @@ const showLoadingWindow = async (opts = {}) => {
   }
 
   _setParentWindow(isRequiredToCloseAllWins || noParent)
-  _runProgressLoader()
+
+  if (!isNotRunProgressLoaderRequired) {
+    _runProgressLoader()
+  }
 
   if (wins.loadingWindow.isVisible()) {
     return
