@@ -17,6 +17,9 @@ const {
   showLoadingWindow,
   hideLoadingWindow
 } = require('./change-loading-win-visibility-state')
+const {
+  showWindow
+} = require('./helpers/manage-window')
 
 const publicDir = path.join(__dirname, '../bfx-report-ui/build')
 const loadURL = serve({ directory: publicDir })
@@ -112,7 +115,7 @@ const _createWindow = async (
     return res
   }
 
-  wins[winName].show()
+  await showWindow(wins[winName])
 
   return res
 }
