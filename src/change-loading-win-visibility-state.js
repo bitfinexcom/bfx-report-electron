@@ -1,18 +1,18 @@
 'use strict'
 
-const electron = require('electron')
+const { BrowserWindow } = require('electron')
 
 const wins = require('./windows')
 const {
   hideWindow,
-  showWindow
+  showWindow,
+  centerWindow
 } = require('./helpers/manage-window')
 
 let intervalMarker
 
 const _closeAllWindows = () => {
-  const _wins = electron.BrowserWindow
-    .getAllWindows()
+  const _wins = BrowserWindow.getAllWindows()
     .filter((win) => win !== wins.loadingWindow)
 
   const promises = _wins.map((win) => hideWindow(win))
@@ -25,7 +25,7 @@ const _setParentWindow = (noParent) => {
     return
   }
 
-  const win = electron.BrowserWindow.getFocusedWindow()
+  const win = BrowserWindow.getFocusedWindow()
 
   if (
     noParent ||
@@ -95,12 +95,6 @@ const showLoadingWindow = async (opts = {}) => {
     _closeAllWindows()
   }
 
-  const screen = electron.screen || electron.remote.screen
-  const {
-    getCursorScreenPoint,
-    getDisplayNearestPoint
-  } = screen
-
   if (
     !wins.loadingWindow ||
     typeof wins.loadingWindow !== 'object' ||
@@ -120,19 +114,7 @@ const showLoadingWindow = async (opts = {}) => {
     return
   }
 
-  const {
-    workArea
-  } = getDisplayNearestPoint(getCursorScreenPoint())
-  const {
-    height,
-    width
-  } = wins.loadingWindow.getBounds()
-  wins.loadingWindow.setBounds({
-    ...workArea,
-    height,
-    width
-  })
-  wins.loadingWindow.center()
+  centerWindow(wins.loadingWindow)
 
   return showWindow(wins.loadingWindow)
 }
