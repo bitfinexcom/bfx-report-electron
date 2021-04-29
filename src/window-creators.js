@@ -13,6 +13,10 @@ const ipcs = require('./ipcs')
 const appStates = require('./app-states')
 const windowStateKeeper = require('./window-state-keeper')
 const createMenu = require('./create-menu')
+const {
+  showLoadingWindow,
+  hideLoadingWindow
+} = require('./change-loading-win-visibility-state')
 
 const publicDir = path.join(__dirname, '../bfx-report-ui/build')
 const loadURL = serve({ directory: publicDir })
@@ -103,7 +107,7 @@ const _createWindow = async (
   }
 
   if (!pathname) {
-    await _createLoadingWindow()
+    await createLoadingWindow()
 
     return res
   }
@@ -181,14 +185,14 @@ const createMainWindow = async ({
   return winProps
 }
 
-const _createLoadingWindow = async () => {
+const createLoadingWindow = async () => {
   if (
     wins.loadingWindow &&
     typeof wins.loadingWindow === 'object' &&
     !wins.loadingWindow.isDestroyed() &&
     !wins.loadingWindow.isVisible()
   ) {
-    wins.loadingWindow.show()
+    await showLoadingWindow()
 
     return {}
   }
@@ -215,14 +219,13 @@ const createErrorWindow = async (pathname) => {
     }
   )
 
-  if (wins.loadingWindow) {
-    wins.loadingWindow.hide()
-  }
+  await hideLoadingWindow()
 
   return winProps
 }
 
 module.exports = {
   createMainWindow,
-  createErrorWindow
+  createErrorWindow,
+  createLoadingWindow
 }
