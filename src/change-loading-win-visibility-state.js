@@ -147,7 +147,8 @@ const showLoadingWindow = async (opts = {}) => {
     typeof wins.loadingWindow !== 'object' ||
     wins.loadingWindow.isDestroyed()
   ) {
-    return
+    await require('./window-creators')
+      .createLoadingWindow()
   }
 
   _setParentWindow(isRequiredToCloseAllWins || noParent)
