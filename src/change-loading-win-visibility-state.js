@@ -3,61 +3,19 @@
 const electron = require('electron')
 
 const wins = require('./windows')
+const {
+  hideWindow,
+  showWindow
+} = require('./helpers/manage-window')
 
 let intervalMarker
-
-const _hideWindow = (win) => {
-  return new Promise((resolve, reject) => {
-    try {
-      if (
-        !win ||
-        typeof win !== 'object' ||
-        win.isDestroyed() ||
-        !win.isVisible()
-      ) {
-        resolve()
-
-        return
-      }
-
-      win.once('hide', resolve)
-
-      win.hide()
-    } catch (err) {
-      reject(err)
-    }
-  })
-}
-
-const _showWindow = (win) => {
-  return new Promise((resolve, reject) => {
-    try {
-      if (
-        !win ||
-        typeof win !== 'object' ||
-        win.isDestroyed() ||
-        win.isVisible()
-      ) {
-        resolve()
-
-        return
-      }
-
-      win.once('show', resolve)
-
-      win.show()
-    } catch (err) {
-      reject(err)
-    }
-  })
-}
 
 const _closeAllWindows = () => {
   const _wins = electron.BrowserWindow
     .getAllWindows()
     .filter((win) => win !== wins.loadingWindow)
 
-  const promises = _wins.map((win) => _hideWindow(win))
+  const promises = _wins.map((win) => hideWindow(win))
 
   return Promise.all(promises)
 }
@@ -172,7 +130,7 @@ const showLoadingWindow = async (opts = {}) => {
   })
   wins.loadingWindow.center()
 
-  return _showWindow(wins.loadingWindow)
+  return showWindow(wins.loadingWindow)
 }
 
 const hideLoadingWindow = async (opts = {}) => {
@@ -181,12 +139,12 @@ const hideLoadingWindow = async (opts = {}) => {
   } = { ...opts }
 
   if (isRequiredToShowMainWin) {
-    await _showWindow(wins.mainWindow)
+    await showWindow(wins.mainWindow)
   }
 
   _stopProgressLoader()
 
-  return _hideWindow(wins.loadingWindow)
+  return hideWindow(wins.loadingWindow)
 }
 
 module.exports = {
