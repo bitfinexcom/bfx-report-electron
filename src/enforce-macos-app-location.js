@@ -37,7 +37,10 @@ module.exports = async () => {
     return
   }
 
-  await showLoadingWindow({ isRequiredToCloseAllWins: true })
+  await showLoadingWindow({
+    isRequiredToCloseAllWins: true,
+    isIndeterminateMode: true
+  })
 
   app.moveToApplicationsFolder({
     conflictHandler: (conflict) => {

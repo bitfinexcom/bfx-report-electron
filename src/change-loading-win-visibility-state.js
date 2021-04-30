@@ -39,9 +39,26 @@ const _setParentWindow = (noParent) => {
   wins.loadingWindow.setParentWindow(win)
 }
 
-const _runProgressLoader = (
-  win = wins.loadingWindow
-) => {
+const _runProgressLoader = (opts = {}) => {
+  const {
+    win = wins.loadingWindow,
+    isIndeterminateMode = false
+  } = { ...opts }
+
+  if (
+    !win ||
+    typeof win !== 'object' ||
+    win.isDestroyed()
+  ) {
+    return
+  }
+  if (isIndeterminateMode) {
+    // Change to indeterminate mode when progress > 1
+    win.setProgressBar(2)
+
+    return
+  }
+
   const duration = 3000 // ms
   const interval = 500 // ms
   const step = 1 / (duration / interval)
@@ -81,6 +98,7 @@ const _stopProgressLoader = (
     return
   }
 
+  // Remove progress bar when progress < 0
   win.setProgressBar(-1)
 }
 
@@ -88,6 +106,7 @@ const showLoadingWindow = async (opts = {}) => {
   const {
     isRequiredToCloseAllWins = false,
     isNotRunProgressLoaderRequired = false,
+    isIndeterminateMode = false,
     noParent = false
   } = { ...opts }
 
@@ -107,7 +126,7 @@ const showLoadingWindow = async (opts = {}) => {
   _setParentWindow(isRequiredToCloseAllWins || noParent)
 
   if (!isNotRunProgressLoaderRequired) {
-    _runProgressLoader()
+    _runProgressLoader({ isIndeterminateMode })
   }
 
   if (wins.loadingWindow.isVisible()) {
