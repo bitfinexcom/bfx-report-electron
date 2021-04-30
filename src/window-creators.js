@@ -123,12 +123,13 @@ const _createWindow = async (
 const _createChildWindow = async (
   pathname,
   winName,
-  {
-    width = 500,
-    height = 500,
-    frame = false
-  } = {}
+  opts = {}
 ) => {
+  const {
+    width = 500,
+    height = 500
+  } = { ...opts }
+
   const point = electron.screen.getCursorScreenPoint()
   const { bounds } = electron.screen.getDisplayNearestPoint(point)
   const x = Math.ceil(bounds.x + ((bounds.width - width) / 2))
@@ -140,8 +141,6 @@ const _createChildWindow = async (
       winName
     },
     {
-      width,
-      height,
       minWidth: width,
       minHeight: height,
       x,
@@ -149,7 +148,8 @@ const _createChildWindow = async (
       resizable: false,
       center: true,
       parent: wins.mainWindow,
-      frame
+      frame: false,
+      ...opts
     }
   )
 
@@ -205,7 +205,11 @@ const createLoadingWindow = async () => {
     'loadingWindow',
     {
       width: 350,
-      height: 350
+      height: 350,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false
+      }
     }
   )
 

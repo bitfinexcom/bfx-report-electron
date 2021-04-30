@@ -38,6 +38,7 @@ module.exports = async () => {
   }
 
   await showLoadingWindow({
+    description: 'Moving the app...',
     isRequiredToCloseAllWins: true,
     isIndeterminateMode: true
   })

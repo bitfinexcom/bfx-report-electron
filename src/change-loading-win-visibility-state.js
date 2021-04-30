@@ -1,6 +1,6 @@
 'use strict'
 
-const { BrowserWindow } = require('electron')
+const { BrowserWindow, ipcMain } = require('electron')
 
 const wins = require('./windows')
 const {
@@ -102,8 +102,43 @@ const _stopProgressLoader = (
   win.setProgressBar(-1)
 }
 
+const _setLoadingDescription = (win, description) => {
+  return new Promise((resolve) => {
+    try {
+      if (
+        !win ||
+        typeof win !== 'object' ||
+        win.isDestroyed() ||
+        typeof description !== 'string'
+      ) {
+        resolve()
+
+        return
+      }
+
+      ipcMain.once('loading:description-ready', (err) => {
+        if (err) {
+          console.error(err)
+        }
+
+        resolve()
+      })
+
+      win.webContents.send(
+        'loading:description',
+        description
+      )
+    } catch (err) {
+      console.error(err)
+
+      resolve()
+    }
+  })
+}
+
 const showLoadingWindow = async (opts = {}) => {
   const {
+    description = '',
     isRequiredToCloseAllWins = false,
     isNotRunProgressLoaderRequired = false,
     isIndeterminateMode = false,
@@ -113,7 +148,6 @@ const showLoadingWindow = async (opts = {}) => {
   if (isRequiredToCloseAllWins) {
     _closeAllWindows()
   }
-
   if (
     !wins.loadingWindow ||
     typeof wins.loadingWindow !== 'object' ||
@@ -128,6 +162,11 @@ const showLoadingWindow = async (opts = {}) => {
   if (!isNotRunProgressLoaderRequired) {
     _runProgressLoader({ isIndeterminateMode })
   }
+
+  await _setLoadingDescription(
+    wins.loadingWindow,
+    description
+  )
 
   if (wins.loadingWindow.isVisible()) {
     return
@@ -147,6 +186,11 @@ const hideLoadingWindow = async (opts = {}) => {
     await showWindow(wins.mainWindow)
   }
 
+  // need to empty description
+  await _setLoadingDescription(
+    wins.loadingWindow,
+    ''
+  )
   _stopProgressLoader()
 
   return hideWindow(wins.loadingWindow)

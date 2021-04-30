@@ -228,7 +228,10 @@ const _autoUpdaterFactory = () => {
     autoUpdater = new BfxMacUpdater()
 
     autoUpdater.addInstallingUpdateEventHandler(() => {
-      return showLoadingWindow({ isRequiredToCloseAllWins: true })
+      return showLoadingWindow({
+        description: 'Updating...',
+        isRequiredToCloseAllWins: true
+      })
     })
   }
   if (process.platform === 'linux') {

@@ -146,6 +146,17 @@
       background-color: #172d3e;
     }
 
+    .description {
+      display: none;
+      color: #f5f8fa;
+      position: fixed;
+      text-align: center;
+      margin: 0;
+      width: 100%;
+      padding: 20px 0;
+      bottom: 0;
+    }
+
     @keyframes lds-roller {
       0% {
         transform: rotate(0deg);
@@ -190,17 +201,41 @@
   <div class="logo">
     <img class="logo-img" src="../../build/loader.png" alt="logo">
   </div>
+  <div id="description" class="description"></div>
 </body>
 
 <script>
   window.addEventListener('load', () => {
-    setTimeout(() => {
-      const rollers = document.getElementsByClassName('lds-roller')
+    const rollers = document.getElementsByClassName('lds-roller')
+    const descriptionElem = document.getElementById('description')
 
+    setTimeout(() => {
       for (const roller of rollers) {
         roller.classList.add("show-roller")
       }
     }, 2500)
+
+    const { ipcRenderer } = require('electron')
+    
+    ipcRenderer.on('loading:description', (event, description) => {
+      try {
+        if (typeof description !== 'string') {
+          return
+        }
+
+        descriptionElem.innerHTML = description
+
+        descriptionElem.style.display = description
+          ? 'block'
+          : 'none'
+
+        ipcRenderer.send('loading:description-ready')
+      } catch (err) {
+        console.error(err)
+
+        ipcRenderer.send('loading:description-ready', err)
+      }
+    })
   })
 </script>
 
