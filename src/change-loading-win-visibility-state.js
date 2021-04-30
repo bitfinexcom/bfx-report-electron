@@ -59,8 +59,9 @@ const _runProgressLoader = (opts = {}) => {
     return
   }
 
+  const fps = 50
   const duration = 3000 // ms
-  const interval = 500 // ms
+  const interval = duration / fps // ms
   const step = 1 / (duration / interval)
   let progress = 0
 
