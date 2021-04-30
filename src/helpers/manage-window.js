@@ -72,12 +72,14 @@ const centerWindow = (win, workArea) => {
   const { width, height } = win.getContentBounds()
   const {
     width: screenWidth,
-    height: screenHeight
+    height: screenHeight,
+    x,
+    y
   } = _workArea
 
   const boundsOpts = {
-    x: (screenWidth - width) / 2,
-    y: (screenHeight - height) / 2
+    x: x + ((screenWidth - width) / 2),
+    y: y + (screenHeight - height) / 2
   }
 
   win.setBounds(boundsOpts)
