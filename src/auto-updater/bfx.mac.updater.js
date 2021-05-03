@@ -32,7 +32,7 @@ class BfxMacUpdater extends MacUpdater {
     this.installingUpdateEventHandlers.push(handler)
   }
 
-  async install () {
+  async install (isSilent, isForceRunAfter) {
     try {
       if (this.quitAndInstallCalled) {
         this._logger.warn('Install call ignored: quitAndInstallCalled is set to true')
@@ -40,8 +40,13 @@ class BfxMacUpdater extends MacUpdater {
         return false
       }
 
-      await this.dispatchInstallingUpdate()
       this.quitAndInstallCalled = true
+
+      this._logger.info(`Install: isSilent: ${isSilent}, isForceRunAfter: ${isForceRunAfter}`)
+
+      if (!isSilent) {
+        await this.dispatchInstallingUpdate()
+      }
 
       const downloadedFilePath = this.getDownloadedFilePath()
 
@@ -60,6 +65,10 @@ class BfxMacUpdater extends MacUpdater {
         }
       )
 
+      if (!isForceRunAfter) {
+        return true
+      }
+
       spawn(exec, [], {
         detached: true,
         stdio: 'ignore',
@@ -76,10 +85,15 @@ class BfxMacUpdater extends MacUpdater {
     }
   }
 
-  async asyncInstaller () {
+  async asyncQuitAndInstall (isSilent, isForceRunAfter) {
     this._logger.info('Install on explicit quitAndInstall')
 
-    const isInstalled = await this.install()
+    const isInstalled = await this.install(
+      isSilent,
+      isSilent
+        ? isForceRunAfter
+        : true
+    )
 
     if (isInstalled) {
       setImmediate(() => this.app.quit())
@@ -100,7 +114,7 @@ class BfxMacUpdater extends MacUpdater {
       return super.quitAndInstall(...args)
     }
 
-    return this.asyncInstaller()
+    return this.asyncQuitAndInstall(...args)
   }
 
   async dispatchInstallingUpdate () {
@@ -132,21 +146,32 @@ class BfxMacUpdater extends MacUpdater {
     this.quitHandlerAdded = true
 
     this.app.onQuit((exitCode) => {
+      if (exitCode === 0) {
+        return
+      }
+
+      this._logger.info(`Update will be not installed on quit because application is quitting with exit code ${exitCode}`)
+    })
+
+    // Need to use this.app.app prop due this.app is ElectronAppAdapter
+    this.app.app.once('will-quit', (e) => {
       if (this.quitAndInstallCalled) {
         this._logger.info('Update installer has already been triggered. Quitting application.')
 
         return
       }
-      if (exitCode !== 0) {
-        this._logger.info(`Update will be not installed on quit because application is quitting with exit code ${exitCode}`)
 
-        return
-      }
-
+      e.preventDefault()
       this._logger.info('Auto install update on quit')
 
-      this.install().catch((err) => {
-        this.dispatchError(err)
+      this.install(true, true).then((isInstalled) => {
+        if (isInstalled) {
+          setImmediate(() => this.app.quit())
+
+          return
+        }
+
+        setImmediate(() => this.app.app.exit(1))
       })
     })
   }
