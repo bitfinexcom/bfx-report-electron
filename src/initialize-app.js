@@ -83,17 +83,16 @@ module.exports = async () => {
 
     const pathToUserData = app.getPath('userData')
     const pathToUserDocuments = app.getPath('documents')
-    const isAppImage = (
-      process.platform === 'linux' &&
-      !isZipRelease()
+
+    const isZipReleaseRun = isZipRelease()
+    const isRelativeCsvPath = (
+      isZipReleaseRun &&
+      process.platform !== 'darwin'
     )
 
-    const pathToUserCsv = (
-      process.platform === 'darwin' ||
-      isAppImage
-    )
-      ? pathToUserDocuments
-      : '../../..'
+    const pathToUserCsv = isRelativeCsvPath
+      ? path.join('../../..', 'csv')
+      : path.join(pathToUserDocuments, 'bitfinex/reports')
 
     const configsKeeper = configsKeeperFactory(
       { pathToUserData },
@@ -103,15 +102,29 @@ module.exports = async () => {
       }
     )
 
-    // Need to force setting pathToUserCsv for AppImage
-    // to not use internal virtual file system
-    if (isAppImage) {
-      const storedPathToUserCsv = configsKeeper
-        .getConfigByName('pathToUserCsv')
+    // Need to use a new csv folder path for export
+    const storedPathToUserCsv = configsKeeper
+      .getConfigByName('pathToUserCsv')
 
-      if (!path.isAbsolute(storedPathToUserCsv)) {
-        await configsKeeper.saveConfigs({ pathToUserCsv })
-      }
+    if (
+      (
+        isRelativeCsvPath &&
+        !storedPathToUserCsv.endsWith('csv')
+      ) ||
+      (
+        !isRelativeCsvPath &&
+        !storedPathToUserCsv.endsWith('bitfinex/reports')
+      ) ||
+      (
+        !isRelativeCsvPath &&
+        !path.isAbsolute(storedPathToUserCsv)
+      ) ||
+      (
+        isRelativeCsvPath &&
+        path.isAbsolute(storedPathToUserCsv)
+      )
+    ) {
+      await configsKeeper.saveConfigs({ pathToUserCsv })
     }
 
     const secretKey = await makeOrReadSecretKey(

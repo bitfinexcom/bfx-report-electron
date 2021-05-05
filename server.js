@@ -53,10 +53,6 @@ let isMigrationsError = false
       throw new WrongPathToUserCsvError()
     }
 
-    const isRelativePath = pathToUserCsv.startsWith('..')
-    const pathToCsvFolder = isRelativePath
-      ? path.join(pathToUserCsv, 'csv')
-      : path.join(pathToUserCsv, 'BitfinexReports')
     const defaultPorts = getDefaultPorts()
     const {
       grape1DhtPort,
@@ -116,7 +112,7 @@ let isMigrationsError = false
       '--isSchedulerEnabled=true',
       '--isElectronjsEnv=true',
       '--isLoggerDisabled=false',
-      `--csvFolder=${pathToCsvFolder}`,
+      `--csvFolder=${pathToUserCsv}`,
       `--tempFolder=${pathToUserData}/temp`,
       `--logsFolder=${pathToUserData}/logs`,
       `--dbFolder=${pathToUserData}`,
