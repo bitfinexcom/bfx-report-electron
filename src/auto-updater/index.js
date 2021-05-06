@@ -18,6 +18,9 @@ const {
   hideLoadingWindow
 } = require('../change-loading-win-visibility-state')
 
+const fontsStyle = fs.readFileSync(path.join(
+  __dirname, '../../bfx-report-ui/build/fonts/roboto.css'
+))
 const toastStyle = fs.readFileSync(path.join(
   __dirname, 'toast-src/toast.css'
 ))
@@ -31,6 +34,7 @@ let uCheckInterval
 let isIntervalUpdate = false
 let isProgressToastEnabled = false
 
+const fonts = `<style>${fontsStyle}</style>`
 const style = `<style>${toastStyle}</style>`
 const script = `<script type="text/javascript">${toastScript}</script>`
 const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
@@ -80,7 +84,7 @@ const _fireToast = (
     return
   }
 
-  const alert = new Alert([style, script])
+  const alert = new Alert([fonts, style, script])
   toast = alert
 
   const _closeAlert = () => _closeToast(alert)

@@ -6,6 +6,9 @@ const cronValidate = require('cron-validate')
 const path = require('path')
 const fs = require('fs')
 
+const fontsStyle = fs.readFileSync(path.join(
+  __dirname, '../bfx-report-ui/build/fonts/roboto.css'
+))
 const modalDialogStyle = fs.readFileSync(path.join(
   __dirname, 'modal-dialog-src/modal-dialog.css'
 ))
@@ -69,13 +72,14 @@ const _getTimeDataFromRule = (rule) => {
   return { timeFormat: 'hours', value: 2 }
 }
 
+const fonts = `<style>${fontsStyle}</style>`
 const style = `<style>${modalDialogStyle}</style>`
 const script = `<script type="text/javascript">${modalDialogScript}</script>`
 
 module.exports = () => {
   const configsKeeper = getConfigsKeeperByName('main')
-  const timeFormatAlert = new Alert([style])
-  const alert = new Alert([style, script])
+  const timeFormatAlert = new Alert([fonts, style])
+  const alert = new Alert([fonts, style, script])
 
   const closeTimeFormatAlert = () => {
     if (!timeFormatAlert.browserWindow) return
