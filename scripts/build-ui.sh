@@ -7,6 +7,7 @@ export CI_ENVIRONMENT_NAME=production
 ROOT="$PWD"
 frontendFolder="$ROOT/bfx-report-ui"
 pathToTriggerElectronLoad="$frontendFolder/src/utils/triggerElectronLoad.js"
+pathToFonts="$frontendFolder/src/styles/fonts"
 uiBuildFolder=/ui-build
 uiReadyFile="$uiBuildFolder/READY"
 branch=master
@@ -99,4 +100,5 @@ fi
 
 mv -f $frontendFolder/build/* $uiBuildFolder
 cp $pathToTriggerElectronLoad $uiBuildFolder/triggerElectronLoad.js
+cp -avrf $pathToFonts $uiBuildFolder
 touch $uiReadyFile
