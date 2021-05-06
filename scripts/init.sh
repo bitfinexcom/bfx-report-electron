@@ -14,7 +14,7 @@ source $ROOT/scripts/update-submodules.sh
 
 programname=$0
 isDevEnv=0
-isNotSkippedReiDeps=1
+isSkippedReiDeps=0
 targetPlatform=0
 isSkippedUIBuild=0
 
@@ -38,7 +38,7 @@ while [ "$1" != "" ]; do
   case $1 in
     -d | --dev )    isDevEnv=1
                     ;;
-    -s | --skip-rei-deps )    isNotSkippedReiDeps=0
+    -s | --skip-rei-deps )    isSkippedReiDeps=1
                     ;;
     -p | --target-platform )  targetPlatform=$2; shift
                     ;;
@@ -125,132 +125,137 @@ fi
 
 cd $ROOT
 
-if [ $isNotSkippedReiDeps != 0 ]; then
-  if [ $targetPlatform != 0 ]
-  then
-    bash $ROOT/scripts/reinstall-deps.sh $targetPlatform
+if [ $isSkippedReiDeps != 0 ]
+then
+  exit 0
+fi
 
-    if [ $isSkippedUIBuild != 0 ]
-    then
-      # Watch the UI build has been completed, in seconds
-      # if not successful exit with an error
-      requiredWatchTime=$((60 * 30))
-      watchTime=$requiredWatchTime
-      interval=0.5
+if [ $targetPlatform == 0 ]
+then
+  bash $ROOT/scripts/reinstall-deps.sh
 
-      while !(test -f "$uiReadyFile"); do
-        isExpired=$(echo "$watchTime <= 0" | bc)
+  exit 0
+fi
 
-        if [ $isExpired == 1 ]; then
-          echo "Exit with error due to the UI has not been built in $requiredWatchTime seconds"
+bash $ROOT/scripts/reinstall-deps.sh $targetPlatform
 
-          exit 1
-        fi
+if [ $isSkippedUIBuild != 0 ]
+then
+  # Watch the UI build has been completed, in seconds
+  # if not successful exit with an error
+  requiredWatchTime=$((60 * 30))
+  watchTime=$requiredWatchTime
+  interval=0.5
 
-        sleep $interval
-        watchTime=$(echo "$watchTime - $interval" | bc)
-      done
-    fi
+  while !(test -f "$uiReadyFile"); do
+    isExpired=$(echo "$watchTime <= 0" | bc)
 
-    mkdir $frontendFolder/build 2>/dev/null
-    rm -rf $frontendFolder/build/*
-    cp -avr $uiBuildFolder/* $frontendFolder/build
-    chmod -R a+xwr $frontendFolder/build
-    ./node_modules/.bin/electron-builder build --$targetPlatform
-    chmod -R a+xwr ./dist
+    if [ $isExpired == 1 ]; then
+      echo "Exit with error due to the UI has not been built in $requiredWatchTime seconds"
 
-    productName=$(getConfValue "productName" $ROOT)
-    version=$(getConfValue "version" $ROOT)
-    versionEnding=""
-
-    if [ $branch != 'master' ]
-    then
-      versionEnding="-$branch"
-    fi
-
-    arch="x64"
-
-    unpackedFolder=$(ls -d $ROOT/dist/*/ | grep $targetPlatform | head -1)
-    artifactName="$productName-$version$versionEnding-$arch-$targetPlatform"
-    zipFile="$ROOT/dist/$artifactName.zip"
-
-    if ! [ -d $unpackedFolder ]; then
       exit 1
     fi
 
-    cd $unpackedFolder
-
-    if [ $targetPlatform == "linux" ]
-    then
-      # Build C executable launcher file
-      make -C $linuxLauncherFolder
-
-      cp -f \
-        "$linuxLauncherFolder/launcher" \
-        "Bitfinex Report"
-      cp -f \
-        "$linuxLauncherFolder/launcher.sh" \
-        "launcher.sh"
-      cp -f \
-        "$linuxLauncherFolder/msg-box.sh" \
-        "msg-box.sh"
-
-      touch "$isZipReleaseFile"
-      node $ROOT/scripts/node/make-app-update-yml.js "$unpackedFolder"
-
-      chmod +x "Bitfinex Report"
-      chmod +x "launcher.sh"
-      chmod +x "msg-box.sh"
-    fi
-
-    if [ $targetPlatform == "mac" ]
-    then
-      rm -rf "$ROOT/dist/$targetPlatform/Bitfinex Report.app.zip"
-      rm -rf "$zipFile"
-    fi
-
-    7z a -tzip $zipFile . -mmt | grep -v "Compressing"
-    cd $ROOT
-
-    if [ $targetPlatform == "mac" ]
-    then
-      node $ROOT/scripts/generate-zipand-blockmap.js
-    fi
-
-    rm -rf /dist/*$targetPlatform*
-    mv -f ./dist/*$targetPlatform*.zip /dist
-
-    if [ $targetPlatform == "win" ]
-    then
-      appFile="/dist/$artifactName.exe"
-      blockmapFile="$appFile.blockmap"
-      latestYmlFile="/dist/latest.yml"
-      mv -f ./dist/*$targetPlatform*.exe "$appFile"
-      mv -f ./dist/*$targetPlatform*.exe.blockmap "$blockmapFile"
-      mv -f ./dist/latest.yml "$latestYmlFile"
-    fi
-    if [ $targetPlatform == "linux" ]
-    then
-      appFile="/dist/$artifactName.AppImage"
-      latestYmlFile="/dist/latest-linux.yml"
-      mv -f ./dist/*$targetPlatform*.AppImage "$appFile"
-      mv -f ./dist/latest-linux.yml "$latestYmlFile"
-
-      chmod a+x "$appFile"
-    fi
-    if [ $targetPlatform == "mac" ]
-    then
-      appFile="/dist/$artifactName.zip"
-      blockmapFile="$appFile.blockmap"
-      latestYmlFile="/dist/latest-mac.yml"
-      mv -f ./dist/*$targetPlatform*.zip.blockmap "$blockmapFile"
-      mv -f ./dist/latest-mac.yml "$latestYmlFile"
-    fi
-
-    chmod -R a+xwr /dist 2>/dev/null
-
-    exit 0
-  else
-    bash $ROOT/scripts/reinstall-deps.sh
-  fi
+    sleep $interval
+    watchTime=$(echo "$watchTime - $interval" | bc)
+  done
 fi
+
+mkdir $frontendFolder/build 2>/dev/null
+rm -rf $frontendFolder/build/*
+cp -avr $uiBuildFolder/* $frontendFolder/build
+chmod -R a+xwr $frontendFolder/build
+./node_modules/.bin/electron-builder build --$targetPlatform
+chmod -R a+xwr ./dist
+
+productName=$(getConfValue "productName" $ROOT)
+version=$(getConfValue "version" $ROOT)
+versionEnding=""
+
+if [ $branch != 'master' ]
+then
+  versionEnding="-$branch"
+fi
+
+arch="x64"
+
+unpackedFolder=$(ls -d $ROOT/dist/*/ | grep $targetPlatform | head -1)
+artifactName="$productName-$version$versionEnding-$arch-$targetPlatform"
+zipFile="$ROOT/dist/$artifactName.zip"
+
+if ! [ -d $unpackedFolder ]; then
+  exit 1
+fi
+
+cd $unpackedFolder
+
+if [ $targetPlatform == "linux" ]
+then
+  # Build C executable launcher file
+  make -C $linuxLauncherFolder
+
+  cp -f \
+    "$linuxLauncherFolder/launcher" \
+    "Bitfinex Report"
+  cp -f \
+    "$linuxLauncherFolder/launcher.sh" \
+    "launcher.sh"
+  cp -f \
+    "$linuxLauncherFolder/msg-box.sh" \
+    "msg-box.sh"
+
+  touch "$isZipReleaseFile"
+  node $ROOT/scripts/node/make-app-update-yml.js "$unpackedFolder"
+
+  chmod +x "Bitfinex Report"
+  chmod +x "launcher.sh"
+  chmod +x "msg-box.sh"
+fi
+
+if [ $targetPlatform == "mac" ]
+then
+  rm -rf "$ROOT/dist/$targetPlatform/Bitfinex Report.app.zip"
+  rm -rf "$zipFile"
+fi
+
+7z a -tzip $zipFile . -mmt | grep -v "Compressing"
+cd $ROOT
+
+if [ $targetPlatform == "mac" ]
+then
+  node $ROOT/scripts/generate-zipand-blockmap.js
+fi
+
+rm -rf /dist/*$targetPlatform*
+mv -f ./dist/*$targetPlatform*.zip /dist
+
+if [ $targetPlatform == "win" ]
+then
+  appFile="/dist/$artifactName.exe"
+  blockmapFile="$appFile.blockmap"
+  latestYmlFile="/dist/latest.yml"
+  mv -f ./dist/*$targetPlatform*.exe "$appFile"
+  mv -f ./dist/*$targetPlatform*.exe.blockmap "$blockmapFile"
+  mv -f ./dist/latest.yml "$latestYmlFile"
+fi
+if [ $targetPlatform == "linux" ]
+then
+  appFile="/dist/$artifactName.AppImage"
+  latestYmlFile="/dist/latest-linux.yml"
+  mv -f ./dist/*$targetPlatform*.AppImage "$appFile"
+  mv -f ./dist/latest-linux.yml "$latestYmlFile"
+
+  chmod a+x "$appFile"
+fi
+if [ $targetPlatform == "mac" ]
+then
+  appFile="/dist/$artifactName.zip"
+  blockmapFile="$appFile.blockmap"
+  latestYmlFile="/dist/latest-mac.yml"
+  mv -f ./dist/*$targetPlatform*.zip.blockmap "$blockmapFile"
+  mv -f ./dist/latest-mac.yml "$latestYmlFile"
+fi
+
+chmod -R a+xwr /dist 2>/dev/null
+
+exit 0
