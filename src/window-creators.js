@@ -18,7 +18,8 @@ const {
   hideLoadingWindow
 } = require('./change-loading-win-visibility-state')
 const {
-  showWindow
+  showWindow,
+  centerWindow
 } = require('./helpers/manage-window')
 
 const publicDir = path.join(__dirname, '../bfx-report-ui/build')
@@ -113,6 +114,9 @@ const _createWindow = async (
     await createLoadingWindow()
 
     return res
+  }
+  if (_props.center) {
+    centerWindow(wins[winName])
   }
 
   await showWindow(wins[winName])

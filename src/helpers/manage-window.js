@@ -64,7 +64,9 @@ const centerWindow = (win, workArea) => {
     workArea &&
     typeof workArea === 'object' &&
     Number.isFinite(workArea.width) &&
-    Number.isFinite(workArea.height)
+    Number.isFinite(workArea.height) &&
+    Number.isFinite(workArea.x) &&
+    Number.isFinite(workArea.y)
   )
     ? workArea
     : getDisplayNearestPoint(getCursorScreenPoint()).workArea
@@ -78,8 +80,8 @@ const centerWindow = (win, workArea) => {
   } = _workArea
 
   const boundsOpts = {
-    x: x + ((screenWidth - width) / 2),
-    y: y + (screenHeight - height) / 2
+    x: Math.round(x + ((screenWidth - width) / 2)),
+    y: Math.round(y + (screenHeight - height) / 2)
   }
 
   win.setBounds(boundsOpts)
