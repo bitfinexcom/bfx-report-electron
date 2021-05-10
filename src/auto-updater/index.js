@@ -420,29 +420,41 @@ const _autoUpdaterFactory = () => {
 }
 
 const checkForUpdates = () => {
-  return () => {
-    isIntervalUpdate = false
+  return async () => {
+    try {
+      isIntervalUpdate = false
+      _switchMenuItem({
+        isCheckMenuItemDisabled: true
+      })
+
+      const res = await _autoUpdaterFactory()
+        .checkForUpdates()
+
+      return res
+    } catch (err) {
+      console.error(err)
+    }
+  }
+}
+
+const checkForUpdatesAndNotify = async (opts) => {
+  try {
+    const {
+      isIntervalUpdate: isIntUp = false
+    } = { ...opts }
+
+    isIntervalUpdate = isIntUp
     _switchMenuItem({
       isCheckMenuItemDisabled: true
     })
 
-    return _autoUpdaterFactory()
-      .checkForUpdates()
+    const res = await _autoUpdaterFactory()
+      .checkForUpdatesAndNotify()
+
+    return res
+  } catch (err) {
+    console.error(err)
   }
-}
-
-const checkForUpdatesAndNotify = (opts) => {
-  const {
-    isIntervalUpdate: isIntUp = false
-  } = { ...opts }
-
-  isIntervalUpdate = isIntUp
-  _switchMenuItem({
-    isCheckMenuItemDisabled: true
-  })
-
-  return _autoUpdaterFactory()
-    .checkForUpdatesAndNotify()
 }
 
 const quitAndInstall = () => {
