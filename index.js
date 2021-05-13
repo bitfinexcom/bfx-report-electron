@@ -12,8 +12,11 @@ const shouldQuit = makeSingleInstance()
 if (shouldQuit) {
   app.quit()
 } else {
-  initializeApp()
-    .catch((err) => {
+  ;(async () => {
+    try {
+      await initializeApp()
+    } catch (err) {
       console.error(err)
-    })
+    }
+  })()
 }

@@ -4,7 +4,6 @@ const { ipcMain, Menu } = require('electron')
 const fs = require('fs')
 const path = require('path')
 const {
-  MacUpdater,
   NsisUpdater,
   AppUpdater
 } = require('electron-updater')
@@ -12,8 +11,16 @@ const log = require('electron-log')
 const Alert = require('electron-alert')
 
 const BfxAppImageUpdater = require('./bfx.appimage.updater')
+const BfxMacUpdater = require('./bfx.mac.updater')
 const wins = require('../windows')
+const {
+  showLoadingWindow,
+  hideLoadingWindow
+} = require('../change-loading-win-visibility-state')
 
+const fontsStyle = fs.readFileSync(path.join(
+  __dirname, '../../bfx-report-ui/build/fonts/roboto.css'
+))
 const toastStyle = fs.readFileSync(path.join(
   __dirname, 'toast-src/toast.css'
 ))
@@ -27,6 +34,7 @@ let uCheckInterval
 let isIntervalUpdate = false
 let isProgressToastEnabled = false
 
+const fonts = `<style>${fontsStyle}</style>`
 const style = `<style>${toastStyle}</style>`
 const script = `<script type="text/javascript">${toastScript}</script>`
 const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
@@ -67,7 +75,16 @@ const _fireToast = (
 
   const height = 44
   const win = wins.mainWindow
-  const alert = new Alert([style, script])
+
+  if (
+    !win ||
+    typeof win !== 'object' ||
+    win.isDestroyed()
+  ) {
+    return
+  }
+
+  const alert = new Alert([fonts, style, script])
   toast = alert
 
   const _closeAlert = () => _closeToast(alert)
@@ -155,7 +172,7 @@ const _fireToast = (
     alert.browserWindow.setBounds(boundsOpts)
   })
 
-  return { res, alert }
+  return res
 }
 
 const _getUpdateMenuItemById = (id) => {
@@ -212,48 +229,70 @@ const _autoUpdaterFactory = () => {
     autoUpdater = new NsisUpdater()
   }
   if (process.platform === 'darwin') {
-    autoUpdater = new MacUpdater()
+    autoUpdater = new BfxMacUpdater()
+
+    autoUpdater.addInstallingUpdateEventHandler(() => {
+      return showLoadingWindow({
+        description: 'Updating...',
+        isRequiredToCloseAllWins: true
+      })
+    })
   }
   if (process.platform === 'linux') {
     autoUpdater = new BfxAppImageUpdater()
   }
 
-  autoUpdater.on('error', () => {
-    isProgressToastEnabled = false
-
-    _switchMenuItem({
-      isCheckMenuItemDisabled: false,
-      isInstallMenuItemVisible: false
-    })
-    _fireToast({
-      title: 'Application update failed',
-      type: 'error',
-      timer: 60000
-    })
-  })
-  autoUpdater.on('checking-for-update', () => {
-    if (isIntervalUpdate) {
-      return
-    }
-
-    _fireToast(
-      {
-        title: 'Checking for update',
-        type: 'warning',
-        timer: 10000
-      },
-      {
-        onOpen: (alert) => alert.showLoading()
+  autoUpdater.on('error', async (err) => {
+    try {
+      // Skip error when can't get code signature on mac
+      if (/Could not get code signature/gi.test(err.toString())) {
+        return
       }
-    )
 
-    _reinitInterval()
+      isProgressToastEnabled = false
+
+      await hideLoadingWindow({ isRequiredToShowMainWin: false })
+
+      _switchMenuItem({
+        isCheckMenuItemDisabled: false,
+        isInstallMenuItemVisible: false
+      })
+      await _fireToast({
+        title: 'Application update failed',
+        type: 'error',
+        timer: 60000
+      })
+    } catch (err) {
+      console.error(err)
+    }
+  })
+  autoUpdater.on('checking-for-update', async () => {
+    try {
+      if (isIntervalUpdate) {
+        return
+      }
+
+      await _fireToast(
+        {
+          title: 'Checking for update',
+          type: 'warning',
+          timer: 10000
+        },
+        {
+          onOpen: (alert) => alert.showLoading()
+        }
+      )
+
+      _reinitInterval()
+    } catch (err) {
+      console.error(err)
+    }
   })
   autoUpdater.on('update-available', async (info) => {
     try {
       const { version } = { ...info }
 
-      const { res } = _fireToast(
+      const { value, dismiss } = await _fireToast(
         {
           title: `An update to v${version} is available`,
           text: 'Starting download...',
@@ -261,7 +300,6 @@ const _autoUpdaterFactory = () => {
           timer: 10000
         }
       )
-      const { value, dismiss } = await res
 
       if (
         !value &&
@@ -274,63 +312,78 @@ const _autoUpdaterFactory = () => {
         return
       }
 
-      _autoUpdaterFactory()
+      await _autoUpdaterFactory()
         .downloadUpdate()
     } catch (err) {
       console.error(err)
     }
   })
-  autoUpdater.on('update-not-available', (info) => {
-    _switchMenuItem({
-      isCheckMenuItemDisabled: false
-    })
+  autoUpdater.on('update-not-available', async (info) => {
+    try {
+      _switchMenuItem({
+        isCheckMenuItemDisabled: false
+      })
 
-    if (isIntervalUpdate) {
-      return
-    }
-
-    _fireToast(
-      {
-        title: 'No updates available',
-        type: 'success',
-        timer: 10000
+      if (isIntervalUpdate) {
+        return
       }
-    )
-  })
-  autoUpdater.on('download-progress', (progressObj) => {
-    const { percent } = { ...progressObj }
 
-    if (isProgressToastEnabled) {
-      _sendProgress(percent)
-
-      return
-    }
-
-    _fireToast(
-      {
-        title: 'Downloading...',
-        type: 'info'
-      },
-      {
-        onOpen: (alert) => {
-          _sendProgress(percent)
-          alert.showLoading()
-
-          isProgressToastEnabled = true
-        },
-        onAfterClose: () => {
-          isProgressToastEnabled = false
+      await _fireToast(
+        {
+          title: 'No updates available',
+          type: 'success',
+          timer: 10000
         }
+      )
+    } catch (err) {
+      console.error(err)
+    }
+  })
+  autoUpdater.on('download-progress', async (progressObj) => {
+    try {
+      const { percent } = { ...progressObj }
+
+      if (isProgressToastEnabled) {
+        _sendProgress(percent)
+
+        return
       }
-    )
+
+      await _fireToast(
+        {
+          title: 'Downloading...',
+          type: 'info'
+        },
+        {
+          onOpen: (alert) => {
+            _sendProgress(percent)
+            alert.showLoading()
+
+            isProgressToastEnabled = true
+          },
+          onAfterClose: () => {
+            isProgressToastEnabled = false
+          }
+        }
+      )
+    } catch (err) {
+      console.error(err)
+    }
   })
   autoUpdater.on('update-downloaded', async (info) => {
     try {
-      const { version } = { ...info }
+      const {
+        version,
+        downloadedFile
+      } = { ...info }
+
+      if (autoUpdater instanceof BfxMacUpdater) {
+        autoUpdater.setDownloadedFilePath(downloadedFile)
+      }
 
       isProgressToastEnabled = false
 
-      const { res } = _fireToast(
+      const { value } = await _fireToast(
         {
           title: `Update v${version} downloaded`,
           text: 'Should the app be updated right now?',
@@ -339,7 +392,6 @@ const _autoUpdaterFactory = () => {
           showCancelButton: true
         }
       )
-      const { value } = await res
 
       if (!value) {
         _switchMenuItem({
@@ -350,7 +402,7 @@ const _autoUpdaterFactory = () => {
         return
       }
 
-      _autoUpdaterFactory()
+      await _autoUpdaterFactory()
         .quitAndInstall(false, true)
     } catch (err) {
       console.error(err)
@@ -367,15 +419,7 @@ const _autoUpdaterFactory = () => {
   return autoUpdater
 }
 
-// TODO: don't support update for mac right now
 const checkForUpdates = () => {
-  if (
-    process.platform !== 'win32' &&
-    process.platform !== 'linux'
-  ) {
-    return () => {}
-  }
-
   return () => {
     isIntervalUpdate = false
     _switchMenuItem({
@@ -387,15 +431,7 @@ const checkForUpdates = () => {
   }
 }
 
-// TODO: don't support auto-update for mac right now
 const checkForUpdatesAndNotify = (opts) => {
-  if (
-    process.platform !== 'win32' &&
-    process.platform !== 'linux'
-  ) {
-    return
-  }
-
   const {
     isIntervalUpdate: isIntUp = false
   } = { ...opts }
@@ -409,15 +445,7 @@ const checkForUpdatesAndNotify = (opts) => {
     .checkForUpdatesAndNotify()
 }
 
-// TODO: don't support update for mac right now
 const quitAndInstall = () => {
-  if (
-    process.platform !== 'win32' &&
-    process.platform !== 'linux'
-  ) {
-    return () => {}
-  }
-
   return () => {
     return _autoUpdaterFactory()
       .quitAndInstall(false, true)
