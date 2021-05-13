@@ -8,17 +8,8 @@ const {
   BrowserWindow
 } = require('electron')
 const path = require('path')
-const os = require('os')
 
-const { EOL } = os
-
-const packageJson = require('../package.json')
-
-let lastCommit = { hash: '-', date: '-' }
-
-try {
-  lastCommit = require('../lastCommit.json')
-} catch (e) {}
+const getDebugInfo = require('./helpers/get-debug-info')
 
 module.exports = () => {
   const _dialog = dialog || remote.dialog
@@ -26,22 +17,11 @@ module.exports = () => {
   return async () => {
     try {
       const win = BrowserWindow.getFocusedWindow()
-      const productName = 'Bitfinex Report'
-
-      const type = os.type()
-      const arch = os.arch()
-      const release = os.release()
-
-      const detail = `
-  Version: ${packageJson.version}${EOL}\
-  Commit: ${lastCommit.hash}${EOL}\
-  Date:  ${lastCommit.date}${EOL}\
-  Electron: ${process.versions.electron}${EOL}\
-  Chrome: ${process.versions.chrome}${EOL}\
-  Node.js: ${process.versions.node}${EOL}\
-  V8: ${process.versions.v8}${EOL}\
-  OS: ${type} ${arch} ${release}\
-  `
+      const {
+        detail,
+        repositoryUrl,
+        productName
+      } = getDebugInfo()
 
       const {
         response: btnId
@@ -63,9 +43,7 @@ module.exports = () => {
         return
       }
       if (btnId === 1) {
-        shell.openExternal(
-          packageJson.repository || 'https://github.com'
-        )
+        shell.openExternal(repositoryUrl)
       }
 
       clipboard.writeText(detail)
