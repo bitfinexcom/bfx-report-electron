@@ -9,11 +9,13 @@ const {
   deserializeError,
   rm
 } = require('./utils')
+const getDebugInfo = require('./get-debug-info')
 
 module.exports = {
   getFreePort,
   getDefaultPorts,
   serializeError,
   deserializeError,
-  rm
+  rm,
+  getDebugInfo
 }
