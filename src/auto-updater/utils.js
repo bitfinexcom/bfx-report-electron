@@ -3,8 +3,8 @@
 const path = require('path')
 const fs = require('fs')
 const log = require('electron-log')
+const { rootPath: appDir } = require('electron-root-path')
 
-const appDir = path.dirname(require.main.filename)
 const _root = path.join(appDir, '../..')
 const {
   version
