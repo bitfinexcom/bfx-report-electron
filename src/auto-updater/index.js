@@ -9,6 +9,7 @@ const {
 } = require('electron-updater')
 const log = require('electron-log')
 const Alert = require('electron-alert')
+const yaml = require('js-yaml')
 
 const BfxAppImageUpdater = require('./bfx.appimage.updater')
 const BfxMacUpdater = require('./bfx.mac.updater')
@@ -452,8 +453,17 @@ const quitAndInstall = () => {
   }
 }
 
+const getAppUpdateConfigSync = () => {
+  const appUpdateConfigPath = _autoUpdaterFactory()
+    ._appUpdateConfigPath
+  const fileContent = fs.readFileSync(appUpdateConfigPath, 'utf8')
+
+  return yaml.load(fileContent)
+}
+
 module.exports = {
   checkForUpdates,
   checkForUpdatesAndNotify,
-  quitAndInstall
+  quitAndInstall,
+  getAppUpdateConfigSync
 }
