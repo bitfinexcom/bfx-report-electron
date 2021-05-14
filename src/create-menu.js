@@ -16,6 +16,7 @@ const {
   checkForUpdates,
   quitAndInstall
 } = require('./auto-updater')
+const { manageNewGithubIssue } = require('./error-manager')
 
 module.exports = ({
   pathToUserData,
@@ -98,9 +99,8 @@ module.exports = ({
       label: 'Help',
       submenu: [
         {
-          label: 'About',
-          accelerator: 'CmdOrCtrl+H',
-          click: showAboutModalDialog()
+          label: 'Open new GitHub issue',
+          click: manageNewGithubIssue
         },
         { type: 'separator' },
         {
@@ -114,6 +114,12 @@ module.exports = ({
           visible: false,
           id: 'INSTALL_UPDATE_MENU_ITEM',
           click: quitAndInstall()
+        },
+        { type: 'separator' },
+        {
+          label: 'About',
+          accelerator: 'CmdOrCtrl+H',
+          click: showAboutModalDialog()
         }
       ]
     }
