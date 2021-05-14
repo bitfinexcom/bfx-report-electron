@@ -455,7 +455,7 @@ const quitAndInstall = () => {
 
 const getAppUpdateConfigSync = () => {
   const appUpdateConfigPath = _autoUpdaterFactory()
-    ._appUpdateConfigPath
+    .app.appUpdateConfigPath
   const fileContent = fs.readFileSync(appUpdateConfigPath, 'utf8')
 
   return yaml.load(fileContent)
