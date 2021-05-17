@@ -11,11 +11,17 @@ const manageNewGithubIssue = async () => {
     const logs = await collectLogs()
 
     const mdIssue = renderMarkdownTemplate({
+      mainLog: 'Empty',
+      workerErrors: 'Empty',
+      workerExceptions: 'Empty',
       ...debugInfo,
       ...logs
     })
 
-    openNewGithubIssue({ body: mdIssue })
+    openNewGithubIssue({
+      title: '[BUG REPORT]',
+      body: mdIssue
+    })
   } catch (err) {
     console.error(err)
   }
