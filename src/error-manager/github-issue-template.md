@@ -23,4 +23,26 @@ ${mainLog}
 
 </details>
 
+<details>
+
+<summary>Worker errors</summary>
+
+```vim
+${workerErrors}
+```
+
+</details>
+
+<details>
+
+<summary>Worker exceptions</summary>
+
+```vim
+${workerExceptions}
+```
+
+</details>
+
+---
+
 *The issue opened from the electron app*
