@@ -23,6 +23,12 @@ const _readLogFile = async (logPath, limit) => {
     if (typeof log !== 'string') {
       return 'Log file read error'
     }
+    if (
+      !log ||
+      /^[\s]+$/.test(log)
+    ) {
+      return 'Empty'
+    }
 
     return _limitLog(log, limit)
   } catch (err) {
