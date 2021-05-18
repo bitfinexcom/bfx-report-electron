@@ -2,5 +2,8 @@
 
 // TODO:
 module.exports = async (mdIssue) => {
-  return { isNewGithubIssueOpened: true }
+  return {
+    isNewGithubIssueOpened: true,
+    isCanceled: false
+  }
 }
