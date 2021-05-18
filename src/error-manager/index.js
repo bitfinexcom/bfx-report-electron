@@ -1,5 +1,9 @@
 'use strict'
 
+const log = require('electron-log')
+
+const isDevEnv = process.env.NODE_ENV === 'development'
+
 const renderMarkdownTemplate = require('./render-markdown-template')
 const openNewGithubIssue = require('./open-new-github-issue')
 const collectLogs = require('./collect-logs')
@@ -27,6 +31,23 @@ const manageNewGithubIssue = async () => {
   }
 }
 
+const initLogger = () => {
+  log.transports.console.level = isDevEnv
+    ? 'debug'
+    : 'warn'
+  log.transports.file.level = isDevEnv
+    ? 'info'
+    : 'warn'
+
+  // Override console.log and console.error etc
+  Object.assign(console, log.functions)
+
+  return log
+}
+
 module.exports = {
+  get log () { return log },
+
+  initLogger,
   manageNewGithubIssue
 }

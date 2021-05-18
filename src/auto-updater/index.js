@@ -7,10 +7,10 @@ const {
   NsisUpdater,
   AppUpdater
 } = require('electron-updater')
-const log = require('electron-log')
 const Alert = require('electron-alert')
 const yaml = require('js-yaml')
 
+const { log } = require('../error-manager')
 const BfxAppImageUpdater = require('./bfx.appimage.updater')
 const BfxMacUpdater = require('./bfx.mac.updater')
 const wins = require('../windows')
@@ -412,8 +412,6 @@ const _autoUpdaterFactory = () => {
 
   autoUpdater.autoDownload = false
   autoUpdater.logger = log
-  autoUpdater.logger.transports.console.level = 'warn'
-  autoUpdater.logger.transports.file.level = 'info'
 
   _reinitInterval()
 
