@@ -4,6 +4,7 @@ const log = require('electron-log')
 
 const isDevEnv = process.env.NODE_ENV === 'development'
 
+const showModalDialog = require('./show-modal-dialog')
 const renderMarkdownTemplate = require('./render-markdown-template')
 const openNewGithubIssue = require('./open-new-github-issue')
 const collectLogs = require('./collect-logs')
@@ -22,10 +23,16 @@ const manageNewGithubIssue = async () => {
       ...logs
     })
 
-    openNewGithubIssue({
-      title: '[BUG REPORT]',
-      body: mdIssue
-    })
+    const {
+      isNewGithubIssueOpened
+    } = await showModalDialog(mdIssue)
+
+    if (isNewGithubIssueOpened) {
+      openNewGithubIssue({
+        title: '[BUG REPORT]',
+        body: mdIssue
+      })
+    }
   } catch (err) {
     console.error(err)
   }
