@@ -2,6 +2,7 @@
 
 const { app } = require('electron')
 const log = require('electron-log')
+const cleanStack = require('clean-stack')
 
 const isDevEnv = process.env.NODE_ENV === 'development'
 
@@ -58,6 +59,30 @@ const initLogger = () => {
   log.transports.file.level = isDevEnv
     ? 'info'
     : 'warn'
+
+  // Clean up error stack traces
+  log.hooks.push((message, transport) => {
+    if (
+      transport !== log.transports.file ||
+      !Array.isArray(message.data) ||
+      message.data.length === 0
+    ) {
+      return message
+    }
+
+    message.data = message.data.map((val) => {
+      if (
+        !(val instanceof Error) ||
+        !val.stack
+      ) {
+        return val
+      }
+
+      return cleanStack(val.stack)
+    })
+
+    return message
+  })
 
   // Override console.log and console.error etc
   Object.assign(console, log.functions)
