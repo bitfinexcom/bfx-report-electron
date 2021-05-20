@@ -36,22 +36,26 @@ const manageNewGithubIssue = async (params) => {
     })
 
     const {
-      isNewGithubIssueOpened,
-      isCanceled
+      isExit,
+      isReported,
+      isIgnored
     } = await showModalDialog({
       errBoxTitle,
       errBoxDescription,
       mdIssue
     })
 
-    if (isCanceled) {
-      return { isCanceled }
+    if (isIgnored) {
+      return
     }
-    if (isNewGithubIssueOpened) {
+    if (isReported) {
       openNewGithubIssue({
         title,
         body: mdIssue
       })
+    }
+    if (isExit) {
+      app.quit()
     }
   } catch (err) {
     console.error(err)
@@ -97,13 +101,7 @@ const initLogger = () => {
   log.catchErrors({
     showDialog: false,
     onError (error) {
-      manageNewGithubIssue({ error }).then(({
-        isCanceled
-      }) => {
-        if (isCanceled) {
-          app.quit()
-        }
-      })
+      manageNewGithubIssue({ error })
     }
   })
 
