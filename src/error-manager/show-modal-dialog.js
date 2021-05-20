@@ -1,6 +1,15 @@
 'use strict'
 
 const { app, dialog } = require('electron')
+const { Converter } = require('showdown')
+
+const converter = new Converter({
+  tables: true,
+  strikethrough: true,
+  tasklists: true,
+  disableForced4SpacesIndentedSublists: true,
+  requireSpaceBeforeHeadingText: true
+})
 
 // TODO:
 module.exports = async (params) => {
@@ -12,6 +21,8 @@ module.exports = async (params) => {
 
   // TODO: Needs to add BrowserWindow to render markdown converted to html
   if (app.isReady()) {
+    const html = converter.makeHtml(mdIssue)
+
     return {
       isExit: false,
       isReported: true,
