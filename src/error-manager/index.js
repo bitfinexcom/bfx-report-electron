@@ -20,7 +20,9 @@ const manageNewGithubIssue = async (params) => {
 
     const {
       title,
-      description
+      description,
+      errBoxTitle,
+      errBoxDescription
     } = getErrorDescription(params)
 
     const mdIssue = renderMarkdownTemplate({
@@ -36,7 +38,11 @@ const manageNewGithubIssue = async (params) => {
     const {
       isNewGithubIssueOpened,
       isCanceled
-    } = await showModalDialog(mdIssue)
+    } = await showModalDialog({
+      errBoxTitle,
+      errBoxDescription,
+      mdIssue
+    })
 
     if (isCanceled) {
       return { isCanceled }

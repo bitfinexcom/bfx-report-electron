@@ -6,21 +6,29 @@ const cleanStack = require('clean-stack')
 module.exports = (params) => {
   const { error } = { ...params }
 
-  const _title = '[BUG REPORT]'
-  const _description = 'Bug report'
+  const title = '[BUG REPORT]'
+  const description = 'Bug report'
+  const errBoxTitle = 'Bug report'
+  const errBoxDescription = 'A new Github issue will be opened'
 
   if (
     error &&
     typeof error === 'string'
   ) {
     return {
-      title: _title,
+      title,
       description: [
         'An error occurred',
         '',
         '```vim',
         error,
         '```'
+      ].join(os.EOL),
+      errBoxTitle,
+      errBoxDescription: [
+        errBoxDescription,
+        'An error occurred',
+        error
       ].join(os.EOL)
     }
   }
@@ -31,19 +39,27 @@ module.exports = (params) => {
       : errStr
 
     return {
-      title: `${_title} ${errStr}`,
+      title: `${title} ${errStr}`,
       description: [
         'An error occurred',
         '',
         '```vim',
         stack,
         '```'
+      ].join(os.EOL),
+      errBoxTitle,
+      errBoxDescription: [
+        errBoxDescription,
+        'An error occurred',
+        stack
       ].join(os.EOL)
     }
   }
 
   return {
-    title: _title,
-    description: _description
+    title,
+    description,
+    errBoxTitle,
+    errBoxDescription
   }
 }
