@@ -1,7 +1,7 @@
 'use string'
 
 const os = require('os')
-const cleanStack = require('clean-stack')
+const cleanStack = import('clean-stack')
 
 module.exports = (params) => {
   const { error } = { ...params }
