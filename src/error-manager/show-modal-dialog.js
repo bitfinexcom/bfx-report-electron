@@ -1,7 +1,27 @@
 'use strict'
 
 const { app, dialog } = require('electron')
+const fs = require('fs')
+const path = require('path')
 const { Converter } = require('showdown')
+const Alert = require('electron-alert')
+
+const wins = require('../windows')
+
+const fontsStyle = fs.readFileSync(path.join(
+  __dirname, '../../bfx-report-ui/build/fonts/roboto.css'
+))
+const toastStyle = fs.readFileSync(path.join(
+  __dirname, '../modal-dialog-src/modal-dialog.css'
+))
+const toastScript = fs.readFileSync(path.join(
+  __dirname, '../modal-dialog-src/modal-dialog.js'
+))
+
+const fonts = `<style>${fontsStyle}</style>`
+const style = `<style>${toastStyle}</style>`
+const script = `<script type="text/javascript">${toastScript}</script>`
+const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
 
 const converter = new Converter({
   tables: true,
@@ -11,22 +31,128 @@ const converter = new Converter({
   requireSpaceBeforeHeadingText: true
 })
 
+const _closeAlert = (alert) => {
+  if (
+    !alert ||
+    !alert.browserWindow
+  ) return
+
+  alert.browserWindow.hide()
+  alert.browserWindow.close()
+}
+
+const _fireAlert = (params) => {
+  const {
+    title = 'Should a bug report be submitted?',
+    isError,
+    html
+  } = params
+  const win = wins.mainWindow
+
+  if (
+    !win ||
+    typeof win !== 'object' ||
+    win.isDestroyed()
+  ) {
+    return
+  }
+
+  const alert = new Alert([fonts, style, script])
+  const _close = () => _closeAlert(alert)
+
+  win.once('closed', _close)
+
+  const bwOptions = {
+    frame: false,
+    transparent: false,
+    thickFrame: false,
+    closable: false,
+    hasShadow: false,
+    backgroundColor: '#172d3e',
+    darkTheme: false,
+    parent: win,
+    modal: true
+  }
+  const swalOptions = {
+    position: 'center',
+    allowOutsideClick: false,
+    backdrop: 'rgba(0,0,0,0.0)',
+    customClass: {
+      title: 'titleColor',
+      content: 'textColor'
+    },
+
+    type: 'question',
+    title,
+    html,
+    focusConfirm: true,
+    showConfirmButton: true,
+    confirmButtonText: 'Report',
+    showCancelButton: true,
+    cancelButtonText: isError ? 'Exit' : 'Cancel',
+    timerProgressBar: false,
+
+    onBeforeOpen: () => {
+      if (
+        !alert ||
+        !alert.browserWindow
+      ) return
+
+      alert.browserWindow.hide()
+    },
+    onOpen: () => {
+      if (
+        !alert ||
+        !alert.browserWindow
+      ) return
+
+      alert.browserWindow.show()
+    },
+    onClose: () => {
+      if (
+        !alert ||
+        !alert.browserWindow
+      ) return
+
+      alert.browserWindow.hide()
+    },
+    onAfterClose: () => {
+      win.removeListener('closed', _close)
+    }
+  }
+
+  const res = alert.fire(
+    swalOptions,
+    bwOptions,
+    null,
+    true,
+    false,
+    sound
+  )
+
+  return res
+}
+
 // TODO:
 module.exports = async (params) => {
   const {
+    isError,
     errBoxTitle = 'Bug report',
     errBoxDescription = 'A new Github issue will be opened',
     mdIssue
   } = params
 
-  // TODO: Needs to add BrowserWindow to render markdown converted to html
   if (app.isReady()) {
     const html = converter.makeHtml(mdIssue)
 
+    const {
+      value
+    } = await _fireAlert({ isError, html })
+
     return {
-      isExit: false,
-      isReported: true,
-      isIgnored: false
+      isExit: isError && !value,
+      isReported: value,
+      isIgnored: !value
     }
   }
 

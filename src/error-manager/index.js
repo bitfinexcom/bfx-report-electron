@@ -21,6 +21,7 @@ const manageNewGithubIssue = async (params) => {
     const {
       title,
       description,
+      isError,
       errBoxTitle,
       errBoxDescription
     } = getErrorDescription(params)
@@ -40,6 +41,7 @@ const manageNewGithubIssue = async (params) => {
       isReported,
       isIgnored
     } = await showModalDialog({
+      isError,
       errBoxTitle,
       errBoxDescription,
       mdIssue

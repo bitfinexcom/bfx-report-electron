@@ -24,6 +24,7 @@ module.exports = (params) => {
         error,
         '```'
       ].join(os.EOL),
+      isError: true,
       errBoxTitle,
       errBoxDescription: [
         errBoxDescription,
@@ -47,6 +48,7 @@ module.exports = (params) => {
         stack,
         '```'
       ].join(os.EOL),
+      isError: true,
       errBoxTitle,
       errBoxDescription: [
         errBoxDescription,
@@ -59,6 +61,7 @@ module.exports = (params) => {
   return {
     title,
     description,
+    isError: false,
     errBoxTitle,
     errBoxDescription
   }
