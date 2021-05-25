@@ -5,22 +5,27 @@ const fs = require('fs')
 const path = require('path')
 const { Converter } = require('showdown')
 const Alert = require('electron-alert')
+const { rootPath } = require('electron-root-path')
 
 const wins = require('../windows')
 
+const mdStyle = fs.readFileSync(path.join(
+  rootPath, 'node_modules', 'github-markdown-css/github-markdown.css'
+))
 const fontsStyle = fs.readFileSync(path.join(
   __dirname, '../../bfx-report-ui/build/fonts/roboto.css'
 ))
-const toastStyle = fs.readFileSync(path.join(
+const alertStyle = fs.readFileSync(path.join(
   __dirname, '../modal-dialog-src/modal-dialog.css'
 ))
-const toastScript = fs.readFileSync(path.join(
+const alertScript = fs.readFileSync(path.join(
   __dirname, '../modal-dialog-src/modal-dialog.js'
 ))
 
 const fonts = `<style>${fontsStyle}</style>`
-const style = `<style>${toastStyle}</style>`
-const script = `<script type="text/javascript">${toastScript}</script>`
+const mdS = `<style>${mdStyle}</style>`
+const style = `<style>${alertStyle}</style>`
+const script = `<script type="text/javascript">${alertScript}</script>`
 const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
 
 const converter = new Converter({
@@ -57,7 +62,7 @@ const _fireAlert = (params) => {
     return
   }
 
-  const alert = new Alert([fonts, style, script])
+  const alert = new Alert([mdS, fonts, style, script])
   const _close = () => _closeAlert(alert)
 
   win.once('closed', _close)
@@ -78,8 +83,7 @@ const _fireAlert = (params) => {
     allowOutsideClick: false,
     backdrop: 'rgba(0,0,0,0.0)',
     customClass: {
-      title: 'titleColor',
-      content: 'textColor'
+      content: 'markdown-body'
     },
 
     type: 'question',

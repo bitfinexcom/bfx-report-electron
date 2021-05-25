@@ -2,6 +2,101 @@ body {
   font-family: "Roboto", sans-serif;
 }
 
+body::-webkit-scrollbar,
+.swal2-container::-webkit-scrollbar,
+.markdown-body pre::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #0c1a25;
+}
+
+body::-webkit-scrollbar-corner,
+.swal2-container::-webkit-scrollbar-corner,
+.markdown-body pre::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-thumb,
+.markdown-body pre::-webkit-scrollbar-thumb,
+.swal2-container::-webkit-scrollbar-thumb {
+  background-color: #5ebefa;
+}
+
+body::-webkit-scrollbar-thumb,
+.swal2-container::-webkit-scrollbar-thumb,
+.markdown-body pre::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+}
+
+.swal2-popup {
+  width: auto;
+  min-width: 32em;
+  background-color: #172d3e;
+}
+
+.swal2-styled.swal2-confirm {
+  border-radius: 2;
+  background-color: #82baf6;
+  transition: all 0.3s;
+}
+
+.swal2-actions .swal2-styled.swal2-confirm:hover,
+.swal2-actions .swal2-styled.swal2-confirm:focus,
+.swal2-actions .swal2-styled.swal2-confirm:active {
+  background-color: #4c88c8;
+}
+
+.swal2-styled.swal2-cancel {
+  border-radius: 2;
+  background-color: #172d3e;
+  border: 1px solid #19354a;
+}
+
+.swal2-actions .swal2-styled.swal2-cancel:hover,
+.swal2-actions .swal2-styled.swal2-cancel:focus,
+.swal2-actions .swal2-styled.swal2-cancel:active {
+  background-color: #19354a;
+}
+
+.markdown-body {
+  background-color: #102331; /* #102331 / #172d3e */
+  padding: 16px 16px 0;
+}
+
+.markdown-body table {
+  color: #f5f8fa;
+  overflow: unset;
+}
+
+.markdown-body table tr {
+  background-color: #102331;
+}
+
+.markdown-body table thead tr {
+  background-color: #172d3e;
+  color: #82baf6;
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background-color: #172d3e;
+}
+
+.markdown-body .highlight pre,
+.markdown-body pre {
+  background-color: #172d3e;
+}
+
+.markdown-body table td,
+.markdown-body table th {
+  border: 1px solid #19354a;
+}
+
+.markdown-body details,
+.markdown-body p {
+  text-align: left;
+}
+
+.markdown-body hr {
+  background-color: rgba(255,255,255,0.1);
+}
+
 .rangeInput {
   display: flex;
   align-items: center;
@@ -67,10 +162,12 @@ body {
   background-image: linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2));
 }
 
-.textColor {
-  color: #f5f8fa;
-}
-
+.swal2-title,
 .titleColor {
   color: #82baf6;
+}
+
+.swal2-content,
+.textColor {
+  color: #f5f8fa;
 }
