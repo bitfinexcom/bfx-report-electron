@@ -2,7 +2,7 @@
 
 const { app, Menu } = require('electron')
 const log = require('electron-log')
-const cleanStack = import('clean-stack')
+const cleanStack = require('clean-stack')
 
 const isDevEnv = process.env.NODE_ENV === 'development'
 
