@@ -82,7 +82,7 @@ const _fireToast = (
     typeof win !== 'object' ||
     win.isDestroyed()
   ) {
-    return
+    return { value: false }
   }
 
   const alert = new Alert([fonts, style, script])

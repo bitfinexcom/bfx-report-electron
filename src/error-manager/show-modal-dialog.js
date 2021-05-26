@@ -37,6 +37,14 @@ const converter = new Converter({
   requireSpaceBeforeHeadingText: true
 })
 
+const _isMainWinAvailable = () => {
+  return (
+    wins.mainWindow &&
+    typeof wins.mainWindow === 'object' &&
+    !wins.mainWindow.isDestroyed()
+  )
+}
+
 const _closeAlert = (alert) => {
   if (
     !alert ||
@@ -55,12 +63,8 @@ const _fireAlert = (params) => {
   } = params
   const win = wins.mainWindow
 
-  if (
-    !win ||
-    typeof win !== 'object' ||
-    win.isDestroyed()
-  ) {
-    return
+  if (!_isMainWinAvailable()) {
+    return { value: false }
   }
 
   const alert = new Alert([mdS, fonts, style, script])
@@ -138,7 +142,6 @@ const _fireAlert = (params) => {
   return res
 }
 
-// TODO:
 module.exports = async (params) => {
   const {
     isError,
@@ -147,7 +150,10 @@ module.exports = async (params) => {
     mdIssue
   } = params
 
-  if (app.isReady()) {
+  if (
+    app.isReady() &&
+    _isMainWinAvailable()
+  ) {
     const html = converter.makeHtml(mdIssue)
 
     const {
