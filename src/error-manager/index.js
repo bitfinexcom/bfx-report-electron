@@ -1,6 +1,6 @@
 'use strict'
 
-const { app } = require('electron')
+const { app, Menu } = require('electron')
 const log = require('electron-log')
 const cleanStack = import('clean-stack')
 
@@ -13,8 +13,36 @@ const openNewGithubIssue = require('./open-new-github-issue')
 const collectLogs = require('./collect-logs')
 const getDebugInfo = require('../helpers/get-debug-info')
 
+let _isLocked = false
+
+const _getReportBugMenuItem = () => {
+  const menu = Menu.getApplicationMenu()
+
+  if (!menu) {
+    return
+  }
+
+  return menu.getMenuItemById('REPORT_BUG_MENU_ITEM')
+}
+
+const _lockIssueManager = () => {
+  _isLocked = true
+  _getReportBugMenuItem().enabled = false
+}
+
+const _unlockIssueManager = () => {
+  _isLocked = false
+  _getReportBugMenuItem().enabled = true
+}
+
 const manageNewGithubIssue = async (params) => {
   try {
+    if (_isLocked) {
+      return
+    }
+
+    _lockIssueManager()
+
     const debugInfo = getDebugInfo()
     const logs = await collectLogs()
 
@@ -48,6 +76,8 @@ const manageNewGithubIssue = async (params) => {
     })
 
     if (isIgnored) {
+      _unlockIssueManager()
+
       return
     }
     if (isReported) {
@@ -59,7 +89,11 @@ const manageNewGithubIssue = async (params) => {
     if (isExit) {
       app.quit()
     }
+
+    _unlockIssueManager()
   } catch (err) {
+    _unlockIssueManager()
+
     console.error(err)
   }
 }

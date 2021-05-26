@@ -100,6 +100,7 @@ module.exports = ({
       submenu: [
         {
           label: 'Open new GitHub issue',
+          id: 'REPORT_BUG_MENU_ITEM',
           click: manageNewGithubIssue
         },
         { type: 'separator' },
