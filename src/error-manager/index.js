@@ -19,10 +19,10 @@ const _getReportBugMenuItem = () => {
   const menu = Menu.getApplicationMenu()
 
   if (!menu) {
-    return
+    return {}
   }
 
-  return menu.getMenuItemById('REPORT_BUG_MENU_ITEM')
+  return menu.getMenuItemById('REPORT_BUG_MENU_ITEM') || {}
 }
 
 const _lockIssueManager = () => {
