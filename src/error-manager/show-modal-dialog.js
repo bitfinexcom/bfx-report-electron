@@ -191,7 +191,8 @@ module.exports = async (params) => {
     `--title=${errBoxTitle}`,
     `--text=${errBoxDescription}`,
     '--width=800',
-    '--ok-label=Exit'
+    '--ok-label=Exit',
+    '--no-markup'
   ])
 
   return res

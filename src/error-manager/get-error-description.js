@@ -28,6 +28,7 @@ module.exports = (params) => {
       errBoxTitle,
       errBoxDescription: [
         errBoxDescription,
+        '',
         'An error occurred',
         error
       ].join(os.EOL)
@@ -52,6 +53,7 @@ module.exports = (params) => {
       errBoxTitle,
       errBoxDescription: [
         errBoxDescription,
+        '',
         'An error occurred',
         stack
       ].join(os.EOL)
