@@ -8,6 +8,7 @@ const Alert = require('electron-alert')
 const { rootPath } = require('electron-root-path')
 
 const wins = require('../windows')
+const spawn = require('../helpers/spawn')
 
 const mdStyle = fs.readFileSync(path.join(
   rootPath, 'node_modules', 'github-markdown-css/github-markdown.css'
@@ -178,7 +179,14 @@ module.exports = async (params) => {
     return res
   }
 
-  // TODO: On Linux needs to spawn zenity gui tool to show error
+  // On Linux needs to spawn zenity gui tool to show error
+  await spawn('zenity', [
+    '--error',
+    `--title=${errBoxTitle}`,
+    `--text=${errBoxDescription}`,
+    '--width=800',
+    '--ok-label=Exit'
+  ])
 
   return res
 }
