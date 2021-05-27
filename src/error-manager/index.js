@@ -15,6 +15,14 @@ const getDebugInfo = require('../helpers/get-debug-info')
 
 let _isLocked = false
 
+const _isLogSkipped = (log) => {
+  return (
+    !log ||
+    typeof log !== 'string' ||
+    log.includes('contextIsolation is deprecated')
+  )
+}
+
 const _getReportBugMenuItem = () => {
   const menu = Menu.getApplicationMenu()
 
@@ -106,7 +114,7 @@ const initLogger = () => {
     ? 'info'
     : 'warn'
 
-  // Clean up error stack traces
+  // Clean up error stack traces for file transport
   log.hooks.push((message, transport) => {
     if (
       transport !== log.transports.file ||
@@ -114,6 +122,9 @@ const initLogger = () => {
       message.data.length === 0
     ) {
       return message
+    }
+    if (message.data.some((val) => _isLogSkipped(val))) {
+      return false
     }
 
     message.data = message.data.map((val) => {
