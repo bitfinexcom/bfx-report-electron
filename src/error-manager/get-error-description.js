@@ -15,13 +15,15 @@ module.exports = (params) => {
     error &&
     typeof error === 'string'
   ) {
+    const errStr = cleanStack(error)
+
     return {
       title,
       description: [
         'An error occurred',
         '',
         '```vim',
-        error,
+        errStr,
         '```'
       ].join(os.EOL),
       isError: true,
@@ -30,7 +32,7 @@ module.exports = (params) => {
         errBoxDescription,
         '',
         'An error occurred',
-        error
+        errStr
       ].join(os.EOL)
     }
   }
@@ -38,7 +40,7 @@ module.exports = (params) => {
     const errStr = error.toString()
     const stack = error.stack
       ? cleanStack(error.stack)
-      : errStr
+      : cleanStack(errStr)
 
     return {
       title: `${title} ${errStr}`,

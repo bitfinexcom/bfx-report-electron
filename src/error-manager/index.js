@@ -117,14 +117,17 @@ const initLogger = () => {
     }
 
     message.data = message.data.map((val) => {
+      if (typeof val === 'string') {
+        return cleanStack(val)
+      }
       if (
-        !(val instanceof Error) ||
-        !val.stack
+        val instanceof Error &&
+        typeof val.stack === 'string'
       ) {
-        return val
+        return cleanStack(val.stack)
       }
 
-      return cleanStack(val.stack)
+      return val
     })
 
     return message
