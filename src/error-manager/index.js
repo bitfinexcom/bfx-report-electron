@@ -1,6 +1,7 @@
 'use strict'
 
 const { app, Menu } = require('electron')
+const os = require('os')
 const log = require('electron-log')
 const cleanStack = require('clean-stack')
 
@@ -14,6 +15,48 @@ const collectLogs = require('./collect-logs')
 const getDebugInfo = require('../helpers/get-debug-info')
 
 let _isLocked = false
+let _isIssueAutoManagerLocked = false
+let caughtError
+
+const _manageErrorLogLevel = async (error) => {
+  try {
+    if (
+      !error ||
+      typeof error !== 'string'
+    ) {
+      return
+    }
+
+    caughtError = error
+
+    if (_isIssueAutoManagerLocked) {
+      return
+    }
+
+    _isIssueAutoManagerLocked = true
+
+    setTimeout(() => {
+      _isIssueAutoManagerLocked = false
+
+      if (
+        !caughtError ||
+        typeof caughtError !== 'string'
+      ) {
+        return
+      }
+
+      _manageErrorLogLevel(caughtError)
+    }, 30 * 60 * 1000).unref()
+
+    const isReported = await manageNewGithubIssue({ error })
+
+    if (isReported) {
+      caughtError = null
+    }
+  } catch (err) {
+    console.error(err)
+  }
+}
 
 const _isLogSkipped = (log) => {
   return (
@@ -46,7 +89,7 @@ const _unlockIssueManager = () => {
 const manageNewGithubIssue = async (params) => {
   try {
     if (_isLocked) {
-      return
+      return false
     }
 
     _lockIssueManager()
@@ -86,7 +129,7 @@ const manageNewGithubIssue = async (params) => {
     if (isIgnored) {
       _unlockIssueManager()
 
-      return
+      return false
     }
     if (isReported) {
       openNewGithubIssue({
@@ -99,6 +142,8 @@ const manageNewGithubIssue = async (params) => {
     }
 
     _unlockIssueManager()
+
+    return isReported
   } catch (err) {
     _unlockIssueManager()
 
@@ -140,6 +185,12 @@ const initLogger = () => {
 
       return val
     })
+
+    if (message.level === 'error') {
+      const error = message.data.join(os.EOL)
+
+      _manageErrorLogLevel(error)
+    }
 
     return message
   })
