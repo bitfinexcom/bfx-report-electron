@@ -54,6 +54,8 @@ const _manageErrorLogLevel = async (error) => {
       caughtError = null
     }
   } catch (err) {
+    _isIssueAutoManagerLocked = false
+
     console.error(err)
   }
 }
