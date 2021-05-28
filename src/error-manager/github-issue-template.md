@@ -2,16 +2,21 @@ ${description}
 
 ---
 
-| Debug info     |                                     |
-| :------------- | :---------------------------------- |
-| Version        | ${version}                          |
-| Commit Hash    | ${commitHash}                       |
-| Commit Date    | ${commitDate}                       |
-| Electron       | ${electronVersion}                  |
-| Chrome         | ${chromeVersion}                    |
-| Node.js        | ${nodeVersion}                      |
-| V8             | ${v8Version}                        |
-| OS             | ${osType} ${osArch} ${osRelease}    |
+| Debug info     |                                               |
+| :------------- | :-------------------------------------------- |
+| Version        | ${version}                                    |
+| Commit Hash    | ${commitHash}                                 |
+| Commit Date    | ${commitDate}                                 |
+| Electron       | ${electronVersion}                            |
+| Chrome         | ${chromeVersion}                              |
+| Node.js        | ${nodeVersion}                                |
+| V8             | ${v8Version}                                  |
+| OS             | ${osType} ${osArch} ${osRelease}              |
+| CPUs           | ${cpuModel} x ${cpuCount}                     |
+| RAM            | ${totalRamGb}GB (${freeRamGb}GB free)         |
+| App RAM limit  | ${ramLimitMb}Mb (${usedRamMb}MB used)         |
+| OS             | ${osType} ${osArch} ${osRelease}              |
+| OS             | ${osType} ${osArch} ${osRelease}              |
 
 <details>
 
