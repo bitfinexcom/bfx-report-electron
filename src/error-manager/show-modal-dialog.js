@@ -81,7 +81,8 @@ const _fireAlert = (params) => {
     backgroundColor: '#172d3e',
     darkTheme: false,
     parent: win,
-    modal: true
+    modal: true,
+    width: 600
   }
   const swalOptions = {
     position: 'center',
