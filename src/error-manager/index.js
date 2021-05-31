@@ -178,11 +178,12 @@ const initLogger = () => {
       if (typeof val === 'string') {
         return cleanStack(val)
       }
-      if (
-        val instanceof Error &&
-        typeof val.stack === 'string'
-      ) {
-        return cleanStack(val.stack)
+      if (val instanceof Error) {
+        const str = typeof val.stack === 'string'
+          ? val.stack
+          : val.toString()
+
+        return cleanStack(str)
       }
 
       return val
