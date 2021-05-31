@@ -37,8 +37,10 @@ const _roundMemorySize = (amount, measure = 'GB') => {
   if (
     !Number.isFinite(amount) ||
     amount === 0 ||
-    measure !== 'GB' ||
-    measure !== 'MB'
+    (
+      measure !== 'GB' &&
+      measure !== 'MB'
+    )
   ) {
     return amount
   }
