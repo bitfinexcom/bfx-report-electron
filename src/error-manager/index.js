@@ -60,11 +60,25 @@ const _manageErrorLogLevel = async (error) => {
   }
 }
 
+const _getErrorStr = (val) => {
+  if (!(val instanceof Error)) {
+    return val
+  }
+
+  const str = typeof val.stack === 'string'
+    ? val.stack
+    : val.toString()
+
+  return str
+}
+
 const _isLogSkipped = (log) => {
+  const str = _getErrorStr(log)
+
   return (
-    !log ||
-    typeof log !== 'string' ||
-    log.includes('contextIsolation is deprecated')
+    str &&
+    typeof str === 'string' &&
+    str.includes('contextIsolation is deprecated')
   )
 }
 
