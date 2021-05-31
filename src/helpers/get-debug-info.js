@@ -94,7 +94,7 @@ module.exports = (eol = os.EOL) => {
   const osRelease = os.release()
   const cpus = os.cpus()
   const cpuCount = cpus.length
-  const { cpuModel } = { ...cpus[0] }
+  const { model: cpuModel } = { ...cpus[0] }
 
   const {
     totalRamGb,
