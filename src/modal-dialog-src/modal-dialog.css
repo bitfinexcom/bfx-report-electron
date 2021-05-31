@@ -89,6 +89,7 @@ body::-webkit-scrollbar-thumb,
 }
 
 .markdown-body details,
+.markdown-body pre,
 .markdown-body p {
   text-align: left;
 }
