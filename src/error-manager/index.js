@@ -127,9 +127,8 @@ const manageNewGithubIssue = async (params) => {
       workerErrors: 'Empty',
       workerExceptions: 'Empty',
       ...params,
-      ...debugInfo,
-      ...logs
-    })
+      ...debugInfo
+    }, logs)
 
     const {
       isExit,
