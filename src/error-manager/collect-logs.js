@@ -4,19 +4,12 @@ const { app } = require('electron')
 const { promisify } = require('util')
 const path = require('path')
 const fs = require('fs')
-const os = require('os')
 const log = require('electron-log')
+const truncate = require('truncate-utf8-bytes')
 
 const readFile = promisify(fs.readFile)
 
-const _limitLog = (log, limit = 20) => {
-  return log
-    .split(os.EOL)
-    .slice(-limit)
-    .join(os.EOL)
-}
-
-const _readLogFile = async (logPath, limit) => {
+const _readLogFile = async (logPath, byteLimit = 8000) => {
   try {
     const log = await readFile(logPath, 'utf8')
 
@@ -30,7 +23,7 @@ const _readLogFile = async (logPath, limit) => {
       return 'Empty'
     }
 
-    return _limitLog(log, limit)
+    return truncate(log, byteLimit)
   } catch (err) {
     console.error(err)
 
