@@ -11,7 +11,8 @@ ${description}
 | Chrome | ${chromeVersion} |
 | Node.js | ${nodeVersion} |
 | V8 | ${v8Version} |
-| OS | ${osType} ${osArch} ${osRelease} |
+| OS version | ${osVersion} |
+| OS release | ${osType} ${osArch} ${osRelease} |
 | CPUs | ${cpuModel} x ${cpuCount} |
 | RAM | ${totalRamGb}GB (${freeRamGb}GB free) |
 | App RAM limit | ${ramLimitMb}Mb (${usedRamMb}MB used) |

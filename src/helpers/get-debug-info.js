@@ -92,6 +92,10 @@ module.exports = (eol = os.EOL) => {
   const osType = os.type()
   const osArch = os.arch()
   const osRelease = os.release()
+  const _osVersion = os.version()
+  const osVersion = process.platform === 'linux'
+    ? _osVersion.replace(/^#\w+~/, '')
+    : _osVersion
   const cpus = os.cpus()
   const cpuCount = cpus.length
   const { model: cpuModel } = { ...cpus[0] }
@@ -119,7 +123,8 @@ Electron: ${electronVersion}${eol}\
 Chrome: ${chromeVersion}${eol}\
 Node.js: ${nodeVersion}${eol}\
 V8: ${v8Version}${eol}\
-OS: ${osType} ${osArch} ${osRelease}\
+OS version: ${osVersion}${eol}\
+OS release: ${osType} ${osArch} ${osRelease}\
 `
 
   return {
@@ -138,6 +143,7 @@ OS: ${osType} ${osArch} ${osRelease}\
     osType,
     osArch,
     osRelease,
+    osVersion,
     totalRamGb,
     freeRamGb,
     ramLimitMb,
