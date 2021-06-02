@@ -2,7 +2,8 @@
 
 const fs = require('fs')
 const path = require('path')
-const truncate = require('truncate-utf8-bytes')
+
+const truncateLog = require('./truncate-log')
 
 const templateByDefault = fs.readFileSync(
   path.join(__dirname, 'github-issue-template.md'),
@@ -10,7 +11,7 @@ const templateByDefault = fs.readFileSync(
 )
 const placeholderPattern = new RegExp(/\$\{[a-zA-Z0-9]+\}/, 'g')
 
-const maxIssueBytes = 10000
+const maxIssueBytes = 6500
 
 const _renderMarkdownTemplate = (
   params = {},
@@ -83,7 +84,9 @@ module.exports = (
   ))
   const allowedByteLengthForLogs = maxIssueBytes - mdIssueByteLength
   const _logs = {}
-  let allowedByteLengthForOneLog = allowedByteLengthForLogs / logsArr.length
+  let allowedByteLengthForOneLog = Math.floor(
+    allowedByteLengthForLogs / logsArr.length
+  )
   let count = 0
 
   for (const [propName, log] of orderedLogsArr) {
@@ -94,7 +97,7 @@ module.exports = (
       _logs[propName] = log
 
       if (allowedByteLengthForOneLog > logByteLength) {
-        allowedByteLengthForOneLog = Math.floor(
+        allowedByteLengthForOneLog += Math.floor(
           (allowedByteLengthForOneLog - logByteLength) / (logsArr.length - count)
         )
       }
@@ -102,7 +105,7 @@ module.exports = (
       continue
     }
 
-    const truncatedLog = truncate(log, allowedByteLengthForOneLog)
+    const truncatedLog = truncateLog(log, allowedByteLengthForOneLog)
 
     _logs[propName] = truncatedLog
   }

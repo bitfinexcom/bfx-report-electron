@@ -5,9 +5,10 @@ const { promisify } = require('util')
 const path = require('path')
 const fs = require('fs')
 const log = require('electron-log')
-const truncate = require('truncate-utf8-bytes')
 
 const readFile = promisify(fs.readFile)
+
+const truncateLog = require('./truncate-log')
 
 const _readLogFile = async (logPath, byteLimit = 8000) => {
   try {
@@ -23,7 +24,7 @@ const _readLogFile = async (logPath, byteLimit = 8000) => {
       return 'Empty'
     }
 
-    return truncate(log, byteLimit)
+    return truncateLog(log, byteLimit)
   } catch (err) {
     console.error(err)
 
