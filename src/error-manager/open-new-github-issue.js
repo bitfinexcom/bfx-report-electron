@@ -1,7 +1,7 @@
 'use strict'
 
 const { shell } = require('electron')
-const newGithubIssueUrl = require('new-github-issue-url')
+const getNewGithubIssueUrl = require('./get-new-github-issue-url')
 
 const getDebugInfo = require('../helpers/get-debug-info')
 
@@ -13,10 +13,10 @@ module.exports = (opts) => {
 
   const _opts = {
     repo,
-    user: owner,
+    owner,
     ...opts
   }
-  const url = newGithubIssueUrl(_opts)
+  const url = getNewGithubIssueUrl(_opts)
 
   shell.openExternal(url)
 }

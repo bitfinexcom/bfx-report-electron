@@ -4,6 +4,7 @@ const fs = require('fs')
 const path = require('path')
 
 const truncateLog = require('./truncate-log')
+const getNewGithubIssueUrl = require('./get-new-github-issue-url')
 
 const templateByDefault = fs.readFileSync(
   path.join(__dirname, 'github-issue-template.md'),
@@ -11,7 +12,22 @@ const templateByDefault = fs.readFileSync(
 )
 const placeholderPattern = new RegExp(/\$\{[a-zA-Z0-9]+\}/, 'g')
 
-const maxIssueBytes = 6500
+// The GitHub GET endpoint for opening a new issue
+// has a restriction for maximum length of a URL: 8192 bytes
+// https://github.com/cli/cli/pull/3271
+// https://github.com/cli/cli/issues/1575
+// https://github.com/cli/cli/blob/trunk/pkg/cmd/issue/create/create.go#L167
+// https://github.com/cli/cli/blob/trunk/utils/utils.go#L84
+const maxIssueBytes = 8150
+
+const _getURLByteLength = (body, params) => {
+  const urlStr = getNewGithubIssueUrl({
+    ...params,
+    body
+  })
+
+  return Buffer.byteLength(urlStr, 'utf8')
+}
 
 const _renderMarkdownTemplate = (
   params = {},
@@ -35,6 +51,51 @@ const _renderMarkdownTemplate = (
   })
 
   return str
+}
+
+const _getTruncatedMarkdownTemplate = (
+  allowedByteLengthForLogs,
+  orderedLogsArr,
+  params,
+  template
+) => {
+  const logsLength = orderedLogsArr.length
+  const _logs = {}
+  let allowedByteLengthForOneLog = Math.floor(
+    allowedByteLengthForLogs / logsLength
+  )
+  let count = 0
+
+  for (const [propName, log] of orderedLogsArr) {
+    count += 1
+    const logByteLength = _getURLByteLength(log, params)
+
+    if (allowedByteLengthForOneLog >= logByteLength) {
+      _logs[propName] = log
+
+      if (allowedByteLengthForOneLog > logByteLength) {
+        allowedByteLengthForOneLog += Math.floor(
+          (allowedByteLengthForOneLog - logByteLength) / (logsLength - count)
+        )
+      }
+
+      continue
+    }
+
+    const truncatedLog = truncateLog(log, allowedByteLengthForOneLog)
+
+    _logs[propName] = truncatedLog
+  }
+
+  const md = _renderMarkdownTemplate(
+    {
+      ...params,
+      ..._logs
+    },
+    template
+  )
+
+  return md
 }
 
 module.exports = (
@@ -67,9 +128,9 @@ module.exports = (
     template
   )
 
-  const mdIssueByteLength = Buffer.byteLength(
+  const mdIssueByteLength = _getURLByteLength(
     mdWithoutLogs,
-    'utf8'
+    params
   )
 
   if (
@@ -82,41 +143,21 @@ module.exports = (
   const orderedLogsArr = logsArr.sort((fEl, sEl) => (
     Buffer.byteLength(fEl[1], 'utf8') - Buffer.byteLength(sEl[1], 'utf8')
   ))
-  const allowedByteLengthForLogs = maxIssueBytes - mdIssueByteLength
-  const _logs = {}
-  let allowedByteLengthForOneLog = Math.floor(
-    allowedByteLengthForLogs / logsArr.length
-  )
-  let count = 0
+  let allowedByteLengthForLogs = maxIssueBytes - mdIssueByteLength
 
-  for (const [propName, log] of orderedLogsArr) {
-    count += 1
-    const logByteLength = Buffer.byteLength(log, 'utf8')
+  while (true) {
+    const md = _getTruncatedMarkdownTemplate(
+      allowedByteLengthForLogs,
+      orderedLogsArr,
+      params,
+      template
+    )
+    const byteLength = _getURLByteLength(md, params)
 
-    if (allowedByteLengthForOneLog >= logByteLength) {
-      _logs[propName] = log
-
-      if (allowedByteLengthForOneLog > logByteLength) {
-        allowedByteLengthForOneLog += Math.floor(
-          (allowedByteLengthForOneLog - logByteLength) / (logsArr.length - count)
-        )
-      }
-
-      continue
+    if (byteLength <= maxIssueBytes) {
+      return md
     }
 
-    const truncatedLog = truncateLog(log, allowedByteLengthForOneLog)
-
-    _logs[propName] = truncatedLog
+    allowedByteLengthForLogs -= 100
   }
-
-  const md = _renderMarkdownTemplate(
-    {
-      ...params,
-      ..._logs
-    },
-    template
-  )
-
-  return md
 }

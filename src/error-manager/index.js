@@ -123,6 +123,7 @@ const manageNewGithubIssue = async (params) => {
 
     const mdIssue = renderMarkdownTemplate(
       {
+        title,
         description,
         ...params,
         ...debugInfo
