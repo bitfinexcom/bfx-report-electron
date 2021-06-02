@@ -121,14 +121,14 @@ const manageNewGithubIssue = async (params) => {
       errBoxDescription
     } = getErrorDescription(params)
 
-    const mdIssue = renderMarkdownTemplate({
-      description,
-      mainLog: 'Empty',
-      workerErrors: 'Empty',
-      workerExceptions: 'Empty',
-      ...params,
-      ...debugInfo
-    }, logs)
+    const mdIssue = renderMarkdownTemplate(
+      {
+        description,
+        ...params,
+        ...debugInfo
+      },
+      logs
+    )
 
     const {
       isExit,

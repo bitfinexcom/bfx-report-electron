@@ -48,8 +48,21 @@ module.exports = (
     return template
   }
 
+  const logsArr = Object.entries(logs)
+  const emptyLogsArr = logsArr.reduce(
+    (accum, [propName]) => {
+      accum[propName] = ''
+
+      return accum
+    },
+    {}
+  )
+
   const mdWithoutLogs = _renderMarkdownTemplate(
-    params,
+    {
+      ...params,
+      ...emptyLogsArr
+    },
     template
   )
 
@@ -57,7 +70,6 @@ module.exports = (
     mdWithoutLogs,
     'utf8'
   )
-  const logsArr = Object.entries(logs)
 
   if (
     mdIssueByteLength >= maxIssueBytes ||
@@ -96,9 +108,11 @@ module.exports = (
   }
 
   const md = _renderMarkdownTemplate(
-    params,
-    template,
-    _logs
+    {
+      ...params,
+      ..._logs
+    },
+    template
   )
 
   return md
