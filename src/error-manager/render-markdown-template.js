@@ -18,7 +18,13 @@ const placeholderPattern = new RegExp(/\$\{[a-zA-Z0-9]+\}/, 'g')
 // https://github.com/cli/cli/issues/1575
 // https://github.com/cli/cli/blob/trunk/pkg/cmd/issue/create/create.go#L167
 // https://github.com/cli/cli/blob/trunk/utils/utils.go#L84
-const maxIssueBytes = 8150
+//
+// But there is a restriction is max 2081 characters on windows
+// https://github.com/electron/electron/blob/main/docs/api/shell.md#shellopenexternalurl-options
+// https://github.com/electron/electron/issues/12416#issuecomment-376596073
+const maxIssueBytes = process.platform === 'win32'
+  ? 2080
+  : 8150
 
 const _getURLByteLength = (body, params) => {
   const urlStr = getNewGithubIssueUrl({

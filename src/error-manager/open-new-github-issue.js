@@ -1,8 +1,8 @@
 'use strict'
 
 const { shell } = require('electron')
-const getNewGithubIssueUrl = require('./get-new-github-issue-url')
 
+const getNewGithubIssueUrl = require('./get-new-github-issue-url')
 const getDebugInfo = require('../helpers/get-debug-info')
 
 module.exports = (opts) => {
