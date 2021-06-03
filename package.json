@@ -1,6 +1,6 @@
 {
   "name": "bfx-report-electron",
-  "version": "3.3.1",
+  "version": "3.4.0",
   "repository": "https://github.com/bitfinexcom/bfx-report-electron",
   "description": "Reporting tool",
   "author": "bitfinex.com",
@@ -14,15 +14,21 @@
     "cron-validate": "^1.4.2",
     "ed25519-supercop": "^2.0.1",
     "electron-alert": "^0.1.11",
+    "electron-log": "^4.3.2",
+    "electron-root-path": "^1.0.16",
     "electron-serve": "^1.0.0",
+    "electron-updater": "^4.3.8",
+    "extract-zip": "^2.0.1",
     "find-free-port": "^2.0.0",
     "grenache-grape": "^0.9.8",
     "lodash": "^4.17.15",
     "yauzl": "^2.10.0"
   },
   "devDependencies": {
-    "electron": "8.5.5",
-    "electron-builder": "22.9.1",
+    "app-builder-bin": "^3.5.13",
+    "electron": "11.4.5",
+    "electron-builder": "22.11.1",
+    "js-yaml": "^4.0.0",
     "node-gyp": "7.1.2",
     "node-pre-gyp": "^0.11.0",
     "standard": "^14.3.1"
@@ -47,12 +53,20 @@
     "test": "standard"
   },
   "build": {
+    "publish": {
+      "provider": "github",
+      "repo": "bfx-report-electron",
+      "owner": "bitfinexcom",
+      "channel": "latest",
+      "useMultipleRangeRequest": false,
+      "updaterCacheDirName": "bfx-report-electron-updater"
+    },
     "npmRebuild": false,
     "extends": null,
     "asar": false,
     "productName": "Bitfinex Report",
-    "artifactName": "${productName}-${version}-${arch}-${os}.${ext}",
-    "appId": "com.report.bitfinex",
+    "artifactName": "BitfinexReport-${version}-x64-${os}.${ext}",
+    "appId": "com.bitfinex.report",
     "files": [
       "**/*",
       "build/icons",
@@ -138,6 +152,32 @@
         ]
       },
       {
+        "from": "bfx-reports-framework/node_modules/request/node_modules",
+        "to": "bfx-reports-framework/node_modules/request/node_modules",
+        "filter": [
+          "**/*",
+          "!.bin",
+          "!**/node_modules/.bin",
+          "!**/*.md",
+          "!**/LICENSE",
+          "!**/CHANGELOG",
+          "!**/test"
+        ]
+      },
+      {
+        "from": "bfx-reports-framework/node_modules/lokue/node_modules",
+        "to": "bfx-reports-framework/node_modules/lokue/node_modules",
+        "filter": [
+          "**/*",
+          "!.bin",
+          "!**/node_modules/.bin",
+          "!**/*.md",
+          "!**/LICENSE",
+          "!**/CHANGELOG",
+          "!**/test"
+        ]
+      },
+      {
         "from": "bfx-report-ui/bfx-report-express/node_modules",
         "to": "bfx-report-ui/bfx-report-express/node_modules",
         "filter": [
@@ -153,24 +193,32 @@
     ],
     "linux": {
       "executableName": "app",
-      "description": "Reporting tool",
+      "description": "Bitfinex Report",
       "maintainer": "<bitfinex.com>",
       "category": "Network",
       "target": [
-        "dir"
+        "dir",
+        "AppImage"
       ]
     },
     "win": {
       "target": [
-        "dir"
+        "dir",
+        "nsis"
       ],
-      "publisherName": "Reporting tool"
+      "publisherName": "Bitfinex Report",
+      "verifyUpdateCodeSignature": false
     },
     "mac": {
+      "type": "development",
       "hardenedRuntime": true,
-      "category": "public.app-category.productivity",
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mas.inherit.plist",
+      "category": "public.app-category.finance",
       "target": [
-        "dir"
+        "dir",
+        "zip"
       ]
     }
   }

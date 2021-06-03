@@ -5,19 +5,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="shortcut icon" href="../../bfx-report-ui/build/favicon.ico">
+  <link href="../../bfx-report-ui/build/fonts/roboto.css" rel="stylesheet">
   <title>Bitfinex Reports</title>
   <style>
     html {
       height: 100%;
     }
 
-    .body {
+    body {
       position: relative;
       height: 100%;
       padding: 0;
       margin: 0;
       text-align: center;
-      background-color: #102331;
+      background-color: #172d3e;
+        font-family: "Roboto", sans-serif;
     }
 
     .lds-roller {
@@ -48,7 +50,7 @@
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: #fff;
+      background: #f5f8fa;
       margin: -3px 0 0 -3px;
     }
 
@@ -125,8 +127,8 @@
     }
 
     .logo-img {
-      width: 54px;
-      height: 54px;
+      width: 40px;
+      height: 40px;
       position: absolute;
       top: 50%;
       left: 50%;
@@ -143,7 +145,18 @@
       animation: logo-shower 3s ease-in-out;
       width: 200px;
       height: 200px;
-      background-color: #102331;
+      background-color: #172d3e;
+    }
+
+    .description {
+      display: none;
+      color: #f5f8fa;
+      position: fixed;
+      text-align: center;
+      margin: 0;
+      width: 100%;
+      padding: 20px 0;
+      bottom: 0;
     }
 
     @keyframes lds-roller {
@@ -190,17 +203,41 @@
   <div class="logo">
     <img class="logo-img" src="../../build/loader.png" alt="logo">
   </div>
+  <div id="description" class="description"></div>
 </body>
 
 <script>
   window.addEventListener('load', () => {
-    setTimeout(() => {
-      const rollers = document.getElementsByClassName('lds-roller')
+    const rollers = document.getElementsByClassName('lds-roller')
+    const descriptionElem = document.getElementById('description')
 
+    setTimeout(() => {
       for (const roller of rollers) {
         roller.classList.add("show-roller")
       }
     }, 2500)
+
+    const { ipcRenderer } = require('electron')
+    
+    ipcRenderer.on('loading:description', (event, description) => {
+      try {
+        if (typeof description !== 'string') {
+          return
+        }
+
+        descriptionElem.innerHTML = description
+
+        descriptionElem.style.display = description
+          ? 'block'
+          : 'none'
+
+        ipcRenderer.send('loading:description-ready')
+      } catch (err) {
+        console.error(err)
+
+        ipcRenderer.send('loading:description-ready', err)
+      }
+    })
   })
 </script>
 

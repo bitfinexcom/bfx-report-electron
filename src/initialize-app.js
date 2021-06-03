@@ -1,9 +1,7 @@
 'use strict'
 
-const electron = require('electron')
+const { app } = require('electron')
 const path = require('path')
-
-const { app } = electron
 
 const triggerElectronLoad = require('./trigger-electron-load')
 const wins = require('./windows')
@@ -32,6 +30,15 @@ const {
 const {
   deserializeError
 } = require('./helpers')
+const {
+  checkForUpdatesAndNotify
+} = require('./auto-updater')
+const {
+  isZipRelease
+} = require('./auto-updater/utils')
+const enforceMacOSAppLocation = require(
+  './enforce-macos-app-location'
+)
 
 const pathToLayouts = path.join(__dirname, 'layouts')
 const pathToLayoutAppInitErr = path
@@ -63,83 +70,108 @@ const _ipcMessToPromise = (ipc) => {
   })
 }
 
-module.exports = () => {
-  return new Promise((resolve, reject) => {
+module.exports = async () => {
+  let isExpressPortError = false
+
+  try {
     app.on('window-all-closed', () => {
       app.quit()
     })
-    app.on('ready', async () => {
-      try {
-        const pathToUserData = app.getPath('userData')
-        const pathToUserDocuments = app.getPath('documents')
 
-        configsKeeperFactory(
-          { pathToUserData },
-          {
-            pathToUserCsv: process.platform === 'darwin'
-              ? pathToUserDocuments
-              : '../../..',
-            schedulerRule
-          }
-        )
-        const secretKey = await makeOrReadSecretKey(
-          { pathToUserData }
-        )
+    await app.whenReady()
+    await enforceMacOSAppLocation()
 
-        await createMainWindow({
-          pathToUserData,
-          pathToUserDocuments
-        })
-        runServer({
-          pathToUserData,
-          secretKey
-        })
+    const pathToUserData = app.getPath('userData')
+    const pathToUserDocuments = app.getPath('documents')
+    const isAppImage = (
+      process.platform === 'linux' &&
+      !isZipRelease()
+    )
 
-        const mess = await _ipcMessToPromise(ipcs.serverIpc)
-        const {
-          state,
-          isMigrationsError,
-          isMigrationsReady,
-          err
-        } = { ...mess }
+    const pathToUserCsv = (
+      process.platform === 'darwin' ||
+      isAppImage
+    )
+      ? pathToUserDocuments
+      : '../../..'
 
-        if (typeof state !== 'string') {
-          throw new IpcMessageError()
-        }
-        if (state === 'error:express-port-required') {
-          await createErrorWindow(pathToLayoutExprPortReq)
-          reject(err || new RunningExpressOnPortError())
-
-          return
-        }
-        if (state === 'error:app-init') {
-          throw err || new AppInitializationError()
-        }
-        if (state === 'ready:server') {
-          if (appStates.isMainWinMaximized) {
-            wins.mainWindow.maximize()
-          }
-
-          wins.mainWindow.show()
-          hideLoadingWindow()
-
-          triggerElectronLoad()
-
-          await showMigrationsModalDialog(
-            isMigrationsError,
-            isMigrationsReady
-          )
-
-          resolve()
-          return
-        }
-
-        throw new AppInitializationError()
-      } catch (err) {
-        createErrorWindow(pathToLayoutAppInitErr)
-          .then(() => reject(err))
-          .catch((err) => reject(err))
+    const configsKeeper = configsKeeperFactory(
+      { pathToUserData },
+      {
+        pathToUserCsv,
+        schedulerRule
       }
+    )
+
+    // Need to force setting pathToUserCsv for AppImage
+    // to not use internal virtual file system
+    if (isAppImage) {
+      const storedPathToUserCsv = configsKeeper
+        .getConfigByName('pathToUserCsv')
+
+      if (!path.isAbsolute(storedPathToUserCsv)) {
+        await configsKeeper.saveConfigs({ pathToUserCsv })
+      }
+    }
+
+    const secretKey = await makeOrReadSecretKey(
+      { pathToUserData }
+    )
+
+    await createMainWindow({
+      pathToUserData,
+      pathToUserDocuments
     })
-  })
+    runServer({
+      pathToUserData,
+      secretKey
+    })
+
+    const mess = await _ipcMessToPromise(ipcs.serverIpc)
+    const {
+      state,
+      isMigrationsError,
+      isMigrationsReady,
+      err
+    } = { ...mess }
+
+    if (typeof state !== 'string') {
+      throw new IpcMessageError()
+    }
+    if (state === 'error:express-port-required') {
+      isExpressPortError = true
+
+      throw err || new RunningExpressOnPortError()
+    }
+    if (state === 'error:app-init') {
+      throw err || new AppInitializationError()
+    }
+    if (state !== 'ready:server') {
+      throw new AppInitializationError()
+    }
+    if (appStates.isMainWinMaximized) {
+      wins.mainWindow.maximize()
+    }
+
+    await hideLoadingWindow({ isRequiredToShowMainWin: true })
+
+    triggerElectronLoad()
+
+    await showMigrationsModalDialog(
+      isMigrationsError,
+      isMigrationsReady
+    )
+
+    await checkForUpdatesAndNotify()
+  } catch (err) {
+    if (isExpressPortError) {
+      await createErrorWindow(pathToLayoutExprPortReq)
+
+      throw err
+    }
+
+    await createErrorWindow(pathToLayoutAppInitErr)
+
+    throw err
+  }
 }

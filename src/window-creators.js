@@ -13,6 +13,14 @@ const ipcs = require('./ipcs')
 const appStates = require('./app-states')
 const windowStateKeeper = require('./window-state-keeper')
 const createMenu = require('./create-menu')
+const {
+  showLoadingWindow,
+  hideLoadingWindow
+} = require('./change-loading-win-visibility-state')
+const {
+  showWindow,
+  centerWindow
+} = require('./helpers/manage-window')
 
 const publicDir = path.join(__dirname, '../bfx-report-ui/build')
 const loadURL = serve({ directory: publicDir })
@@ -63,7 +71,7 @@ const _createWindow = async (
       ? bounds.y
       : y,
     icon: path.join(__dirname, '../build/icons/512x512.png'),
-    backgroundColor: '#102331',
+    backgroundColor: '#172d3e',
     show: false,
     ...props
   }
@@ -103,12 +111,15 @@ const _createWindow = async (
   }
 
   if (!pathname) {
-    await _createLoadingWindow()
+    await createLoadingWindow()
 
     return res
   }
+  if (_props.center) {
+    centerWindow(wins[winName])
+  }
 
-  wins[winName].show()
+  await showWindow(wins[winName])
 
   return res
 }
@@ -116,12 +127,13 @@ const _createWindow = async (
 const _createChildWindow = async (
   pathname,
   winName,
-  {
-    width = 500,
-    height = 500,
-    frame = false
-  } = {}
+  opts = {}
 ) => {
+  const {
+    width = 500,
+    height = 500
+  } = { ...opts }
+
   const point = electron.screen.getCursorScreenPoint()
   const { bounds } = electron.screen.getDisplayNearestPoint(point)
   const x = Math.ceil(bounds.x + ((bounds.width - width) / 2))
@@ -133,8 +145,6 @@ const _createChildWindow = async (
       winName
     },
     {
-      width,
-      height,
       minWidth: width,
       minHeight: height,
       x,
@@ -142,7 +152,8 @@ const _createChildWindow = async (
       resizable: false,
       center: true,
       parent: wins.mainWindow,
-      frame
+      frame: false,
+      ...opts
     }
   )
 
@@ -181,14 +192,14 @@ const createMainWindow = async ({
   return winProps
 }
 
-const _createLoadingWindow = async () => {
+const createLoadingWindow = async () => {
   if (
     wins.loadingWindow &&
     typeof wins.loadingWindow === 'object' &&
     !wins.loadingWindow.isDestroyed() &&
     !wins.loadingWindow.isVisible()
   ) {
-    wins.loadingWindow.show()
+    await showLoadingWindow()
 
     return {}
   }
@@ -198,7 +209,11 @@ const _createLoadingWindow = async () => {
     'loadingWindow',
     {
       width: 350,
-      height: 350
+      height: 350,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation: false
+      }
     }
   )
 
@@ -215,14 +230,13 @@ const createErrorWindow = async (pathname) => {
     }
   )
 
-  if (wins.loadingWindow) {
-    wins.loadingWindow.hide()
-  }
+  await hideLoadingWindow()
 
   return winProps
 }
 
 module.exports = {
   createMainWindow,
-  createErrorWindow
+  createErrorWindow,
+  createLoadingWindow
 }
