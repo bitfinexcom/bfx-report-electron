@@ -18,5 +18,5 @@ module.exports = (opts) => {
   }
   const url = getNewGithubIssueUrl(_opts)
 
-  shell.openExternal(url)
+  return shell.openExternal(url)
 }

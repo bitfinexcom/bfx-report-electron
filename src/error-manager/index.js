@@ -148,7 +148,7 @@ const manageNewGithubIssue = async (params) => {
       return false
     }
     if (isReported) {
-      openNewGithubIssue({
+      await openNewGithubIssue({
         title,
         body: mdIssue
       })
@@ -162,6 +162,7 @@ const manageNewGithubIssue = async (params) => {
     return isReported
   } catch (err) {
     _unlockIssueManager()
+    _isIssueAutoManagerLocked = false
 
     console.error(err)
   }
