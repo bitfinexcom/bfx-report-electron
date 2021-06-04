@@ -94,7 +94,7 @@ module.exports = (eol = os.EOL) => {
   const osRelease = os.release()
   const _osVersion = os.version()
   const osVersion = process.platform === 'linux'
-    ? _osVersion.replace(/^#\w+~/, '')
+    ? _osVersion.replace(/^#\w+[~-]/, '')
     : _osVersion
   const cpus = os.cpus()
   const cpuCount = cpus.length
