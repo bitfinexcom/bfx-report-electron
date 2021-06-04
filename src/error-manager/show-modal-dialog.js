@@ -1,6 +1,6 @@
 'use strict'
 
-const { app, dialog } = require('electron')
+const { app, dialog, screen, remote } = require('electron')
 const fs = require('fs')
 const path = require('path')
 const { Converter } = require('showdown')
@@ -67,6 +67,17 @@ const _fireAlert = (params) => {
     return { value: false }
   }
 
+  const _screen = screen || remote.screen
+  const {
+    getCursorScreenPoint,
+    getDisplayNearestPoint
+  } = _screen
+  const {
+    workArea
+  } = getDisplayNearestPoint(getCursorScreenPoint())
+  const { height: screenHeight } = workArea
+  const maxHeight = Math.floor(screenHeight * 0.90)
+
   const alert = new Alert([mdS, fonts, style, script])
   const _close = () => _closeAlert(alert)
 
@@ -117,6 +128,13 @@ const _fireAlert = (params) => {
       ) return
 
       alert.browserWindow.show()
+      const { height } = alert.browserWindow
+        .getContentBounds()
+      alert.browserWindow.setBounds({
+        height: height > maxHeight
+          ? maxHeight
+          : height
+      })
     },
     onClose: () => {
       if (
