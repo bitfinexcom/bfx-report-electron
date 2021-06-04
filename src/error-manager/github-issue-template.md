@@ -49,4 +49,4 @@ ${workerExceptions}
 
 ---
 
-*The issue opened from the electron app*
+*The issue was opened from the electron app*
