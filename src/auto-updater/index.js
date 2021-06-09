@@ -7,9 +7,10 @@ const {
   NsisUpdater,
   AppUpdater
 } = require('electron-updater')
-const log = require('electron-log')
 const Alert = require('electron-alert')
+const yaml = require('js-yaml')
 
+const { log } = require('../error-manager')
 const BfxAppImageUpdater = require('./bfx.appimage.updater')
 const BfxMacUpdater = require('./bfx.mac.updater')
 const wins = require('../windows')
@@ -81,7 +82,7 @@ const _fireToast = (
     typeof win !== 'object' ||
     win.isDestroyed()
   ) {
-    return
+    return { value: false }
   }
 
   const alert = new Alert([fonts, style, script])
@@ -411,8 +412,6 @@ const _autoUpdaterFactory = () => {
 
   autoUpdater.autoDownload = false
   autoUpdater.logger = log
-  autoUpdater.logger.transports.console.level = 'warn'
-  autoUpdater.logger.transports.file.level = 'info'
 
   _reinitInterval()
 
@@ -464,8 +463,17 @@ const quitAndInstall = () => {
   }
 }
 
+const getAppUpdateConfigSync = () => {
+  const appUpdateConfigPath = _autoUpdaterFactory()
+    .app.appUpdateConfigPath
+  const fileContent = fs.readFileSync(appUpdateConfigPath, 'utf8')
+
+  return yaml.load(fileContent)
+}
+
 module.exports = {
   checkForUpdates,
   checkForUpdatesAndNotify,
-  quitAndInstall
+  quitAndInstall,
+  getAppUpdateConfigSync
 }
