@@ -19,6 +19,7 @@ const {
 } = require('./change-loading-win-visibility-state')
 const {
   showWindow,
+  hideWindow,
   centerWindow
 } = require('./helpers/manage-window')
 
@@ -231,6 +232,7 @@ const createErrorWindow = async (pathname) => {
   )
 
   await hideLoadingWindow()
+  await hideWindow(wins.mainWindow)
 
   return winProps
 }

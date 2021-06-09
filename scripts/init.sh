@@ -189,6 +189,11 @@ fi
 
 cd $unpackedFolder
 
+if [ $targetPlatform == "win" ]
+then
+  touch "$isZipReleaseFile"
+fi
+
 if [ $targetPlatform == "linux" ]
 then
   # Build C executable launcher file
