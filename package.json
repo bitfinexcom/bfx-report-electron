@@ -61,7 +61,7 @@
     "publish": {
       "provider": "github",
       "repo": "bfx-report-electron",
-      "owner": "ZIMkaRU",
+      "owner": "bitfinexcom",
       "channel": "latest",
       "useMultipleRangeRequest": false,
       "updaterCacheDirName": "bfx-report-electron-updater"
