@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "app-builder-bin": "^3.5.13",
-    "electron": "11.4.8",
+    "electron": "13.1.2",
     "electron-builder": "22.11.1",
     "node-gyp": "7.1.2",
     "node-pre-gyp": "^0.11.0",
@@ -61,7 +61,7 @@
     "publish": {
       "provider": "github",
       "repo": "bfx-report-electron",
-      "owner": "bitfinexcom",
+      "owner": "ZIMkaRU",
       "channel": "latest",
       "useMultipleRangeRequest": false,
       "updaterCacheDirName": "bfx-report-electron-updater"
