@@ -2,6 +2,7 @@
 
 const { app } = require('electron')
 
+process.traceProcessWarnings = true
 app.allowRendererProcessReuse = true
 
 require('./src/error-manager')
