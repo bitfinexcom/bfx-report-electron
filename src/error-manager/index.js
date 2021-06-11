@@ -2,11 +2,11 @@
 
 const { app, Menu } = require('electron')
 const os = require('os')
-const log = require('electron-log')
 const cleanStack = require('clean-stack')
 
 const isDevEnv = process.env.NODE_ENV === 'development'
 
+const log = require('./log')
 const getErrorDescription = require('./get-error-description')
 const showModalDialog = require('./show-modal-dialog')
 const renderMarkdownTemplate = require('./render-markdown-template')

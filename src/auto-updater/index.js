@@ -10,7 +10,7 @@ const {
 const Alert = require('electron-alert')
 const yaml = require('js-yaml')
 
-const { log } = require('../error-manager')
+const log = require('../error-manager/log')
 const BfxAppImageUpdater = require('./bfx.appimage.updater')
 const BfxMacUpdater = require('./bfx.mac.updater')
 const wins = require('../windows')
