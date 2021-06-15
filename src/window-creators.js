@@ -102,7 +102,16 @@ const _createWindow = async (
     }
   })
 
-  await wins[winName].loadURL(startUrl)
+  const isReadyToShowPromise = new Promise((resolve) => {
+    wins[winName].once('ready-to-show', resolve)
+  })
+  const didFinishLoadPromise = wins[winName]
+    .loadURL(startUrl)
+
+  await Promise.all([
+    isReadyToShowPromise,
+    didFinishLoadPromise
+  ])
 
   const res = {
     isMaximized,
