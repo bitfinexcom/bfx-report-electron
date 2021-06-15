@@ -168,7 +168,7 @@ module.exports = async () => {
 
     await hideLoadingWindow({ isRequiredToShowMainWin: true })
 
-    triggerElectronLoad()
+    await triggerElectronLoad()
 
     await showMigrationsModalDialog(
       isMigrationsError,
