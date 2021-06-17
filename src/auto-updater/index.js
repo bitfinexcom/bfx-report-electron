@@ -102,7 +102,10 @@ const _fireToast = (
     darkTheme: false,
     height,
     parent: win,
-    modal: false
+    modal: false,
+    webPreferences: {
+      contextIsolation: false
+    }
   }
   const swalOptions = {
     toast: true,
