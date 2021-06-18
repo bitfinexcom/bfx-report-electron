@@ -21,6 +21,13 @@ const _closeAllWindows = () => {
 }
 
 const _setParentWindow = (noParent) => {
+  // TODO: The reason for it related to the electronjs issue:
+  // `[Bug]: Wrong main window hidden state on macOS when using 'parent' option`
+  // https://github.com/electron/electron/issues/29732
+  if (process.platform === 'darwin') {
+    return
+  }
+
   if (wins.loadingWindow.isFocused()) {
     return
   }
