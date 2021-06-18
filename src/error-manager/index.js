@@ -78,7 +78,10 @@ const _isLogSkipped = (log) => {
   return (
     str &&
     typeof str === 'string' &&
-    str.includes('contextIsolation is deprecated')
+    (
+      str.includes('contextIsolation is deprecated') ||
+      str.includes('ERR_INTERNET_DISCONNECTED')
+    )
   )
 }
 

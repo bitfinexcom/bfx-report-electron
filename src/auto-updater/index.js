@@ -258,6 +258,19 @@ const _autoUpdaterFactory = () => {
         isCheckMenuItemDisabled: false,
         isInstallMenuItemVisible: false
       })
+
+      if (
+        /ERR_INTERNET_DISCONNECTED/gi.test(err.toString())
+      ) {
+        await _fireToast({
+          title: 'Internet disconnected',
+          type: 'error',
+          timer: 60000
+        })
+
+        return
+      }
+
       await _fireToast({
         title: 'Application update failed',
         type: 'error',
