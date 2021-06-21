@@ -34,7 +34,7 @@
     "app-builder-bin": "^3.5.13",
     "electron": "13.1.2",
     "electron-builder": "22.11.7",
-    "node-gyp": "8.1.0",
+    "node-gyp": "7.1.2",
     "node-pre-gyp": "^0.11.0",
     "standard": "^14.3.1"
   },
