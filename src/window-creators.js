@@ -196,6 +196,18 @@ const createMainWindow = async ({
     isMaximized
   } = winProps
 
+  win.on('closed', () => {
+    if (
+      wins.loadingWindow &&
+      typeof wins.loadingWindow === 'object' &&
+      !wins.loadingWindow.isDestroyed()
+    ) {
+      wins.loadingWindow.close()
+    }
+
+    wins.loadingWindow = null
+  })
+
   if (isDevEnv) {
     wins.mainWindow.webContents.openDevTools()
   }

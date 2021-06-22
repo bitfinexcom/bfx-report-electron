@@ -153,9 +153,6 @@ const showLoadingWindow = async (opts = {}) => {
     noParent = false
   } = { ...opts }
 
-  if (isRequiredToCloseAllWins) {
-    _closeAllWindows()
-  }
   if (
     !wins.loadingWindow ||
     typeof wins.loadingWindow !== 'object' ||
@@ -176,13 +173,16 @@ const showLoadingWindow = async (opts = {}) => {
     description
   )
 
-  if (wins.loadingWindow.isVisible()) {
+  if (!wins.loadingWindow.isVisible()) {
+    centerWindow(wins.loadingWindow)
+
+    await showWindow(wins.loadingWindow)
+  }
+  if (!isRequiredToCloseAllWins) {
     return
   }
 
-  centerWindow(wins.loadingWindow)
-
-  return showWindow(wins.loadingWindow)
+  await _closeAllWindows()
 }
 
 const hideLoadingWindow = async (opts = {}) => {
