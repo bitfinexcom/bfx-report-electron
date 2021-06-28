@@ -21,6 +21,13 @@ const _closeAllWindows = () => {
 }
 
 const _setParentWindow = (noParent) => {
+  // TODO: The reason for it related to the electronjs issue:
+  // `[Bug]: Wrong main window hidden state on macOS when using 'parent' option`
+  // https://github.com/electron/electron/issues/29732
+  if (process.platform === 'darwin') {
+    return
+  }
+
   if (wins.loadingWindow.isFocused()) {
     return
   }
@@ -54,7 +61,7 @@ const _runProgressLoader = (opts = {}) => {
   }
   if (isIndeterminateMode) {
     // Change to indeterminate mode when progress > 1
-    win.setProgressBar(2)
+    win.setProgressBar(1.1)
 
     return
   }
@@ -100,7 +107,7 @@ const _stopProgressLoader = (
   }
 
   // Remove progress bar when progress < 0
-  win.setProgressBar(-1)
+  win.setProgressBar(-0.1)
 }
 
 const _setLoadingDescription = (win, description) => {
@@ -146,9 +153,6 @@ const showLoadingWindow = async (opts = {}) => {
     noParent = false
   } = { ...opts }
 
-  if (isRequiredToCloseAllWins) {
-    _closeAllWindows()
-  }
   if (
     !wins.loadingWindow ||
     typeof wins.loadingWindow !== 'object' ||
@@ -169,13 +173,16 @@ const showLoadingWindow = async (opts = {}) => {
     description
   )
 
-  if (wins.loadingWindow.isVisible()) {
+  if (!wins.loadingWindow.isVisible()) {
+    centerWindow(wins.loadingWindow)
+
+    await showWindow(wins.loadingWindow)
+  }
+  if (!isRequiredToCloseAllWins) {
     return
   }
 
-  centerWindow(wins.loadingWindow)
-
-  return showWindow(wins.loadingWindow)
+  await _closeAllWindows()
 }
 
 const hideLoadingWindow = async (opts = {}) => {

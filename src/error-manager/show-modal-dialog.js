@@ -93,7 +93,10 @@ const _fireAlert = (params) => {
     darkTheme: false,
     parent: win,
     modal: true,
-    width: 600
+    width: 600,
+    webPreferences: {
+      contextIsolation: false
+    }
   }
   const swalOptions = {
     position: 'center',

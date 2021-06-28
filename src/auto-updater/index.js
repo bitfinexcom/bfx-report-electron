@@ -10,7 +10,7 @@ const {
 const Alert = require('electron-alert')
 const yaml = require('js-yaml')
 
-const { log } = require('../error-manager')
+const log = require('../error-manager/log')
 const BfxAppImageUpdater = require('./bfx.appimage.updater')
 const BfxMacUpdater = require('./bfx.mac.updater')
 const wins = require('../windows')
@@ -102,7 +102,10 @@ const _fireToast = (
     darkTheme: false,
     height,
     parent: win,
-    modal: false
+    modal: false,
+    webPreferences: {
+      contextIsolation: false
+    }
   }
   const swalOptions = {
     toast: true,

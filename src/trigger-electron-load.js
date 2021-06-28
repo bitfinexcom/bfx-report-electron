@@ -14,6 +14,6 @@ const triggerElectronLoadStr = fs.readFileSync(
 )
 
 module.exports = () => {
-  wins.mainWindow.webContents
+  return wins.mainWindow.webContents
     .executeJavaScript(triggerElectronLoadStr)
 }
