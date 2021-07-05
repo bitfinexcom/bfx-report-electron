@@ -10,7 +10,7 @@ const templateByDefault = fs.readFileSync(
   path.join(__dirname, 'github-issue-template.md'),
   'utf8'
 )
-const placeholderPattern = new RegExp(/\$\{[a-zA-Z0-9]+\}/, 'g')
+const placeholderPattern = /\$\{[a-zA-Z0-9]+\}/g
 
 // The GitHub GET endpoint for opening a new issue
 // has a restriction for maximum length of a URL: 8192 bytes

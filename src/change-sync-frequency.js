@@ -176,7 +176,8 @@ module.exports = () => {
         ...alertOptions,
         text,
         inputValue: timeFormat.value === timeData.timeFormat
-          ? timeData.value : 1,
+          ? timeData.value
+          : 1,
         inputAttributes: {
           min: 1,
           max: 31,
@@ -189,7 +190,8 @@ module.exports = () => {
         ...alertOptions,
         text,
         inputValue: timeFormat.value === timeData.timeFormat
-          ? timeData.value : 2,
+          ? timeData.value
+          : 2,
         inputAttributes: {
           min: 1,
           max: 23,
@@ -202,7 +204,8 @@ module.exports = () => {
       ...alertOptions,
       text,
       inputValue: timeFormat.value === timeData.timeFormat
-        ? timeData.value : 20,
+        ? timeData.value
+        : 20,
       inputAttributes: {
         min: 10,
         max: 59,
