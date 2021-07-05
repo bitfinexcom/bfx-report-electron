@@ -3,6 +3,7 @@
 set -x
 
 export CI_ENVIRONMENT_NAME=production
+export SKIP_PREFLIGHT_CHECK=true
 
 ROOT="$PWD"
 frontendFolder="$ROOT/bfx-report-ui"
