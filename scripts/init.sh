@@ -62,7 +62,13 @@ expressFolder="$frontendFolder/bfx-report-express"
 backendFolder="$ROOT/bfx-reports-framework"
 
 linuxLauncherFolder="$ROOT/build/linux-launcher"
-uiBuildFolder=/ui-build
+
+uiBuildFolder="$frontendFolder/build"
+if [ "$UI_BUILD_FOLDER" != "" ]
+then
+  uiBuildFolder=$UI_BUILD_FOLDER
+fi
+mkdir $uiBuildFolder 2>/dev/null
 uiReadyFile="$uiBuildFolder/READY"
 
 mkdir $ROOT/dist 2>/dev/null

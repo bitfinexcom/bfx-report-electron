@@ -9,7 +9,7 @@ ROOT="$PWD"
 frontendFolder="$ROOT/bfx-report-ui"
 pathToTriggerElectronLoad="$frontendFolder/src/utils/triggerElectronLoad.js"
 pathToFonts="$frontendFolder/src/styles/fonts"
-uiBuildFolder=/ui-build
+uiBuildFolder="$frontendFolder/build"
 uiReadyFile="$uiBuildFolder/READY"
 branch=master
 
@@ -23,7 +23,12 @@ if [ "$BRANCH" != "" ]
 then
   branch=$BRANCH
 fi
+if [ "$UI_BUILD_FOLDER" != "" ]
+then
+  uiBuildFolder=$UI_BUILD_FOLDER
+fi
 
+mkdir $uiBuildFolder 2>/dev/null
 rm -rf $uiBuildFolder/*
 
 function usage {
