@@ -7,6 +7,7 @@ branch=master
 dbDriver=better-sqlite
 lastCommitFileName=lastCommit.json
 isZipReleaseFile="isZipRelease"
+bfxStagingUrl="https://api.staging.bitfinex.com"
 
 source $ROOT/scripts/get-conf-value.sh
 source $ROOT/scripts/escape-string.sh
@@ -110,8 +111,9 @@ sed -i -e \
   $backendFolder/config/service.report.json
 
 if [ $isDevEnv != 0 ]; then
+  escapedBfxStagingUrl=$(escapeString $bfxStagingUrl)
   sed -i -e \
-    "s/\"restUrl\": \".*\"/\"restUrl\": \"https:\/\/test.bitfinex.com\"/g" \
+    "s/\"restUrl\": \".*\"/\"restUrl\": \"$escapedBfxStagingUrl\"/g" \
     $backendFolder/config/service.report.json
 fi
 
