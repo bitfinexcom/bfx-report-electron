@@ -10,7 +10,6 @@ frontendFolder="$ROOT/bfx-report-ui"
 pathToTriggerElectronLoad="$frontendFolder/src/utils/triggerElectronLoad.js"
 pathToFonts="$frontendFolder/src/styles/fonts"
 uiBuildFolder="$frontendFolder/build"
-uiReadyFile="$uiBuildFolder/READY"
 branch=master
 
 source $ROOT/scripts/update-submodules.sh
@@ -29,6 +28,7 @@ then
 fi
 
 mkdir $uiBuildFolder 2>/dev/null
+uiReadyFile="$uiBuildFolder/READY"
 rm -rf $uiBuildFolder/*
 
 function usage {
