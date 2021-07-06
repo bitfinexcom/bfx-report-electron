@@ -95,10 +95,10 @@ sed -i -e \
   "s/showFrameworkMode: false/showFrameworkMode: true/g" \
   $frontendFolder/src/config.js
 
-rm -f "$ROOT/.eslintrc"
-
+mv -f "$ROOT/.eslintrc" "$ROOT/eslint-conf-disabled-for-ui"
 npm i --no-audit
 npm run build
+mv -f "$ROOT/eslint-conf-disabled-for-ui" "$ROOT/.eslintrc"
 
 if ! [ -s "$frontendFolder/build/index.html" ]; then
   exit 1
