@@ -22,7 +22,7 @@
     "extract-zip": "^2.0.1",
     "find-free-port": "^2.0.0",
     "github-markdown-css": "^4.0.0",
-    "grenache-grape": "^0.9.8",
+    "grenache-grape": "git+https://github.com/bitfinexcom/grenache-grape.git",
     "js-yaml": "^4.0.0",
     "lodash": "^4.17.15",
     "new-github-issue-url": "^0.2.1",
@@ -32,11 +32,11 @@
   },
   "devDependencies": {
     "app-builder-bin": "^3.5.13",
-    "electron": "13.1.2",
+    "electron": "13.1.6",
     "electron-builder": "22.11.7",
     "node-gyp": "7.1.2",
     "node-pre-gyp": "^0.11.0",
-    "standard": "^14.3.1"
+    "standard": "^16.0.3"
   },
   "standard": {
     "globals": [

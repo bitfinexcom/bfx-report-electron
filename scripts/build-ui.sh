@@ -3,13 +3,13 @@
 set -x
 
 export CI_ENVIRONMENT_NAME=production
+export SKIP_PREFLIGHT_CHECK=true
 
 ROOT="$PWD"
 frontendFolder="$ROOT/bfx-report-ui"
 pathToTriggerElectronLoad="$frontendFolder/src/utils/triggerElectronLoad.js"
 pathToFonts="$frontendFolder/src/styles/fonts"
-uiBuildFolder=/ui-build
-uiReadyFile="$uiBuildFolder/READY"
+uiBuildFolder="$frontendFolder/build"
 branch=master
 
 source $ROOT/scripts/update-submodules.sh
@@ -22,7 +22,13 @@ if [ "$BRANCH" != "" ]
 then
   branch=$BRANCH
 fi
+if [ "$UI_BUILD_FOLDER" != "" ]
+then
+  uiBuildFolder=$UI_BUILD_FOLDER
+fi
 
+mkdir $uiBuildFolder 2>/dev/null
+uiReadyFile="$uiBuildFolder/READY"
 rm -rf $uiBuildFolder/*
 
 function usage {
@@ -89,10 +95,10 @@ sed -i -e \
   "s/showFrameworkMode: false/showFrameworkMode: true/g" \
   $frontendFolder/src/config.js
 
-rm -f "$ROOT/.eslintrc"
-
+mv -f "$ROOT/.eslintrc" "$ROOT/eslint-conf-disabled-for-ui"
 npm i --no-audit
 npm run build
+mv -f "$ROOT/eslint-conf-disabled-for-ui" "$ROOT/.eslintrc"
 
 if ! [ -s "$frontendFolder/build/index.html" ]; then
   exit 1

@@ -9,11 +9,18 @@ const productName = 'Bitfinex Report'
 
 const { getAppUpdateConfigSync } = require('../auto-updater')
 
-const appUpdateConfig = getAppUpdateConfigSync()
 const packageJson = require(path.join(appDir, 'package.json'))
 
 let lastCommit = { hash: '-', date: '-' }
+let appUpdateConfig = {}
 
+try {
+  appUpdateConfig = getAppUpdateConfigSync()
+} catch (err) {
+  console.debug(err)
+
+  appUpdateConfig = packageJson.build.publish
+}
 try {
   lastCommit = require(path.join(appDir, 'lastCommit.json'))
 } catch (err) {
