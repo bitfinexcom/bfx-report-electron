@@ -103,6 +103,7 @@ cp config/schedule.json.example config/schedule.json
 cp config/common.json.example config/common.json
 cp config/service.report.json.example config/service.report.json
 cp config/facs/grc.config.json.example config/facs/grc.config.json
+cp config/facs/grc-slack.config.json.example config/facs/grc-slack.config.json
 sed -i -e \
   "s/\"syncMode\": false/\"syncMode\": true/g" \
   $backendFolder/config/service.report.json
