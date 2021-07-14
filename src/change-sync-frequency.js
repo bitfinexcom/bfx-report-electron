@@ -72,9 +72,39 @@ const _getTimeDataFromRule = (rule) => {
   return { timeFormat: 'hours', value: 2 }
 }
 
+const _fireFrameless = (alert, opts) => {
+  const bwOptions = {
+    frame: false,
+    transparent: true,
+    thickFrame: false,
+    closable: false,
+    backgroundColor: '#172d3e',
+    hasShadow: false,
+    webPreferences: {
+      contextIsolation: false
+    }
+  }
+  const swalOptions = {
+    background: '#172d3e',
+    allowOutsideClick: false,
+    backdrop: 'rgba(0,0,0,0.0)',
+    ...opts
+  }
+
+  return alert.fire(
+    swalOptions,
+    bwOptions,
+    null,
+    true,
+    false,
+    sound
+  )
+}
+
 const fonts = `<style>${fontsStyle}</style>`
 const style = `<style>${modalDialogStyle}</style>`
 const script = `<script type="text/javascript">${modalDialogScript}</script>`
+const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
 
 module.exports = () => {
   const configsKeeper = getConfigsKeeperByName('main')
@@ -95,7 +125,6 @@ module.exports = () => {
   const timeFormatAlertOptions = {
     title: 'Set time format',
     type: 'question',
-    background: '#172d3e',
     customClass: {
       title: 'titleColor',
       content: 'textColor',
@@ -121,7 +150,6 @@ module.exports = () => {
   const alertOptions = {
     title: 'Set sync frequency',
     type: 'question',
-    background: '#172d3e',
     customClass: {
       title: 'titleColor',
       content: 'textColor',
@@ -138,7 +166,6 @@ module.exports = () => {
       alert.browserWindow.once('blur', closeAlert)
     }
   }
-  const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
 
   const getAlertOpts = (timeFormat, timeData) => {
     const { inputOptions } = timeFormatAlertOptions
@@ -149,7 +176,8 @@ module.exports = () => {
         ...alertOptions,
         text,
         inputValue: timeFormat.value === timeData.timeFormat
-          ? timeData.value : 1,
+          ? timeData.value
+          : 1,
         inputAttributes: {
           min: 1,
           max: 31,
@@ -162,7 +190,8 @@ module.exports = () => {
         ...alertOptions,
         text,
         inputValue: timeFormat.value === timeData.timeFormat
-          ? timeData.value : 2,
+          ? timeData.value
+          : 2,
         inputAttributes: {
           min: 1,
           max: 23,
@@ -175,7 +204,8 @@ module.exports = () => {
       ...alertOptions,
       text,
       inputValue: timeFormat.value === timeData.timeFormat
-        ? timeData.value : 20,
+        ? timeData.value
+        : 20,
       inputAttributes: {
         min: 10,
         max: 59,
@@ -194,12 +224,12 @@ module.exports = () => {
         .getConfigByName('schedulerRule')
       const timeData = _getTimeDataFromRule(savedSchedulerRule)
 
-      const timeFormat = await timeFormatAlert.fireFrameless(
+      const timeFormat = await _fireFrameless(
+        timeFormatAlert,
         {
           ...timeFormatAlertOptions,
           inputValue: timeData.timeFormat
-        },
-        null, true, false, sound
+        }
       )
       win.removeListener('closed', closeTimeFormatAlert)
 
@@ -207,9 +237,9 @@ module.exports = () => {
         return
       }
 
-      const alertRes = await alert.fireFrameless(
-        getAlertOpts(timeFormat, timeData),
-        null, true, false, sound
+      const alertRes = await _fireFrameless(
+        alert,
+        getAlertOpts(timeFormat, timeData)
       )
       win.removeListener('closed', closeAlert)
 

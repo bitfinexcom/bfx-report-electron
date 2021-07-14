@@ -2,9 +2,8 @@
 
 const path = require('path')
 const fs = require('fs')
-const log = require('electron-log')
+const { rootPath: appDir } = require('electron-root-path')
 
-const appDir = path.dirname(require.main.filename)
 const _root = path.join(appDir, '../..')
 const {
   version
@@ -39,7 +38,7 @@ const makeTempReleaseFile = (filePath) => {
   try {
     fs.writeFileSync(filePath, '')
   } catch (err) {
-    log.error(err)
+    console.error(err)
   }
 }
 
@@ -51,7 +50,7 @@ const rmOldReleaseDir = (root) => {
   try {
     fs.rmdirSync(root, { recursive: true })
   } catch (err) {
-    log.error(err)
+    console.error(err)
   }
 }
 

@@ -7,9 +7,10 @@ const {
   NsisUpdater,
   AppUpdater
 } = require('electron-updater')
-const log = require('electron-log')
 const Alert = require('electron-alert')
+const yaml = require('js-yaml')
 
+const log = require('../error-manager/log')
 const BfxAppImageUpdater = require('./bfx.appimage.updater')
 const BfxMacUpdater = require('./bfx.mac.updater')
 const wins = require('../windows')
@@ -81,7 +82,7 @@ const _fireToast = (
     typeof win !== 'object' ||
     win.isDestroyed()
   ) {
-    return
+    return { value: false }
   }
 
   const alert = new Alert([fonts, style, script])
@@ -101,7 +102,10 @@ const _fireToast = (
     darkTheme: false,
     height,
     parent: win,
-    modal: false
+    modal: false,
+    webPreferences: {
+      contextIsolation: false
+    }
   }
   const swalOptions = {
     toast: true,
@@ -257,6 +261,19 @@ const _autoUpdaterFactory = () => {
         isCheckMenuItemDisabled: false,
         isInstallMenuItemVisible: false
       })
+
+      if (
+        /ERR_INTERNET_DISCONNECTED/gi.test(err.toString())
+      ) {
+        await _fireToast({
+          title: 'Internet disconnected',
+          type: 'error',
+          timer: 60000
+        })
+
+        return
+      }
+
       await _fireToast({
         title: 'Application update failed',
         type: 'error',
@@ -411,8 +428,6 @@ const _autoUpdaterFactory = () => {
 
   autoUpdater.autoDownload = false
   autoUpdater.logger = log
-  autoUpdater.logger.transports.console.level = 'warn'
-  autoUpdater.logger.transports.file.level = 'info'
 
   _reinitInterval()
 
@@ -420,29 +435,41 @@ const _autoUpdaterFactory = () => {
 }
 
 const checkForUpdates = () => {
-  return () => {
-    isIntervalUpdate = false
+  return async () => {
+    try {
+      isIntervalUpdate = false
+      _switchMenuItem({
+        isCheckMenuItemDisabled: true
+      })
+
+      const res = await _autoUpdaterFactory()
+        .checkForUpdates()
+
+      return res
+    } catch (err) {
+      console.error(err)
+    }
+  }
+}
+
+const checkForUpdatesAndNotify = async (opts) => {
+  try {
+    const {
+      isIntervalUpdate: isIntUp = false
+    } = { ...opts }
+
+    isIntervalUpdate = isIntUp
     _switchMenuItem({
       isCheckMenuItemDisabled: true
     })
 
-    return _autoUpdaterFactory()
-      .checkForUpdates()
+    const res = await _autoUpdaterFactory()
+      .checkForUpdatesAndNotify()
+
+    return res
+  } catch (err) {
+    console.error(err)
   }
-}
-
-const checkForUpdatesAndNotify = (opts) => {
-  const {
-    isIntervalUpdate: isIntUp = false
-  } = { ...opts }
-
-  isIntervalUpdate = isIntUp
-  _switchMenuItem({
-    isCheckMenuItemDisabled: true
-  })
-
-  return _autoUpdaterFactory()
-    .checkForUpdatesAndNotify()
 }
 
 const quitAndInstall = () => {
@@ -452,8 +479,17 @@ const quitAndInstall = () => {
   }
 }
 
+const getAppUpdateConfigSync = () => {
+  const appUpdateConfigPath = _autoUpdaterFactory()
+    .app.appUpdateConfigPath
+  const fileContent = fs.readFileSync(appUpdateConfigPath, 'utf8')
+
+  return yaml.load(fileContent)
+}
+
 module.exports = {
   checkForUpdates,
   checkForUpdatesAndNotify,
-  quitAndInstall
+  quitAndInstall,
+  getAppUpdateConfigSync
 }

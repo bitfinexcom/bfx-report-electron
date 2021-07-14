@@ -7,6 +7,7 @@ branch=master
 dbDriver=better-sqlite
 lastCommitFileName=lastCommit.json
 isZipReleaseFile="isZipRelease"
+bfxStagingUrl="https://api.staging.bitfinex.com"
 
 source $ROOT/scripts/get-conf-value.sh
 source $ROOT/scripts/escape-string.sh
@@ -62,7 +63,13 @@ expressFolder="$frontendFolder/bfx-report-express"
 backendFolder="$ROOT/bfx-reports-framework"
 
 linuxLauncherFolder="$ROOT/build/linux-launcher"
-uiBuildFolder=/ui-build
+
+uiBuildFolder="$frontendFolder/build"
+if [ "$UI_BUILD_FOLDER" != "" ]
+then
+  uiBuildFolder=$UI_BUILD_FOLDER
+fi
+mkdir $uiBuildFolder 2>/dev/null
 uiReadyFile="$uiBuildFolder/READY"
 
 mkdir $ROOT/dist 2>/dev/null
@@ -96,6 +103,7 @@ cp config/schedule.json.example config/schedule.json
 cp config/common.json.example config/common.json
 cp config/service.report.json.example config/service.report.json
 cp config/facs/grc.config.json.example config/facs/grc.config.json
+cp config/facs/grc-slack.config.json.example config/facs/grc-slack.config.json
 sed -i -e \
   "s/\"syncMode\": false/\"syncMode\": true/g" \
   $backendFolder/config/service.report.json
@@ -104,8 +112,9 @@ sed -i -e \
   $backendFolder/config/service.report.json
 
 if [ $isDevEnv != 0 ]; then
+  escapedBfxStagingUrl=$(escapeString $bfxStagingUrl)
   sed -i -e \
-    "s/\"restUrl\": \".*\"/\"restUrl\": \"https:\/\/test.bitfinex.com\"/g" \
+    "s/\"restUrl\": \".*\"/\"restUrl\": \"$escapedBfxStagingUrl\"/g" \
     $backendFolder/config/service.report.json
 fi
 
@@ -189,6 +198,11 @@ fi
 
 cd $unpackedFolder
 
+if [ $targetPlatform == "win" ]
+then
+  touch "$isZipReleaseFile"
+fi
+
 if [ $targetPlatform == "linux" ]
 then
   # Build C executable launcher file
@@ -223,7 +237,7 @@ cd $ROOT
 
 if [ $targetPlatform == "mac" ]
 then
-  node $ROOT/scripts/generate-zipand-blockmap.js
+  node $ROOT/scripts/node/generate-zipand-blockmap.js
 fi
 
 rm -rf /dist/*$targetPlatform*
