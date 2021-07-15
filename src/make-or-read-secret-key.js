@@ -33,7 +33,8 @@ const _readSecretKey = async (secretKeyPath) => {
 
     return secretKey
   } catch (err) {
-    console.error(err)
+    // Log warning to the log file and don't start opening new github issue
+    console.warn(err)
 
     return false
   }
@@ -49,7 +50,8 @@ const _rm = async (secretKeyPath) => {
 
     return res
   } catch (err) {
-    console.error(err)
+    // Log warning to the log file and don't start opening new github issue
+    console.warn(err)
   }
 }
 
