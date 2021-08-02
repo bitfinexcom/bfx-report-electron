@@ -92,14 +92,20 @@ module.exports = ({
 }) => {
   return async () => {
     const win = electron.BrowserWindow.getFocusedWindow()
+    const title = shouldAllTablesBeCleared
+      ? 'Clear all data'
+      : 'Remove database'
+    const message = shouldAllTablesBeCleared
+      ? 'Are you sure you want to clear all data?'
+      : 'Are you sure you want to remove the database?'
 
     try {
       const {
         btnId
       } = await showMessageModalDialog(win, {
         type: 'question',
-        title: 'Remove database',
-        message: 'Are you sure you want to remove the database?'
+        title,
+        message
       })
       const isOkBtnPushed = btnId === 1
 
@@ -115,7 +121,7 @@ module.exports = ({
       relaunch()
     } catch (err) {
       try {
-        await showErrorModalDialog(win, 'Remove database', err)
+        await showErrorModalDialog(win, title, err)
       } catch (err) {
         console.error(err)
       }
