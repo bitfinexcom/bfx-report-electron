@@ -2,6 +2,7 @@
 
 const electron = require('electron')
 
+const ipcs = require('./ipcs')
 const showErrorModalDialog = require('./show-error-modal-dialog')
 const showMessageModalDialog = require('./show-message-modal-dialog')
 const pauseApp = require('./pause-app')
@@ -34,7 +35,52 @@ const _rmDb = async (pathToUserData) => {
   }
 }
 
-module.exports = ({ pathToUserData }) => {
+const _clearAllTables = () => {
+  ipcs.serverIpc.send({
+    state: 'clear-all-tables'
+  })
+
+  return new Promise((resolve, reject) => {
+    const handlerMess = (mess) => {
+      const { state } = { ...mess }
+
+      if (state !== 'all-tables-have-been-cleared') {
+        return
+      }
+
+      ipc.removeListener('error', reject)
+      ipc.removeListener('message', handler)
+
+      resolve()
+    }
+    const handlerErr = (err) => {
+      ipc.removeListener('message', handlerMess)
+
+      reject(err)
+    }
+
+    ipc.once('error', handlerErr)
+    ipc.on('message', handlerMess)
+  })
+}
+
+const _removeDb = async ({
+  pathToUserData,
+  shouldAllTablesBeCleared
+}) => {
+  if (shouldAllTablesBeCleared) {
+    await _clearAllTables()
+
+    return
+  }
+
+  await _rmDb(pathToUserData)
+}
+
+module.exports = ({
+  pathToUserData,
+  shouldAllTablesBeCleared
+}) => {
   return async () => {
     const win = electron.BrowserWindow.getFocusedWindow()
 
@@ -53,7 +99,10 @@ module.exports = ({ pathToUserData }) => {
       }
 
       await pauseApp()
-      await _rmDb(pathToUserData)
+      await _removeDb({
+        pathToUserData,
+        shouldAllTablesBeCleared
+      })
       relaunch()
     } catch (err) {
       try {
