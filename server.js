@@ -132,6 +132,25 @@ let isMigrationsError = false
       })
     })
 
+    ipc.on('message', (mess) => {
+      const { state } = { ...mess }
+
+      if (state !== 'all-tables-have-been-cleared') {
+        return
+      }
+
+      process.send(mess)
+    })
+    process.on('message', (mess) => {
+      const { state } = { ...mess }
+
+      if (state !== 'clear-all-tables') {
+        return
+      }
+
+      ipc.send(mess)
+    })
+
     const announcePromise = grapes.onAnnounce('rest:report:api')
     const ipcReadyPromise = new Promise((resolve, reject) => {
       ipc.once('error', reject)
