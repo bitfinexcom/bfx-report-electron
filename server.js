@@ -135,7 +135,10 @@ let isMigrationsError = false
     ipc.on('message', (mess) => {
       const { state } = { ...mess }
 
-      if (state !== 'all-tables-have-been-cleared') {
+      if (
+        state !== 'all-tables-have-been-cleared' ||
+        state !== 'all-tables-have-not-been-cleared'
+      ) {
         return
       }
 

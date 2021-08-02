@@ -44,12 +44,21 @@ const _clearAllTables = () => {
     const handlerMess = (mess) => {
       const { state } = { ...mess }
 
-      if (state !== 'all-tables-have-been-cleared') {
+      if (
+        state !== 'all-tables-have-been-cleared' ||
+        state !== 'all-tables-have-not-been-cleared'
+      ) {
         return
       }
 
       ipc.removeListener('error', handlerErr)
       ipc.removeListener('message', handlerMess)
+
+      if (state === 'all-tables-have-not-been-cleared') {
+        reject(new DbRemovingError(state))
+
+        return
+      }
 
       resolve()
     }
