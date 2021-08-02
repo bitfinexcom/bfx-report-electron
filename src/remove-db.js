@@ -48,8 +48,8 @@ const _clearAllTables = () => {
         return
       }
 
-      ipc.removeListener('error', reject)
-      ipc.removeListener('message', handler)
+      ipc.removeListener('error', handlerErr)
+      ipc.removeListener('message', handlerMess)
 
       resolve()
     }

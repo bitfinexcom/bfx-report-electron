@@ -155,7 +155,7 @@ let isMigrationsError = false
     const ipcReadyPromise = new Promise((resolve, reject) => {
       ipc.once('error', reject)
 
-      const handler = (mess) => {
+      const handlerMess = (mess) => {
         const { state } = { ...mess }
 
         if (state === 'error:migrations') {
@@ -168,13 +168,19 @@ let isMigrationsError = false
           return
         }
 
-        ipc.removeListener('error', reject)
-        ipc.removeListener('message', handler)
+        ipc.removeListener('error', handlerErr)
+        ipc.removeListener('message', handlerMess)
 
         resolve()
       }
-
-      ipc.on('message', handler)
+      const handlerErr = (err) => {
+        ipc.removeListener('message', handlerMess)
+  
+        reject(err)
+      }
+  
+      ipc.once('error', handlerErr)
+      ipc.on('message', handlerMess)
     })
 
     await Promise.all([announcePromise, ipcReadyPromise])
