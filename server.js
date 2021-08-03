@@ -136,7 +136,7 @@ let isMigrationsError = false
       const { state } = { ...mess }
 
       if (
-        state !== 'all-tables-have-been-cleared' ||
+        state !== 'all-tables-have-been-cleared' &&
         state !== 'all-tables-have-not-been-cleared'
       ) {
         return

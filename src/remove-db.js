@@ -45,14 +45,14 @@ const _clearAllTables = () => {
       const { state } = { ...mess }
 
       if (
-        state !== 'all-tables-have-been-cleared' ||
+        state !== 'all-tables-have-been-cleared' &&
         state !== 'all-tables-have-not-been-cleared'
       ) {
         return
       }
 
-      ipc.removeListener('error', handlerErr)
-      ipc.removeListener('message', handlerMess)
+      ipcs.serverIpc.removeListener('error', handlerErr)
+      ipcs.serverIpc.removeListener('message', handlerMess)
 
       if (state === 'all-tables-have-not-been-cleared') {
         reject(new DbRemovingError(state))
@@ -63,27 +63,14 @@ const _clearAllTables = () => {
       resolve()
     }
     const handlerErr = (err) => {
-      ipc.removeListener('message', handlerMess)
+      ipcs.serverIpc.removeListener('message', handlerMess)
 
       reject(err)
     }
 
-    ipc.once('error', handlerErr)
-    ipc.on('message', handlerMess)
+    ipcs.serverIpc.once('error', handlerErr)
+    ipcs.serverIpc.on('message', handlerMess)
   })
-}
-
-const _removeDb = async ({
-  pathToUserData,
-  shouldAllTablesBeCleared
-}) => {
-  if (shouldAllTablesBeCleared) {
-    await _clearAllTables()
-
-    return
-  }
-
-  await _rmDb(pathToUserData)
 }
 
 module.exports = ({
@@ -113,11 +100,20 @@ module.exports = ({
         return
       }
 
-      await pauseApp()
-      await _removeDb({
-        pathToUserData,
-        shouldAllTablesBeCleared
+      await pauseApp({
+        beforeClosingServHook: async () => {
+          if (!shouldAllTablesBeCleared) {
+            return
+          }
+
+          await _clearAllTables()
+        }
       })
+
+      if (!shouldAllTablesBeCleared) {
+        await _rmDb(pathToUserData)
+      }
+
       relaunch()
     } catch (err) {
       try {
