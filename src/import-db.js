@@ -13,6 +13,8 @@ const relaunch = require('./relaunch')
 const { rm } = require('./helpers')
 const {
   DB_FILE_NAME,
+  DB_SHM_FILE_NAME,
+  DB_WAL_FILE_NAME,
   SECRET_KEY_FILE_NAME
 } = require('./const')
 
@@ -78,7 +80,14 @@ module.exports = ({
       const extractedfileNames = await unzip(
         filePaths[0],
         pathToUserData,
-        { extractFiles: [DB_FILE_NAME, SECRET_KEY_FILE_NAME] }
+        {
+          extractFiles: [
+            DB_FILE_NAME,
+            DB_SHM_FILE_NAME,
+            DB_WAL_FILE_NAME,
+            SECRET_KEY_FILE_NAME
+          ]
+        }
       )
 
       if (extractedfileNames.every(file => file !== DB_FILE_NAME)) {
