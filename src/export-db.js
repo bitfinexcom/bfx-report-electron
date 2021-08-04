@@ -14,6 +14,8 @@ const {
 const {
   DEFAULT_ARCHIVE_DB_FILE_NAME,
   DB_FILE_NAME,
+  DB_SHM_FILE_NAME,
+  DB_WAL_FILE_NAME,
   SECRET_KEY_FILE_NAME
 } = require('./const')
 
@@ -30,6 +32,8 @@ module.exports = ({
     `${DEFAULT_ARCHIVE_DB_FILE_NAME}-${timestamp}.zip`
   )
   const dbPath = path.join(pathToUserData, DB_FILE_NAME)
+  const dbShmPath = path.join(pathToUserData, DB_SHM_FILE_NAME)
+  const dbWalPath = path.join(pathToUserData, DB_WAL_FILE_NAME)
   const secretKeyPath = path.join(pathToUserData, SECRET_KEY_FILE_NAME)
 
   return async () => {
@@ -60,7 +64,12 @@ module.exports = ({
       }
 
       await showLoadingWindow()
-      await zip(filePath, [dbPath, secretKeyPath])
+      await zip(filePath, [
+        dbPath,
+        dbShmPath,
+        dbWalPath,
+        secretKeyPath
+      ])
       await hideLoadingWindow()
 
       await showMessageModalDialog(win, {
