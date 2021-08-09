@@ -132,11 +132,33 @@ let isMigrationsError = false
       })
     })
 
+    ipc.on('message', (mess) => {
+      const { state } = { ...mess }
+
+      if (
+        state !== 'all-tables-have-been-cleared' &&
+        state !== 'all-tables-have-not-been-cleared'
+      ) {
+        return
+      }
+
+      process.send(mess)
+    })
+    process.on('message', (mess) => {
+      const { state } = { ...mess }
+
+      if (state !== 'clear-all-tables') {
+        return
+      }
+
+      ipc.send(mess)
+    })
+
     const announcePromise = grapes.onAnnounce('rest:report:api')
     const ipcReadyPromise = new Promise((resolve, reject) => {
       ipc.once('error', reject)
 
-      const handler = (mess) => {
+      const handlerMess = (mess) => {
         const { state } = { ...mess }
 
         if (state === 'error:migrations') {
@@ -149,13 +171,19 @@ let isMigrationsError = false
           return
         }
 
-        ipc.removeListener('error', reject)
-        ipc.removeListener('message', handler)
+        ipc.removeListener('error', handlerErr)
+        ipc.removeListener('message', handlerMess)
 
         resolve()
       }
-
-      ipc.on('message', handler)
+      const handlerErr = (err) => {
+        ipc.removeListener('message', handlerMess)
+  
+        reject(err)
+      }
+  
+      ipc.once('error', handlerErr)
+      ipc.on('message', handlerMess)
     })
 
     await Promise.all([announcePromise, ipcReadyPromise])

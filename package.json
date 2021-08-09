@@ -1,6 +1,6 @@
 {
   "name": "bfx-report-electron",
-  "version": "3.5.1",
+  "version": "3.5.2",
   "repository": "https://github.com/bitfinexcom/bfx-report-electron",
   "description": "Reporting tool",
   "author": "bitfinex.com",
@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "app-builder-bin": "^3.5.13",
-    "electron": "13.1.6",
+    "electron": "13.1.7",
     "electron-builder": "22.11.7",
     "node-gyp": "7.1.2",
     "node-pre-gyp": "^0.11.0",
@@ -63,6 +63,7 @@
       "repo": "bfx-report-electron",
       "owner": "bitfinexcom",
       "channel": "latest",
+      "allowPrerelease": true,
       "useMultipleRangeRequest": false,
       "updaterCacheDirName": "bfx-report-electron-updater"
     },
