@@ -2,9 +2,25 @@
 
 const electron = require('electron')
 
+const {
+  isZipRelease
+} = require('./auto-updater/utils')
+
 module.exports = () => {
   const app = electron.app || electron.remote.app
 
-  app.relaunch({ args: process.argv.slice(1).concat(['--relaunch']) })
+  const options = {
+    args: process.argv.slice(1).concat(['--relaunch'])
+  }
+
+  if (
+    process.env.APPIMAGE &&
+    !isZipRelease()
+  ) {
+    options.execPath = process.env.APPIMAGE
+    options.args.unshift('--appimage-extract-and-run')
+  }
+
+  app.relaunch(options)
   app.exit(0)
 }

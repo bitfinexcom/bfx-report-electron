@@ -84,6 +84,14 @@ module.exports = ({
           click: removeDB({ pathToUserData })
         },
         {
+          label: 'Clear all data',
+          accelerator: 'CmdOrCtrl+D',
+          click: removeDB({
+            pathToUserData,
+            shouldAllTablesBeCleared: true
+          })
+        },
+        {
           label: 'Change reports folder',
           accelerator: 'CmdOrCtrl+F',
           click: changeReportsFolder({ pathToUserDocuments })
