@@ -8,17 +8,258 @@ The Tool provides the following main reports sections
 
 <details>
 
-<summary>TODO:</summary>
+<summary>Types of filters available</summary>
 
-> TODO:
+> The columns might be filtered, so as to have a smaller screen, thereby removing information that is not required for analysis
+> Abailable the following types of filters:
+> - for string:
+>   - contains
+>   - begins with
+>   - ends with
+>   - equal to
+>   - not equal to
+> - for number
+>   - equal to
+>   - not equal to
+>   - greater than
+>   - greater/equal
+>   - less than
+>   - less/equal
+> - for date
+>   - before
+>   - equal to
+>   - not equal to
+> - for specific columns provides `equal to` and `not equal to` by selection list
 
 </details>
 
 <details>
 
-<summary>TODO:</summary>
+<summary>Ledgers</summary>
 
-> TODO:
+> Shows your past ledger entries. Most recent entries are returned by default, but a timestamp can be used to retrieve time-specific data. Contain sections `Date Range Selection`, `Filters`, `Refresh Button`, `Table`, `Pagination`
+
+</details>
+
+<details>
+
+<summary>Trades</summary>
+
+> - Shows your trades. Your most recent trades will be retrieved by default, but a timestamp can be used to retrieve time-specific data. Contain sections `Date Range Selection`, `Filters`, `Refresh Button`, `Table`, `Pagination`
+> - Shows candles, provides OCHL (Open, Close, High, Low) and volume data for the specified funding currency or trading pair. This section provides optional functionality to sync certain pairs and time period. Contain sections `Date Range Selection`, `Filters`, `Query Button`, `Refresh Button`, `Sync Preferences`, `Chart`
+
+</details>
+
+<details>
+
+<summary>Orders</summary>
+
+> Shows historic closed or cancelled orders. Contain sections `Date Range Selection`, `Filters`, `Refresh Button`, `Table`, `Pagination`
+
+</details>
+
+<details>
+
+<summary>Movements</summary>
+
+> Shows your past deposits/withdrawals. Currency can be specified to retrieve movements specific to that currency. Contain sections `Date Range Selection`, `Filters`, `Refresh Button`, `Table`, `Pagination`
+
+</details>
+
+<details>
+
+<summary>Positions</summary>
+
+> - Shows data on past positions. Timestamps can be used to retrieve results for a specific time period. Contain sections `Date Range Selection`, `Filters`, `Refresh Button`, `Table`, `Pagination`
+> - Shows an audit of your positions by click on position ID. Contain sections `Date Range Selection`, `Refresh Button`, `Table`
+> - Shows your active positions. Timestamps can be used to retrieve results for a specific time period. Contain sections `Date Range Selection`, `Filters`, `Refresh Button`, `Table`, `Pagination`
+
+</details>
+
+<details>
+
+<summary>Wallets</summary>
+
+> Shows account wallet balances. Contain sections `End Time Selection`, `Query Button`, `Refresh Button`, `Tables`
+
+</details>
+
+<details>
+
+<summary>Funding Bids & Offers</summary>
+
+> Shows past inactive funding offers. Contain sections `Date Range Selection`, `Filters`, `Refresh Button`, `Table`, `Pagination`
+
+</details>
+
+<details>
+
+<summary>Funding Loans (Unused)</summary>
+
+> Shows inactive funds not used in positions. Contain sections `Date Range Selection`, `Filters`, `Refresh Button`, `Table`, `Pagination`
+
+</details>
+
+<details>
+
+<summary>Funding Credit (Used)</summary>
+
+> Shows inactive funds used in positions. Contain sections `Date Range Selection`, `Filters`, `Refresh Button`, `Table`, `Pagination`
+
+</details>
+
+<details>
+
+<summary>Funding Earnings</summary>
+
+> Shows your past ledger entries for margin/swap/interest payment. Most recent entries are returned by default, but a timestamp can be used to retrieve time-specific data. Contain sections `Date Range Selection`, `Filters`, `Refresh Button`, `Table`, `Pagination`
+
+</details>
+
+<details>
+
+<summary>Staking Earnings</summary>
+
+> Shows your past ledger entries for staking payment. To get more information about staking and how it works, visit https://staking.bitfinex.com. Most recent entries are returned by default, but a timestamp can be used to retrieve time-specific data. Contain sections `Date Range Selection`, `Filters`, `Refresh Button`, `Table`, `Pagination`
+
+</details>
+
+<details>
+
+<summary>Affiliates Earnings</summary>
+
+> Shows your past ledger entries for earned fee/affiliate rebate. To get more information about affiliate program and how it works, visit https://www.bitfinex.com/affiliate. Most recent entries are returned by default, but a timestamp can be used to retrieve time-specific data. Contain sections `Date Range Selection`, `Filters`, `Refresh Button`, `Table`, `Pagination`
+
+</details>
+
+<details>
+
+<summary>Public Trades</summary>
+
+> Shows past public trades and includes details such as price, size, and time. This section provides optional functionality to sync certain pairs and time period. Contain sections `Date Range Selection`, `Filters`, `Refresh Button`, `Sync Preferences`, `Table`, `Pagination`
+
+</details>
+
+<details>
+
+<summary>Public Funding</summary>
+
+> Shows past public funding and includes details such as price, size, and time. This section provides optional functionality to sync certain pairs and time period. Contain sections `Date Range Selection`, `Filters`, `Refresh Button`, `Sync Preferences`, `Table`, `Pagination`
+
+</details>
+
+<details>
+
+<summary>Tickers</summary>
+
+> Shows history of recent tickers. Provides historic data of the best bid and ask at a 10-second interval. Historic data goes back 1 year. The oldest results have a 30-minute interval. This section provides optional functionality to sync certain pairs and time period. Contain sections `Date Range Selection`, `Filters`, `Refresh Button`, `Sync Preferences`, `Table`, `Pagination`
+
+</details>
+
+<details>
+
+<summary>Derivatives</summary>
+
+> Shows platform information about derivatives pair status. This section provides optional functionality to sync certain pairs and time period. Contain sections `Filters`, `Refresh Button`, `Sync Preferences`, `Table`
+
+</details>
+
+<details>
+
+<summary>Account Balance</summary>
+
+> Shows the daily, weekly or monthly account balances expressed in USD for the selected time frames. Contain sections `Date Range Selection`, `Filters`, `Query Button`, `Refresh Button`, `Chart`
+
+</details>
+
+<details>
+
+<summary>Loan Report</summary>
+
+> Shows users how their funding strategy is working. The results are displayed as daily returns, accumulative returns on the time period and as an annualized percentage return. Contain sections `Date Range Selection`, `Filters`, `Query Button`, `Refresh Button`, `Chart`
+
+</details>
+
+<details>
+
+<summary>Traded Volume</summary>
+
+> Shows the amount of traded volume over a certain period of time, allowing users to filter by pairs if required. Contain sections `Date Range Selection`, `Filters`, `Query Button`, `Refresh Button`, `Chart`
+
+</details>
+
+<details>
+
+<summary>Fees Report</summary>
+
+> Shows the fees paid by the user over selected periods of time, enabling users to filter by pairs if required. Contain sections `Date Range Selection`, `Filters`, `Query Button`, `Refresh Button`, `Chart`
+
+</details>
+
+<details>
+
+<summary>Average Win/Loss</summary>
+
+> Shows the daily, weekly and monthly portfolio gains across a selected time frame. Values are represented in USD or fiat currency of choice. The formula used takes into consideration equity, trades, funding earnings, funding costs, price movements, transactions, and fees; it does not take into account open margin positions. Contain sections `Date Range Selection`, `Filters`, `Query Button`, `Refresh Button`, `Chart`
+
+</details>
+
+<details>
+
+<summary>Concentration Risk</summary>
+
+> Shows the currency breakdown of your portfolio, at a select moment in time, allowing you to view a visual breakdown of your trading wallet and the respective proportions of each asset. Contain sections `End Time Selection`, `Query Button`, `Refresh Button`, `Table`, `Chart`
+
+</details>
+
+<details>
+
+<summary>Snapshots</summary>
+
+> Shows snapshot of an account at a certain moment:
+> - Positions: captures all the positions opened, displaying the key information at that moment for each position.
+> - Tickers: amounts are displayed in US dollar (USD). This section displays the tickers used to convert the amounts into the relative USD value.
+> - Wallets: snapshot of the wallets, the information is displayed consists of the currencies and balance for that exact moment
+> - Contain sections `End Time Selection`, `Query Button`, `Refresh Button`, `Tables`
+
+</details>
+
+<details>
+
+<summary>Tax Report</summary>
+
+> Shows tax report by selecting the relevant dates for the generation of the report. The report will be displayed in the `Final Result` tab:
+> - Total Result (USD): Total gains or losses during the selected period, expressed in US Dollars.
+> - Movements Total Amount (USD): The total result of movements expressed in US Dollars.
+> - Movements: All deposits and withdrawals completed during the specified period.
+> - Starting Period Balances: Total balances between all wallets and positions expressed in US Dollars.
+> - Ending Period Balances: Total balances between all wallets and positions expressed in US Dollars.
+> `Start snapshot` and `End snapshot` details the snapshots at the start or end of the period, with details of wallets, positions and tickers used to calculate the final result
+> Contain sections `Date Range Selection`, `Tables`
+
+</details>
+
+<details>
+
+<summary>Account Summary</summary>
+
+> Provides an overview of the different fee rates for the account as well as the LEO discount level and the average amount of LEO held over the last 30 days. Contain sections `Volume in the last 30 days`, `Fees on Bitfinex`, `Fees on Bitfinex Derivatives`, `Total return on your margin funds provided in the last 30 days`, `Trading fees charged in the last 30 days`, `Volume (eligible for fee tier calculation) in the last 30 days`
+
+</details>
+
+<details>
+
+<summary>Logins</summary>
+
+> Shows a list of past logins. Contain sections `Date Range Selection`, `Filters`, `Refresh Button`, `Table`, `Pagination`
+
+</details>
+
+<details>
+
+<summary>Change Logs</summary>
+
+> Shows all the changes made to the Bitfinex account, enabling users to keep track of changes made to their account. It shows where changes have been made providing the ability to track any suspicious activity. Contain sections `Date Range Selection`, `Filters`, `Refresh Button`, `Table`, `Pagination`
 
 </details>
 
@@ -72,9 +313,12 @@ Let users set preferred language, theme etc. The dialog places in the popup near
 
 </details>
 
-## Extra framework features
+## Bitfinex Reporting App extra features
 
-The reports framework provides additional features that are not available in the online version of the reporting tool
+Bitfinex Reporting App provides additional features that are not available in the online version.
+This is because the App saves all the users information locally enhancing the ability to present the information in new ways.
+Is worth noticing that as to provide this new type of reports the information must be priorly synced.
+First time opening the App or Syncing an account users would need to wait the process to be ended. After the first time the process works on the background
 
 <details>
 
@@ -104,33 +348,6 @@ The reports framework provides additional features that are not available in the
 
 <details>
 
-<summary>Types of filters available</summary>
-
-> The columns might be filtered, so as to have a smaller screen, thereby removing information that is not required for analysis
-> Abailable the following types of filters:
-> - for string:
->   - contains
->   - begins with
->   - ends with
->   - equal to
->   - not equal to
-> - for number
->   - equal to
->   - not equal to
->   - greater than
->   - greater/equal
->   - less than
->   - less/equal
-> - for date
->   - before
->   - equal to
->   - not equal to
-> - for specific columns provides `equal to` and `not equal to` by selection list
-
-</details>
-
-<details>
-
 <summary>How to show/hide columns</summary>
 
 > To show/hide columns just push the `Filter Columns` button and in the popup push the `Column Selection` item to use corresponding checkboxes
@@ -141,7 +358,7 @@ The reports framework provides additional features that are not available in the
 
 <summary>Login methodology</summary>
 
-> Users are saved locally, which means that there is no need to remember the API keys. This makes the process faster and more intuitive. Users can also add a password that encrypts their login information, protecting it from other users using the same terminal
+> Users are saved locally, which means that there is no need to remember the `API keys`. This makes the process faster and more intuitive. Users can also add a password that encrypts their login information, protecting it from other users using the same terminal
 
 </details>
 
@@ -155,17 +372,13 @@ The reports framework provides additional features that are not available in the
 
 <details>
 
-<summary>How to add remove a sub account</summary>
+<summary>How to add/remove a sub account</summary>
 
 > To create a sub-account firstly need to login with `API keys` which will be the master-user. Then need to create sub-account with `API keys` of the master-user and sub-users. For this need to go to the `Sub Accounts` section clicking item in bottom of the left menu bar. The sync will be processed for data of the master-user and all sub-users. Then to the system would be able to login with `API keys` of the master-user using corresponging `Sub Accounts` checkbox.
 > Once created, a user can login from the sub accounts section or from the normal login ticking the sub-account feature. Once logged in as a sub-account user, the information displayed is aggregated across the list of accounts added in the previous step. This can be extremely useful as a means of tracking the activity of all a user’s accounts in a single place, with aggregated data such as volume and performance metrics
 > Also there is possible to remove the sub-account totally and add/remove sub-users in the sub-account particularly
 
 </details>
-
-## Extra software features
-
-The desktop software provides the following extra features
 
 <details>
 
