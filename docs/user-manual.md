@@ -11,7 +11,7 @@ The Tool provides the following main reports sections
 <summary>Types of filters available</summary>
 
 > The columns might be filtered, so as to have a smaller screen, thereby removing information that is not required for analysis
-> Abailable the following types of filters:
+> Available the following types of filters:
 > - for string:
 >   - contains
 >   - begins with
@@ -46,7 +46,7 @@ The Tool provides the following main reports sections
 <summary>Trades</summary>
 
 > - Shows your trades. Your most recent trades will be retrieved by default, but a timestamp can be used to retrieve time-specific data. Contain sections `Date Range Selection`, `Filters`, `Refresh Button`, `Table`, `Pagination`
-> - Shows candles, provides OCHL (Open, Close, High, Low) and volume data for the specified funding currency or trading pair. This section provides optional functionality to sync certain pairs and time period. Contain sections `Date Range Selection`, `Filters`, `Query Button`, `Refresh Button`, `Sync Preferences`, `Chart`
+> - Shows candles, **displays your trades and trade information over** the market trading candles providing OCHL (Open, Close, High, Low) and volume data for the specified funding currency or trading pair. This section provides optional functionality to sync certain pairs and time period. Contain sections `Date Range Selection`, `Filters`, `Query Button`, `Refresh Button`, `Sync Preferences`, `Chart`
 
 </details>
 
@@ -112,7 +112,7 @@ The Tool provides the following main reports sections
 
 <summary>Funding Earnings</summary>
 
-> Shows your past ledger entries for margin/swap/interest payment. Most recent entries are returned by default, but a timestamp can be used to retrieve time-specific data. Contain sections `Date Range Selection`, `Filters`, `Refresh Button`, `Table`, `Pagination`
+> Shows your past ledger entries for interest earnings. Most recent entries are returned by default, but a timestamp can be used to retrieve time-specific data. Contain sections `Date Range Selection`, `Filters`, `Refresh Button`, `Table`, `Pagination`
 
 </details>
 
