@@ -56,7 +56,7 @@ body::-webkit-scrollbar-thumb,
 }
 
 .markdown-body {
-  background-color: #102331; /* #102331 / #172d3e */
+  background-color: #102331;
   padding: 16px 16px 0;
 }
 
@@ -90,12 +90,27 @@ body::-webkit-scrollbar-thumb,
 
 .markdown-body details,
 .markdown-body pre,
-.markdown-body p {
+.markdown-body p,
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
   text-align: left;
 }
 
 .markdown-body hr {
   background-color: rgba(255,255,255,0.1);
+}
+
+.markdown-body h1,
+.markdown-body h2 {
+  border-bottom: 1px solid #19354a;
+}
+
+.markdown-body blockquote {
+  border-left: .25em solid #19354a;
 }
 
 .rangeInput {

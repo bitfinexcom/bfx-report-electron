@@ -95,6 +95,12 @@ class SyncFrequencyChangingError extends BaseError {
   }
 }
 
+class UserManualShowingError extends BaseError {
+  constructor (message = 'ERR_USER_MANUAL_HAS_NOT_SHOWN') {
+    super(message)
+  }
+}
+
 module.exports = {
   BaseError,
   InvalidFilePathError,
@@ -110,5 +116,6 @@ module.exports = {
   WrongPathToUserCsvError,
   WrongSecretKeyError,
   ReportsFolderChangingError,
-  SyncFrequencyChangingError
+  SyncFrequencyChangingError,
+  UserManualShowingError
 }

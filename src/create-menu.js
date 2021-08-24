@@ -17,6 +17,7 @@ const {
   quitAndInstall
 } = require('./auto-updater')
 const { manageNewGithubIssue } = require('./error-manager')
+const showDocs = require('./show-docs')
 
 module.exports = ({
   pathToUserData,
@@ -126,8 +127,13 @@ module.exports = ({
         },
         { type: 'separator' },
         {
-          label: 'About',
+          label: 'User manual',
           accelerator: 'CmdOrCtrl+H',
+          click: showDocs
+        },
+        { type: 'separator' },
+        {
+          label: 'About',
           click: showAboutModalDialog()
         }
       ]
