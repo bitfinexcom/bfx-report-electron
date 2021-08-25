@@ -13,10 +13,8 @@ function updateSubmodules {
   fi
 
   git submodule sync --recursive
-  git submodule update --init --recursive
   git config url."https://github.com/".insteadOf git@github.com:
   git pull --recurse-submodules
-  git submodule update --remote --recursive
 
   if [ $branch != "master" ]
   then
