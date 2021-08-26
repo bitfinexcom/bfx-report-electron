@@ -12,13 +12,11 @@ function updateSubmodules {
     exit 1
   fi
 
-  git submodule foreach --recursive git clean -fdx
-  git submodule foreach --recursive git reset --hard HEAD
   git submodule sync --recursive
-  git submodule update --init --recursive
+  git submodule update --recursive
   git config url."https://github.com/".insteadOf git@github.com:
+  git submodule update --recursive
   git pull --recurse-submodules
-  git submodule update --remote --recursive
 
   if [ $branch != "master" ]
   then
