@@ -178,10 +178,10 @@ let isMigrationsError = false
       }
       const handlerErr = (err) => {
         ipc.removeListener('message', handlerMess)
-  
+
         reject(err)
       }
-  
+
       ipc.once('error', handlerErr)
       ipc.on('message', handlerMess)
     })

@@ -211,7 +211,7 @@ const initLogger = () => {
       const error = message.data.join(os.EOL)
 
       // Don't open a new issue when can't download differentially
-      // it would fallback to full download 
+      // it would fallback to full download
       if (/Cannot download differentially/gi.test(error)) {
         return message
       }
