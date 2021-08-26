@@ -3,6 +3,8 @@
 const { app } = require('electron')
 const path = require('path')
 
+const { CSV_PATH_VERSION } = require('./const')
+
 const triggerElectronLoad = require('./trigger-electron-load')
 const wins = require('./windows')
 const ipcs = require('./ipcs')
@@ -49,6 +51,55 @@ const pathToLayoutExprPortReq = path
 const { rule: schedulerRule } = require(
   '../bfx-reports-framework/config/schedule.json'
 )
+
+const _resetCsvPath = async (
+  configsKeeper,
+  opts = {}
+) => {
+  const {
+    pathToUserCsv,
+    isRelativeCsvPath
+  } = opts
+
+  // Need to use a new csv folder path for export
+  const storedPathToUserCsv = configsKeeper
+    .getConfigByName('pathToUserCsv')
+  const csvPathVersion = configsKeeper
+    .getConfigByName('csvPathVersion')
+
+  if (csvPathVersion === CSV_PATH_VERSION) {
+    return
+  }
+  if (
+    (
+      isRelativeCsvPath &&
+      !storedPathToUserCsv.endsWith('csv')
+    ) ||
+    (
+      !isRelativeCsvPath &&
+      !storedPathToUserCsv.endsWith('bitfinex/reports')
+    ) ||
+    (
+      !isRelativeCsvPath &&
+      !path.isAbsolute(storedPathToUserCsv)
+    ) ||
+    (
+      isRelativeCsvPath &&
+      path.isAbsolute(storedPathToUserCsv)
+    )
+  ) {
+    await configsKeeper.saveConfigs({
+      csvPathVersion: CSV_PATH_VERSION,
+      pathToUserCsv
+    })
+
+    return
+  }
+
+  await configsKeeper.saveConfigs({
+    csvPathVersion: CSV_PATH_VERSION
+  })
+}
 
 const _ipcMessToPromise = (ipc) => {
   return new Promise((resolve, reject) => {
@@ -101,31 +152,13 @@ module.exports = async () => {
         schedulerRule
       }
     )
-
-    // Need to use a new csv folder path for export
-    const storedPathToUserCsv = configsKeeper
-      .getConfigByName('pathToUserCsv')
-
-    if (
-      (
-        isRelativeCsvPath &&
-        !storedPathToUserCsv.endsWith('csv')
-      ) ||
-      (
-        !isRelativeCsvPath &&
-        !storedPathToUserCsv.endsWith('bitfinex/reports')
-      ) ||
-      (
-        !isRelativeCsvPath &&
-        !path.isAbsolute(storedPathToUserCsv)
-      ) ||
-      (
-        isRelativeCsvPath &&
-        path.isAbsolute(storedPathToUserCsv)
-      )
-    ) {
-      await configsKeeper.saveConfigs({ pathToUserCsv })
-    }
+    _resetCsvPath(
+      configsKeeper,
+      {
+        pathToUserCsv,
+        isRelativeCsvPath
+      }
+    )
 
     const secretKey = await makeOrReadSecretKey(
       { pathToUserData }
