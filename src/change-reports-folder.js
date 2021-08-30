@@ -2,6 +2,8 @@
 
 const electron = require('electron')
 
+const { CSV_PATH_VERSION } = require('./const')
+
 const {
   InvalidFilePathError,
   ReportsFolderChangingError
@@ -51,7 +53,10 @@ module.exports = ({ pathToUserDocuments }) => {
 
       await pauseApp()
       const isSaved = await getConfigsKeeperByName('main')
-        .saveConfigs({ pathToUserCsv: filePaths[0] })
+        .saveConfigs({
+          csvPathVersion: CSV_PATH_VERSION,
+          pathToUserCsv: filePaths[0]
+        })
 
       if (!isSaved) {
         throw new ReportsFolderChangingError()
