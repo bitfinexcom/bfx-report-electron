@@ -31,7 +31,7 @@
     "yauzl": "2.10.0"
   },
   "devDependencies": {
-    "app-builder-bin": "^3.5.13",
+    "app-builder-bin": "4.1.0",
     "electron": "13.4.0",
     "electron-builder": "22.11.7",
     "node-gyp": "7.1.2",
