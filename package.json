@@ -10,7 +10,7 @@
     "archiver": "5.3.0",
     "async": "3.2.1",
     "bfx-svc-test-helper": "git+https://github.com/bitfinexcom/bfx-svc-test-helper.git",
-    "bittorrent-dht": "^8.4.0",
+    "bittorrent-dht": "10.0.2",
     "clean-stack": "^3.0.1",
     "cron-validate": "^1.4.2",
     "ed25519-supercop": "^2.0.1",
