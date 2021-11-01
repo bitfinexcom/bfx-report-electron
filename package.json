@@ -21,7 +21,7 @@
     "electron-updater": "4.3.8",
     "extract-zip": "2.0.1",
     "find-free-port": "2.0.0",
-    "github-markdown-css": "^4.0.0",
+    "github-markdown-css": "4.0.0",
     "grenache-grape": "git+https://github.com/bitfinexcom/grenache-grape.git",
     "js-yaml": "^4.0.0",
     "lodash": "^4.17.15",
