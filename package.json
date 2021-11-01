@@ -28,7 +28,7 @@
     "new-github-issue-url": "0.2.1",
     "showdown": "1.9.1",
     "truncate-utf8-bytes": "1.0.2",
-    "yauzl": "^2.10.0"
+    "yauzl": "2.10.0"
   },
   "devDependencies": {
     "app-builder-bin": "^3.5.13",
