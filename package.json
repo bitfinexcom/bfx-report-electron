@@ -23,7 +23,7 @@
     "find-free-port": "2.0.0",
     "github-markdown-css": "4.0.0",
     "grenache-grape": "git+https://github.com/bitfinexcom/grenache-grape.git",
-    "js-yaml": "^4.0.0",
+    "js-yaml": "4.1.0",
     "lodash": "^4.17.15",
     "new-github-issue-url": "^0.2.1",
     "showdown": "^1.9.1",
