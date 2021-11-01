@@ -36,7 +36,7 @@
     "electron-builder": "22.11.7",
     "node-gyp": "7.1.2",
     "@mapbox/node-pre-gyp": "1.0.6",
-    "standard": "^16.0.3"
+    "standard": "16.0.4"
   },
   "standard": {
     "globals": [
