@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "app-builder-bin": "4.1.0",
-    "electron": "13.4.0",
+    "electron": "13.6.1",
     "electron-builder": "22.11.7",
     "node-gyp": "7.1.2",
     "@mapbox/node-pre-gyp": "1.0.6",
