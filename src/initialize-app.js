@@ -17,9 +17,6 @@ const {
 const {
   hideLoadingWindow
 } = require('./change-loading-win-visibility-state')
-const showMigrationsModalDialog = require(
-  './show-migrations-modal-dialog'
-)
 const makeOrReadSecretKey = require('./make-or-read-secret-key')
 const {
   configsKeeperFactory
@@ -41,6 +38,9 @@ const {
 const enforceMacOSAppLocation = require(
   './enforce-macos-app-location'
 )
+const manageBackupModalDialogs = require(
+  './manage-backup-modal-dialogs'
+)
 
 const pathToLayouts = path.join(__dirname, 'layouts')
 const pathToLayoutAppInitErr = path
@@ -51,6 +51,8 @@ const pathToLayoutExprPortReq = path
 const { rule: schedulerRule } = require(
   '../bfx-reports-framework/config/schedule.json'
 )
+
+let isExpressPortError = false
 
 const _resetCsvPath = async (
   configsKeeper,
@@ -104,7 +106,13 @@ const _resetCsvPath = async (
 const _ipcMessToPromise = (ipc) => {
   return new Promise((resolve, reject) => {
     try {
-      ipc.once('message', (mess) => {
+      let interval = null
+
+      const rmHandler = () => {
+        ipc.off('message', handler)
+        clearInterval(interval)
+      }
+      const handler = (mess) => {
         if (
           mess ||
           typeof mess === 'object' ||
@@ -113,8 +121,40 @@ const _ipcMessToPromise = (ipc) => {
           mess.err = deserializeError(mess.err)
         }
 
-        resolve(mess)
-      })
+        const { state, err } = mess ?? {}
+
+        interval = setInterval(() => {
+          rmHandler()
+          reject(new AppInitializationError())
+        }, 10 * 60 * 1000).unref()
+
+        if (typeof state !== 'string') {
+          rmHandler()
+          reject(new IpcMessageError())
+
+          return
+        }
+        if (state === 'error:express-port-required') {
+          isExpressPortError = true
+    
+          rmHandler()
+          reject(err || new RunningExpressOnPortError())
+
+          return
+        }
+        if (state === 'error:app-init') {
+          rmHandler()
+          reject(err || new AppInitializationError())
+
+          return
+        }
+        if (state === 'ready:server') {
+          rmHandler()
+          resolve(mess)
+        }
+      }
+
+      ipc.on('message', handler)
     } catch (err) {
       reject(err)
     }
@@ -122,8 +162,6 @@ const _ipcMessToPromise = (ipc) => {
 }
 
 module.exports = async () => {
-  let isExpressPortError = false
-
   try {
     app.on('window-all-closed', () => {
       app.quit()
@@ -172,42 +210,15 @@ module.exports = async () => {
       pathToUserData,
       secretKey
     })
+    manageBackupModalDialogs()
 
-    const mess = await _ipcMessToPromise(ipcs.serverIpc)
-    const {
-      state,
-      isMigrationsError,
-      isMigrationsReady,
-      err
-    } = { ...mess }
-
-    if (typeof state !== 'string') {
-      throw new IpcMessageError()
-    }
-    if (state === 'error:express-port-required') {
-      isExpressPortError = true
-
-      throw err || new RunningExpressOnPortError()
-    }
-    if (state === 'error:app-init') {
-      throw err || new AppInitializationError()
-    }
-    if (state !== 'ready:server') {
-      throw new AppInitializationError()
-    }
     if (appStates.isMainWinMaximized) {
       wins.mainWindow.maximize()
     }
 
     await hideLoadingWindow({ isRequiredToShowMainWin: true })
-
+    await _ipcMessToPromise(ipcs.serverIpc)
     await triggerElectronLoad()
-
-    await showMigrationsModalDialog(
-      isMigrationsError,
-      isMigrationsReady
-    )
-
     await checkForUpdatesAndNotify()
   } catch (err) {
     if (isExpressPortError) {
