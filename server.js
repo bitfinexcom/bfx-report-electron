@@ -33,9 +33,6 @@ const {
 
 const emitter = new EventEmitter()
 
-let isMigrationsReady = false
-let isMigrationsError = false
-
 ;(async () => {
   try {
     const pathToUserData = process.env.PATH_TO_USER_DATA
@@ -137,7 +134,19 @@ let isMigrationsError = false
 
       if (
         state !== 'all-tables-have-been-cleared' &&
-        state !== 'all-tables-have-not-been-cleared'
+        state !== 'all-tables-have-not-been-cleared' &&
+
+        state !== 'all-tables-have-been-removed' &&
+        state !== 'all-tables-have-not-been-removed' &&
+
+        state !== 'backup:progress' &&
+        state !== 'error:backup' &&
+
+        state !== 'ready:migrations' &&
+        state !== 'error:migrations' &&
+
+        state !== 'request:migration-has-failed:what-should-be-done' &&
+        state !== 'request:should-all-tables-be-removed'
       ) {
         return
       }
@@ -147,7 +156,11 @@ let isMigrationsError = false
     process.on('message', (mess) => {
       const { state } = { ...mess }
 
-      if (state !== 'clear-all-tables') {
+      if (
+        state !== 'clear-all-tables' &&
+        state !== 'remove-all-tables' &&
+        state !== 'response:migration-has-failed:what-should-be-done'
+      ) {
         return
       }
 
@@ -161,12 +174,6 @@ let isMigrationsError = false
       const handlerMess = (mess) => {
         const { state } = { ...mess }
 
-        if (state === 'error:migrations') {
-          isMigrationsError = true
-        }
-        if (state === 'ready:migrations') {
-          isMigrationsReady = true
-        }
         if (state !== 'ready:worker') {
           return
         }
@@ -217,11 +224,7 @@ emitter.once('ready:grapes-worker', () => {
 })
 
 emitter.once('ready:server', () => {
-  process.send({
-    state: 'ready:server',
-    isMigrationsError,
-    isMigrationsReady
-  })
+  process.send({ state: 'ready:server' })
 })
 
 module.exports = emitter
