@@ -136,7 +136,7 @@ const _ipcMessToPromise = (ipc) => {
         }
         if (state === 'error:express-port-required') {
           isExpressPortError = true
-    
+
           rmHandler()
           reject(err || new RunningExpressOnPortError())
 

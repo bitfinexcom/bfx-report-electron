@@ -32,6 +32,8 @@ module.exports = () => {
         return
       }
 
+      const data = mess?.data ?? {}
+
       const isMigrationsError = mess.state === 'error:migrations'
       const isMigrationsReady = mess.state === 'ready:migrations'
 
@@ -43,11 +45,8 @@ module.exports = () => {
           isMigrationsError,
           isMigrationsReady
         )
-        
-        return
-      }
-      if (mess.state === 'error:migrations') {
 
+        return
       }
       if (mess.state === 'request:migration-has-failed:what-should-be-done') {
         const {
@@ -56,7 +55,7 @@ module.exports = () => {
           type: 'question',
           title: 'The migration has failed',
           message: 'What should be done?',
-          buttons: ['Cancel', 'Try to restore DB', 'Remove DB'],
+          buttons: ['Cancel', 'Try to restore DB', 'Remove DB']
         })
 
         if (btnId === 0) {
@@ -65,8 +64,6 @@ module.exports = () => {
           return
         }
 
-        console.log('[btnId]:', btnId)
-
         ipc.send({
           state: 'response:migration-has-failed:what-should-be-done',
           data: {
@@ -74,6 +71,32 @@ module.exports = () => {
             shouldRemove: btnId === 2
           }
         })
+
+        return
+      }
+      if (mess.state === 'request:should-all-tables-be-removed') {
+        const title = data.isNotDbRestored
+          ? 'DB has not been restored'
+          : 'Remove database'
+
+        const {
+          btnId
+        } = await showMessageModalDialog(win, {
+          type: 'question',
+          title,
+          message: 'Should all tables be removed?',
+          buttons: ['Cancel', 'OK']
+        })
+
+        if (btnId === 0) {
+          if (data.isNotDbRestored) {
+            relaunch()
+          }
+
+          return
+        }
+
+        ipc.send({ state: 'remove-all-tables' })
 
         return
       }
