@@ -36,7 +36,56 @@ module.exports = () => {
 
       const isMigrationsError = mess.state === 'error:migrations'
       const isMigrationsReady = mess.state === 'ready:migrations'
+      const isBackupError = mess.state === 'error:backup'
+      const isBackupInProgress = mess.state === 'backup:progress'
+      const isBackupFinished = mess.state === 'backup:finished'
 
+      if (isBackupError) {
+        await showMessageModalDialog(win, {
+          type: 'error',
+          title: 'DB backup error',
+          message: 'DB backup has not been successfully',
+          buttons: ['OK'],
+          defaultId: 0,
+          cancelId: 0
+        })
+
+        return
+      }
+      if (isBackupFinished) {
+        await showMessageModalDialog(win, {
+          type: 'info',
+          title: 'DB backup',
+          message: 'DB backup has been successfully',
+          buttons: ['OK'],
+          defaultId: 0,
+          cancelId: 0
+        })
+
+        return
+      }
+      if (
+        isBackupInProgress ||
+        isBackupFinished
+      ) {
+        const calcedProgress = (
+          isBackupFinished ||
+          data.progress >= 100
+        )
+          ? 0
+          : data.progress / 100
+        const progress = (
+          Number.isFinite(calcedProgress) &&
+          calcedProgress >= 0 &&
+          calcedProgress < 1
+        )
+          ? calcedProgress
+          : 0
+
+        win.setProgressBar(progress)
+
+        return
+      }
       if (
         isMigrationsError ||
         isMigrationsReady
@@ -102,7 +151,7 @@ module.exports = () => {
       }
     } catch (err) {
       try {
-        await showErrorModalDialog(win, 'Unexpected exception', err)
+        await showErrorModalDialog(win, 'Error', err)
       } catch (err) {
         console.error(err)
       }
