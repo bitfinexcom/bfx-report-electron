@@ -39,7 +39,31 @@ module.exports = () => {
       const isBackupError = mess.state === 'error:backup'
       const isBackupInProgress = mess.state === 'backup:progress'
       const isBackupFinished = mess.state === 'backup:finished'
+      const haveAllDbDataBeenRemoved = mess.state === 'all-tables-have-been-removed'
+      const haveNotAllDbDataBeenRemoved = mess.state === 'all-tables-have-not-been-removed'
 
+      if (
+        haveAllDbDataBeenRemoved ||
+        haveNotAllDbDataBeenRemoved
+      ) {
+        const messChunk = haveNotAllDbDataBeenRemoved
+          ? ' not'
+          : ''
+        const type = haveNotAllDbDataBeenRemoved
+          ? 'error'
+          : 'info'
+
+        await showMessageModalDialog(win, {
+          type,
+          title: 'DB removing',
+          message: `DB data have${messChunk} been removed`,
+          buttons: ['OK'],
+          defaultId: 0,
+          cancelId: 0
+        })
+
+        return
+      }
       if (
         isBackupFinished ||
         isBackupError
