@@ -40,23 +40,21 @@ module.exports = () => {
       const isBackupInProgress = mess.state === 'backup:progress'
       const isBackupFinished = mess.state === 'backup:finished'
 
-      if (isBackupError) {
-        await showMessageModalDialog(win, {
-          type: 'error',
-          title: 'DB backup error',
-          message: 'DB backup has not been successfully',
-          buttons: ['OK'],
-          defaultId: 0,
-          cancelId: 0
-        })
+      if (
+        isBackupFinished ||
+        isBackupError
+      ) {
+        const messChunk = isBackupError
+          ? ' not'
+          : ''
+        const type = isBackupError
+          ? 'error'
+          : 'info'
 
-        return
-      }
-      if (isBackupFinished) {
         await showMessageModalDialog(win, {
-          type: 'info',
+          type,
           title: 'DB backup',
-          message: 'DB backup has been successfully',
+          message: `DB backup has${messChunk} been successfully`,
           buttons: ['OK'],
           defaultId: 0,
           cancelId: 0
