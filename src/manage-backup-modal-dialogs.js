@@ -41,7 +41,31 @@ module.exports = () => {
       const isBackupFinished = mess.state === 'backup:finished'
       const haveAllDbDataBeenRemoved = mess.state === 'all-tables-have-been-removed'
       const haveNotAllDbDataBeenRemoved = mess.state === 'all-tables-have-not-been-removed'
+      const hasDbBeenRestored = mess.state === 'db-has-been-restored'
+      const hasNotDbBeenRestored = mess.state === 'db-has-not-been-restored'
 
+      if (
+        hasDbBeenRestored ||
+        hasNotDbBeenRestored
+      ) {
+        const messChunk = hasNotDbBeenRestored
+          ? ' not'
+          : ''
+        const type = hasNotDbBeenRestored
+          ? 'error'
+          : 'info'
+
+        await showMessageModalDialog(win, {
+          type,
+          title: 'DB restoring',
+          message: `DB has${messChunk} been restored`,
+          buttons: ['OK'],
+          defaultId: 0,
+          cancelId: 0
+        })
+
+        return
+      }
       if (
         haveAllDbDataBeenRemoved ||
         haveNotAllDbDataBeenRemoved
