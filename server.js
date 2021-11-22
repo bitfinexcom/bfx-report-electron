@@ -146,7 +146,9 @@ const emitter = new EventEmitter()
         state !== 'error:migrations' &&
 
         state !== 'request:migration-has-failed:what-should-be-done' &&
-        state !== 'request:should-all-tables-be-removed'
+        state !== 'request:should-all-tables-be-removed' &&
+
+        state !== 'response:get-backup-files-metadata'
       ) {
         return
       }
@@ -159,7 +161,9 @@ const emitter = new EventEmitter()
       if (
         state !== 'clear-all-tables' &&
         state !== 'remove-all-tables' &&
-        state !== 'response:migration-has-failed:what-should-be-done'
+        state !== 'response:migration-has-failed:what-should-be-done' &&
+
+        state !== 'request:get-backup-files-metadata'
       ) {
         return
       }
