@@ -140,10 +140,14 @@ const emitter = new EventEmitter()
         state !== 'all-tables-have-not-been-removed' &&
 
         state !== 'backup:progress' &&
+        state !== 'backup:finished' &&
         state !== 'error:backup' &&
 
         state !== 'ready:migrations' &&
         state !== 'error:migrations' &&
+
+        state !== 'db-has-been-restored' &&
+        state !== 'db-has-not-been-restored' &&
 
         state !== 'request:migration-has-failed:what-should-be-done' &&
         state !== 'request:should-all-tables-be-removed' &&
@@ -161,6 +165,8 @@ const emitter = new EventEmitter()
       if (
         state !== 'clear-all-tables' &&
         state !== 'remove-all-tables' &&
+        state !== 'restore-db' &&
+
         state !== 'response:migration-has-failed:what-should-be-done' &&
 
         state !== 'request:get-backup-files-metadata'
