@@ -11,6 +11,9 @@ const wins = require('../windows')
 const {
   deserializeError
 } = require('../helpers/utils')
+const showMessageModalDialog = require(
+  '../show-message-modal-dialog'
+)
 
 const fontsStyle = fs.readFileSync(path.join(
   rootPath, 'bfx-report-ui/build/fonts/roboto.css'
@@ -226,7 +229,16 @@ module.exports = () => {
         !Array.isArray(backupFilesMetadata) ||
         backupFilesMetadata.length === 0
       ) {
-        throw new Error() // TODO:
+        await showMessageModalDialog(wins.mainWindow, {
+          type: 'warning',
+          title: 'DB restoring',
+          message: 'Suitable DB backup file has not been found',
+          buttons: ['OK'],
+          defaultId: 0,
+          cancelId: 0
+        })
+
+        return
       }
 
       const res = await _fireAlert({ backupFilesMetadata })
