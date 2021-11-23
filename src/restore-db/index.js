@@ -47,13 +47,21 @@ const _closeAlert = (alert) => {
 
 const _fireAlert = (params) => {
   const {
-    title = 'Select DB backup file'
+    title = 'Select DB backup file',
+    backupFilesMetadata
   } = params
   const win = wins.mainWindow
 
   if (!_isMainWinAvailable()) {
     return { value: false }
   }
+
+  const inputOptions = backupFilesMetadata.reduce((accum, item) => {
+    accum[item?.name] = item?.name
+
+    return accum
+  }, {})
+  const inputValue = backupFilesMetadata[0]?.name
 
   const _screen = screen || remote.screen
   const {
@@ -91,7 +99,9 @@ const _fireAlert = (params) => {
     allowOutsideClick: false,
     backdrop: 'rgba(0,0,0,0.0)',
     customClass: {
-      content: 'select-db-backup'
+      title: 'titleColor',
+      content: 'select-db-backup textColor',
+      input: 'textColor radioInput'
     },
 
     type: 'question',
@@ -101,6 +111,10 @@ const _fireAlert = (params) => {
     showCancelButton: true,
     cancelButtonText: 'Cancel',
     timerProgressBar: false,
+
+    input: 'radio',
+    inputValue,
+    inputOptions,
 
     onBeforeOpen: () => {
       if (
@@ -160,7 +174,6 @@ const _getBackupFilesMetadata = (ipc) => {
         clearInterval(interval)
       }
       const handler = (mess) => {
-        console.log('[---0-mess---]:', mess)
         if (mess?.state !== 'response:get-backup-files-metadata') {
           return
         }
@@ -203,13 +216,30 @@ module.exports = () => {
         throw new Error() // TODO:
       }
 
-      console.log('[start-backup]')
       const backupFilesMetadata = await _getBackupFilesMetadata(
         ipcs.serverIpc
       )
-      console.log('[backupFilesMetadata]:', backupFilesMetadata)
 
-      await _fireAlert({ backupFilesMetadata })
+      if (
+        !Array.isArray(backupFilesMetadata) ||
+        backupFilesMetadata.length === 0
+      ) {
+        throw new Error() // TODO:
+      }
+
+      const res = await _fireAlert({ backupFilesMetadata })
+
+      if (
+        !res?.value ||
+        typeof res?.value !== 'string'
+      ) {
+        return
+      }
+
+      ipcs.serverIpc.send({
+        state: 'restore-db',
+        data: { name: res.value }
+      })
     } catch (err) {
       console.error(err)
     }
