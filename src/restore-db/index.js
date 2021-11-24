@@ -20,6 +20,9 @@ const showMessageModalDialog = require(
 const {
   closeAlert
 } = require('../modal-dialog-src/utils')
+const {
+  DbRestoringError
+} = require('../errors')
 
 const fontsStyle = fs.readFileSync(path.join(
   rootPath, 'bfx-report-ui/build/fonts/roboto.css'
@@ -175,7 +178,7 @@ const _getBackupFilesMetadata = (ipc) => {
 
         interval = setInterval(() => {
           rmHandler()
-          reject(new Error()) // TODO:
+          reject(new DbRestoringError())
         }, 30 * 1000).unref()
 
         if (data?.err) {
@@ -206,7 +209,7 @@ module.exports = () => {
         !app.isReady() ||
         !isMainWinAvailable()
       ) {
-        throw new Error() // TODO:
+        throw new DbRestoringError()
       }
 
       const backupFilesMetadata = await _getBackupFilesMetadata(
