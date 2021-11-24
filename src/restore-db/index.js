@@ -11,6 +11,9 @@ const wins = require('../windows')
 const {
   deserializeError
 } = require('../helpers/utils')
+const isMainWinAvailable = require(
+  '../helpers/is-main-win-available'
+)
 const showMessageModalDialog = require(
   '../show-message-modal-dialog'
 )
@@ -30,14 +33,6 @@ const style = `<style>${alertStyle}</style>`
 const script = `<script type="text/javascript">${alertScript}</script>`
 const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
 
-const _isMainWinAvailable = () => {
-  return (
-    wins.mainWindow &&
-    typeof wins.mainWindow === 'object' &&
-    !wins.mainWindow.isDestroyed()
-  )
-}
-
 const _closeAlert = (alert) => {
   if (
     !alert ||
@@ -55,7 +50,7 @@ const _fireAlert = (params) => {
   } = params
   const win = wins.mainWindow
 
-  if (!_isMainWinAvailable()) {
+  if (!isMainWinAvailable()) {
     return { value: false }
   }
 
@@ -216,7 +211,7 @@ module.exports = () => {
     try {
       if (
         !app.isReady() ||
-        !_isMainWinAvailable()
+        !isMainWinAvailable()
       ) {
         throw new Error() // TODO:
       }

@@ -8,6 +8,9 @@ const Alert = require('electron-alert')
 const { rootPath } = require('electron-root-path')
 
 const wins = require('../windows')
+const isMainWinAvailable = require(
+  '../helpers/is-main-win-available'
+)
 const { UserManualShowingError } = require('../errors')
 
 const mdUserManual = fs.readFileSync(
@@ -42,14 +45,6 @@ const converter = new Converter({
   requireSpaceBeforeHeadingText: true
 })
 
-const _isMainWinAvailable = () => {
-  return (
-    wins.mainWindow &&
-    typeof wins.mainWindow === 'object' &&
-    !wins.mainWindow.isDestroyed()
-  )
-}
-
 const _closeAlert = (alert) => {
   if (
     !alert ||
@@ -67,7 +62,7 @@ const _fireAlert = (params) => {
   } = params
   const win = wins.mainWindow
 
-  if (!_isMainWinAvailable()) {
+  if (!isMainWinAvailable()) {
     return { value: false }
   }
 
@@ -175,7 +170,7 @@ module.exports = async (params = {}) => {
 
     if (
       !app.isReady() ||
-      !_isMainWinAvailable()
+      !isMainWinAvailable()
     ) {
       throw new UserManualShowingError()
     }

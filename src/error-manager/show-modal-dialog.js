@@ -9,6 +9,9 @@ const { rootPath } = require('electron-root-path')
 
 const wins = require('../windows')
 const spawn = require('../helpers/spawn')
+const isMainWinAvailable = require(
+  '../helpers/is-main-win-available'
+)
 
 const mdStyle = fs.readFileSync(path.join(
   rootPath, 'node_modules', 'github-markdown-css/github-markdown.css'
@@ -37,14 +40,6 @@ const converter = new Converter({
   requireSpaceBeforeHeadingText: true
 })
 
-const _isMainWinAvailable = () => {
-  return (
-    wins.mainWindow &&
-    typeof wins.mainWindow === 'object' &&
-    !wins.mainWindow.isDestroyed()
-  )
-}
-
 const _closeAlert = (alert) => {
   if (
     !alert ||
@@ -63,7 +58,7 @@ const _fireAlert = (params) => {
   } = params
   const win = wins.mainWindow
 
-  if (!_isMainWinAvailable()) {
+  if (!isMainWinAvailable()) {
     return { value: false }
   }
 
@@ -174,7 +169,7 @@ module.exports = async (params) => {
 
   if (
     app.isReady() &&
-    _isMainWinAvailable()
+    isMainWinAvailable()
   ) {
     const html = converter.makeHtml(mdIssue)
 
