@@ -68,7 +68,7 @@ const _fireAlert = (params) => {
   const { height: screenHeight } = workArea
   const maxHeight = Math.floor(screenHeight * 0.90)
 
-  const alert = new Alert([fonts, style, script], true)
+  const alert = new Alert([fonts, style, script])
   const _close = () => closeAlert(alert)
 
   win.once('closed', _close)
@@ -125,7 +125,6 @@ const _fireAlert = (params) => {
         !alert.browserWindow
       ) return
 
-      alert.browserWindow.webContents.openDevTools()
       alert.browserWindow.show()
       const { height } = alert.browserWindow
         .getContentBounds()
