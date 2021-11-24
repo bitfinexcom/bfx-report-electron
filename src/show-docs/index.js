@@ -11,6 +11,9 @@ const wins = require('../windows')
 const isMainWinAvailable = require(
   '../helpers/is-main-win-available'
 )
+const {
+  closeAlert
+} = require('../modal-dialog-src/utils')
 const { UserManualShowingError } = require('../errors')
 
 const mdUserManual = fs.readFileSync(
@@ -45,16 +48,6 @@ const converter = new Converter({
   requireSpaceBeforeHeadingText: true
 })
 
-const _closeAlert = (alert) => {
-  if (
-    !alert ||
-    !alert.browserWindow
-  ) return
-
-  alert.browserWindow.hide()
-  alert.browserWindow.close()
-}
-
 const _fireAlert = (params) => {
   const {
     title = 'User manual',
@@ -78,7 +71,7 @@ const _fireAlert = (params) => {
   const maxHeight = Math.floor(screenHeight * 0.90)
 
   const alert = new Alert([mdS, fonts, style, script])
-  const _close = () => _closeAlert(alert)
+  const _close = () => closeAlert(alert)
 
   win.once('closed', _close)
 

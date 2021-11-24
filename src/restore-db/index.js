@@ -17,6 +17,9 @@ const isMainWinAvailable = require(
 const showMessageModalDialog = require(
   '../show-message-modal-dialog'
 )
+const {
+  closeAlert
+} = require('../modal-dialog-src/utils')
 
 const fontsStyle = fs.readFileSync(path.join(
   rootPath, 'bfx-report-ui/build/fonts/roboto.css'
@@ -32,16 +35,6 @@ const fonts = `<style>${fontsStyle}</style>`
 const style = `<style>${alertStyle}</style>`
 const script = `<script type="text/javascript">${alertScript}</script>`
 const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
-
-const _closeAlert = (alert) => {
-  if (
-    !alert ||
-    !alert.browserWindow
-  ) return
-
-  alert.browserWindow.hide()
-  alert.browserWindow.close()
-}
 
 const _fireAlert = (params) => {
   const {
@@ -73,7 +66,7 @@ const _fireAlert = (params) => {
   const maxHeight = Math.floor(screenHeight * 0.90)
 
   const alert = new Alert([fonts, style, script], true)
-  const _close = () => _closeAlert(alert)
+  const _close = () => closeAlert(alert)
 
   win.once('closed', _close)
 
