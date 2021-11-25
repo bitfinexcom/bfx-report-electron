@@ -133,6 +133,8 @@ const emitter = new EventEmitter()
       const { state } = { ...mess }
 
       if (
+        state !== 'error:worker' &&
+
         state !== 'all-tables-have-been-cleared' &&
         state !== 'all-tables-have-not-been-cleared' &&
 
@@ -179,8 +181,6 @@ const emitter = new EventEmitter()
 
     const announcePromise = grapes.onAnnounce('rest:report:api')
     const ipcReadyPromise = new Promise((resolve, reject) => {
-      ipc.once('error', reject)
-
       const handlerMess = (mess) => {
         const { state } = { ...mess }
 
