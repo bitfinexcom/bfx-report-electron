@@ -7,7 +7,6 @@ const { CSV_PATH_VERSION } = require('./const')
 
 const triggerElectronLoad = require('./trigger-electron-load')
 const wins = require('./windows')
-const ipcs = require('./ipcs')
 const runServer = require('./run-server')
 const appStates = require('./app-states')
 const {
@@ -38,8 +37,8 @@ const {
 const enforceMacOSAppLocation = require(
   './enforce-macos-app-location'
 )
-const manageBackupModalDialogs = require(
-  './manage-backup-modal-dialogs'
+const manageWorkerMessages = require(
+  './manage-worker-messages'
 )
 
 const pathToLayouts = path.join(__dirname, 'layouts')
@@ -106,7 +105,10 @@ const _resetCsvPath = async (
 const _ipcMessToPromise = (ipc) => {
   return new Promise((resolve, reject) => {
     try {
-      let interval = null
+      const interval = setInterval(() => {
+        rmHandler()
+        reject(new AppInitializationError())
+      }, 10 * 60 * 1000).unref()
 
       const rmHandler = () => {
         ipc.off('message', handler)
@@ -122,11 +124,6 @@ const _ipcMessToPromise = (ipc) => {
         }
 
         const { state, err } = mess ?? {}
-
-        interval = setInterval(() => {
-          rmHandler()
-          reject(new AppInitializationError())
-        }, 10 * 60 * 1000).unref()
 
         if (typeof state !== 'string') {
           rmHandler()
@@ -206,18 +203,21 @@ module.exports = async () => {
       pathToUserData,
       pathToUserDocuments
     })
-    runServer({
+    const ipc = runServer({
       pathToUserData,
       secretKey
     })
-    manageBackupModalDialogs()
+    const isServerReadyPromise = _ipcMessToPromise(ipc)
+    manageWorkerMessages(ipc)
+    await isServerReadyPromise
 
+    // Legacy fix related to reprodducing the same behavior on all OS,
+    // waiting for checks that it was resolved in the last electron ver
     if (appStates.isMainWinMaximized) {
       wins.mainWindow.maximize()
     }
 
     await hideLoadingWindow({ isRequiredToShowMainWin: true })
-    await _ipcMessToPromise(ipcs.serverIpc)
     await triggerElectronLoad()
     await checkForUpdatesAndNotify()
   } catch (err) {
