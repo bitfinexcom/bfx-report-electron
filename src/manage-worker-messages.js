@@ -2,7 +2,7 @@
 
 const { BrowserWindow } = require('electron')
 
-const ipcs = require('./ipcs')
+const wins = require('./windows')
 const relaunch = require('./relaunch')
 const showMessageModalDialog = require(
   './show-message-modal-dialog'
@@ -10,13 +10,14 @@ const showMessageModalDialog = require(
 const showMigrationsModalDialog = require(
   './show-migrations-modal-dialog'
 )
-const showErrorModalDialog = require(
-  './show-error-modal-dialog'
+const isMainWinAvailable = require(
+  './helpers/is-main-win-available'
 )
 
-module.exports = () => {
-  const ipc = ipcs.serverIpc
-  const win = BrowserWindow.getFocusedWindow()
+module.exports = (ipc) => {
+  const win = isMainWinAvailable()
+    ? wins.mainWindow
+    : BrowserWindow.getFocusedWindow()
 
   if (!ipc) {
     return
@@ -34,6 +35,7 @@ module.exports = () => {
 
       const data = mess?.data ?? {}
 
+      const isWorkerError = mess.state === 'error:worker'
       const isMigrationsError = mess.state === 'error:migrations'
       const isMigrationsReady = mess.state === 'ready:migrations'
       const isBackupError = mess.state === 'error:backup'
@@ -44,6 +46,11 @@ module.exports = () => {
       const hasDbBeenRestored = mess.state === 'db-has-been-restored'
       const hasNotDbBeenRestored = mess.state === 'db-has-not-been-restored'
 
+      if (isWorkerError) {
+        console.error(data?.err)
+
+        return
+      }
       if (
         hasDbBeenRestored ||
         hasNotDbBeenRestored
@@ -114,6 +121,10 @@ module.exports = () => {
         isBackupInProgress ||
         isBackupFinished
       ) {
+        if (!isMainWinAvailable(win)) {
+          return
+        }
+
         const calcedProgress = (
           isBackupFinished ||
           data.progress >= 100
@@ -196,12 +207,6 @@ module.exports = () => {
         return
       }
     } catch (err) {
-      try {
-        await showErrorModalDialog(win, 'Error', err)
-      } catch (err) {
-        console.error(err)
-      }
-
       console.error(err)
     }
   })
