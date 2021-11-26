@@ -16,7 +16,6 @@ const PROCESS_MESSAGES = require(
 const PROCESS_STATES = require(
   '../bfx-reports-framework/workers/loc.api/process.message.manager/process.states'
 )
-const ERROR_WORKER_PROCESS_MESSAGES = 'error:worker'
 
 module.exports = (ipc) => {
   const win = isMainWinAvailable()
@@ -43,7 +42,7 @@ module.exports = (ipc) => {
         data = {}
       } = mess
 
-      if (state === ERROR_WORKER_PROCESS_MESSAGES) {
+      if (state === PROCESS_MESSAGES.ERROR_WORKER) {
         console.error(data?.err)
 
         return
