@@ -158,6 +158,38 @@ const _ipcMessToPromise = (ipc) => {
   })
 }
 
+const _manageConfigs = (params = {}) => {
+  const {
+    pathToUserData,
+    pathToUserDocuments
+  } = params
+
+  const isZipReleaseRun = isZipRelease()
+  const isRelativeCsvPath = (
+    isZipReleaseRun &&
+    process.platform !== 'darwin'
+  )
+
+  const pathToUserCsv = isRelativeCsvPath
+    ? path.join('../../..', 'csv')
+    : path.join(pathToUserDocuments, 'bitfinex/reports')
+
+  const configsKeeper = configsKeeperFactory(
+    { pathToUserData },
+    {
+      pathToUserCsv,
+      schedulerRule
+    }
+  )
+  _resetCsvPath(
+    configsKeeper,
+    {
+      pathToUserCsv,
+      isRelativeCsvPath
+    }
+  )
+}
+
 module.exports = async () => {
   try {
     app.on('window-all-closed', () => {
@@ -170,30 +202,10 @@ module.exports = async () => {
     const pathToUserData = app.getPath('userData')
     const pathToUserDocuments = app.getPath('documents')
 
-    const isZipReleaseRun = isZipRelease()
-    const isRelativeCsvPath = (
-      isZipReleaseRun &&
-      process.platform !== 'darwin'
-    )
-
-    const pathToUserCsv = isRelativeCsvPath
-      ? path.join('../../..', 'csv')
-      : path.join(pathToUserDocuments, 'bitfinex/reports')
-
-    const configsKeeper = configsKeeperFactory(
-      { pathToUserData },
-      {
-        pathToUserCsv,
-        schedulerRule
-      }
-    )
-    _resetCsvPath(
-      configsKeeper,
-      {
-        pathToUserCsv,
-        isRelativeCsvPath
-      }
-    )
+    _manageConfigs({
+      pathToUserData,
+      pathToUserDocuments
+    })
 
     const secretKey = await makeOrReadSecretKey(
       { pathToUserData }
