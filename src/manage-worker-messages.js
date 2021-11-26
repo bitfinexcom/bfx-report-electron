@@ -7,12 +7,16 @@ const relaunch = require('./relaunch')
 const showMessageModalDialog = require(
   './show-message-modal-dialog'
 )
-const showMigrationsModalDialog = require(
-  './show-migrations-modal-dialog'
-)
 const isMainWinAvailable = require(
   './helpers/is-main-win-available'
 )
+const PROCESS_MESSAGES = require(
+  '../bfx-reports-framework/workers/loc.api/process.message.manager/process.messages'
+)
+const PROCESS_STATES = require(
+  '../bfx-reports-framework/workers/loc.api/process.message.manager/process.states'
+)
+const ERROR_WORKER_PROCESS_MESSAGES = 'error:worker'
 
 module.exports = (ipc) => {
   const win = isMainWinAvailable()
@@ -28,33 +32,27 @@ module.exports = (ipc) => {
       if (
         !mess ||
         typeof mess !== 'object' ||
+        !mess.state ||
         typeof mess.state !== 'string'
       ) {
         return
       }
 
-      const data = mess?.data ?? {}
+      const {
+        state = '',
+        data = {}
+      } = mess
 
-      const isWorkerError = mess.state === 'error:worker'
-      const isMigrationsError = mess.state === 'error:migrations'
-      const isMigrationsReady = mess.state === 'ready:migrations'
-      const isBackupError = mess.state === 'error:backup'
-      const isBackupInProgress = mess.state === 'backup:progress'
-      const isBackupFinished = mess.state === 'backup:finished'
-      const haveAllDbDataBeenRemoved = mess.state === 'all-tables-have-been-removed'
-      const haveNotAllDbDataBeenRemoved = mess.state === 'all-tables-have-not-been-removed'
-      const hasDbBeenRestored = mess.state === 'db-has-been-restored'
-      const hasNotDbBeenRestored = mess.state === 'db-has-not-been-restored'
-
-      if (isWorkerError) {
+      if (state === ERROR_WORKER_PROCESS_MESSAGES) {
         console.error(data?.err)
 
         return
       }
       if (
-        hasDbBeenRestored ||
-        hasNotDbBeenRestored
+        state === PROCESS_MESSAGES.DB_HAS_BEEN_RESTORED ||
+        state === PROCESS_MESSAGES.DB_HAS_NOT_BEEN_RESTORED
       ) {
+        const hasNotDbBeenRestored = state === PROCESS_MESSAGES.DB_HAS_NOT_BEEN_RESTORED
         const messChunk = hasNotDbBeenRestored
           ? ' not'
           : ''
@@ -74,9 +72,10 @@ module.exports = (ipc) => {
         return
       }
       if (
-        haveAllDbDataBeenRemoved ||
-        haveNotAllDbDataBeenRemoved
+        state === PROCESS_MESSAGES.ALL_TABLE_HAVE_BEEN_REMOVED ||
+        state === PROCESS_MESSAGES.ALL_TABLE_HAVE_NOT_BEEN_REMOVED
       ) {
+        const haveNotAllDbDataBeenRemoved = state === PROCESS_MESSAGES.ALL_TABLE_HAVE_NOT_BEEN_REMOVED
         const messChunk = haveNotAllDbDataBeenRemoved
           ? ' not'
           : ''
@@ -96,9 +95,10 @@ module.exports = (ipc) => {
         return
       }
       if (
-        isBackupFinished ||
-        isBackupError
+        state === PROCESS_MESSAGES.BACKUP_FINISHED ||
+        state === PROCESS_MESSAGES.ERROR_BACKUP
       ) {
+        const isBackupError = state === PROCESS_MESSAGES.ERROR_BACKUP
         const messChunk = isBackupError
           ? ' not'
           : ''
@@ -118,15 +118,15 @@ module.exports = (ipc) => {
         return
       }
       if (
-        isBackupInProgress ||
-        isBackupFinished
+        state === PROCESS_MESSAGES.BACKUP_PROGRESS ||
+        state === PROCESS_MESSAGES.BACKUP_FINISHED
       ) {
         if (!isMainWinAvailable(win)) {
           return
         }
 
         const calcedProgress = (
-          isBackupFinished ||
+          state === PROCESS_MESSAGES.BACKUP_FINISHED ||
           data.progress >= 100
         )
           ? 0
@@ -144,17 +144,31 @@ module.exports = (ipc) => {
         return
       }
       if (
-        isMigrationsError ||
-        isMigrationsReady
+        state === PROCESS_MESSAGES.ERROR_MIGRATIONS ||
+        state === PROCESS_MESSAGES.READY_MIGRATIONS
       ) {
-        await showMigrationsModalDialog(
-          isMigrationsError,
-          isMigrationsReady
-        )
+        const isMigrationsError = state === PROCESS_MESSAGES.ERROR_MIGRATIONS
+        const type = isMigrationsError
+          ? 'error'
+          : 'info'
+        const message = isMigrationsError
+          ? 'DВ migration failed, all data has been deleted,\nsynchronization will start from scratch'
+          : 'DB migration completed successfully'
+        const buttons = isMigrationsError
+          ? ['Cancel']
+          : ['OK']
+
+        await showMessageModalDialog(win, {
+          type,
+          message,
+          buttons,
+          defaultId: 0,
+          cancelId: 0
+        })
 
         return
       }
-      if (mess.state === 'request:migration-has-failed:what-should-be-done') {
+      if (state === PROCESS_MESSAGES.REQUEST_MIGRATION_HAS_FAILED_WHAT_SHOULD_BE_DONE) {
         const {
           btnId
         } = await showMessageModalDialog(win, {
@@ -171,7 +185,7 @@ module.exports = (ipc) => {
         }
 
         ipc.send({
-          state: 'response:migration-has-failed:what-should-be-done',
+          state: PROCESS_STATES.RESPONSE_MIGRATION_HAS_FAILED_WHAT_SHOULD_BE_DONE,
           data: {
             shouldRestore: btnId === 1,
             shouldRemove: btnId === 2
@@ -180,7 +194,7 @@ module.exports = (ipc) => {
 
         return
       }
-      if (mess.state === 'request:should-all-tables-be-removed') {
+      if (state === PROCESS_MESSAGES.REQUEST_SHOULD_ALL_TABLES_BE_REMOVED) {
         const title = data.isNotDbRestored
           ? 'DB has not been restored'
           : 'Remove database'
@@ -202,7 +216,7 @@ module.exports = (ipc) => {
           return
         }
 
-        ipc.send({ state: 'remove-all-tables' })
+        ipc.send({ state: PROCESS_STATES.REMOVE_ALL_TABLES })
 
         return
       }
