@@ -14,6 +14,13 @@ const {
   SECRET_KEY_FILE_NAME
 } = require('./const')
 
+const PROCESS_MESSAGES = require(
+  '../bfx-reports-framework/workers/loc.api/process.message.manager/process.messages'
+)
+const PROCESS_STATES = require(
+  '../bfx-reports-framework/workers/loc.api/process.message.manager/process.states'
+)
+
 const _rmDb = async (pathToUserData) => {
   try {
     await rm(
@@ -37,7 +44,7 @@ const _rmDb = async (pathToUserData) => {
 
 const _clearAllTables = () => {
   ipcs.serverIpc.send({
-    state: 'clear-all-tables'
+    state: PROCESS_STATES.CLEAR_ALL_TABLES
   })
 
   return new Promise((resolve, reject) => {
@@ -45,8 +52,8 @@ const _clearAllTables = () => {
       const { state } = { ...mess }
 
       if (
-        state !== 'all-tables-have-been-cleared' &&
-        state !== 'all-tables-have-not-been-cleared'
+        state !== PROCESS_MESSAGES.ALL_TABLE_HAVE_BEEN_CLEARED &&
+        state !== PROCESS_MESSAGES.ALL_TABLE_HAVE_NOT_BEEN_CLEARED
       ) {
         return
       }
@@ -54,7 +61,7 @@ const _clearAllTables = () => {
       ipcs.serverIpc.removeListener('error', handlerErr)
       ipcs.serverIpc.removeListener('message', handlerMess)
 
-      if (state === 'all-tables-have-not-been-cleared') {
+      if (state === PROCESS_MESSAGES.ALL_TABLE_HAVE_NOT_BEEN_CLEARED) {
         reject(new DbRemovingError(state))
 
         return
