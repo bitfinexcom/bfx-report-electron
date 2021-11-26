@@ -13,6 +13,13 @@ const pathToConfFacs = path.join(pathToConfDir, 'facs')
 const pathToConfFacsGrc = path.join(pathToConfFacs, 'grc.config.json')
 const confFacsGrc = require(pathToConfFacsGrc)
 
+const PROCESS_MESSAGES = require(
+  './bfx-reports-framework/workers/loc.api/process.message.manager/process.messages'
+)
+const PROCESS_STATES = require(
+  './bfx-reports-framework/workers/loc.api/process.message.manager/process.states'
+)
+
 if (!process.env.NODE_ENV) process.env.NODE_ENV = 'production'
 process.send = process.send || (() => {})
 process.env.NODE_CONFIG_DIR = pathToExpressConfDir
@@ -133,28 +140,28 @@ const emitter = new EventEmitter()
       const { state } = { ...mess }
 
       if (
-        state !== 'error:worker' &&
+        state !== PROCESS_MESSAGES.ERROR_WORKER &&
 
-        state !== 'all-tables-have-been-cleared' &&
-        state !== 'all-tables-have-not-been-cleared' &&
+        state !== PROCESS_MESSAGES.READY_MIGRATIONS &&
+        state !== PROCESS_MESSAGES.ERROR_MIGRATIONS &&
 
-        state !== 'all-tables-have-been-removed' &&
-        state !== 'all-tables-have-not-been-removed' &&
+        state !== PROCESS_MESSAGES.ALL_TABLE_HAVE_BEEN_CLEARED &&
+        state !== PROCESS_MESSAGES.ALL_TABLE_HAVE_NOT_BEEN_CLEARED &&
 
-        state !== 'backup:progress' &&
-        state !== 'backup:finished' &&
-        state !== 'error:backup' &&
+        state !== PROCESS_MESSAGES.ALL_TABLE_HAVE_BEEN_REMOVED &&
+        state !== PROCESS_MESSAGES.ALL_TABLE_HAVE_NOT_BEEN_REMOVED &&
 
-        state !== 'ready:migrations' &&
-        state !== 'error:migrations' &&
+        state !== PROCESS_MESSAGES.BACKUP_PROGRESS &&
+        state !== PROCESS_MESSAGES.BACKUP_FINISHED &&
+        state !== PROCESS_MESSAGES.ERROR_BACKUP &&
 
-        state !== 'db-has-been-restored' &&
-        state !== 'db-has-not-been-restored' &&
+        state !== PROCESS_MESSAGES.DB_HAS_BEEN_RESTORED &&
+        state !== PROCESS_MESSAGES.DB_HAS_NOT_BEEN_RESTORED &&
 
-        state !== 'request:migration-has-failed:what-should-be-done' &&
-        state !== 'request:should-all-tables-be-removed' &&
+        state !== PROCESS_MESSAGES.REQUEST_MIGRATION_HAS_FAILED_WHAT_SHOULD_BE_DONE &&
+        state !== PROCESS_MESSAGES.REQUEST_SHOULD_ALL_TABLES_BE_REMOVED &&
 
-        state !== 'response:get-backup-files-metadata'
+        state !== PROCESS_MESSAGES.RESPONSE_GET_BACKUP_FILES_METADATA
       ) {
         return
       }
@@ -165,13 +172,13 @@ const emitter = new EventEmitter()
       const { state } = { ...mess }
 
       if (
-        state !== 'clear-all-tables' &&
-        state !== 'remove-all-tables' &&
-        state !== 'restore-db' &&
+        state !== PROCESS_STATES.CLEAR_ALL_TABLES &&
+        state !== PROCESS_STATES.REMOVE_ALL_TABLES &&
+        state !== PROCESS_STATES.RESTORE_DB &&
 
-        state !== 'response:migration-has-failed:what-should-be-done' &&
+        state !== PROCESS_STATES.RESPONSE_MIGRATION_HAS_FAILED_WHAT_SHOULD_BE_DONE &&
 
-        state !== 'request:get-backup-files-metadata'
+        state !== PROCESS_STATES.REQUEST_GET_BACKUP_FILES_METADATA
       ) {
         return
       }
@@ -184,7 +191,7 @@ const emitter = new EventEmitter()
       const handlerMess = (mess) => {
         const { state } = { ...mess }
 
-        if (state !== 'ready:worker') {
+        if (state !== PROCESS_MESSAGES.READY_WORKER) {
           return
         }
 
