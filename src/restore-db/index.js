@@ -34,6 +34,13 @@ const alertScript = fs.readFileSync(path.join(
   __dirname, '../modal-dialog-src/modal-dialog.js'
 ))
 
+const PROCESS_MESSAGES = require(
+  '../../bfx-reports-framework/workers/loc.api/process.message.manager/process.messages'
+)
+const PROCESS_STATES = require(
+  '../../bfx-reports-framework/workers/loc.api/process.message.manager/process.states'
+)
+
 const fonts = `<style>${fontsStyle}</style>`
 const style = `<style>${alertStyle}</style>`
 const script = `<script type="text/javascript">${alertScript}</script>`
@@ -169,7 +176,7 @@ const _getBackupFilesMetadata = (ipc) => {
         clearInterval(interval)
       }
       const handler = (mess) => {
-        if (mess?.state !== 'response:get-backup-files-metadata') {
+        if (mess?.state !== PROCESS_MESSAGES.RESPONSE_GET_BACKUP_FILES_METADATA) {
           return
         }
 
@@ -193,7 +200,7 @@ const _getBackupFilesMetadata = (ipc) => {
 
       ipc.on('message', handler)
       ipc.send({
-        state: 'request:get-backup-files-metadata'
+        state: PROCESS_STATES.REQUEST_GET_BACKUP_FILES_METADATA
       })
     } catch (err) {
       reject(err)
@@ -241,7 +248,7 @@ module.exports = () => {
       }
 
       ipcs.serverIpc.send({
-        state: 'restore-db',
+        state: PROCESS_STATES.RESTORE_DB,
         data: { name: res.value }
       })
     } catch (err) {
