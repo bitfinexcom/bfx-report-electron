@@ -10,6 +10,7 @@ const showMessageModalDialog = require(
 const isMainWinAvailable = require(
   './helpers/is-main-win-available'
 )
+const { showWindow } = require('./helpers/manage-window')
 const PROCESS_MESSAGES = require(
   '../bfx-reports-framework/workers/loc.api/process.message.manager/process.messages'
 )
@@ -51,6 +52,8 @@ module.exports = (ipc) => {
         state === PROCESS_MESSAGES.DB_HAS_BEEN_RESTORED ||
         state === PROCESS_MESSAGES.DB_HAS_NOT_BEEN_RESTORED
       ) {
+        await showWindow(win)
+
         const hasNotDbBeenRestored = state === PROCESS_MESSAGES.DB_HAS_NOT_BEEN_RESTORED
         const messChunk = hasNotDbBeenRestored
           ? ' not'
@@ -74,6 +77,8 @@ module.exports = (ipc) => {
         state === PROCESS_MESSAGES.ALL_TABLE_HAVE_BEEN_REMOVED ||
         state === PROCESS_MESSAGES.ALL_TABLE_HAVE_NOT_BEEN_REMOVED
       ) {
+        await showWindow(win)
+
         const haveNotAllDbDataBeenRemoved = state === PROCESS_MESSAGES.ALL_TABLE_HAVE_NOT_BEEN_REMOVED
         const messChunk = haveNotAllDbDataBeenRemoved
           ? ' not'
@@ -97,6 +102,8 @@ module.exports = (ipc) => {
         state === PROCESS_MESSAGES.BACKUP_FINISHED ||
         state === PROCESS_MESSAGES.ERROR_BACKUP
       ) {
+        await showWindow(win)
+
         const isBackupError = state === PROCESS_MESSAGES.ERROR_BACKUP
         const messChunk = isBackupError
           ? ' not'
@@ -146,6 +153,9 @@ module.exports = (ipc) => {
         state === PROCESS_MESSAGES.ERROR_MIGRATIONS ||
         state === PROCESS_MESSAGES.READY_MIGRATIONS
       ) {
+        await showWindow(win)
+
+        console.log('[isMainWinAvailable]:', isMainWinAvailable(), win)
         const isMigrationsError = state === PROCESS_MESSAGES.ERROR_MIGRATIONS
         const type = isMigrationsError
           ? 'error'
