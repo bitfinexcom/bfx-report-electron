@@ -71,6 +71,11 @@ module.exports = (ipc) => {
           cancelId: 0
         })
 
+        // To enforce migration launch if restores prev db schema version
+        if (data?.isNotVerSupported) {
+          relaunch()
+        }
+
         return
       }
       if (
