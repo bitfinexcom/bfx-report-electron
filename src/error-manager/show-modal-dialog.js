@@ -171,9 +171,9 @@ module.exports = async (params) => {
     } = await _fireAlert({ isError, html })
 
     return {
-      isExit: isError && !value,
+      isExit: isError,
       isReported: value,
-      isIgnored: !value
+      isIgnored: !isError && !value
     }
   }
 
