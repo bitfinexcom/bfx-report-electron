@@ -105,14 +105,14 @@ const _resetCsvPath = async (
 const _ipcMessToPromise = (ipc) => {
   return new Promise((resolve, reject) => {
     try {
-      const interval = setInterval(() => {
+      const timeout = setTimeout(() => {
         rmHandler()
         reject(new AppInitializationError())
       }, 10 * 60 * 1000).unref()
 
       const rmHandler = () => {
         ipc.off('message', handler)
-        clearInterval(interval)
+        clearTimeout(timeout)
       }
       const handler = (mess) => {
         if (
