@@ -1,6 +1,6 @@
 'use strict'
 
-const { BrowserWindow } = require('electron')
+const { app, BrowserWindow } = require('electron')
 
 const wins = require('./windows')
 const relaunch = require('./relaunch')
@@ -174,11 +174,11 @@ module.exports = (ipc) => {
           type: 'question',
           title: 'The migration has failed',
           message: 'What should be done?',
-          buttons: ['Cancel', 'Try to restore DB', 'Remove DB']
+          buttons: ['Exit', 'Try to restore DB', 'Remove DB']
         })
 
         if (btnId === 0) {
-          relaunch()
+          app.quit()
 
           return
         }
