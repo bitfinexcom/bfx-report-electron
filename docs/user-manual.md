@@ -399,6 +399,7 @@ First time opening the App or Syncing an account users would need to wait the pr
 > - Tools:
 >   - Export DB
 >   - Import DB
+>   - Restore DB
 >   - Remove DB
 >   - Clear all data
 >   - Change reports folder
@@ -418,8 +419,16 @@ First time opening the App or Syncing an account users would need to wait the pr
 > - If a user wishes to upgrade between report versions, change the computer or replicate a report on another computer, without syncing their data again, there is an option added to import/export the reports DB.
 By pressing the `ALT` key, a menu will pop up on the top with the respective tools relating to do the export/import task.
 > - If it becomes necessary to clear all confidential data, it is possible to completely delete the database files using the menu bar item `Tools`->`Remove DB`.
-> Also has ability to drop all data except users login information to be able to login using the menu bar item `Tools`->`Clear all data`.
+> - Also has ability to drop all data except users login information to be able to login using the menu bar item `Tools`->`Clear all data`.
 > After it the app would be launched except exporting case
+
+> In addition to the above, there is an option to restore the DB from previously saved backups:
+>  - when a new version of the app is published DB structure might be changed
+>  - in this case, the corresponding DB backup would be saved to keep users data safe
+>  - if DB migration to a new version has some trouble would restore the previous DB version from the made backups
+>  - also, added an option into the menu bar to be able to restore DB from the selected backup `Tools`->`Restore DB`
+>  - backups store in the same place where the main DB is placed, in a separated folder `backups/`
+>  - stores only two last versions of backup files (e.g. `backup_v26_ISO-TIMESTAMP.db` and `backup_v25_ISO-TIMESTAMP.db`). And not more than two backup files of the last DB version (e.g. `backup_v26_2021-11-05T00:00:00.000Z.db` and `backup_v26_2021-09-05T00:00:00.000Z.db`) for cases when user wants to store more than one backup file for current supported DB schema. Taking into account the previously described, max number of backup files might be three
 
 </details>
 
