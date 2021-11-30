@@ -9,6 +9,7 @@ const exportDB = require('./export-db')
 const importDB = require('./import-db')
 const removeDB = require('./remove-db')
 const restoreDB = require('./restore-db')
+const backupDB = require('./backup-db')
 const changeReportsFolder = require('./change-reports-folder')
 const changeSyncFrequency = require('./change-sync-frequency')
 const triggerElectronLoad = require('./trigger-electron-load')
@@ -83,6 +84,10 @@ module.exports = ({
         {
           label: 'Restore DB',
           click: restoreDB()
+        },
+        {
+          label: 'Backup DB',
+          click: backupDB()
         },
         {
           label: 'Remove DB',
