@@ -174,7 +174,9 @@ const emitter = new EventEmitter()
       if (
         state !== PROCESS_STATES.CLEAR_ALL_TABLES &&
         state !== PROCESS_STATES.REMOVE_ALL_TABLES &&
+
         state !== PROCESS_STATES.RESTORE_DB &&
+        state !== PROCESS_STATES.BACKUP_DB &&
 
         state !== PROCESS_STATES.RESPONSE_MIGRATION_HAS_FAILED_WHAT_SHOULD_BE_DONE &&
 
