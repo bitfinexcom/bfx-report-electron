@@ -160,7 +160,6 @@ module.exports = (ipc) => {
       ) {
         await showWindow(win)
 
-        console.log('[isMainWinAvailable]:', isMainWinAvailable(), win)
         const isMigrationsError = state === PROCESS_MESSAGES.ERROR_MIGRATIONS
         const type = isMigrationsError
           ? 'error'
