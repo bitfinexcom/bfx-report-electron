@@ -126,7 +126,9 @@ module.exports = (ipc) => {
           cancelId: 0
         })
 
-        return
+        if (isBackupError) {
+          return
+        }
       }
       if (
         state === PROCESS_MESSAGES.BACKUP_PROGRESS ||
@@ -140,7 +142,7 @@ module.exports = (ipc) => {
           state === PROCESS_MESSAGES.BACKUP_FINISHED ||
           data.progress >= 100
         )
-          ? 0
+          ? -1
           : data.progress / 100
         const progress = (
           Number.isFinite(calcedProgress) &&
@@ -148,7 +150,7 @@ module.exports = (ipc) => {
           calcedProgress < 1
         )
           ? calcedProgress
-          : 0
+          : -1
 
         win.setProgressBar(progress)
 
