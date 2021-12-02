@@ -429,7 +429,7 @@ By pressing the `ALT` key, a menu will pop up on the top with the respective too
 > - if DB migration to a new version has some trouble would restore the previous DB version from the made backups
 > - also, available an option into the menu bar to be able to restore DB from the selected backup `Tools`->`Restore DB` and make a new backup file `Tools`->`Backup DB`
 > - backups store in the same place where the main DB is placed, in a separated folder `backups/`
-> - stores only two last versions of backup files (e.g. `backup_v26_ISO-TIMESTAMP.db` and `backup_v25_ISO-TIMESTAMP.db`). And not more than two backup files of the last DB version (e.g. `backup_v26_2021-11-05T00:00:00.000Z.db` and `backup_v26_2021-09-05T00:00:00.000Z.db`) for cases when user wants to store more than one backup file for current supported DB schema. Taking into account the previously described, max number of backup files might be three
+> - stores only two last versions of backup files (e.g. `backup_v26_TIMESTAMP.db` and `backup_v25_TIMESTAMP.db`). And not more than two backup files of the last DB version (e.g. `backup_v26_2021-11-05T00-00-00.000Z.db` and `backup_v26_2021-09-05T00-00-00.000Z.db`) for cases when user wants to store more than one backup file for current supported DB schema. Taking into account the previously described, max number of backup files might be three
 
 </details>
 
