@@ -1,5 +1,6 @@
 'use strict'
 
+const { pick } = require('lodash')
 const { fork } = require('child_process')
 const path = require('path')
 const EventEmitter = require('events')
@@ -39,6 +40,60 @@ const {
 } = require('./src/errors')
 
 const emitter = new EventEmitter()
+
+const _getAllowedStatesSet = ({
+  allStates,
+  availableStates
+}) => {
+  const pickedStates = pick(
+    allStates,
+    availableStates
+  )
+
+  return new Set(Object.values(pickedStates))
+}
+
+const allowedProcessMessagesSet = _getAllowedStatesSet({
+  allStates: PROCESS_MESSAGES,
+  availableStates: [
+    'ERROR_WORKER',
+
+    'READY_MIGRATIONS',
+    'ERROR_MIGRATIONS',
+
+    'ALL_TABLE_HAVE_BEEN_CLEARED',
+    'ALL_TABLE_HAVE_NOT_BEEN_CLEARED',
+
+    'ALL_TABLE_HAVE_BEEN_REMOVED',
+    'ALL_TABLE_HAVE_NOT_BEEN_REMOVED',
+
+    'BACKUP_PROGRESS',
+    'BACKUP_FINISHED',
+    'ERROR_BACKUP',
+
+    'DB_HAS_BEEN_RESTORED',
+    'DB_HAS_NOT_BEEN_RESTORED',
+
+    'REQUEST_MIGRATION_HAS_FAILED_WHAT_SHOULD_BE_DONE',
+    'REQUEST_SHOULD_ALL_TABLES_BE_REMOVED',
+
+    'RESPONSE_GET_BACKUP_FILES_METADATA'
+  ]
+})
+const allowedProcessStatesSet = _getAllowedStatesSet({
+  allStates: PROCESS_STATES,
+  availableStates: [
+    'CLEAR_ALL_TABLES',
+    'REMOVE_ALL_TABLES',
+
+    'RESTORE_DB',
+    'BACKUP_DB',
+
+    'RESPONSE_MIGRATION_HAS_FAILED_WHAT_SHOULD_BE_DONE',
+
+    'REQUEST_GET_BACKUP_FILES_METADATA'
+  ]
+})
 
 ;(async () => {
   try {
@@ -139,30 +194,7 @@ const emitter = new EventEmitter()
     ipc.on('message', (mess) => {
       const { state } = { ...mess }
 
-      if (
-        state !== PROCESS_MESSAGES.ERROR_WORKER &&
-
-        state !== PROCESS_MESSAGES.READY_MIGRATIONS &&
-        state !== PROCESS_MESSAGES.ERROR_MIGRATIONS &&
-
-        state !== PROCESS_MESSAGES.ALL_TABLE_HAVE_BEEN_CLEARED &&
-        state !== PROCESS_MESSAGES.ALL_TABLE_HAVE_NOT_BEEN_CLEARED &&
-
-        state !== PROCESS_MESSAGES.ALL_TABLE_HAVE_BEEN_REMOVED &&
-        state !== PROCESS_MESSAGES.ALL_TABLE_HAVE_NOT_BEEN_REMOVED &&
-
-        state !== PROCESS_MESSAGES.BACKUP_PROGRESS &&
-        state !== PROCESS_MESSAGES.BACKUP_FINISHED &&
-        state !== PROCESS_MESSAGES.ERROR_BACKUP &&
-
-        state !== PROCESS_MESSAGES.DB_HAS_BEEN_RESTORED &&
-        state !== PROCESS_MESSAGES.DB_HAS_NOT_BEEN_RESTORED &&
-
-        state !== PROCESS_MESSAGES.REQUEST_MIGRATION_HAS_FAILED_WHAT_SHOULD_BE_DONE &&
-        state !== PROCESS_MESSAGES.REQUEST_SHOULD_ALL_TABLES_BE_REMOVED &&
-
-        state !== PROCESS_MESSAGES.RESPONSE_GET_BACKUP_FILES_METADATA
-      ) {
+      if (!allowedProcessMessagesSet.has(state)) {
         return
       }
 
@@ -171,17 +203,7 @@ const emitter = new EventEmitter()
     process.on('message', (mess) => {
       const { state } = { ...mess }
 
-      if (
-        state !== PROCESS_STATES.CLEAR_ALL_TABLES &&
-        state !== PROCESS_STATES.REMOVE_ALL_TABLES &&
-
-        state !== PROCESS_STATES.RESTORE_DB &&
-        state !== PROCESS_STATES.BACKUP_DB &&
-
-        state !== PROCESS_STATES.RESPONSE_MIGRATION_HAS_FAILED_WHAT_SHOULD_BE_DONE &&
-
-        state !== PROCESS_STATES.REQUEST_GET_BACKUP_FILES_METADATA
-      ) {
+      if (!allowedProcessStatesSet.has(state)) {
         return
       }
 
