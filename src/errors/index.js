@@ -107,6 +107,12 @@ class DbRestoringError extends BaseError {
   }
 }
 
+class ShowingChangelogError extends BaseError {
+  constructor (message = 'ERR_CHANGELOG_HAS_NOT_SHOWN') {
+    super(message)
+  }
+}
+
 module.exports = {
   BaseError,
   InvalidFilePathError,
@@ -124,5 +130,6 @@ module.exports = {
   ReportsFolderChangingError,
   SyncFrequencyChangingError,
   UserManualShowingError,
-  DbRestoringError
+  DbRestoringError,
+  ShowingChangelogError
 }
