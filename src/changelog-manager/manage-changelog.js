@@ -6,6 +6,9 @@ const {
   getConfigsKeeperByName
 } = require('../configs-keeper')
 const getDebugInfo = require('../helpers/get-debug-info')
+const {
+  ShowingChangelogError
+} = require('../errors')
 
 const showChangelog = require('./show-changelog')
 
@@ -20,7 +23,19 @@ module.exports = async () => {
       return
     }
 
-    await showChangelog()
+    const isShown = await showChangelog()
+
+    const isSaved = await configsKeeper
+      .saveConfigs({ shownChangelogVer: version })
+
+    if (
+      isSaved &&
+      isShown
+    ) {
+      return
+    }
+
+    throw new ShowingChangelogError()
   } catch (err) {
     console.error(err)
   }

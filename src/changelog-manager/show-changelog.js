@@ -1,3 +1,12 @@
 'use strict'
 
-module.exports = () => {}
+// TODO:
+module.exports = async () => {
+  try {
+    return true
+  } catch (err) {
+    console.error(err)
+
+    return false
+  }
+}
