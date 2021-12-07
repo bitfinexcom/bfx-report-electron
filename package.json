@@ -11,6 +11,7 @@
     "bfx-svc-test-helper": "git+https://github.com/bitfinexcom/bfx-svc-test-helper.git",
     "bittorrent-dht": "10.0.2",
     "clean-stack": "3.0.1",
+    "compare-versions": "4.1.1",
     "cron-validate": "1.4.3",
     "ed25519-supercop": "2.0.1",
     "electron-alert": "0.1.13",
@@ -30,11 +31,11 @@
     "yauzl": "2.10.0"
   },
   "devDependencies": {
+    "@mapbox/node-pre-gyp": "1.0.6",
     "app-builder-bin": "4.1.0",
     "electron": "13.6.1",
     "electron-builder": "22.11.7",
     "node-gyp": "7.1.2",
-    "@mapbox/node-pre-gyp": "1.0.6",
     "standard": "16.0.4"
   },
   "standard": {
