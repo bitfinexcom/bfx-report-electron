@@ -18,6 +18,16 @@ module.exports = async (params = {}) => {
       removeMarkdown: false
     })
 
+    if (
+      !Array.isArray(mdEntries?.versions) ||
+      mdEntries?.versions.length === 0
+    ) {
+      return true
+    }
+
+    const mdEntry = mdEntries.versions
+      .find((item) => item?.version === version)
+
     return true
   } catch (err) {
     console.error(err)
