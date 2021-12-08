@@ -23,7 +23,7 @@ module.exports = async () => {
       return
     }
 
-    const isShown = await showChangelog()
+    const isShown = await showChangelog({ version })
 
     const isSaved = await configsKeeper
       .saveConfigs({ shownChangelogVer: version })
