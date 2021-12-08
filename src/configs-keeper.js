@@ -102,7 +102,7 @@ class ConfigsKeeper {
 
       await writeFile(
         this.pathToConfigsFile,
-        JSON.stringify(_configs)
+        JSON.stringify(_configs, null, 2)
       )
 
       return true
@@ -138,7 +138,7 @@ class ConfigsKeeper {
 
       writeFileSync(
         this.pathToConfigsFile,
-        JSON.stringify(_configs)
+        JSON.stringify(_configs, null, 2)
       )
 
       return true
