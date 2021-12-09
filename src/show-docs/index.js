@@ -50,6 +50,7 @@ const converter = new Converter({
 
 const _fireAlert = (params) => {
   const {
+    type = 'info',
     title = 'User manual',
     html
   } = params
@@ -98,7 +99,7 @@ const _fireAlert = (params) => {
       content: 'markdown-body'
     },
 
-    type: 'info',
+    type,
     title,
     html,
     showConfirmButton: false,
@@ -158,6 +159,8 @@ const _fireAlert = (params) => {
 module.exports = async (params = {}) => {
   try {
     const {
+      type,
+      title,
       mdDoc = mdUserManual
     } = params
 
@@ -170,7 +173,7 @@ module.exports = async (params = {}) => {
 
     const html = converter.makeHtml(mdDoc)
 
-    await _fireAlert({ html })
+    await _fireAlert({ type, title, html })
   } catch (err) {
     console.error(err)
   }
