@@ -19,6 +19,7 @@ module.exports = async (params = {}) => {
     })
 
     if (
+      !mdEntries?.title ||
       !Array.isArray(mdEntries?.versions) ||
       mdEntries?.versions.length === 0
     ) {
@@ -27,6 +28,17 @@ module.exports = async (params = {}) => {
 
     const mdEntry = mdEntries.versions
       .find((item) => item?.version === version)
+
+    if (
+      !mdEntry?.title ||
+      !mdEntry?.body
+    ) {
+      return true
+    }
+
+    const mdTitle = `# ${mdEntries.title}`
+    const versionTitle = `## ${mdEntry.title}`
+    const md = `${mdTitle}\n\n${versionTitle}\n\n${mdEntry.body}`
 
     return true
   } catch (err) {
