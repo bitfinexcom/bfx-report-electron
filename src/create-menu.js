@@ -140,11 +140,11 @@ module.exports = ({
         {
           label: 'User manual',
           accelerator: 'CmdOrCtrl+H',
-          click: showDocs
+          click: () => showDocs()
         },
         {
           label: 'Changelog',
-          click: showChangelog
+          click: () => showChangelog()
         },
         { type: 'separator' },
         {
