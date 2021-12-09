@@ -5,10 +5,10 @@ const parseChangelog = require('changelog-parser')
 const { rootPath } = require('electron-root-path')
 
 const getDebugInfo = require('../helpers/get-debug-info')
+const showDocs = require('../show-docs')
 
 const changelogPath = path.join(rootPath, 'CHANGELOG.md')
 
-// TODO:
 module.exports = async (params = {}) => {
   try {
     const version = params?.version ?? getDebugInfo()?.version
@@ -38,7 +38,12 @@ module.exports = async (params = {}) => {
 
     const mdTitle = `# ${mdEntries.title}`
     const versionTitle = `## ${mdEntry.title}`
-    const md = `${mdTitle}\n\n${versionTitle}\n\n${mdEntry.body}`
+    const mdDoc = `${mdTitle}\n\n${versionTitle}\n\n${mdEntry.body}`
+
+    await showDocs({
+      title: mdEntries.title,
+      mdDoc
+    })
 
     return true
   } catch (err) {
