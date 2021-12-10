@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added ability to `backup/restore` DB
 - Added ability to track server worker errors
+- Added `changelog` file and flow to show one in the modal dialog after the app was updated
 
 ### Fixed
 
