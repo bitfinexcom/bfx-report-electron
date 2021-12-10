@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Updated electron version up to `13.6.1`
+- Updated electron version up to `13.6.3`
 
 ## [3.6.1] - 2021-11-03
 
