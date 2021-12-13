@@ -7,7 +7,6 @@ const { CSV_PATH_VERSION } = require('./const')
 
 const triggerElectronLoad = require('./trigger-electron-load')
 const wins = require('./windows')
-const ipcs = require('./ipcs')
 const runServer = require('./run-server')
 const appStates = require('./app-states')
 const {
@@ -17,9 +16,6 @@ const {
 const {
   hideLoadingWindow
 } = require('./change-loading-win-visibility-state')
-const showMigrationsModalDialog = require(
-  './show-migrations-modal-dialog'
-)
 const makeOrReadSecretKey = require('./make-or-read-secret-key')
 const {
   configsKeeperFactory
@@ -41,6 +37,9 @@ const {
 const enforceMacOSAppLocation = require(
   './enforce-macos-app-location'
 )
+const manageWorkerMessages = require(
+  './manage-worker-messages'
+)
 
 const pathToLayouts = path.join(__dirname, 'layouts')
 const pathToLayoutAppInitErr = path
@@ -51,6 +50,8 @@ const pathToLayoutExprPortReq = path
 const { rule: schedulerRule } = require(
   '../bfx-reports-framework/config/schedule.json'
 )
+
+let isExpressPortError = false
 
 const _resetCsvPath = async (
   configsKeeper,
@@ -104,7 +105,16 @@ const _resetCsvPath = async (
 const _ipcMessToPromise = (ipc) => {
   return new Promise((resolve, reject) => {
     try {
-      ipc.once('message', (mess) => {
+      const timeout = setTimeout(() => {
+        rmHandler()
+        reject(new AppInitializationError())
+      }, 10 * 60 * 1000).unref()
+
+      const rmHandler = () => {
+        ipc.off('message', handler)
+        clearTimeout(timeout)
+      }
+      const handler = (mess) => {
         if (
           mess ||
           typeof mess === 'object' ||
@@ -113,17 +123,74 @@ const _ipcMessToPromise = (ipc) => {
           mess.err = deserializeError(mess.err)
         }
 
-        resolve(mess)
-      })
+        const { state, err } = mess ?? {}
+
+        if (typeof state !== 'string') {
+          rmHandler()
+          reject(new IpcMessageError())
+
+          return
+        }
+        if (state === 'error:express-port-required') {
+          isExpressPortError = true
+
+          rmHandler()
+          reject(err || new RunningExpressOnPortError())
+
+          return
+        }
+        if (state === 'error:app-init') {
+          rmHandler()
+          reject(err || new AppInitializationError())
+
+          return
+        }
+        if (state === 'ready:server') {
+          rmHandler()
+          resolve(mess)
+        }
+      }
+
+      ipc.on('message', handler)
     } catch (err) {
       reject(err)
     }
   })
 }
 
-module.exports = async () => {
-  let isExpressPortError = false
+const _manageConfigs = (params = {}) => {
+  const {
+    pathToUserData,
+    pathToUserDocuments
+  } = params
 
+  const isZipReleaseRun = isZipRelease()
+  const isRelativeCsvPath = (
+    isZipReleaseRun &&
+    process.platform !== 'darwin'
+  )
+
+  const pathToUserCsv = isRelativeCsvPath
+    ? path.join('../../..', 'csv')
+    : path.join(pathToUserDocuments, 'bitfinex/reports')
+
+  const configsKeeper = configsKeeperFactory(
+    { pathToUserData },
+    {
+      pathToUserCsv,
+      schedulerRule
+    }
+  )
+  _resetCsvPath(
+    configsKeeper,
+    {
+      pathToUserCsv,
+      isRelativeCsvPath
+    }
+  )
+}
+
+module.exports = async () => {
   try {
     app.on('window-all-closed', () => {
       app.quit()
@@ -135,30 +202,10 @@ module.exports = async () => {
     const pathToUserData = app.getPath('userData')
     const pathToUserDocuments = app.getPath('documents')
 
-    const isZipReleaseRun = isZipRelease()
-    const isRelativeCsvPath = (
-      isZipReleaseRun &&
-      process.platform !== 'darwin'
-    )
-
-    const pathToUserCsv = isRelativeCsvPath
-      ? path.join('../../..', 'csv')
-      : path.join(pathToUserDocuments, 'bitfinex/reports')
-
-    const configsKeeper = configsKeeperFactory(
-      { pathToUserData },
-      {
-        pathToUserCsv,
-        schedulerRule
-      }
-    )
-    _resetCsvPath(
-      configsKeeper,
-      {
-        pathToUserCsv,
-        isRelativeCsvPath
-      }
-    )
+    _manageConfigs({
+      pathToUserData,
+      pathToUserDocuments
+    })
 
     const secretKey = await makeOrReadSecretKey(
       { pathToUserData }
@@ -168,46 +215,22 @@ module.exports = async () => {
       pathToUserData,
       pathToUserDocuments
     })
-    runServer({
+    const ipc = runServer({
       pathToUserData,
       secretKey
     })
+    const isServerReadyPromise = _ipcMessToPromise(ipc)
+    manageWorkerMessages(ipc)
+    await isServerReadyPromise
 
-    const mess = await _ipcMessToPromise(ipcs.serverIpc)
-    const {
-      state,
-      isMigrationsError,
-      isMigrationsReady,
-      err
-    } = { ...mess }
-
-    if (typeof state !== 'string') {
-      throw new IpcMessageError()
-    }
-    if (state === 'error:express-port-required') {
-      isExpressPortError = true
-
-      throw err || new RunningExpressOnPortError()
-    }
-    if (state === 'error:app-init') {
-      throw err || new AppInitializationError()
-    }
-    if (state !== 'ready:server') {
-      throw new AppInitializationError()
-    }
+    // Legacy fix related to reprodducing the same behavior on all OS,
+    // waiting for checks that it was resolved in the last electron ver
     if (appStates.isMainWinMaximized) {
       wins.mainWindow.maximize()
     }
 
     await hideLoadingWindow({ isRequiredToShowMainWin: true })
-
     await triggerElectronLoad()
-
-    await showMigrationsModalDialog(
-      isMigrationsError,
-      isMigrationsReady
-    )
-
     await checkForUpdatesAndNotify()
   } catch (err) {
     if (isExpressPortError) {

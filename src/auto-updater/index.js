@@ -18,6 +18,9 @@ const {
   showLoadingWindow,
   hideLoadingWindow
 } = require('../change-loading-win-visibility-state')
+const {
+  closeAlert
+} = require('../modal-dialog-src/utils')
 
 const fontsStyle = fs.readFileSync(path.join(
   __dirname, '../../bfx-report-ui/build/fonts/roboto.css'
@@ -53,16 +56,6 @@ const _sendProgress = (progress) => {
   )
 }
 
-const _closeToast = (toast) => {
-  if (
-    !toast ||
-    !toast.browserWindow
-  ) return
-
-  toast.browserWindow.hide()
-  toast.browserWindow.destroy()
-}
-
 const _fireToast = (
   opts = {},
   hooks = {}
@@ -72,7 +65,7 @@ const _fireToast = (
     onAfterClose = () => {}
   } = { ...hooks }
 
-  _closeToast(toast)
+  closeAlert(toast)
 
   const height = 44
   const win = wins.mainWindow
@@ -88,7 +81,7 @@ const _fireToast = (
   const alert = new Alert([fonts, style, script])
   toast = alert
 
-  const _closeAlert = () => _closeToast(alert)
+  const _closeAlert = () => closeAlert(alert)
 
   win.once('closed', _closeAlert)
 

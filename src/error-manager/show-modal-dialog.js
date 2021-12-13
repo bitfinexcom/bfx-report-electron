@@ -9,6 +9,12 @@ const { rootPath } = require('electron-root-path')
 
 const wins = require('../windows')
 const spawn = require('../helpers/spawn')
+const isMainWinAvailable = require(
+  '../helpers/is-main-win-available'
+)
+const {
+  closeAlert
+} = require('../modal-dialog-src/utils')
 
 const mdStyle = fs.readFileSync(path.join(
   rootPath, 'node_modules', 'github-markdown-css/github-markdown.css'
@@ -37,24 +43,6 @@ const converter = new Converter({
   requireSpaceBeforeHeadingText: true
 })
 
-const _isMainWinAvailable = () => {
-  return (
-    wins.mainWindow &&
-    typeof wins.mainWindow === 'object' &&
-    !wins.mainWindow.isDestroyed()
-  )
-}
-
-const _closeAlert = (alert) => {
-  if (
-    !alert ||
-    !alert.browserWindow
-  ) return
-
-  alert.browserWindow.hide()
-  alert.browserWindow.close()
-}
-
 const _fireAlert = (params) => {
   const {
     title = 'Should a bug report be submitted?',
@@ -63,7 +51,7 @@ const _fireAlert = (params) => {
   } = params
   const win = wins.mainWindow
 
-  if (!_isMainWinAvailable()) {
+  if (!isMainWinAvailable()) {
     return { value: false }
   }
 
@@ -79,7 +67,7 @@ const _fireAlert = (params) => {
   const maxHeight = Math.floor(screenHeight * 0.90)
 
   const alert = new Alert([mdS, fonts, style, script])
-  const _close = () => _closeAlert(alert)
+  const _close = () => closeAlert(alert)
 
   win.once('closed', _close)
 
@@ -174,7 +162,7 @@ module.exports = async (params) => {
 
   if (
     app.isReady() &&
-    _isMainWinAvailable()
+    isMainWinAvailable()
   ) {
     const html = converter.makeHtml(mdIssue)
 
@@ -183,9 +171,9 @@ module.exports = async (params) => {
     } = await _fireAlert({ isError, html })
 
     return {
-      isExit: isError && !value,
+      isExit: isError,
       isReported: value,
-      isIgnored: !value
+      isIgnored: !isError && !value
     }
   }
 

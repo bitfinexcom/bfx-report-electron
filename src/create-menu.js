@@ -8,6 +8,8 @@ const wins = require('./windows')
 const exportDB = require('./export-db')
 const importDB = require('./import-db')
 const removeDB = require('./remove-db')
+const restoreDB = require('./restore-db')
+const backupDB = require('./backup-db')
 const changeReportsFolder = require('./change-reports-folder')
 const changeSyncFrequency = require('./change-sync-frequency')
 const triggerElectronLoad = require('./trigger-electron-load')
@@ -80,13 +82,19 @@ module.exports = ({
           click: importDB({ pathToUserData, pathToUserDocuments })
         },
         {
+          label: 'Restore DB',
+          click: restoreDB()
+        },
+        {
+          label: 'Backup DB',
+          click: backupDB()
+        },
+        {
           label: 'Remove DB',
-          accelerator: 'CmdOrCtrl+D',
           click: removeDB({ pathToUserData })
         },
         {
           label: 'Clear all data',
-          accelerator: 'CmdOrCtrl+D',
           click: removeDB({
             pathToUserData,
             shouldAllTablesBeCleared: true
