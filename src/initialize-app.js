@@ -32,6 +32,9 @@ const {
   checkForUpdatesAndNotify
 } = require('./auto-updater')
 const {
+  manageChangelog
+} = require('./changelog-manager')
+const {
   isZipRelease
 } = require('./auto-updater/utils')
 const enforceMacOSAppLocation = require(
@@ -178,7 +181,8 @@ const _manageConfigs = (params = {}) => {
     { pathToUserData },
     {
       pathToUserCsv,
-      schedulerRule
+      schedulerRule,
+      shownChangelogVer: '0.0.0'
     }
   )
   _resetCsvPath(
@@ -232,6 +236,7 @@ module.exports = async () => {
     await hideLoadingWindow({ isRequiredToShowMainWin: true })
     await triggerElectronLoad()
     await checkForUpdatesAndNotify()
+    await manageChangelog()
   } catch (err) {
     if (isExpressPortError) {
       await createErrorWindow(pathToLayoutExprPortReq)

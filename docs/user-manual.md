@@ -409,6 +409,7 @@ First time opening the App or Syncing an account users would need to wait the pr
 >   - Open new GitHub issue
 >   - Check for update
 >   - User manual
+>   - Changelog
 >   - About
 
 </details>

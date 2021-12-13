@@ -96,7 +96,8 @@ body::-webkit-scrollbar-thumb,
 .markdown-body h3,
 .markdown-body h4,
 .markdown-body h5,
-.markdown-body h6 {
+.markdown-body h6,
+.markdown-body ul {
   text-align: left;
 }
 

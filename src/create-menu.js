@@ -20,6 +20,9 @@ const {
 } = require('./auto-updater')
 const { manageNewGithubIssue } = require('./error-manager')
 const showDocs = require('./show-docs')
+const {
+  showChangelog
+} = require('./changelog-manager')
 
 module.exports = ({
   pathToUserData,
@@ -137,7 +140,11 @@ module.exports = ({
         {
           label: 'User manual',
           accelerator: 'CmdOrCtrl+H',
-          click: showDocs
+          click: () => showDocs()
+        },
+        {
+          label: 'Changelog',
+          click: () => showChangelog()
         },
         { type: 'separator' },
         {
