@@ -8,6 +8,12 @@ const Alert = require('electron-alert')
 const { rootPath } = require('electron-root-path')
 
 const wins = require('../windows')
+const isMainWinAvailable = require(
+  '../helpers/is-main-win-available'
+)
+const {
+  closeAlert
+} = require('../modal-dialog-src/utils')
 const { UserManualShowingError } = require('../errors')
 
 const mdUserManual = fs.readFileSync(
@@ -42,32 +48,15 @@ const converter = new Converter({
   requireSpaceBeforeHeadingText: true
 })
 
-const _isMainWinAvailable = () => {
-  return (
-    wins.mainWindow &&
-    typeof wins.mainWindow === 'object' &&
-    !wins.mainWindow.isDestroyed()
-  )
-}
-
-const _closeAlert = (alert) => {
-  if (
-    !alert ||
-    !alert.browserWindow
-  ) return
-
-  alert.browserWindow.hide()
-  alert.browserWindow.close()
-}
-
 const _fireAlert = (params) => {
   const {
+    type = 'info',
     title = 'User manual',
     html
   } = params
   const win = wins.mainWindow
 
-  if (!_isMainWinAvailable()) {
+  if (!isMainWinAvailable()) {
     return { value: false }
   }
 
@@ -83,7 +72,7 @@ const _fireAlert = (params) => {
   const maxHeight = Math.floor(screenHeight * 0.90)
 
   const alert = new Alert([mdS, fonts, style, script])
-  const _close = () => _closeAlert(alert)
+  const _close = () => closeAlert(alert)
 
   win.once('closed', _close)
 
@@ -110,7 +99,7 @@ const _fireAlert = (params) => {
       content: 'markdown-body'
     },
 
-    type: 'info',
+    type,
     title,
     html,
     showConfirmButton: false,
@@ -170,19 +159,21 @@ const _fireAlert = (params) => {
 module.exports = async (params = {}) => {
   try {
     const {
+      type,
+      title,
       mdDoc = mdUserManual
     } = params
 
     if (
       !app.isReady() ||
-      !_isMainWinAvailable()
+      !isMainWinAvailable()
     ) {
       throw new UserManualShowingError()
     }
 
     const html = converter.makeHtml(mdDoc)
 
-    await _fireAlert({ html })
+    await _fireAlert({ type, title, html })
   } catch (err) {
     console.error(err)
   }

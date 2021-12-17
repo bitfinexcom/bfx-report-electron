@@ -96,7 +96,8 @@ body::-webkit-scrollbar-thumb,
 .markdown-body h3,
 .markdown-body h4,
 .markdown-body h5,
-.markdown-body h6 {
+.markdown-body h6,
+.markdown-body ul {
   text-align: left;
 }
 
@@ -186,4 +187,14 @@ body::-webkit-scrollbar-thumb,
 .swal2-content,
 .textColor {
   color: #f5f8fa;
+}
+
+.select-db-backup .radioInput {
+  flex-direction: column;
+  align-items: start;
+}
+
+.select-db-backup .radioInput label {
+  margin-top: 20px;
+  margin-bottom: 20px;
 }

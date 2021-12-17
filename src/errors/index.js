@@ -101,6 +101,18 @@ class UserManualShowingError extends BaseError {
   }
 }
 
+class DbRestoringError extends BaseError {
+  constructor (message = 'ERR_DB_HAS_NOT_BEEN_RESTORED') {
+    super(message)
+  }
+}
+
+class ShowingChangelogError extends BaseError {
+  constructor (message = 'ERR_CHANGELOG_HAS_NOT_SHOWN') {
+    super(message)
+  }
+}
+
 module.exports = {
   BaseError,
   InvalidFilePathError,
@@ -117,5 +129,7 @@ module.exports = {
   WrongSecretKeyError,
   ReportsFolderChangingError,
   SyncFrequencyChangingError,
-  UserManualShowingError
+  UserManualShowingError,
+  DbRestoringError,
+  ShowingChangelogError
 }

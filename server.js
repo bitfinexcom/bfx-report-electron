@@ -1,5 +1,6 @@
 'use strict'
 
+const { pick } = require('lodash')
 const { fork } = require('child_process')
 const path = require('path')
 const EventEmitter = require('events')
@@ -12,6 +13,13 @@ const pathToConfDir = path.join(root, 'config')
 const pathToConfFacs = path.join(pathToConfDir, 'facs')
 const pathToConfFacsGrc = path.join(pathToConfFacs, 'grc.config.json')
 const confFacsGrc = require(pathToConfFacsGrc)
+
+const PROCESS_MESSAGES = require(
+  './bfx-reports-framework/workers/loc.api/process.message.manager/process.messages'
+)
+const PROCESS_STATES = require(
+  './bfx-reports-framework/workers/loc.api/process.message.manager/process.states'
+)
 
 if (!process.env.NODE_ENV) process.env.NODE_ENV = 'production'
 process.send = process.send || (() => {})
@@ -33,8 +41,59 @@ const {
 
 const emitter = new EventEmitter()
 
-let isMigrationsReady = false
-let isMigrationsError = false
+const _getAllowedStatesSet = ({
+  allStates,
+  availableStates
+}) => {
+  const pickedStates = pick(
+    allStates,
+    availableStates
+  )
+
+  return new Set(Object.values(pickedStates))
+}
+
+const allowedProcessMessagesSet = _getAllowedStatesSet({
+  allStates: PROCESS_MESSAGES,
+  availableStates: [
+    'ERROR_WORKER',
+
+    'READY_MIGRATIONS',
+    'ERROR_MIGRATIONS',
+
+    'ALL_TABLE_HAVE_BEEN_CLEARED',
+    'ALL_TABLE_HAVE_NOT_BEEN_CLEARED',
+
+    'ALL_TABLE_HAVE_BEEN_REMOVED',
+    'ALL_TABLE_HAVE_NOT_BEEN_REMOVED',
+
+    'BACKUP_PROGRESS',
+    'BACKUP_FINISHED',
+    'ERROR_BACKUP',
+
+    'DB_HAS_BEEN_RESTORED',
+    'DB_HAS_NOT_BEEN_RESTORED',
+
+    'REQUEST_MIGRATION_HAS_FAILED_WHAT_SHOULD_BE_DONE',
+    'REQUEST_SHOULD_ALL_TABLES_BE_REMOVED',
+
+    'RESPONSE_GET_BACKUP_FILES_METADATA'
+  ]
+})
+const allowedProcessStatesSet = _getAllowedStatesSet({
+  allStates: PROCESS_STATES,
+  availableStates: [
+    'CLEAR_ALL_TABLES',
+    'REMOVE_ALL_TABLES',
+
+    'RESTORE_DB',
+    'BACKUP_DB',
+
+    'RESPONSE_MIGRATION_HAS_FAILED_WHAT_SHOULD_BE_DONE',
+
+    'REQUEST_GET_BACKUP_FILES_METADATA'
+  ]
+})
 
 ;(async () => {
   try {
@@ -135,10 +194,7 @@ let isMigrationsError = false
     ipc.on('message', (mess) => {
       const { state } = { ...mess }
 
-      if (
-        state !== 'all-tables-have-been-cleared' &&
-        state !== 'all-tables-have-not-been-cleared'
-      ) {
+      if (!allowedProcessMessagesSet.has(state)) {
         return
       }
 
@@ -147,7 +203,7 @@ let isMigrationsError = false
     process.on('message', (mess) => {
       const { state } = { ...mess }
 
-      if (state !== 'clear-all-tables') {
+      if (!allowedProcessStatesSet.has(state)) {
         return
       }
 
@@ -156,18 +212,10 @@ let isMigrationsError = false
 
     const announcePromise = grapes.onAnnounce('rest:report:api')
     const ipcReadyPromise = new Promise((resolve, reject) => {
-      ipc.once('error', reject)
-
       const handlerMess = (mess) => {
         const { state } = { ...mess }
 
-        if (state === 'error:migrations') {
-          isMigrationsError = true
-        }
-        if (state === 'ready:migrations') {
-          isMigrationsReady = true
-        }
-        if (state !== 'ready:worker') {
+        if (state !== PROCESS_MESSAGES.READY_WORKER) {
           return
         }
 
@@ -217,11 +265,7 @@ emitter.once('ready:grapes-worker', () => {
 })
 
 emitter.once('ready:server', () => {
-  process.send({
-    state: 'ready:server',
-    isMigrationsError,
-    isMigrationsReady
-  })
+  process.send({ state: 'ready:server' })
 })
 
 module.exports = emitter
