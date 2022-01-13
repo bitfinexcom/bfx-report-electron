@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.6.3] - 2021-01-12
+
+### Added
+
+- Added usd equivalents columns to ledgers csv export. This request was got from issue: [#114](https://github.com/bitfinexcom/bfx-report-electron/issues/114)
+
+### Fixed
+
+- Fixed data consistency error message, while DB is being synced, we should display the message that: `This particular endpoints are not available for the selected time frame while DB is being synced`
+- Fixed `Logins` metadata duplicated data preview on mobiles
+
+## [3.6.2] - 2021-12-17
+
 ### Added
 
 - Added ability to `backup/restore` DB
