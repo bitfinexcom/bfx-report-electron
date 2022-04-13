@@ -1,4 +1,4 @@
-FROM electronuserland/builder
+FROM electronuserland/builder:14
 
 ENV NODE_VERSION 14.16.0
 

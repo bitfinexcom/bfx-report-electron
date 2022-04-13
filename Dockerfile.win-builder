@@ -1,4 +1,4 @@
-FROM electronuserland/builder:wine
+FROM electronuserland/builder:14-wine
 
 ENV NODE_VERSION 14.16.0
 
