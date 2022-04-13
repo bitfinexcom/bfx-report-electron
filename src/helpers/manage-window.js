@@ -2,9 +2,13 @@
 
 const electron = require('electron')
 
-const hideWindow = (win) => {
+const hideWindow = (win, opts) => {
   return new Promise((resolve, reject) => {
     try {
+      const {
+        shouldWinBeBlurred = false
+      } = opts ?? {}
+
       if (
         !win ||
         typeof win !== 'object' ||
@@ -18,6 +22,10 @@ const hideWindow = (win) => {
 
       win.once('hide', resolve)
 
+      if (shouldWinBeBlurred) {
+        win.blur()
+      }
+
       win.hide()
     } catch (err) {
       reject(err)
@@ -25,9 +33,14 @@ const hideWindow = (win) => {
   })
 }
 
-const showWindow = (win) => {
+const showWindow = (win, opts) => {
   return new Promise((resolve, reject) => {
     try {
+      const {
+        shouldWinBeShownInactive = false,
+        shouldWinBeFocused = false
+      } = opts ?? {}
+
       if (
         !win ||
         typeof win !== 'object' ||
@@ -39,7 +52,19 @@ const showWindow = (win) => {
         return
       }
 
-      win.once('show', resolve)
+      win.once('show', () => {
+        if (shouldWinBeFocused) {
+          win.focus()
+        }
+
+        resolve()
+      })
+
+      if (shouldWinBeShownInactive) {
+        win.showInactive()
+
+        return
+      }
 
       win.show()
     } catch (err) {
