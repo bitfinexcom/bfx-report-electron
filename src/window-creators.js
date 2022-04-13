@@ -47,6 +47,7 @@ const _createWindow = async (
     height: defaultHeight
   } = workAreaSize
   const isMainWindow = winName === 'mainWindow'
+  const isLoadingWindow = winName === 'loadingWindow'
   const {
     width = defaultWidth,
     height = defaultHeight,
@@ -130,7 +131,10 @@ const _createWindow = async (
     centerWindow(wins[winName])
   }
 
-  await showWindow(wins[winName])
+  await showWindow(
+    wins[winName],
+    { shouldWinBeShownInactive: isLoadingWindow }
+  )
 
   return res
 }
