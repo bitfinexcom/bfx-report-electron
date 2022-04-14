@@ -5,11 +5,15 @@ const path = require('path')
 const os = require('os')
 const v8 = require('v8')
 
-const productName = 'Bitfinex Report'
-
 const { getAppUpdateConfigSync } = require('../auto-updater')
 
 const packageJson = require(path.join(appDir, 'package.json'))
+const {
+  build: {
+    productName,
+    publish
+  }
+} = packageJson
 
 let lastCommit = { hash: '-', date: '-' }
 let appUpdateConfig = {}
@@ -19,7 +23,7 @@ try {
 } catch (err) {
   console.debug(err)
 
-  appUpdateConfig = packageJson.build.publish
+  appUpdateConfig = publish
 }
 try {
   lastCommit = require(path.join(appDir, 'lastCommit.json'))

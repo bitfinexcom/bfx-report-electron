@@ -1,8 +1,12 @@
 'use strict'
 
 const { app, dialog } = require('electron')
+const path = require('path')
+const { rootPath: appDir } = require('electron-root-path')
 
-const productName = 'Bitfinex Report'
+const {
+  build: { productName }
+} = require(path.join(appDir, 'package.json'))
 const {
   showLoadingWindow,
   hideLoadingWindow
