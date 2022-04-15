@@ -1,12 +1,8 @@
 'use strict'
 
 const { app } = require('electron')
-const path = require('path')
-const { rootPath: appDir } = require('electron-root-path')
 
-const {
-  build: { productName }
-} = require(path.join(appDir, 'package.json'))
+const productName = require('./src/helpers/product-name')
 app.setName(productName)
 
 process.traceProcessWarnings = true

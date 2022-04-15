@@ -1,12 +1,8 @@
 'use strict'
 
 const { app, dialog } = require('electron')
-const path = require('path')
-const { rootPath: appDir } = require('electron-root-path')
 
-const {
-  build: { productName }
-} = require(path.join(appDir, 'package.json'))
+const productName = require('./helpers/product-name')
 const {
   showLoadingWindow,
   hideLoadingWindow
