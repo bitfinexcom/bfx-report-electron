@@ -27,7 +27,25 @@ module.exports = ({
   pathToUserDocuments
 }) => {
   const menuTemplate = [
-    ...(isMac ? [{ role: 'appMenu' }] : []),
+    ...(isMac
+      ? [{
+          label: app.name,
+          submenu: [
+            {
+              label: `About ${app.name}`,
+              click: showAboutModalDialog()
+            },
+            { type: 'separator' },
+            { role: 'services' },
+            { type: 'separator' },
+            { role: 'hide' },
+            { role: 'hideOthers' },
+            { role: 'unhide' },
+            { type: 'separator' },
+            { role: 'quit' }
+          ]
+        }]
+      : []),
     { role: 'fileMenu' },
     { role: 'editMenu' },
     {
@@ -141,11 +159,15 @@ module.exports = ({
           label: 'Changelog',
           click: () => showChangelog()
         },
-        { type: 'separator' },
-        {
-          label: 'About',
-          click: showAboutModalDialog()
-        }
+        ...(isMac
+          ? []
+          : [
+              { type: 'separator' },
+              {
+                label: 'About',
+                click: showAboutModalDialog()
+              }
+            ])
       ]
     }
   ]

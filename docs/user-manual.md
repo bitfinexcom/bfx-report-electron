@@ -388,14 +388,14 @@ First time opening the App or Syncing an account users would need to wait the pr
 > By pressing the `ALT` key, a menu will pop up on the top with the respective options:
 >
 > - Bitfinex Report *`if Mac`*
->   - About
+>   - About Bitfinex Report
 >   - Services
 >   - Hide Bitfinex Report
 >   - Hide Others
 >   - Show All
->   - Suit
+>   - Quit Bitfinex Report
 > - File
->   - Close *`if Mac`*
+>   - Close Window *`if Mac`*
 >   - Quit *`if not Mac`*
 > - Edit
 >   - Undo
@@ -433,7 +433,7 @@ First time opening the App or Syncing an account users would need to wait the pr
 >   - Check for update
 >   - User manual
 >   - Changelog
->   - About
+>   - About *`if not Mac`*
 
 </details>
 
