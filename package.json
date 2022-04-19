@@ -22,19 +22,19 @@
     "electron-updater": "4.3.8",
     "extract-zip": "2.0.1",
     "find-free-port": "2.0.0",
-    "github-markdown-css": "4.0.0",
+    "github-markdown-css": "5.1.0",
     "grenache-grape": "git+https://github.com/bitfinexcom/grenache-grape.git",
     "js-yaml": "4.1.0",
     "lodash": "4.17.21",
     "new-github-issue-url": "0.2.1",
-    "showdown": "1.9.1",
+    "showdown": "2.0.3",
     "truncate-utf8-bytes": "1.0.2",
     "yauzl": "2.10.0"
   },
   "devDependencies": {
     "@mapbox/node-pre-gyp": "1.0.6",
     "app-builder-bin": "4.1.0",
-    "electron": "13.6.3",
+    "electron": "13.6.9",
     "electron-builder": "22.11.7",
     "node-gyp": "7.1.2",
     "standard": "16.0.4"
