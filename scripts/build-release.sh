@@ -14,6 +14,10 @@ COLOR_NORMAL="\033[39m"
 BFX_API_URL="https://api-pub.bitfinex.com"
 STAGING_BFX_API_URL="https://api.staging.bitfinex.com"
 
+LAST_COMMIT_FILE_NAME="lastCommit.json"
+
+source "$ROOT/scripts/helpers/make-last-commit-json.sh"
+
 programname=$0
 countReqOSs=0
 bfxApiUrl="$BFX_API_URL"
@@ -89,3 +93,5 @@ fi
 if [ $isDevEnv == 1 ]; then
   echo -e "\n${COLOR_YELLOW}Developer environment is turned on!${COLOR_NORMAL}"
 fi
+
+makeLastCommitJson "$ROOT/$LAST_COMMIT_FILE_NAME"
