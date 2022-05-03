@@ -3,8 +3,8 @@
 const electron = require('electron')
 
 const { app, Menu } = electron
+const isMac = process.platform === 'darwin'
 
-const wins = require('./windows')
 const exportDB = require('./export-db')
 const importDB = require('./import-db')
 const removeDB = require('./remove-db')
@@ -20,103 +20,117 @@ const {
 } = require('./auto-updater')
 const { manageNewGithubIssue } = require('./error-manager')
 const showDocs = require('./show-docs')
-const {
-  showChangelog
-} = require('./changelog-manager')
+const { showChangelog } = require('./changelog-manager')
 
 module.exports = ({
   pathToUserData,
   pathToUserDocuments
 }) => {
   const menuTemplate = [
+    ...(isMac
+      ? [{
+          label: app.name,
+          submenu: [
+            {
+              label: `About ${app.name}`,
+              click: showAboutModalDialog()
+            },
+            { type: 'separator' },
+            { role: 'services' },
+            { type: 'separator' },
+            { role: 'hide' },
+            { role: 'hideOthers' },
+            { role: 'unhide' },
+            { type: 'separator' },
+            { role: 'quit' }
+          ]
+        }]
+      : []),
+    { role: 'fileMenu' },
+    { role: 'editMenu' },
     {
-      label: 'Application',
+      label: 'View',
       submenu: [
-        { label: 'Quit', accelerator: 'CmdOrCtrl+Q', click: () => app.quit() },
-        { type: 'separator' },
         {
-          label: 'Open dev tools',
-          accelerator: 'CmdOrCtrl+T',
-          click: () => {
-            if (!wins.mainWindow) {
-              return
+          label: 'Reload',
+          accelerator: 'CmdOrCtrl+R',
+          click: (item, focusedWindow) => {
+            if (focusedWindow) {
+              focusedWindow.reload()
             }
 
-            wins.mainWindow.webContents.openDevTools()
+            triggerElectronLoad()
           }
         },
         {
-          label: 'Refresh page',
-          accelerator: 'CmdOrCtrl+R',
-          click: () => {
-            if (!wins.mainWindow) {
-              return
+          label: 'Force Reload',
+          accelerator: 'CmdOrCtrl+Shift+R',
+          click: (item, focusedWindow) => {
+            if (focusedWindow) {
+              focusedWindow.webContents.reloadIgnoringCache()
             }
 
-            wins.mainWindow.reload()
             triggerElectronLoad()
           }
-        }
-      ]
-    },
-    {
-      label: 'Edit',
-      submenu: [
-        { label: 'Undo', accelerator: 'CmdOrCtrl+Z', selector: 'undo:' },
-        { label: 'Redo', accelerator: 'Shift+CmdOrCtrl+Z', selector: 'redo:' },
+        },
+        { role: 'toggleDevTools' },
         { type: 'separator' },
-        { label: 'Cut', accelerator: 'CmdOrCtrl+X', selector: 'cut:' },
-        { label: 'Copy', accelerator: 'CmdOrCtrl+C', selector: 'copy:' },
-        { label: 'Paste', accelerator: 'CmdOrCtrl+V', selector: 'paste:' },
-        { label: 'Select All', accelerator: 'CmdOrCtrl+A', selector: 'selectAll:' }
+        { role: 'resetZoom' },
+        { role: 'zoomIn' },
+        { role: 'zoomOut' },
+        { type: 'separator' },
+        { role: 'togglefullscreen' }
       ]
     },
+    { role: 'windowMenu' },
     {
       label: 'Tools',
       submenu: [
         {
-          label: 'Export DB',
-          accelerator: 'CmdOrCtrl+E',
-          click: exportDB({ pathToUserData, pathToUserDocuments })
+          label: 'Data Management',
+          submenu: [
+            {
+              label: 'Export DB',
+              click: exportDB({ pathToUserData, pathToUserDocuments })
+            },
+            {
+              label: 'Import DB',
+              click: importDB({ pathToUserData, pathToUserDocuments })
+            },
+            {
+              label: 'Restore DB',
+              click: restoreDB()
+            },
+            {
+              label: 'Backup DB',
+              click: backupDB()
+            },
+            {
+              label: 'Remove DB',
+              click: removeDB({ pathToUserData })
+            },
+            {
+              label: 'Clear all data',
+              click: removeDB({
+                pathToUserData,
+                shouldAllTablesBeCleared: true
+              })
+            }
+          ]
         },
-        {
-          label: 'Import DB',
-          accelerator: 'CmdOrCtrl+I',
-          click: importDB({ pathToUserData, pathToUserDocuments })
-        },
-        {
-          label: 'Restore DB',
-          click: restoreDB()
-        },
-        {
-          label: 'Backup DB',
-          click: backupDB()
-        },
-        {
-          label: 'Remove DB',
-          click: removeDB({ pathToUserData })
-        },
-        {
-          label: 'Clear all data',
-          click: removeDB({
-            pathToUserData,
-            shouldAllTablesBeCleared: true
-          })
-        },
+        { type: 'separator' },
         {
           label: 'Change reports folder',
-          accelerator: 'CmdOrCtrl+F',
           click: changeReportsFolder({ pathToUserDocuments })
         },
         {
           label: 'Change sync frequency',
-          accelerator: 'CmdOrCtrl+S',
           click: changeSyncFrequency()
         }
       ]
     },
     {
-      label: 'Help',
+      role: 'help',
       submenu: [
         {
           label: 'Open new GitHub issue',
@@ -126,7 +140,6 @@ module.exports = ({
         { type: 'separator' },
         {
           label: 'Check for updates',
-          accelerator: 'CmdOrCtrl+U',
           id: 'CHECK_UPDATE_MENU_ITEM',
           click: checkForUpdates()
         },
@@ -146,11 +159,15 @@ module.exports = ({
           label: 'Changelog',
           click: () => showChangelog()
         },
-        { type: 'separator' },
-        {
-          label: 'About',
-          click: showAboutModalDialog()
-        }
+        ...(isMac
+          ? []
+          : [
+              { type: 'separator' },
+              {
+                label: 'About',
+                click: showAboutModalDialog()
+              }
+            ])
       ]
     }
   ]

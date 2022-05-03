@@ -14,10 +14,10 @@ const {
 
 const cwd = process.cwd()
 const packageJsonPath = path.join(cwd, 'package.json')
+const productName = require('../../src/helpers/product-name')
 
 const {
-  version: APP_VERSION,
-  build: { productName }
+  version: APP_VERSION
 } = require(packageJsonPath)
 
 const ARCH = 'x64'

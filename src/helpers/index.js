@@ -12,6 +12,7 @@ const {
 const isMainWinAvailable = require(
   './is-main-win-available'
 )
+const productName = require('./product-name')
 
 module.exports = {
   getFreePort,
@@ -19,5 +20,6 @@ module.exports = {
   serializeError,
   deserializeError,
   rm,
-  isMainWinAvailable
+  isMainWinAvailable,
+  productName
 }

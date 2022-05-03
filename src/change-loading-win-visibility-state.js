@@ -191,7 +191,10 @@ const hideLoadingWindow = async (opts = {}) => {
   } = { ...opts }
 
   if (isRequiredToShowMainWin) {
-    await showWindow(wins.mainWindow)
+    await showWindow(
+      wins.mainWindow,
+      { shouldWinBeFocused: true }
+    )
   }
 
   // need to empty description
@@ -201,7 +204,10 @@ const hideLoadingWindow = async (opts = {}) => {
   )
   _stopProgressLoader()
 
-  return hideWindow(wins.loadingWindow)
+  return hideWindow(
+    wins.loadingWindow,
+    { shouldWinBeBlurred: true }
+  )
 }
 
 module.exports = {

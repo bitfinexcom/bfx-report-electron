@@ -2,7 +2,7 @@
 
 const { app, dialog } = require('electron')
 
-const productName = 'Bitfinex Report'
+const productName = require('./helpers/product-name')
 const {
   showLoadingWindow,
   hideLoadingWindow

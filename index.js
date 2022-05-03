@@ -2,6 +2,9 @@
 
 const { app } = require('electron')
 
+const productName = require('./src/helpers/product-name')
+app.setName(productName)
+
 process.traceProcessWarnings = true
 app.allowRendererProcessReuse = true
 
