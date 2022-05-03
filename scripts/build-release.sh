@@ -22,6 +22,7 @@ EXPRESS_FOLDER="$UI_FOLDER/bfx-report-express"
 UI_BUILD_FOLDER="${UI_BUILD_FOLDER:-"$UI_FOLDER/build"}"
 
 source "$ROOT/scripts/helpers/make-last-commit-json.sh"
+source "$ROOT/scripts/helpers/run-ui-watchdog.sh"
 
 programname=$0
 countReqOSs=0
@@ -100,3 +101,19 @@ if [ $isDevEnv == 1 ]; then
 fi
 
 makeLastCommitJson "$ROOT/$LAST_COMMIT_FILE_NAME"
+
+echo -e "\n${COLOR_BLUE}Watching for UI build...${COLOR_NORMAL}"
+
+if ! runUIWatchdog "$UI_BUILD_FOLDER"; then
+  echo -e "\n${COLOR_YELLOW}The UI has not been built within the specified time. \
+Trying to build it again...${COLOR_NORMAL}"
+
+  "$ROOT/scripts/build-ui.sh"
+
+  if ! runUIWatchdog "$UI_BUILD_FOLDER" 10; then
+    echo -e "\n${COLOR_RED}The UI has not been built within the specified time!${COLOR_NORMAL}" >&2
+    exit 1
+  fi
+fi
+
+echo -e "\n${COLOR_GREEN}The UI has been built successful${COLOR_NORMAL}"
