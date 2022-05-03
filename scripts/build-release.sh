@@ -117,3 +117,18 @@ Trying to build it again...${COLOR_NORMAL}"
 fi
 
 echo -e "\n${COLOR_GREEN}The UI has been built successful${COLOR_NORMAL}"
+
+echo -e "\n${COLOR_BLUE}Making backend config files${COLOR_NORMAL}"
+
+cp "$WORKER_FOLDER/config/schedule.json.example" \
+  "$WORKER_FOLDER/config/schedule.json"
+cp "$WORKER_FOLDER/config/common.json.example" \
+  "$WORKER_FOLDER/config/common.json"
+cp "$WORKER_FOLDER/config/service.report.json.example" \
+  "$WORKER_FOLDER/config/service.report.json"
+cp "$WORKER_FOLDER/config/facs/grc.config.json.example" \
+  "$WORKER_FOLDER/config/facs/grc.config.json"
+cp "$WORKER_FOLDER/config/facs/grc-slack.config.json.example" \
+  "$WORKER_FOLDER/config/facs/grc-slack.config.json"
+cp "$EXPRESS_FOLDER/config/default.json.example" \
+  "$EXPRESS_FOLDER/config/default.json"
