@@ -16,6 +16,11 @@ STAGING_BFX_API_URL="https://api.staging.bitfinex.com"
 
 LAST_COMMIT_FILE_NAME="lastCommit.json"
 
+WORKER_FOLDER="$ROOT/bfx-reports-framework"
+UI_FOLDER="$ROOT/bfx-report-ui"
+EXPRESS_FOLDER="$UI_FOLDER/bfx-report-express"
+UI_BUILD_FOLDER="${UI_BUILD_FOLDER:-"$UI_FOLDER/build"}"
+
 source "$ROOT/scripts/helpers/make-last-commit-json.sh"
 
 programname=$0
