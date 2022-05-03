@@ -1,13 +1,11 @@
 #!/bin/bash
 
-set -euox pipefail
-
-COLOR_RED="\033[31m"
-COLOR_NORMAL="\033[39m"
-
 function makeLastCommitJson {
+  COLOR_RED="\033[31m"
+  COLOR_NORMAL="\033[39m"
+
   if [ -z "${1:-}" ]; then
-    echo -e "\n${COLOR_RED}Requires the first argument as file path!${COLOR_NORMAL}" >&2
+    echo -e "\n${COLOR_RED}Requires the first argument of '${FUNCNAME[0]}' as file path!${COLOR_NORMAL}" >&2
     exit 1
   fi
 
