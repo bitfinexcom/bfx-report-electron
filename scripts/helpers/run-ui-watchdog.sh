@@ -1,8 +1,8 @@
 #!/bin/bash
 
 function runUIWatchdog {
-  COLOR_RED="\033[31m"
-  COLOR_NORMAL="\033[39m"
+  local COLOR_RED="${COLOR_RED:-"\033[31m"}"
+  local COLOR_NORMAL="${COLOR_NORMAL:-"\033[39m"}"
 
   if [ -z "${1:-}" ]; then
     echo -e "\n${COLOR_RED}Requires the first argument of '${FUNCNAME[0]}' fn as UI build folder!${COLOR_NORMAL}" >&2
