@@ -24,8 +24,10 @@ UI_BUILD_FOLDER="${UI_BUILD_FOLDER:-"$UI_FOLDER/build"}"
 source "$ROOT/scripts/helpers/make-last-commit-json.sh"
 source "$ROOT/scripts/helpers/run-ui-watchdog.sh"
 source "$ROOT/scripts/helpers/escape-string.sh"
+source "$ROOT/scripts/helpers/install-backend-deps.sh"
 
 programname=$0
+targetPlatform=""
 countReqOSs=0
 bfxApiUrl="$BFX_API_URL"
 
@@ -94,6 +96,16 @@ if [ $countReqOSs != 1 ]; then
   exit 1
 fi
 
+if [ $buildLinux == 1 ]; then
+  targetPlatform="linux"
+fi
+if [ $buildWin == 1 ]; then
+  targetPlatform="win"
+fi
+if [ $buildMac == 1 ]; then
+  targetPlatform="mac"
+fi
+
 if [ $isBfxApiStaging == 1 ]; then
   bfxApiUrl="$STAGING_BFX_API_URL"
 fi
@@ -140,3 +152,5 @@ escapedBfxApiUrl=$(escapeString $bfxApiUrl)
 sed -i -e \
   "s/\"restUrl\": \".*\"/\"restUrl\": \"$escapedBfxApiUrl\"/g" \
   "$WORKER_FOLDER/config/service.report.json"
+
+installBackendDeps "$targetPlatform"
