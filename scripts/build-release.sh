@@ -23,6 +23,7 @@ UI_BUILD_FOLDER="${UI_BUILD_FOLDER:-"$UI_FOLDER/build"}"
 
 source "$ROOT/scripts/helpers/make-last-commit-json.sh"
 source "$ROOT/scripts/helpers/run-ui-watchdog.sh"
+source "$ROOT/scripts/helpers/escape-string.sh"
 
 programname=$0
 countReqOSs=0
@@ -132,3 +133,10 @@ cp "$WORKER_FOLDER/config/facs/grc-slack.config.json.example" \
   "$WORKER_FOLDER/config/facs/grc-slack.config.json"
 cp "$EXPRESS_FOLDER/config/default.json.example" \
   "$EXPRESS_FOLDER/config/default.json"
+
+echo -e "\n${COLOR_BLUE}Setting backend configs${COLOR_NORMAL}"
+
+escapedBfxApiUrl=$(escapeString $bfxApiUrl)
+sed -i -e \
+  "s/\"restUrl\": \".*\"/\"restUrl\": \"$escapedBfxApiUrl\"/g" \
+  "$WORKER_FOLDER/config/service.report.json"
