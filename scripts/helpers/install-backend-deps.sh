@@ -24,6 +24,7 @@ function installBackendDeps {
 
   case "${machine}" in
     Linux*) targetPlatform="linux";;
+    linux) targetPlatform="linux";;
     Darwin*) targetPlatform="darwin";;
     mac) targetPlatform="darwin";;
     CYGWIN*) targetPlatform="win32";;
@@ -41,6 +42,7 @@ function installBackendDeps {
   echo -e "\n${COLOR_BLUE}Installing the main dev deps...${COLOR_NORMAL}"
   rm -rf ./node_modules
   npm i --development --no-audit
+  npm ls --depth=0 --only=dev 1<&-
 
   export npm_config_target_platform="$targetPlatform"
   export npm_config_platform="$targetPlatform"
@@ -55,16 +57,23 @@ function installBackendDeps {
   npm i --production --no-audit
   rm -rf "$ROOT/node_modules/ed25519-supercop/build"
   checkNodeModulesDir "$ROOT"
+  depsErr=$(npm ls --depth=0 --only=prod 2>&1 >/dev/null | grep -v "missing: eslint" || [[ $? == 1 ]])
+  if [ -n "$depsErr" ]; then
+    echo -e "$depsErr" >&2
+    exit 1
+  fi
 
   cd "$EXPRESS_FOLDER"
   echo -e "\n${COLOR_BLUE}Installing the prod express deps...${COLOR_NORMAL}"
   rm -rf ./node_modules
   npm i --production --no-audit
   checkNodeModulesDir "$EXPRESS_FOLDER"
+  npm ls --depth=0 --only=prod 1<&-
 
   cd "$WORKER_FOLDER"
   echo -e "\n${COLOR_BLUE}Installing the prod worker deps...${COLOR_NORMAL}"
   rm -rf ./node_modules
   npm i --production --no-audit
   checkNodeModulesDir "$WORKER_FOLDER"
+  npm ls --depth=0 --only=prod 1<&-
 }
