@@ -4,9 +4,9 @@ function installBackendDeps {
   local SCRIPTPATH="${SCRIPTPATH:-"$(cd -- "$(dirname "$0")" >/dev/null 2>&1; pwd -P)"}"
   local ROOT="${SCRIPTPATH:-"$(dirname "$SCRIPTPATH")"}"
 
-  local COLOR_RED="${COLOR_RED:-"\033[31m"}"
-  local COLOR_BLUE="${COLOR_BLUE:-"\033[31m"}"
-  local COLOR_NORMAL="${COLOR_NORMAL:-"\033[39m"}"
+  local COLOR_RED=${COLOR_RED:-"\033[31m"}
+  local COLOR_BLUE=${COLOR_BLUE:-"\033[34m"}
+  local COLOR_NORMAL=${COLOR_NORMAL:-"\033[39m"}
 
   local WORKER_FOLDER="${WORKER_FOLDER:-"$ROOT/bfx-reports-framework"}"
   local EXPRESS_FOLDER="${EXPRESS_FOLDER:-"$ROOT/bfx-report-ui/bfx-report-express"}"
