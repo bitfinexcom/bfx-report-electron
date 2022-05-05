@@ -12,6 +12,7 @@ function installBackendDeps {
   local EXPRESS_FOLDER="${EXPRESS_FOLDER:-"$ROOT/bfx-report-ui/bfx-report-express"}"
 
   source $ROOT/scripts/helpers/get-conf-value.sh
+  source $ROOT/scripts/helpers/check-node-modules-dir.sh
 
   local ARCH="x64"
   local DIST_URL="https://electronjs.org/headers"
@@ -53,14 +54,17 @@ function installBackendDeps {
   echo -e "\n${COLOR_BLUE}Installing the main prod deps...${COLOR_NORMAL}"
   npm i --production --no-audit
   rm -rf "$ROOT/node_modules/ed25519-supercop/build"
+  checkNodeModulesDir "$ROOT"
 
   cd "$EXPRESS_FOLDER"
   echo -e "\n${COLOR_BLUE}Installing the prod express deps...${COLOR_NORMAL}"
   rm -rf ./node_modules
   npm i --production --no-audit
+  checkNodeModulesDir "$EXPRESS_FOLDER"
 
   cd "$WORKER_FOLDER"
   echo -e "\n${COLOR_BLUE}Installing the prod worker deps...${COLOR_NORMAL}"
   rm -rf ./node_modules
   npm i --production --no-audit
+  checkNodeModulesDir "$WORKER_FOLDER"
 }
