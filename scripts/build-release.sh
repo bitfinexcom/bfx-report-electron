@@ -115,22 +115,6 @@ fi
 
 makeLastCommitJson "$ROOT/$LAST_COMMIT_FILE_NAME"
 
-echo -e "\n${COLOR_BLUE}Watching for UI build...${COLOR_NORMAL}"
-
-if ! runUIWatchdog "$UI_BUILD_FOLDER"; then
-  echo -e "\n${COLOR_YELLOW}The UI has not been built within the specified time. \
-Trying to build it again...${COLOR_NORMAL}"
-
-  "$ROOT/scripts/build-ui.sh"
-
-  if ! runUIWatchdog "$UI_BUILD_FOLDER" 10; then
-    echo -e "\n${COLOR_RED}The UI has not been built within the specified time!${COLOR_NORMAL}" >&2
-    exit 1
-  fi
-fi
-
-echo -e "\n${COLOR_GREEN}The UI has been built successful${COLOR_NORMAL}"
-
 echo -e "\n${COLOR_BLUE}Making backend config files${COLOR_NORMAL}"
 
 cp "$WORKER_FOLDER/config/schedule.json.example" \
@@ -154,3 +138,19 @@ sed -i -e \
   "$WORKER_FOLDER/config/service.report.json"
 
 installBackendDeps "$targetPlatform"
+
+echo -e "\n${COLOR_BLUE}Watching for UI build...${COLOR_NORMAL}"
+
+if ! runUIWatchdog "$UI_BUILD_FOLDER"; then
+  echo -e "\n${COLOR_YELLOW}The UI has not been built within the specified time. \
+Trying to build it again...${COLOR_NORMAL}"
+
+  "$ROOT/scripts/build-ui.sh"
+
+  if ! runUIWatchdog "$UI_BUILD_FOLDER" 10; then
+    echo -e "\n${COLOR_RED}The UI has not been built within the specified time!${COLOR_NORMAL}" >&2
+    exit 1
+  fi
+fi
+
+echo -e "\n${COLOR_GREEN}The UI has been built successful${COLOR_NORMAL}"
