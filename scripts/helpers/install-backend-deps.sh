@@ -11,10 +11,10 @@ function installBackendDeps {
   local WORKER_FOLDER="${WORKER_FOLDER:-"$ROOT/bfx-reports-framework"}"
   local EXPRESS_FOLDER="${EXPRESS_FOLDER:-"$ROOT/bfx-report-ui/bfx-report-express"}"
 
-  source $ROOT/scripts/helpers/get-conf-value.sh
-  source $ROOT/scripts/helpers/check-node-modules-dir.sh
+  source "$ROOT/scripts/helpers/get-conf-value.sh"
+  source "$ROOT/scripts/helpers/check-node-modules-dir.sh"
 
-  local ARCH="x64"
+  local ARCH=${ARCH:-"x64"}
   local DIST_URL="https://electronjs.org/headers"
   local ELECTRON_VER=$(getConfValue "electron" "$ROOT")
 
