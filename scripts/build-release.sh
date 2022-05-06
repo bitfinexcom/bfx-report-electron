@@ -11,6 +11,7 @@ COLOR_YELLOW="\033[33m"
 COLOR_BLUE="\033[34m"
 COLOR_NORMAL="\033[39m"
 
+ARCH="x64"
 BFX_API_URL="https://api-pub.bitfinex.com"
 STAGING_BFX_API_URL="https://api.staging.bitfinex.com"
 
@@ -20,16 +21,21 @@ WORKER_FOLDER="$ROOT/bfx-reports-framework"
 UI_FOLDER="$ROOT/bfx-report-ui"
 EXPRESS_FOLDER="$UI_FOLDER/bfx-report-express"
 UI_BUILD_FOLDER="${UI_BUILD_FOLDER:-"$UI_FOLDER/build"}"
+DIST_FOLDER="$ROOT/dist"
+COMMON_DIST_FOLDER="${COMMON_DIST_FOLDER:-}"
 
 source "$ROOT/scripts/helpers/make-last-commit-json.sh"
 source "$ROOT/scripts/helpers/run-ui-watchdog.sh"
 source "$ROOT/scripts/helpers/escape-string.sh"
 source "$ROOT/scripts/helpers/install-backend-deps.sh"
+source "$ROOT/scripts/helpers/get-conf-value.sh"
 
 programname=$0
 targetPlatform=""
 countReqOSs=0
 bfxApiUrl="$BFX_API_URL"
+productName=$(getConfValue "productName" "$ROOT")
+version=$(getConfValue "version" "$ROOT")
 
 buildLinux=0
 buildWin=0
@@ -154,3 +160,57 @@ Trying to build it again...${COLOR_NORMAL}"
 fi
 
 echo -e "\n${COLOR_GREEN}The UI has been built successful${COLOR_NORMAL}"
+
+echo -e "\n${COLOR_BLUE}Electron app buiding...${COLOR_NORMAL}"
+
+node "$ROOT/node_modules/.bin/electron-builder" "build" "--$targetPlatform"
+unpackedFolder=$(ls -d "$DIST_FOLDER/*/" | grep $targetPlatform | head -1)
+artifactName="$productName-$version-$ARCH-$targetPlatform"
+appFilePath="$DIST_FOLDER/$artifactName"
+
+if ! [ -d "$unpackedFolder" ]; then
+  echo -e "\n${COLOR_RED}The electron app has not been built successful${COLOR_NORMAL}" >&2
+  exit 1
+fi
+
+if [ $buildLinux == 1 ]; then
+  fullAppFilePath="$appFilePath.AppImage"
+
+  mv -f "$DIST_FOLDER/*$targetPlatform*.AppImage" "$fullAppFilePath"
+
+  node "$ROOT/scripts/node/make-app-update-yml.js" "$unpackedFolder"
+fi
+if [ $buildWin == 1 ]; then
+  fullAppFilePath="$appFilePath.exe"
+
+  mv -f "$DIST_FOLDER/*$targetPlatform*.exe" "$fullAppFilePath"
+  mv -f ./dist/*$targetPlatform*.exe.blockmap "$fullAppFilePath.blockmap"
+
+  node "$ROOT/scripts/node/make-app-update-yml.js" "$unpackedFolder"
+fi
+if [ $buildMac == 1 ]; then
+  fullAppFilePath="$appFilePath.zip"
+
+  rm -rf "$DIST_FOLDER/$targetPlatform/Bitfinex Report.app.zip"
+  rm -rf "$fullAppFilePath"
+
+  7z a -tzip "$fullAppFilePath" -r "$unpackedFolder" -mmt | grep -v "Compressing"
+  node "$ROOT/scripts/node/generate-zipand-blockmap.js"
+fi
+
+rm -rf "$unpackedFolder"
+
+if ! [ -d "$COMMON_DIST_FOLDER" ]; then
+  chmod -R a+xwr "$DIST_FOLDER" 2>/dev/null
+
+  echo -e "\n${COLOR_GREEN}The electron app has been built successful${COLOR_NORMAL}"
+  exit 0
+fi
+
+rm -rf "$COMMON_DIST_FOLDER/*$targetPlatform*"
+mv -f "$DIST_FOLDER/*" "$COMMON_DIST_FOLDER"
+
+chmod -R a+xwr "$COMMON_DIST_FOLDER" 2>/dev/null
+
+echo -e "\n${COLOR_GREEN}The electron app has been built successful${COLOR_NORMAL}"
+exit 0
