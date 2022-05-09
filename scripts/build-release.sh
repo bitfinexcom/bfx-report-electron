@@ -20,7 +20,8 @@ LAST_COMMIT_FILE_NAME="lastCommit.json"
 WORKER_FOLDER="$ROOT/bfx-reports-framework"
 UI_FOLDER="$ROOT/bfx-report-ui"
 EXPRESS_FOLDER="$UI_FOLDER/bfx-report-express"
-UI_BUILD_FOLDER="${UI_BUILD_FOLDER:-"$UI_FOLDER/build"}"
+UI_BUILD_FOLDER="$UI_FOLDER/build"
+COMMON_UI_BUILD_FOLDER="${COMMON_UI_BUILD_FOLDER:-}"
 DIST_FOLDER="$ROOT/dist"
 COMMON_DIST_FOLDER="${COMMON_DIST_FOLDER:-}"
 
@@ -36,6 +37,7 @@ countReqOSs=0
 bfxApiUrl="$BFX_API_URL"
 productName=$(getConfValue "productName" "$ROOT")
 version=$(getConfValue "version" "$ROOT")
+hasIUNotBeenBuilt=0
 
 buildLinux=0
 buildWin=0
@@ -147,17 +149,28 @@ installBackendDeps "$targetPlatform"
 
 echo -e "\n${COLOR_BLUE}Watching for UI build...${COLOR_NORMAL}"
 
-if ! runUIWatchdog "$UI_BUILD_FOLDER"; then
-  echo -e "\n${COLOR_YELLOW}The UI has not been built within the specified time. \
-Trying to build it again...${COLOR_NORMAL}"
-
+if [ -n "${COMMON_UI_BUILD_FOLDER:-}" ]; then
+  if ! runUIWatchdog "$COMMON_UI_BUILD_FOLDER"; then
+    hasIUNotBeenBuilt=1
+    echo -e "\n${COLOR_YELLOW}The UI has not been built within the specified time. \
+Trying to build it again...${COLOR_NORMAL}" >&2
+  else
+    mkdir -p "$UI_BUILD_FOLDER" 2>/dev/null
+    rm -rf "$UI_BUILD_FOLDER/*"
+    cp -rf "$COMMON_UI_BUILD_FOLDER/*" "$UI_BUILD_FOLDER"
+  fi
+fi
+if [ -z "${COMMON_UI_BUILD_FOLDER:-}" || $hasIUNotBeenBuilt == 1 ]; then
+  COMMON_UI_BUILD_FOLDER=""
   "$ROOT/scripts/build-ui.sh"
 
   if ! runUIWatchdog "$UI_BUILD_FOLDER" 10; then
     echo -e "\n${COLOR_RED}The UI has not been built within the specified time!${COLOR_NORMAL}" >&2
     exit 1
   fi
-fi
+
+  hasIUNotBeenBuilt=0
+if
 
 echo -e "\n${COLOR_GREEN}The UI has been built successful${COLOR_NORMAL}"
 
