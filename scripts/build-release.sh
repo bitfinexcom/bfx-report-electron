@@ -42,8 +42,8 @@ hasIUNotBeenBuilt=0
 buildLinux=0
 buildWin=0
 buildMac=0
-isBfxApiStaging=0
-isDevEnv=0
+isBfxApiStaging=${IS_BFX_API_STAGING:-0}
+isDevEnv=${IS_DEV_ENV:-0}
 
 function usage {
   echo -e "\
