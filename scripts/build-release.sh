@@ -180,7 +180,7 @@ echo -e "\n${COLOR_BLUE}Electron app buiding...${COLOR_NORMAL}"
 node "$ROOT/node_modules/.bin/electron-builder" \
   "build" "--$targetPlatform" \
   "--config" "$ELECTRON_BUILDER_CONFIG_FILE_PATH"
-unpackedFolder=$(ls -d "$DIST_FOLDER/*/" | grep $targetPlatform | head -1)
+unpackedFolder=$(ls -d "$DIST_FOLDER"/*/ | grep $targetPlatform | head -1)
 artifactName="$productName-$version-$ARCH-$targetPlatform"
 appFilePath="$DIST_FOLDER/$artifactName"
 
