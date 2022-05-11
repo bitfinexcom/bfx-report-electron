@@ -15,6 +15,7 @@ ARCH="x64"
 BFX_API_URL="https://api-pub.bitfinex.com"
 STAGING_BFX_API_URL="https://api.staging.bitfinex.com"
 
+ELECTRON_BUILDER_CONFIG_FILE_PATH="$ROOT/electron-builder.json"
 LAST_COMMIT_FILE_NAME="lastCommit.json"
 
 WORKER_FOLDER="$ROOT/bfx-reports-framework"
@@ -176,7 +177,9 @@ echo -e "\n${COLOR_GREEN}The UI has been built successful${COLOR_NORMAL}"
 
 echo -e "\n${COLOR_BLUE}Electron app buiding...${COLOR_NORMAL}"
 
-node "$ROOT/node_modules/.bin/electron-builder" "build" "--$targetPlatform"
+node "$ROOT/node_modules/.bin/electron-builder" \
+  "build" "--$targetPlatform" \
+  "--config" "$ELECTRON_BUILDER_CONFIG_FILE_PATH"
 unpackedFolder=$(ls -d "$DIST_FOLDER/*/" | grep $targetPlatform | head -1)
 artifactName="$productName-$version-$ARCH-$targetPlatform"
 appFilePath="$DIST_FOLDER/$artifactName"
