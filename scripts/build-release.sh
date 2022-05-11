@@ -161,7 +161,7 @@ Trying to build it again...${COLOR_NORMAL}" >&2
     cp -rf "$COMMON_UI_BUILD_FOLDER/*" "$UI_BUILD_FOLDER"
   fi
 fi
-if [ -z "${COMMON_UI_BUILD_FOLDER:-}" || $hasIUNotBeenBuilt == 1 ]; then
+if [ -z "${COMMON_UI_BUILD_FOLDER:-}" ] || [ $hasIUNotBeenBuilt == 1 ]; then
   COMMON_UI_BUILD_FOLDER=""
   "$ROOT/scripts/build-ui.sh"
 
@@ -171,7 +171,7 @@ if [ -z "${COMMON_UI_BUILD_FOLDER:-}" || $hasIUNotBeenBuilt == 1 ]; then
   fi
 
   hasIUNotBeenBuilt=0
-if
+fi
 
 echo -e "\n${COLOR_GREEN}The UI has been built successful${COLOR_NORMAL}"
 
