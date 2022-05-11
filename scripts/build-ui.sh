@@ -4,6 +4,7 @@ set -euox pipefail
 
 SCRIPTPATH="${SCRIPTPATH:-"$(cd -- "$(dirname "$0")" >/dev/null 2>&1; pwd -P)"}"
 ROOT="${ROOT:-"$(dirname "$SCRIPTPATH")"}"
+UI_CURRDIR="$PWD"
 
 COLOR_RED=${COLOR_RED:-"\033[31m"}
 COLOR_GREEN=${COLOR_GREEN:-"\033[32m"}
@@ -130,4 +131,4 @@ fi
 
 touch "$UI_BUILD_FOLDER/$UI_READY_FILE_NAME"
 
-exit 0
+cd "$UI_CURRDIR"
