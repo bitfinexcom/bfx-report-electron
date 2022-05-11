@@ -2,7 +2,8 @@
 
 function installBackendDeps {
   local SCRIPTPATH="${SCRIPTPATH:-"$(cd -- "$(dirname "$0")" >/dev/null 2>&1; pwd -P)"}"
-  local ROOT="${SCRIPTPATH:-"$(dirname "$SCRIPTPATH")"}"
+  local ROOT="${ROOT:-"$(dirname "$SCRIPTPATH")"}"
+  CURRDIR="$PWD"
 
   local COLOR_RED=${COLOR_RED:-"\033[31m"}
   local COLOR_BLUE=${COLOR_BLUE:-"\033[34m"}
@@ -76,4 +77,6 @@ function installBackendDeps {
   npm i --production --no-audit
   checkNodeModulesDir "$WORKER_FOLDER"
   npm ls --depth=0 --only=prod 1<&-
+
+  cd "$CURRDIR"
 }
