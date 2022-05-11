@@ -3,7 +3,7 @@
 set -euox pipefail
 
 SCRIPTPATH="${SCRIPTPATH:-"$(cd -- "$(dirname "$0")" >/dev/null 2>&1; pwd -P)"}"
-ROOT="${SCRIPTPATH:-"$(dirname "$SCRIPTPATH")"}"
+ROOT="${ROOT:-"$(dirname "$SCRIPTPATH")"}"
 
 COLOR_RED=${COLOR_RED:-"\033[31m"}
 COLOR_GREEN=${COLOR_GREEN:-"\033[32m"}
