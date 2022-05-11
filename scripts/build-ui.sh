@@ -113,7 +113,9 @@ checkNodeModulesDir "$UI_FOLDER"
 npm ls --depth=0 --only=prod 1<&-
 
 echo -e "\n${COLOR_BLUE}UI building...${COLOR_NORMAL}"
+mv -f "$ROOT/.eslintrc" "$ROOT/off-eslintrc"
 npm run build
+mv -f "$ROOT/off-eslintrc" "$ROOT/.eslintrc"
 
 if ! [ -s "$UI_BUILD_FOLDER/index.html" ]; then
   echo -e "\n${COLOR_RED}The UI has not been built successful${COLOR_NORMAL}" >&2
