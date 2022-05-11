@@ -3,7 +3,7 @@
 function installBackendDeps {
   local SCRIPTPATH="${SCRIPTPATH:-"$(cd -- "$(dirname "$0")" >/dev/null 2>&1; pwd -P)"}"
   local ROOT="${ROOT:-"$(dirname "$SCRIPTPATH")"}"
-  CURRDIR="$PWD"
+  local CURRDIR="$PWD"
 
   local COLOR_RED=${COLOR_RED:-"\033[31m"}
   local COLOR_BLUE=${COLOR_BLUE:-"\033[34m"}
