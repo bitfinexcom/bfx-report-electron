@@ -178,6 +178,7 @@ echo -e "\n${COLOR_GREEN}The UI has been built successful${COLOR_NORMAL}"
 
 echo -e "\n${COLOR_BLUE}Electron app buiding...${COLOR_NORMAL}"
 
+rm -rf "$DIST_FOLDER/"*"$targetPlatform"*
 node "$ROOT/node_modules/.bin/electron-builder" \
   "build" "--$targetPlatform" \
   "--config" "$ELECTRON_BUILDER_CONFIG_FILE_PATH"
@@ -193,15 +194,21 @@ fi
 if [ $buildLinux == 1 ]; then
   fullAppFilePath="$appFilePath.AppImage"
 
-  mv -f "$DIST_FOLDER/"*"$targetPlatform"*".AppImage" "$fullAppFilePath"
+  if ! [ -f "$fullAppFilePath" ]; then
+    mv -f "$DIST_FOLDER/"*"$targetPlatform"*".AppImage" "$fullAppFilePath"
+  fi
 
   node "$ROOT/scripts/node/make-app-update-yml.js" "$unpackedFolder"
 fi
 if [ $buildWin == 1 ]; then
   fullAppFilePath="$appFilePath.exe"
 
-  mv -f "$DIST_FOLDER/"*"$targetPlatform"*".exe" "$fullAppFilePath"
-  mv -f "./dist/"*"$targetPlatform"*".exe.blockmap" "$fullAppFilePath.blockmap"
+  if ! [ -f "$fullAppFilePath" ]; then
+    mv -f "$DIST_FOLDER/"*"$targetPlatform"*".exe" "$fullAppFilePath"
+  fi
+  if ! [ -f "$fullAppFilePath.blockmap" ]; then
+    mv -f "./dist/"*"$targetPlatform"*".exe.blockmap" "$fullAppFilePath.blockmap"
+  fi
 
   node "$ROOT/scripts/node/make-app-update-yml.js" "$unpackedFolder"
 fi
@@ -209,7 +216,6 @@ if [ $buildMac == 1 ]; then
   fullAppFilePath="$appFilePath.zip"
 
   rm -rf "$DIST_FOLDER/$targetPlatform/Bitfinex Report.app.zip"
-  rm -rf "$fullAppFilePath"
 
   7z a -tzip "$fullAppFilePath" -r "$unpackedFolder" -mmt | grep -v "Compressing"
   node "$ROOT/scripts/node/generate-zipand-blockmap.js"
@@ -218,7 +224,7 @@ fi
 rm -rf "$unpackedFolder"
 
 if ! [ -d "$COMMON_DIST_FOLDER" ]; then
-  chmod -R a+xwr "$DIST_FOLDER" 2>/dev/null
+  chmod -fR a+xwr "$DIST_FOLDER" || [[ $? == 1 ]]
 
   echo -e "\n${COLOR_GREEN}The electron app has been built successful${COLOR_NORMAL}"
   exit 0
@@ -227,7 +233,7 @@ fi
 rm -rf "$COMMON_DIST_FOLDER/"*"$targetPlatform"*
 mv -f "$DIST_FOLDER/"* "$COMMON_DIST_FOLDER"
 
-chmod -R a+xwr "$COMMON_DIST_FOLDER" 2>/dev/null
+chmod -fR a+xwr "$COMMON_DIST_FOLDER" || [[ $? == 1 ]]
 
 echo -e "\n${COLOR_GREEN}The electron app has been built successful${COLOR_NORMAL}"
 exit 0
