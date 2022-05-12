@@ -158,8 +158,8 @@ if [ -n "${COMMON_UI_BUILD_FOLDER:-}" ]; then
 Trying to build it again...${COLOR_NORMAL}" >&2
   else
     mkdir -p "$UI_BUILD_FOLDER" 2>/dev/null
-    rm -rf "$UI_BUILD_FOLDER/*"
-    cp -rf "$COMMON_UI_BUILD_FOLDER/*" "$UI_BUILD_FOLDER"
+    rm -rf "$UI_BUILD_FOLDER/"*
+    cp -rf "$COMMON_UI_BUILD_FOLDER/"* "$UI_BUILD_FOLDER"
   fi
 fi
 if [ -z "${COMMON_UI_BUILD_FOLDER:-}" ] || [ $hasIUNotBeenBuilt == 1 ]; then
@@ -181,7 +181,7 @@ echo -e "\n${COLOR_BLUE}Electron app buiding...${COLOR_NORMAL}"
 node "$ROOT/node_modules/.bin/electron-builder" \
   "build" "--$targetPlatform" \
   "--config" "$ELECTRON_BUILDER_CONFIG_FILE_PATH"
-unpackedFolder=$(ls -d "$DIST_FOLDER"/*/ | grep $targetPlatform | head -1)
+unpackedFolder=$(ls -d "$DIST_FOLDER/"*/ | grep $targetPlatform | head -1)
 artifactName="$productName-$version-$ARCH-$targetPlatform"
 appFilePath="$DIST_FOLDER/$artifactName"
 
@@ -193,15 +193,15 @@ fi
 if [ $buildLinux == 1 ]; then
   fullAppFilePath="$appFilePath.AppImage"
 
-  mv -f "$DIST_FOLDER/*$targetPlatform*.AppImage" "$fullAppFilePath"
+  mv -f "$DIST_FOLDER/"*"$targetPlatform"*".AppImage" "$fullAppFilePath"
 
   node "$ROOT/scripts/node/make-app-update-yml.js" "$unpackedFolder"
 fi
 if [ $buildWin == 1 ]; then
   fullAppFilePath="$appFilePath.exe"
 
-  mv -f "$DIST_FOLDER/*$targetPlatform*.exe" "$fullAppFilePath"
-  mv -f ./dist/*$targetPlatform*.exe.blockmap "$fullAppFilePath.blockmap"
+  mv -f "$DIST_FOLDER/"*"$targetPlatform"*".exe" "$fullAppFilePath"
+  mv -f "./dist/"*"$targetPlatform"*".exe.blockmap" "$fullAppFilePath.blockmap"
 
   node "$ROOT/scripts/node/make-app-update-yml.js" "$unpackedFolder"
 fi
@@ -224,8 +224,8 @@ if ! [ -d "$COMMON_DIST_FOLDER" ]; then
   exit 0
 fi
 
-rm -rf "$COMMON_DIST_FOLDER/*$targetPlatform*"
-mv -f "$DIST_FOLDER/*" "$COMMON_DIST_FOLDER"
+rm -rf "$COMMON_DIST_FOLDER/"*"$targetPlatform"*
+mv -f "$DIST_FOLDER/"* "$COMMON_DIST_FOLDER"
 
 chmod -R a+xwr "$COMMON_DIST_FOLDER" 2>/dev/null
 
