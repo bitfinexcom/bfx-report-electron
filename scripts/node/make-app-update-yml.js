@@ -9,8 +9,9 @@ const appDir = path.join(
   '../..'
 )
 const {
-  build: { publish }
-} = require(path.join(appDir, 'package.json'))
+  publish
+} = require(path.join(appDir, 'electron-builder.json'))
+
 const unpackedFolder = process.argv[2]
 
 if (
