@@ -15,7 +15,8 @@ ARCH="x64"
 BFX_API_URL="https://api-pub.bitfinex.com"
 STAGING_BFX_API_URL="https://api.staging.bitfinex.com"
 
-ELECTRON_BUILDER_CONFIG_FILE_PATH="$ROOT/electron-builder.json"
+ELECTRON_BUILDER_CONFIG_FILE_NAME="electron-builder.json"
+ELECTRON_BUILDER_CONFIG_FILE_PATH="$ROOT/$ELECTRON_BUILDER_CONFIG_FILE_NAME"
 LAST_COMMIT_FILE_NAME="lastCommit.json"
 
 WORKER_FOLDER="$ROOT/bfx-reports-framework"
@@ -36,7 +37,7 @@ programname=$0
 targetPlatform=""
 countReqOSs=0
 bfxApiUrl="$BFX_API_URL"
-productName=$(getConfValue "productName" "$ROOT")
+productName=$(getConfValue "productName" "$ROOT" "$ELECTRON_BUILDER_CONFIG_FILE_NAME")
 version=$(getConfValue "version" "$ROOT")
 hasIUNotBeenBuilt=0
 
