@@ -15,8 +15,9 @@ function getConfValue {
 
   local dep="$1"
   local path="$2"
+  local fileName="${3:-"package.json"}"
 
-  local version=$(cat "$path/package.json" \
+  local version=$(cat "$path/$fileName" \
     | grep \"$dep\" \
     | head -1 \
     | awk -F: '{ print $2($3 ? ":" : "")$3($4 ? ":" : "")$4 }' \
