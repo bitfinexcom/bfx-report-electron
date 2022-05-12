@@ -221,6 +221,11 @@ if [ $buildMac == 1 ]; then
   node "$ROOT/scripts/node/generate-zipand-blockmap.js"
 fi
 
+if ! [ -f "$fullAppFilePath" ]; then
+  echo -e "\n${COLOR_RED}The electron app has not been built successful!${COLOR_NORMAL}" >&2
+  exit 1
+fi
+
 rm -rf "$unpackedFolder"
 
 if ! [ -d "$COMMON_DIST_FOLDER" ]; then
