@@ -1,10 +1,10 @@
 FROM electronuserland/builder:14
 
-ENV NODE_VERSION 14.16.0
+ARG NODE_VERSION="14.16.0"
 
-COPY ./scripts/install-nodejs.sh ./scripts/install-nodejs.sh
+COPY ./scripts/helpers/install-nodejs.sh ./scripts/helpers/install-nodejs.sh
 
-RUN ./scripts/install-nodejs.sh $NODE_VERSION
+RUN ./scripts/install-nodejs.sh ${NODE_VERSION}
 
 COPY . .
 
