@@ -2,8 +2,9 @@
 
 set -euox pipefail
 
-SCRIPTPATH="$(cd -- "$(dirname "$0")" >/dev/null 2>&1; pwd -P)"
-ROOT="$(dirname "$SCRIPTPATH")"
+SCRIPTPATH="${SCRIPTPATH:-"$(cd -- "$(dirname "$0")" >/dev/null 2>&1; pwd -P)"}"
+ROOT="${ROOT:-"$(dirname "$SCRIPTPATH")"}"
+BUILD_RELEASE_CURRDIR="$PWD"
 
 COLOR_RED=${COLOR_RED:-"\033[31m"}
 COLOR_GREEN=${COLOR_GREEN:-"\033[32m"}
@@ -232,6 +233,7 @@ if ! [ -d "$COMMON_DIST_FOLDER" ]; then
   chmod -fR a+xwr "$DIST_FOLDER" || [[ $? == 1 ]]
 
   echo -e "\n${COLOR_GREEN}The electron app has been built successful${COLOR_NORMAL}"
+  cd "$BUILD_RELEASE_CURRDIR"
   exit 0
 fi
 
@@ -241,4 +243,4 @@ mv -f "$DIST_FOLDER/"* "$COMMON_DIST_FOLDER"
 chmod -fR a+xwr "$COMMON_DIST_FOLDER" || [[ $? == 1 ]]
 
 echo -e "\n${COLOR_GREEN}The electron app has been built successful${COLOR_NORMAL}"
-exit 0
+cd "$BUILD_RELEASE_CURRDIR"
