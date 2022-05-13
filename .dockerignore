@@ -3,7 +3,6 @@
 **/node_modules
 **/.env
 **/.env.example
-**/.git
 *Dockerfile*
 *docker-compose*
 lastCommit.json
