@@ -1,5 +1,13 @@
+.idea
+.vscode
 **/node_modules
 **/.env
+**/.env.example
+**/.git
+*Dockerfile*
+*docker-compose*
+lastCommit.json
+dist
 bfx-reports-framework/db/*.db
 bfx-reports-framework/db/*.json
 bfx-reports-framework/config/*.json
@@ -9,12 +17,3 @@ bfx-reports-framework/csv
 bfx-report-ui/build
 bfx-report-ui/bfx-report-express/logs/*.log
 bfx-report-ui/bfx-report-express/config/*.json
-docker-compose.yaml
-Dockerfile.ui-builder
-Dockerfile.linux-builder
-Dockerfile.win-builder
-Dockerfile.mac-builder
-dist
-.env.example
-lastCommit.json
-.vscode
