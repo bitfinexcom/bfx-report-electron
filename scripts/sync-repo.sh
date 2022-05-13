@@ -6,10 +6,10 @@ SCRIPTPATH="$(cd -- "$(dirname "$0")" >/dev/null 2>&1; pwd -P)"
 ROOT="$(dirname "$SCRIPTPATH")"
 CURRDIR="$PWD"
 
-COLOR_RED="\033[31m"
-COLOR_GREEN="\033[32m"
-COLOR_BLUE="\033[34m"
-COLOR_NORMAL="\033[39m"
+COLOR_RED=${COLOR_RED:-"\033[31m"}
+COLOR_GREEN=${COLOR_GREEN:-"\033[32m"}
+COLOR_BLUE=${COLOR_BLUE:-"\033[34m"}
+COLOR_NORMAL=${COLOR_NORMAL:-"\033[39m"}
 
 dotEnvFilePath="$ROOT/.env"
 
