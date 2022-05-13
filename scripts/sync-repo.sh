@@ -2,19 +2,19 @@
 
 set -euo pipefail
 
-SCRIPTPATH="$(cd -- "$(dirname "$0")" >/dev/null 2>&1; pwd -P)"
-ROOT="$(dirname "$SCRIPTPATH")"
-CURRDIR="$PWD"
+SCRIPTPATH="${SCRIPTPATH:-"$(cd -- "$(dirname "$0")" >/dev/null 2>&1; pwd -P)"}"
+ROOT="${ROOT:-"$(dirname "$SCRIPTPATH")"}"
+SYNC_REPO_CURRDIR="$PWD"
 
 COLOR_RED=${COLOR_RED:-"\033[31m"}
 COLOR_GREEN=${COLOR_GREEN:-"\033[32m"}
 COLOR_BLUE=${COLOR_BLUE:-"\033[34m"}
 COLOR_NORMAL=${COLOR_NORMAL:-"\033[39m"}
 
-dotEnvFilePath="$ROOT/.env"
+DOT_ENV_FILE_PATH="$ROOT/.env"
 
 set -a
-[ -f "$dotEnvFilePath" ] && . "$dotEnvFilePath"
+[ -f "$DOT_ENV_FILE_PATH" ] && . "$DOT_ENV_FILE_PATH"
 set +a
 
 programname=$0
@@ -100,7 +100,7 @@ if [ $syncAll == 1 ]; then
   git submodule foreach --recursive "git clean -fd; git reset --hard HEAD"
   git submodule update --init --force --recursive
 
-  cd "$CURRDIR"
+  cd "$SYNC_REPO_CURRDIR"
   exit 0
 fi
 if [ $syncElectron == 1 ]; then
@@ -141,4 +141,4 @@ if [ $syncExpress == 1 ]; then
 '
 fi
 
-cd "$CURRDIR"
+cd "$SYNC_REPO_CURRDIR"
