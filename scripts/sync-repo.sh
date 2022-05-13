@@ -5,17 +5,16 @@ set -euo pipefail
 SCRIPTPATH="${SCRIPTPATH:-"$(cd -- "$(dirname "$0")" >/dev/null 2>&1; pwd -P)"}"
 ROOT="${ROOT:-"$(dirname "$SCRIPTPATH")"}"
 SYNC_REPO_CURRDIR="$PWD"
-
-COLOR_RED=${COLOR_RED:-"\033[31m"}
-COLOR_GREEN=${COLOR_GREEN:-"\033[32m"}
-COLOR_BLUE=${COLOR_BLUE:-"\033[34m"}
-COLOR_NORMAL=${COLOR_NORMAL:-"\033[39m"}
-
 DOT_ENV_FILE_PATH="$ROOT/.env"
 
 set -a
 [ -f "$DOT_ENV_FILE_PATH" ] && . "$DOT_ENV_FILE_PATH"
 set +a
+
+COLOR_RED=${COLOR_RED:-"\033[31m"}
+COLOR_GREEN=${COLOR_GREEN:-"\033[32m"}
+COLOR_BLUE=${COLOR_BLUE:-"\033[34m"}
+COLOR_NORMAL=${COLOR_NORMAL:-"\033[39m"}
 
 programname=$0
 workerSubmoduleName=bfx-reports-framework

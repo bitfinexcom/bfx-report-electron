@@ -5,6 +5,11 @@ set -euox pipefail
 SCRIPTPATH="${SCRIPTPATH:-"$(cd -- "$(dirname "$0")" >/dev/null 2>&1; pwd -P)"}"
 ROOT="${ROOT:-"$(dirname "$SCRIPTPATH")"}"
 UI_CURRDIR="$PWD"
+DOT_ENV_FILE_PATH="$ROOT/.env"
+
+set -a
+[ -f "$DOT_ENV_FILE_PATH" ] && . "$DOT_ENV_FILE_PATH"
+set +a
 
 COLOR_RED=${COLOR_RED:-"\033[31m"}
 COLOR_GREEN=${COLOR_GREEN:-"\033[32m"}
