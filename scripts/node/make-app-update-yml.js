@@ -10,7 +10,7 @@ const appDir = path.join(
 )
 const {
   publish
-} = require(path.join(appDir, 'electron-builder.json'))
+} = require(path.join(appDir, 'electron-builder-config'))
 
 const unpackedFolder = process.argv[2]
 

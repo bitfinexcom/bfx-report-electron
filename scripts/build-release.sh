@@ -21,7 +21,7 @@ ARCH="x64"
 BFX_API_URL="https://api-pub.bitfinex.com"
 STAGING_BFX_API_URL="https://api.staging.bitfinex.com"
 
-ELECTRON_BUILDER_CONFIG_FILE_NAME="electron-builder.json"
+ELECTRON_BUILDER_CONFIG_FILE_NAME="electron-builder-config.js"
 ELECTRON_BUILDER_CONFIG_FILE_PATH="$ROOT/$ELECTRON_BUILDER_CONFIG_FILE_NAME"
 LAST_COMMIT_FILE_NAME="lastCommit.json"
 ELECTRON_ENV_FILE_NAME="electronEnv.json"
