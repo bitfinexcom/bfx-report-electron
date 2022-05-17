@@ -24,6 +24,7 @@ STAGING_BFX_API_URL="https://api.staging.bitfinex.com"
 ELECTRON_BUILDER_CONFIG_FILE_NAME="electron-builder.json"
 ELECTRON_BUILDER_CONFIG_FILE_PATH="$ROOT/$ELECTRON_BUILDER_CONFIG_FILE_NAME"
 LAST_COMMIT_FILE_NAME="lastCommit.json"
+ELECTRON_ENV_FILE_NAME="electronEnv.json"
 
 WORKER_FOLDER="$ROOT/bfx-reports-framework"
 UI_FOLDER="$ROOT/bfx-report-ui"
@@ -127,6 +128,8 @@ if [ $isBfxApiStaging == 1 ]; then
 fi
 if [ $isDevEnv == 1 ]; then
   echo -e "\n${COLOR_YELLOW}Developer environment is turned on!${COLOR_NORMAL}"
+
+  echo "{\"NODE_ENV\":\"development\"}" > "$ROOT/$ELECTRON_ENV_FILE_NAME"
 fi
 
 makeLastCommitJson "$ROOT/$LAST_COMMIT_FILE_NAME"
