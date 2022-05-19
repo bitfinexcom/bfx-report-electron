@@ -18,7 +18,7 @@ function getConfValue {
   local fileName="${3:-"package.json"}"
 
   local version=$(cat "$path/$fileName" \
-    | grep $dep \
+    | grep -m 1 "[\'\" ]$dep[\'\"]*:" \
     | head -1 \
     | awk -F: '{ print $2($3 ? ":" : "")$3($4 ? ":" : "")$4 }' \
     | sed "s/[\'\",]//g" \
