@@ -17,12 +17,19 @@ version="${1:-"14.16.0"}"
 
 echo -e "\n${COLOR_BLUE}Installing the NodeJS v$version...${COLOR_NORMAL}"
 
-# This package is used for snapcraft and 
+# This package is used for snapcraft and
 # we should not clear apt list - to avoid apt-get update during snap build
-curl -L https://nodejs.org/dist/v$version/node-v$version-linux-x64.tar.gz | tar xz -C /usr/local --strip-components=1 \
-  && unlink /usr/local/CHANGELOG.md \
-  && unlink /usr/local/LICENSE \
-  && unlink /usr/local/README.md \
-  && npm config set unsafe-perm true # https://github.com/npm/npm/issues/4531
+curl -L https://nodejs.org/dist/v$version/node-v$version-linux-x64.tar.gz | tar xz -C /usr/local --strip-components=1
+
+unlink /usr/local/CHANGELOG.md
+unlink /usr/local/LICENSE
+unlink /usr/local/README.md
+
+# https://github.com/npm/npm/issues/4531
+npm config set unsafe-perm true
+
+npm cache clear --force
+npm install --global node-gyp@7.1.2
+npm config set node_gyp $(npm prefix -g)/lib/node_modules/node-gyp/bin/node-gyp.js
 
 echo -e "\n${COLOR_GREEN}The NodeJS has been installed successful${COLOR_NORMAL}"
