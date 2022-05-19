@@ -9,6 +9,11 @@ const { getAppUpdateConfigSync } = require('../auto-updater')
 
 const packageJson = require(path.join(appDir, 'package.json'))
 const productName = require('./product-name')
+let electronBuilderConfig = {}
+
+try {
+  electronBuilderConfig = require(path.join(appDir, 'electron-builder-config'))
+} catch (err) {}
 
 let lastCommit = { hash: '-', date: '-' }
 let appUpdateConfig = {}
@@ -18,7 +23,8 @@ try {
 } catch (err) {
   console.debug(err)
 
-  appUpdateConfig = packageJson.build.publish
+  appUpdateConfig = electronBuilderConfig
+    ?.publish ?? {}
 }
 try {
   lastCommit = require(path.join(appDir, 'lastCommit.json'))
