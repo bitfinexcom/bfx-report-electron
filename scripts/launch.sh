@@ -35,6 +35,7 @@ function usage {
   -w    Build Windows release
   -m    Build Mac release
   -r    Sync all repositories
+  -o    Sync only sub-modules
   -s    Use staging BFX API
   -d    Set development environment
   -h    Display help\
@@ -47,7 +48,7 @@ if [ $# == 0 ]; then
   exit 1
 fi
 
-while getopts "alwmrsdh" opt; do
+while getopts "alwmrosdh" opt; do
   case "${opt}" in
     a)
       buildLinux=1
@@ -58,6 +59,7 @@ while getopts "alwmrsdh" opt; do
     w) buildWin=1;;
     m) buildMac=1;;
     r) syncRepo=1;;
+    o) syncSubModules=1;;
     s) isBfxApiStaging=1;;
     d) isDevEnv=1;;
     h)
@@ -110,6 +112,10 @@ fi
 if [ $syncRepo == 1 ]; then
   echo -e "\n${COLOR_BLUE}Syncing all repositories...${COLOR_NORMAL}"
   source "$ROOT/scripts/sync-repo.sh" "-a"
+fi
+if [ $syncSubModules == 1 ]; then
+  echo -e "\n${COLOR_BLUE}Syncing only all sub-modules...${COLOR_NORMAL}"
+  source "$ROOT/scripts/sync-repo.sh" "-wue"
 fi
 
 docker-compose up $composeCommonFlags $uiBuilderServices \
