@@ -23,6 +23,7 @@ buildLinux=0
 buildWin=0
 buildMac=0
 syncRepo=0
+syncSubModules=0
 isBfxApiStaging=${IS_BFX_API_STAGING:-0}
 isDevEnv=${IS_DEV_ENV:-0}
 
