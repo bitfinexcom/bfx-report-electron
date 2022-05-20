@@ -30,7 +30,9 @@ module.exports = {
     provider: 'github',
     repo: 'bfx-report-electron',
     owner: 'bitfinexcom',
+    vPrefixedTagName: true, // to use v-prefixed tag name
     channel: 'latest',
+    releaseType: 'draft', // available: `draft` | `prerelease` | `release`
     allowPrerelease: true,
     useMultipleRangeRequest: false,
     updaterCacheDirName: 'bfx-report-electron-updater'
@@ -114,5 +116,9 @@ module.exports = {
       'request',
       'lokue'
     ])
-  ]
+  ],
+  // TODO: https://www.electron.build/configuration/configuration#afterallartifactbuild
+  afterAllArtifactBuild () {
+    return []
+  }
 }

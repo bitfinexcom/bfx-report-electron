@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+set -euox pipefail
 
 SCRIPTPATH="${SCRIPTPATH:-"$(cd -- "$(dirname "$0")" >/dev/null 2>&1; pwd -P)"}"
 ROOT="${ROOT:-"$(dirname "$SCRIPTPATH")"}"
@@ -26,6 +26,7 @@ syncRepo=0
 syncSubModules=0
 isBfxApiStaging=${IS_BFX_API_STAGING:-0}
 isDevEnv=${IS_DEV_ENV:-0}
+isPublished=${IS_PUBLISHED:-0}
 
 function usage {
   echo -e "\
@@ -39,6 +40,7 @@ function usage {
   -o    Sync only sub-modules
   -s    Use staging BFX API
   -d    Set development environment
+  -p    Publish artifacts
   -h    Display help\
 ${COLOR_NORMAL}" 1>&2
 }
@@ -49,7 +51,7 @@ if [ $# == 0 ]; then
   exit 1
 fi
 
-while getopts "alwmrosdh" opt; do
+while getopts "alwmrosdph" opt; do
   case "${opt}" in
     a)
       buildLinux=1
@@ -63,6 +65,7 @@ while getopts "alwmrosdh" opt; do
     o) syncSubModules=1;;
     s) isBfxApiStaging=1;;
     d) isDevEnv=1;;
+    p) isPublished=1;;
     h)
       usage
       exit 0
@@ -88,6 +91,9 @@ if [ $isBfxApiStaging == 1 ]; then
 fi
 if [ $isDevEnv == 1 ]; then
   export IS_DEV_ENV=1
+fi
+if [ $isPublished == 1 ]; then
+  export IS_PUBLISHED=1
 fi
 
 composeCommonFlags="\

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+set -euox pipefail
 
 SCRIPTPATH="${SCRIPTPATH:-"$(cd -- "$(dirname "$0")" >/dev/null 2>&1; pwd -P)"}"
 ROOT="${ROOT:-"$(dirname "$SCRIPTPATH")"}"
@@ -53,6 +53,7 @@ buildWin=0
 buildMac=0
 isBfxApiStaging=${IS_BFX_API_STAGING:-0}
 isDevEnv=${IS_DEV_ENV:-0}
+isPublished=${IS_PUBLISHED:-0}
 
 function usage {
   echo -e "\
@@ -63,6 +64,7 @@ function usage {
   -m    Build Mac release
   -s    Use staging BFX API
   -d    Set development environment
+  -p    Publish artifacts
   -h    Display help\
 ${COLOR_NORMAL}" 1>&2
 }
@@ -73,13 +75,14 @@ if [ $# == 0 ]; then
   exit 1
 fi
 
-while getopts "lwmsdh" opt; do
+while getopts "lwmsdph" opt; do
   case "${opt}" in
     l) buildLinux=1;;
     w) buildWin=1;;
     m) buildMac=1;;
     s) isBfxApiStaging=1;;
     d) isDevEnv=1;;
+    p) isPublished=1;;
     h)
       usage
       exit 0
@@ -187,10 +190,17 @@ echo -e "\n${COLOR_GREEN}The UI has been built successful${COLOR_NORMAL}"
 
 echo -e "\n${COLOR_BLUE}Electron app buiding...${COLOR_NORMAL}"
 
+publishOption=""
+
+if [ $isPublished == 1 ]; then
+  publishOption="--publish always"
+fi
+
 rm -rf "$DIST_FOLDER/"*"$targetPlatform"*
 node "$ROOT/node_modules/.bin/electron-builder" \
   "build" "--$targetPlatform" \
-  "--config" "$ELECTRON_BUILDER_CONFIG_FILE_PATH"
+  "--config" "$ELECTRON_BUILDER_CONFIG_FILE_PATH" \
+  $publishOption
 unpackedFolder=$(ls -d "$DIST_FOLDER/"*/ | grep $targetPlatform | head -1)
 artifactName="$productName-$version-$ARCH-$targetPlatform"
 appFilePath="$DIST_FOLDER/$artifactName"
