@@ -78,6 +78,10 @@ fi
 
 rm -rf "$UI_BUILD_FOLDER/*"
 
+if [ -n "${COMMON_UI_BUILD_FOLDER:-}" ]; then
+  rm -rf "$COMMON_UI_BUILD_FOLDER/*"
+fi
+
 echo -e "\n${COLOR_BLUE}Setting UI configs${COLOR_NORMAL}"
 
 escapedBfxApiUrl=$(escapeString $bfxApiUrl)

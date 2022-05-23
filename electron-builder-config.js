@@ -33,7 +33,7 @@ module.exports = {
   publish: {
     provider: 'github',
     repo: 'bfx-report-electron',
-    owner: 'ZIMkaRU',
+    owner: 'bitfinexcom',
     vPrefixedTagName: true,
     channel: 'latest',
 
