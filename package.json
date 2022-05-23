@@ -37,6 +37,7 @@
   "devDependencies": {
     "@mapbox/node-pre-gyp": "1.0.6",
     "app-builder-bin": "4.1.0",
+    "chmodr": "1.2.0",
     "electron": "13.6.9",
     "electron-builder": "22.11.7",
     "standard": "16.0.4"

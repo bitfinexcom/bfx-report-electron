@@ -1,5 +1,9 @@
 'use strict'
 
+const fs = require('fs')
+const { promisify } = require('util')
+const chmodr = promisify(require('chmodr'))
+
 /* eslint-disable no-template-curly-in-string */
 
 const nodeModulesFilter = [
@@ -29,10 +33,12 @@ module.exports = {
   publish: {
     provider: 'github',
     repo: 'bfx-report-electron',
-    owner: 'bitfinexcom',
-    vPrefixedTagName: true, // to use v-prefixed tag name
+    owner: 'ZIMkaRU',
+    vPrefixedTagName: true,
     channel: 'latest',
-    releaseType: 'draft', // available: `draft` | `prerelease` | `release`
+
+    // Available: 'draft', 'prerelease', 'release'
+    releaseType: 'draft',
     allowPrerelease: true,
     useMultipleRangeRequest: false,
     updaterCacheDirName: 'bfx-report-electron-updater'
@@ -117,8 +123,37 @@ module.exports = {
       'lokue'
     ])
   ],
-  // TODO: https://www.electron.build/configuration/configuration#afterallartifactbuild
-  afterAllArtifactBuild () {
-    return []
+  async afterPack (context) {
+    const {
+      appOutDir
+    } = context
+
+    await fs.promises.access(appOutDir, fs.constants.F_OK)
+    await chmodr(appOutDir, '0777')
+  },
+  async afterAllArtifactBuild (buildResult) {
+    const {
+      outDir,
+      artifactPaths,
+      platformToTargets
+    } = buildResult
+
+    for (const [platform, targets] of platformToTargets) {
+      const {
+        buildConfigurationKey: targetPlatform
+      } = platform
+
+      for (const [targetName, target] of targets) {
+        const ext = targetName === 'nsis'
+          ? 'exe'
+          : targetName
+        const appFilePath = artifactPaths.find((path) => (
+          new RegExp(`${targetPlatform}.*${ext}`, 'i').test(path)
+        ))
+
+        await fs.promises.access(appFilePath, fs.constants.F_OK)
+        await fs.promises.chmod(appFilePath, '0777')
+      }
+    }
   }
 }
