@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euox pipefail
+set -euo pipefail
 
 SCRIPTPATH="${SCRIPTPATH:-"$(cd -- "$(dirname "$0")" >/dev/null 2>&1; pwd -P)"}"
 ROOT="${ROOT:-"$(dirname "$SCRIPTPATH")"}"
@@ -193,6 +193,7 @@ echo -e "\n${COLOR_BLUE}Electron app buiding...${COLOR_NORMAL}"
 publishOption=""
 
 if [ $isPublished == 1 ]; then
+  # Available: 'onTag', 'onTagOrDraft', 'always', 'never'
   publishOption="--publish always"
 fi
 
@@ -201,51 +202,29 @@ node "$ROOT/node_modules/.bin/electron-builder" \
   "build" "--$targetPlatform" \
   "--config" "$ELECTRON_BUILDER_CONFIG_FILE_PATH" \
   $publishOption
+
 unpackedFolder=$(ls -d "$DIST_FOLDER/"*/ | grep $targetPlatform | head -1)
 artifactName="$productName-$version-$ARCH-$targetPlatform"
 appFilePath="$DIST_FOLDER/$artifactName"
 
-if ! [ -d "$unpackedFolder" ]; then
-  echo -e "\n${COLOR_RED}The electron app has not been built successful${COLOR_NORMAL}" >&2
-  exit 1
-fi
-
-if [ $buildLinux == 1 ]; then
-  fullAppFilePath="$appFilePath.AppImage"
-
-  if ! [ -f "$fullAppFilePath" ]; then
-    mv -f "$DIST_FOLDER/"*"$targetPlatform"*".AppImage" "$fullAppFilePath"
-  fi
-
-  node "$ROOT/scripts/node/make-app-update-yml.js" "$unpackedFolder"
-fi
-if [ $buildWin == 1 ]; then
-  fullAppFilePath="$appFilePath.exe"
-
-  if ! [ -f "$fullAppFilePath" ]; then
-    mv -f "$DIST_FOLDER/"*"$targetPlatform"*".exe" "$fullAppFilePath"
-  fi
-  if ! [ -f "$fullAppFilePath.blockmap" ]; then
-    mv -f "./dist/"*"$targetPlatform"*".exe.blockmap" "$fullAppFilePath.blockmap"
-  fi
-
-  node "$ROOT/scripts/node/make-app-update-yml.js" "$unpackedFolder"
-fi
 if [ $buildMac == 1 ]; then
   fullAppFilePath="$appFilePath.zip"
 
-  rm -rf "$DIST_FOLDER/$targetPlatform/Bitfinex Report.app.zip"
+  rm -rf "$fullAppFilePath"
 
   7z a -tzip "$fullAppFilePath" -r "$unpackedFolder" -mmt | grep -v "Compressing"
   node "$ROOT/scripts/node/generate-zipand-blockmap.js"
-fi
 
-if ! [ -f "$fullAppFilePath" ]; then
-  echo -e "\n${COLOR_RED}The electron app has not been built successful!${COLOR_NORMAL}" >&2
-  exit 1
+  if ! [ -f "$fullAppFilePath" ]; then
+    echo -e "\n${COLOR_RED}The electron app has not been built successful!${COLOR_NORMAL}" >&2
+    exit 1
+  fi
 fi
 
 rm -rf "$unpackedFolder"
+rm -rf "$DIST_FOLDER/.icon-ico"
+rm -f "$DIST_FOLDER/builder-effective-config.yaml"
+rm -f "$DIST_FOLDER/builder-debug.yml"
 
 if ! [ -d "$COMMON_DIST_FOLDER" ]; then
   chmod -fR a+xwr "$DIST_FOLDER" || [[ $? == 1 ]]
