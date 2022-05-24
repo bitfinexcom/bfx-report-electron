@@ -204,22 +204,6 @@ node "$ROOT/node_modules/.bin/electron-builder" \
   $publishOption
 
 unpackedFolder=$(ls -d "$DIST_FOLDER/"*/ | grep $targetPlatform | head -1)
-artifactName="$productName-$version-$ARCH-$targetPlatform"
-appFilePath="$DIST_FOLDER/$artifactName"
-
-if [ $buildMac == 1 ]; then
-  fullAppFilePath="$appFilePath.zip"
-
-  rm -rf "$fullAppFilePath"
-
-  7z a -tzip "$fullAppFilePath" -r "$unpackedFolder" -mmt | grep -v "Compressing"
-  node "$ROOT/scripts/node/generate-zipand-blockmap.js"
-
-  if ! [ -f "$fullAppFilePath" ]; then
-    echo -e "\n${COLOR_RED}The electron app has not been built successful!${COLOR_NORMAL}" >&2
-    exit 1
-  fi
-fi
 
 rm -rf "$unpackedFolder"
 rm -rf "$DIST_FOLDER/.icon-ico"
