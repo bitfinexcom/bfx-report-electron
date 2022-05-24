@@ -1,8 +1,12 @@
 'use strict'
 
 const fs = require('fs')
+const zlib = require('zlib')
 const { promisify } = require('util')
+const archiver = require('archiver')
 const chmodr = promisify(require('chmodr'))
+
+let appDistDir
 
 /* eslint-disable no-template-curly-in-string */
 
@@ -127,33 +131,74 @@ module.exports = {
     const {
       appOutDir
     } = context
+    appDistDir = appOutDir
 
     await fs.promises.access(appOutDir, fs.constants.F_OK)
     await chmodr(appOutDir, '0777')
   },
   async afterAllArtifactBuild (buildResult) {
     const {
-      outDir,
       artifactPaths,
       platformToTargets
     } = buildResult
+    let macBlockmapFilePath
+
+    if (!appDistDir) {
+      throw new Error('ERR_APP_DIST_DIR_IS_NOT_DEFINED')
+    }
 
     for (const [platform, targets] of platformToTargets) {
       const {
         buildConfigurationKey: targetPlatform
       } = platform
 
-      for (const [targetName, target] of targets) {
+      for (const [targetName] of targets) {
         const ext = targetName === 'nsis'
           ? 'exe'
           : targetName
         const appFilePath = artifactPaths.find((path) => (
-          new RegExp(`${targetPlatform}.*${ext}`, 'i').test(path)
+          new RegExp(`${targetPlatform}.*${ext}$`, 'i').test(path)
         ))
+
+        if (
+          targetPlatform === 'mac' &&
+          targetName === 'zip'
+        ) {
+          macBlockmapFilePath = `${appFilePath}.blockmap`
+
+          await fs.promises.unlink(appFilePath)
+          await new Promise((resolve, reject) => {
+            try {
+              const output = fs.createWriteStream(appFilePath)
+              const archive = archiver('zip', {
+                zlib: { level: zlib.constants.Z_BEST_COMPRESSION }
+              })
+
+              output.on('close', resolve)
+              output.on('error', reject)
+              archive.on('error', reject)
+              archive.on('warning', reject)
+
+              archive.pipe(output)
+              archive.directory(appDistDir, false)
+
+              archive.finalize()
+            } catch (err) {
+              reject(err)
+            }
+          })
+          require('./scripts/node/generate-zipand-blockmap')
+
+          console.log('Mac release has been zipped successfully')
+        }
 
         await fs.promises.access(appFilePath, fs.constants.F_OK)
         await fs.promises.chmod(appFilePath, '0777')
       }
     }
+
+    return macBlockmapFilePath
+      ? [macBlockmapFilePath]
+      : []
   }
 }
