@@ -33,9 +33,23 @@ const ymlPath = path.join(APP_DIST_PATH, 'latest-mac.yml')
 try {
   const output = execSync(`${appBuilderPath} blockmap --input=${APP_GENERATED_BINARY_PATH} --output=${APP_GENERATED_BINARY_PATH}.blockmap --compression=gzip`)
   const { sha512, size } = JSON.parse(output)
-  const ymlData = yaml.load(fs.readFileSync(ymlPath, 'utf8'))
+  let ymlData = {
+    version: '',
+    files: [{
+      url: '',
+      sha512: '',
+      size: 0
+    }],
+    path: '',
+    sha512: '',
+    releaseDate: ''
+  }
 
-  console.log(ymlData)
+  try {
+    ymlData = yaml.load(fs.readFileSync(ymlPath, 'utf8'))
+  } catch (err) {
+    console.log(`The ${ymlPath} file does not exist!`)
+  }
 
   ymlData.version = APP_VERSION
   ymlData.path = appReleaseFileName
@@ -45,11 +59,12 @@ try {
   ymlData.files[0].sha512 = sha512
   ymlData.files[0].size = size
 
-  const yamlStr = yaml.dump(ymlData)
+  delete ymlData.files[0].blockMapSize
 
-  console.log(yamlStr)
+  const yamlStr = yaml.dump(ymlData, { lineWidth: -1 })
 
   fs.writeFileSync(ymlPath, yamlStr, 'utf8')
+
   console.log('Successfully updated YAML file and configurations with blockmap')
 } catch (e) {
   console.log('Error in updating YAML file and configurations with blockmap', e)
