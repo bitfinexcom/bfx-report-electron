@@ -133,6 +133,8 @@ if [ $isDevEnv == 1 ]; then
   echo -e "\n${COLOR_YELLOW}Developer environment is turned on!${COLOR_NORMAL}"
 
   echo "{\"NODE_ENV\":\"development\"}" > "$ROOT/$ELECTRON_ENV_FILE_NAME"
+else
+  rm -f "$ROOT/$ELECTRON_ENV_FILE_NAME"
 fi
 
 makeLastCommitJson "$ROOT/$LAST_COMMIT_FILE_NAME"
