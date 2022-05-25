@@ -78,6 +78,8 @@ if [ $isDevEnv == 1 ]; then
   echo -e "\n${COLOR_YELLOW}Developer environment is turned on!${COLOR_NORMAL}"
 
   echo "{\"NODE_ENV\":\"development\"}" > "$ROOT/$ELECTRON_ENV_FILE_NAME"
+else
+  rm -f "$ROOT/$ELECTRON_ENV_FILE_NAME"
 fi
 
 if [ $syncRepo == 1 ]; then
@@ -113,7 +115,7 @@ sed -i -e \
   "s/\"restUrl\": \".*\"/\"restUrl\": \"$escapedBfxApiUrl\"/g" \
   "$WORKER_FOLDER/config/service.report.json"
 
-installBackendDeps # TODO:
+installBackendDeps
 
 echo -e "\n${COLOR_BLUE}Watching for UI build...${COLOR_NORMAL}"
 
