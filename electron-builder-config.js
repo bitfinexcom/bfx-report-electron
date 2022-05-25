@@ -1,12 +1,14 @@
 'use strict'
 
 const fs = require('fs')
+const path = require('path')
 const zlib = require('zlib')
 const { promisify } = require('util')
 const archiver = require('archiver')
-const chmodr = promisify(require('chmodr'))
+const exec = promisify(require('child_process').exec)
 
-let appDistDir
+let version
+const appOutDirs = new Map()
 
 /* eslint-disable no-template-curly-in-string */
 
@@ -73,8 +75,7 @@ module.exports = {
     entitlementsInherit: 'build/entitlements.mas.inherit.plist',
     category: 'public.app-category.finance',
     target: [
-      'dir',
-      'zip'
+      'dir'
     ]
   },
   files: [
@@ -129,28 +130,46 @@ module.exports = {
   ],
   async afterPack (context) {
     const {
-      appOutDir
+      appOutDir,
+      outDir
     } = context
-    appDistDir = appOutDir
 
     await fs.promises.access(appOutDir, fs.constants.F_OK)
-    await chmodr(appOutDir, '0777')
+    await exec(`chmod -fR a+xwr ${outDir}`)
+
+    version = context.packager.appInfo.version
+    appOutDirs.set(
+      context.packager.platform.buildConfigurationKey,
+      appOutDir
+    )
   },
   async afterAllArtifactBuild (buildResult) {
     const {
+      outDir,
       artifactPaths,
       platformToTargets
     } = buildResult
-    let macBlockmapFilePath
-
-    if (!appDistDir) {
-      throw new Error('ERR_APP_DIST_DIR_IS_NOT_DEFINED')
-    }
+    const macBlockmapFilePaths = []
 
     for (const [platform, targets] of platformToTargets) {
       const {
         buildConfigurationKey: targetPlatform
       } = platform
+
+      if (!appOutDirs.has(targetPlatform)) {
+        throw new Error('ERR_APP_DIST_DIR_IS_NOT_DEFINED')
+      }
+
+      if (
+        targetPlatform === 'mac' &&
+        !targets.has('zip')
+      ) {
+        targets.set('zip', {})
+        artifactPaths.push(path.join(
+          outDir,
+          `BitfinexReport-${version}-x64-${targetPlatform}.zip`
+        ))
+      }
 
       for (const [targetName] of targets) {
         const ext = targetName === 'nsis'
@@ -164,9 +183,12 @@ module.exports = {
           targetPlatform === 'mac' &&
           targetName === 'zip'
         ) {
-          macBlockmapFilePath = `${appFilePath}.blockmap`
+          macBlockmapFilePaths.push(
+            `${appFilePath}.blockmap`,
+            path.join(outDir, 'latest-mac.yml')
+          )
 
-          await fs.promises.unlink(appFilePath)
+          require('./scripts/node/make-mac-app-update-yml')
           await new Promise((resolve, reject) => {
             try {
               const output = fs.createWriteStream(appFilePath)
@@ -180,25 +202,25 @@ module.exports = {
               archive.on('warning', reject)
 
               archive.pipe(output)
-              archive.directory(appDistDir, false)
+              archive.directory(appOutDirs.get(targetPlatform), false)
 
               archive.finalize()
             } catch (err) {
               reject(err)
             }
           })
-          require('./scripts/node/generate-zipand-blockmap')
+          require('./scripts/node/generate-mac-zipand-blockmap')
 
           console.log('Mac release has been zipped successfully')
         }
 
         await fs.promises.access(appFilePath, fs.constants.F_OK)
-        await fs.promises.chmod(appFilePath, '0777')
+        await fs.promises.chmod(appFilePath, '777')
       }
     }
 
-    return macBlockmapFilePath
-      ? [macBlockmapFilePath]
+    return macBlockmapFilePaths.length > 0
+      ? [...artifactPaths, ...macBlockmapFilePaths]
       : []
   }
 }
