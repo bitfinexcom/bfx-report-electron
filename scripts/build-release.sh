@@ -165,7 +165,7 @@ installBackendDeps "$targetPlatform"
 
 echo -e "\n${COLOR_BLUE}Watching for UI build...${COLOR_NORMAL}"
 
-if [ -n "${COMMON_UI_BUILD_FOLDER:-}" ]; then
+if [ -d "$COMMON_UI_BUILD_FOLDER" ]; then
   if ! runUIWatchdog "$COMMON_UI_BUILD_FOLDER"; then
     hasIUNotBeenBuilt=1
     echo -e "\n${COLOR_YELLOW}The UI has not been built within the specified time. \
@@ -176,7 +176,7 @@ Trying to build it again...${COLOR_NORMAL}" >&2
     cp -rf "$COMMON_UI_BUILD_FOLDER/"* "$UI_BUILD_FOLDER"
   fi
 fi
-if [ -z "${COMMON_UI_BUILD_FOLDER:-}" ] || [ $hasIUNotBeenBuilt == 1 ]; then
+if ! [ -d "$COMMON_UI_BUILD_FOLDER" ] || [ $hasIUNotBeenBuilt == 1 ]; then
   COMMON_UI_BUILD_FOLDER=""
   "$ROOT/scripts/build-ui.sh"
 

@@ -76,10 +76,10 @@ if [ $isDevEnv == 1 ]; then
   export CI_ENVIRONMENT_NAME="development"
 fi
 
-rm -rf "$UI_BUILD_FOLDER/*"
+rm -rf "$UI_BUILD_FOLDER/"*
 
-if [ -n "${COMMON_UI_BUILD_FOLDER:-}" ]; then
-  rm -rf "$COMMON_UI_BUILD_FOLDER/*"
+if [ -d "$COMMON_UI_BUILD_FOLDER" ]; then
+  rm -rf "$COMMON_UI_BUILD_FOLDER/"*
 fi
 
 echo -e "\n${COLOR_BLUE}Setting UI configs${COLOR_NORMAL}"
@@ -133,13 +133,17 @@ fi
 
 cp -f "$UI_TRIGGER_ELECTRON_LOAD_SCRIPT" "$UI_BUILD_FOLDER/$UI_TRIGGER_ELECTRON_LOAD_SCRIPT_NAME"
 cp -rf "$UI_FONTS_FOLDER" "$UI_BUILD_FOLDER"
-chmod -fR a+xwr "$UI_BUILD_FOLDER" || [[ $? == 1 ]]
 
-if [ -n "${COMMON_UI_BUILD_FOLDER:-}" ]; then
-  cp -rf "$UI_BUILD_FOLDER/"* "$COMMON_UI_BUILD_FOLDER"
-  touch "$COMMON_UI_BUILD_FOLDER/$UI_READY_FILE_NAME"
+if ! [ -d "$COMMON_UI_BUILD_FOLDER" ]; then
+  chmod -fR a+xwr "$UI_BUILD_FOLDER" || [[ $? == 1 ]]
+  touch "$UI_BUILD_FOLDER/$UI_READY_FILE_NAME"
+
+  cd "$UI_CURRDIR"
+  exit 0
 fi
 
-touch "$UI_BUILD_FOLDER/$UI_READY_FILE_NAME"
+mv -f "$UI_BUILD_FOLDER/"* "$COMMON_UI_BUILD_FOLDER"
+chmod -fR a+xwr "$COMMON_UI_BUILD_FOLDER" || [[ $? == 1 ]]
+touch "$COMMON_UI_BUILD_FOLDER/$UI_READY_FILE_NAME"
 
 cd "$UI_CURRDIR"
