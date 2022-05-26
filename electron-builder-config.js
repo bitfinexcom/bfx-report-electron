@@ -30,6 +30,7 @@ const getNodeModulesSubSource = (
 })
 
 module.exports = {
+  generateUpdatesFilesForAllChannels: true,
   npmRebuild: false,
   extends: null,
   asar: false,
@@ -41,6 +42,8 @@ module.exports = {
     repo: 'bfx-report-electron',
     owner: 'bitfinexcom',
     vPrefixedTagName: true,
+
+    // Available: 'latest', 'beta', 'alpha'
     channel: 'latest',
 
     // Available: 'draft', 'prerelease', 'release'
@@ -135,7 +138,12 @@ module.exports = {
     } = context
 
     await fs.promises.access(appOutDir, fs.constants.F_OK)
-    await exec(`chmod -fR a+xwr ${outDir}`)
+
+    try {
+      await exec(`chmod -fR a+xwr ${outDir}`)
+    } catch (err) {
+      console.error(err)
+    }
 
     version = context.packager.appInfo.version
     appOutDirs.set(
@@ -147,7 +155,8 @@ module.exports = {
     const {
       outDir,
       artifactPaths,
-      platformToTargets
+      platformToTargets,
+      configuration: { publish: { channel } }
     } = buildResult
     const macBlockmapFilePaths = []
 
@@ -185,7 +194,7 @@ module.exports = {
         ) {
           macBlockmapFilePaths.push(
             `${appFilePath}.blockmap`,
-            path.join(outDir, 'latest-mac.yml')
+            path.join(outDir, `${channel}-mac.yml`)
           )
 
           require('./scripts/node/make-mac-app-update-yml')
@@ -215,7 +224,12 @@ module.exports = {
         }
 
         await fs.promises.access(appFilePath, fs.constants.F_OK)
-        await fs.promises.chmod(appFilePath, '777')
+
+        try {
+          await fs.promises.chmod(appFilePath, '777')
+        } catch (err) {
+          console.error(err)
+        }
       }
     }
 

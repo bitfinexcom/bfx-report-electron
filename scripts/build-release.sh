@@ -220,6 +220,12 @@ if ! [ -d "$COMMON_DIST_FOLDER" ]; then
   exit 0
 fi
 
+if [ $buildWin == 1 ]; then
+  rm -f "$COMMON_DIST_FOLDER/latest.yml"
+  rm -f "$COMMON_DIST_FOLDER/beta.yml"
+  rm -f "$COMMON_DIST_FOLDER/alpha.yml"
+fi
+
 rm -rf "$COMMON_DIST_FOLDER/"*"$targetPlatform"*
 mv -f "$DIST_FOLDER/"* "$COMMON_DIST_FOLDER"
 
