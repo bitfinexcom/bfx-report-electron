@@ -97,6 +97,7 @@ module.exports = {
     '!bfx-reports-framework/test/${/*}',
     '!bfx-reports-framework/scripts/${/*}',
     '!bfx-reports-framework/*/*.sh',
+    '!bfx-reports-framework/*.sh',
     '!bfx-reports-framework/.mocharc.json',
 
     '!**/.dockerignore',
