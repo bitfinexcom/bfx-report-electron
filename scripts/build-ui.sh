@@ -117,7 +117,7 @@ sed -i -e \
 cd "$UI_FOLDER"
 echo -e "\n${COLOR_BLUE}Installing the UI deps...${COLOR_NORMAL}"
 rm -rf ./node_modules
-npm i --no-audit
+npm ci --no-audit --progress=false
 checkNodeModulesDir "$UI_FOLDER"
 npm ls --depth=0 --only=prod 1<&-
 
