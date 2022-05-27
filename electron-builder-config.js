@@ -42,14 +42,10 @@ module.exports = {
     repo: 'bfx-report-electron',
     owner: 'bitfinexcom',
     vPrefixedTagName: true,
-
-    // Available: 'latest', 'beta', 'alpha'
     channel: 'latest',
 
     // Available: 'draft', 'prerelease', 'release'
     releaseType: 'draft',
-    allowPrerelease: true,
-    useMultipleRangeRequest: false,
     updaterCacheDirName: 'bfx-report-electron-updater'
   },
   linux: {

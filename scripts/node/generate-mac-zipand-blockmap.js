@@ -36,7 +36,7 @@ const ymlPath = path.join(APP_DIST_PATH, `${channel}-mac.yml`)
 try {
   const output = execSync(`${appBuilderPath} blockmap --input=${APP_GENERATED_BINARY_PATH} --output=${APP_GENERATED_BINARY_PATH}.blockmap --compression=gzip`)
   const { sha512, size } = JSON.parse(output)
-  let ymlData = {
+  const ymlData = {
     version: '',
     files: [{
       url: '',
@@ -46,12 +46,6 @@ try {
     path: '',
     sha512: '',
     releaseDate: ''
-  }
-
-  try {
-    ymlData = yaml.load(fs.readFileSync(ymlPath, 'utf8'))
-  } catch (err) {
-    console.log(`The ${ymlPath} file does not exist!`)
   }
 
   ymlData.version = APP_VERSION
