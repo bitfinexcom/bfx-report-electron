@@ -27,6 +27,7 @@ services:
       IS_DEV_ENV: ${IS_DEV_ENV:-0}
       IS_PUBLISHED: ${IS_PUBLISHED:-0}
       GH_TOKEN: ${GH_TOKEN:-}
+      EP_GH_IGNORE_TIME: ${EP_GH_IGNORE_TIME:-true}
     volumes:
       - ui-build:/ui-build
       - ./dist:/dist
@@ -47,6 +48,7 @@ services:
       IS_DEV_ENV: ${IS_DEV_ENV:-0}
       IS_PUBLISHED: ${IS_PUBLISHED:-0}
       GH_TOKEN: ${GH_TOKEN:-}
+      EP_GH_IGNORE_TIME: ${EP_GH_IGNORE_TIME:-true}
     volumes:
       - ui-build:/ui-build
       - ./dist:/dist
@@ -67,6 +69,7 @@ services:
       IS_DEV_ENV: ${IS_DEV_ENV:-0}
       IS_PUBLISHED: ${IS_PUBLISHED:-0}
       GH_TOKEN: ${GH_TOKEN:-}
+      EP_GH_IGNORE_TIME: ${EP_GH_IGNORE_TIME:-true}
     volumes:
       - ui-build:/ui-build
       - ./dist:/dist
