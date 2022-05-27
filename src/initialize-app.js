@@ -34,9 +34,6 @@ const {
 const {
   manageChangelog
 } = require('./changelog-manager')
-const {
-  isZipRelease
-} = require('./auto-updater/utils')
 const enforceMacOSAppLocation = require(
   './enforce-macos-app-location'
 )
@@ -167,15 +164,10 @@ const _manageConfigs = (params = {}) => {
     pathToUserDocuments
   } = params
 
-  const isZipReleaseRun = isZipRelease()
-  const isRelativeCsvPath = (
-    isZipReleaseRun &&
-    process.platform !== 'darwin'
+  const pathToUserCsv = path.join(
+    pathToUserDocuments,
+    'bitfinex/reports'
   )
-
-  const pathToUserCsv = isRelativeCsvPath
-    ? path.join('../../..', 'csv')
-    : path.join(pathToUserDocuments, 'bitfinex/reports')
 
   const configsKeeper = configsKeeperFactory(
     { pathToUserData },
@@ -189,7 +181,7 @@ const _manageConfigs = (params = {}) => {
     configsKeeper,
     {
       pathToUserCsv,
-      isRelativeCsvPath
+      isRelativeCsvPath: true
     }
   )
 }
