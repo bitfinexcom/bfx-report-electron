@@ -20,14 +20,37 @@ const nodeModulesFilter = [
   '!**/.bin'
 ]
 
-const getNodeModulesSubSource = (
-  deps = [],
-  mainSource = 'bfx-reports-framework'
-) => deps.map((dep) => {
-  const from = `${mainSource}/node_modules/${dep}/node_modules`
+const getNodeModulesSubSources = (mainSource) => {
+  const mainNodeModules = `${mainSource}/node_modules`
+  const mainPath = path.join(__dirname, mainNodeModules)
 
-  return { from, to: from, filter: nodeModulesFilter }
-})
+  const deps = fs.readdirSync(
+    mainPath,
+    { withFileTypes: true }
+  )
+
+  return deps.reduce((accum, dirDirent) => {
+    if (!dirDirent.isDirectory()) {
+      return accum
+    }
+
+    const hasNodeModules = fs.readdirSync(
+      path.join(mainPath, dirDirent.name),
+      { withFileTypes: true }
+    ).some((subDirDirent) => (
+      subDirDirent.isDirectory() &&
+      subDirDirent.name === 'node_modules'
+    ))
+
+    if (hasNodeModules) {
+      const from = `${mainNodeModules}/${dirDirent.name}/node_modules`
+
+      accum.push({ from, to: from, filter: nodeModulesFilter })
+    }
+
+    return accum
+  }, [])
+}
 
 module.exports = {
   generateUpdatesFilesForAllChannels: true,
@@ -119,14 +142,8 @@ module.exports = {
       to: 'bfx-report-ui/bfx-report-express/node_modules',
       filter: nodeModulesFilter
     },
-    ...getNodeModulesSubSource([
-      'bfx-api-node-rest',
-      'bfx-svc-boot-js',
-      'yargs',
-      'bfx-report',
-      'request',
-      'lokue'
-    ])
+    ...getNodeModulesSubSources('bfx-reports-framework'),
+    ...getNodeModulesSubSources('bfx-report-ui/bfx-report-express')
   ],
   async afterPack (context) {
     const {
