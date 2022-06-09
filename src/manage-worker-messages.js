@@ -19,7 +19,10 @@ const PROCESS_STATES = require(
 )
 
 module.exports = (ipc) => {
-  const win = isMainWinAvailable()
+  const win = isMainWinAvailable(
+    wins.mainWindow,
+    { shouldCheckVisibility: true }
+  )
     ? wins.mainWindow
     : BrowserWindow.getFocusedWindow()
 
