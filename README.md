@@ -132,7 +132,7 @@ It provides the following steps:
 - if the corresponding flag is added will be fetched the last changes repository/sub-modules
 - launch Docker container to build UI using `./scripts/build-ui.sh` entrypoint, compiled UI files will be used in the build process of the Electron app
 - launch Docker containers for selected OSs (Linux, Windows, Mac) to build releases of the Electron app using `./scripts/build-release.sh` entrypoint
-- if `-p` flag is passed and `GH_TOKEN` environment variable is set:
+- if `-p` flag is passed and `GH_TOKEN` or `GITHUB_TOKEN` environment variable is set:
   - after the binary artifacts are successfully built
   - publish artifacts on the github releases page as a `draft`
   - after which they can be downloaded/tested and if everything is fine, press the buttons for editing and then publishing the release with the corresponding tag, check this [Recommended GitHub Releases Workflow](https://www.electron.build/configuration/publish#recommended-github-releases-workflow)
