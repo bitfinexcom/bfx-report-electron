@@ -1,0 +1,51 @@
+name: build-electron-app
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+  workflow_dispatch:
+
+jobs:
+  docker-builder:
+    timeout-minutes: 30
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        submodules: true
+    - name: Cache node modules
+      id: cache-npm
+      uses: actions/cache@v3
+      env:
+        cache-name: cache-node-modules
+      with:
+        path: |
+          ~/.npm
+          ~/.cache/electron
+          ~/.cache/electron-builder
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+    - name: Cache docker images
+      id: cache-dis
+      uses: actions/cache@v3
+      env:
+        cache-name: cache-docker-images
+      with:
+        path: |
+          /var/lib/docker/overlay2
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Dockerfile**', 'docker-compose.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+    - name: Build release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: ./scripts/launch.sh -ap
