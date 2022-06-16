@@ -103,13 +103,13 @@ composeCommonFlags="\
   --force-recreate \
   --remove-orphans
 "
-uiBuilderServices="ui-builder"
-linuxBuilderServices=""
+uiBuilderService="ui-builder"
+linuxBuilderService=""
 winBuilderService=""
 macBuilderService=""
 
 if [ $buildLinux == 1 ]; then
-  linuxBuilderServices="linux-builder"
+  linuxBuilderService="linux-builder"
 fi
 if [ $buildWin == 1 ]; then
   winBuilderService="win-builder"
@@ -127,7 +127,29 @@ if [ $syncSubModules == 1 ]; then
   source "$ROOT/scripts/sync-repo.sh" "-wue"
 fi
 
-docker-compose up $composeCommonFlags $uiBuilderServices \
-  $linuxBuilderServices $winBuilderService $macBuilderService
+docker-compose up $composeCommonFlags $uiBuilderService \
+  $linuxBuilderService $winBuilderService $macBuilderService
+
+if [ $buildLinux == 1 ]; then
+  linuxExitCode=$(docker inspect $linuxBuilderService --format="{{.State.ExitCode}}")
+
+  if [ $linuxExitCode != 0 ]; then
+    exit 1
+  fi
+fi
+if [ $buildWin == 1 ]; then
+  winExitCode=$(docker inspect $winBuilderService --format="{{.State.ExitCode}}")
+
+  if [ $winExitCode != 0 ]; then
+    exit 1
+  fi
+fi
+if [ $buildMac == 1 ]; then
+  macExitCode=$(docker inspect $macBuilderService --format="{{.State.ExitCode}}")
+
+  if [ $macExitCode != 0 ]; then
+    exit 1
+  fi
+fi
 
 cd "$LAUNCH_CURRDIR"
