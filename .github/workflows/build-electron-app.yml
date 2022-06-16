@@ -12,6 +12,10 @@ on:
     - master
   workflow_dispatch:
 
+env:
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+
 jobs:
   docker-builder:
     timeout-minutes: 30
@@ -20,32 +24,32 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
       with:
-        submodules: true
-    - name: Cache node modules
-      id: cache-npm
+        submodules: recursive
+    - name: Cache Docker images
+      uses: ScribeMD/docker-cache@0.1.4
+      env:
+        cache-name: docker-images-cache-v1
+      with:
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Dockerfile**', 'docker-compose.yaml') }}
+    - name: Cache Electron binaries
+      id: electron-cache
       uses: actions/cache@v3
       env:
-        cache-name: cache-node-modules
+        cache-name: electron-cache-v1
       with:
         path: |
-          ~/.npm
           ~/.cache/electron
           ~/.cache/electron-builder
         key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package.json') }}
         restore-keys: |
           ${{ runner.os }}-build-${{ env.cache-name }}-
-    - name: Cache docker images
-      id: cache-dis
-      uses: actions/cache@v3
-      env:
-        cache-name: cache-docker-images
-      with:
-        path: |
-          /var/lib/docker/overlay2
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Dockerfile**', 'docker-compose.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-build-${{ env.cache-name }}-
     - name: Build release
+      id: release-builder
+      continue-on-error: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: ./scripts/launch.sh -ap
+    - name: Prepare cache folders
+      run: |
+        sudo chown -R $(id -u):$(id -g) ~/.cache/electron
+        sudo chown -R $(id -u):$(id -g) ~/.cache/electron-builder
