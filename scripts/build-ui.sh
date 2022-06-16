@@ -32,6 +32,7 @@ UI_READY_FILE_NAME="READY"
 
 source "$ROOT/scripts/helpers/check-node-modules-dir.sh"
 source "$ROOT/scripts/helpers/escape-string.sh"
+source "$ROOT/scripts/helpers/change-dir-ownership-to-curr-user.sh"
 
 programname=$0
 bfxApiUrl="$BFX_API_URL"
@@ -75,6 +76,8 @@ if [ $isDevEnv == 1 ]; then
   echo -e "\n${COLOR_YELLOW}UI developer environment is turned on!${COLOR_NORMAL}"
   export CI_ENVIRONMENT_NAME="development"
 fi
+
+changeDirOwnershipToCurrUser "$COMMON_UI_BUILD_FOLDER"
 
 rm -rf "$UI_BUILD_FOLDER/"*
 

@@ -39,6 +39,7 @@ source "$ROOT/scripts/helpers/run-ui-watchdog.sh"
 source "$ROOT/scripts/helpers/escape-string.sh"
 source "$ROOT/scripts/helpers/install-backend-deps.sh"
 source "$ROOT/scripts/helpers/get-conf-value.sh"
+source "$ROOT/scripts/helpers/change-dir-ownership-to-curr-user.sh"
 
 programname=$0
 targetPlatform=""
@@ -136,6 +137,11 @@ if [ $isDevEnv == 1 ]; then
 else
   rm -f "$ROOT/$ELECTRON_ENV_FILE_NAME"
 fi
+
+changeDirOwnershipToCurrUser "$ELECTRON_CACHE" "$(id -u):$(id -g)"
+changeDirOwnershipToCurrUser "$ELECTRON_BUILDER_CACHE" "$(id -u):$(id -g)"
+changeDirOwnershipToCurrUser "$COMMON_UI_BUILD_FOLDER"
+changeDirOwnershipToCurrUser "$COMMON_DIST_FOLDER"
 
 makeLastCommitJson "$ROOT/$LAST_COMMIT_FILE_NAME"
 

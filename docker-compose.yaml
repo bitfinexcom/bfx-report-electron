@@ -10,6 +10,7 @@ services:
       COMMON_UI_BUILD_FOLDER: /ui-build
       IS_BFX_API_STAGING: ${IS_BFX_API_STAGING:-0}
       IS_DEV_ENV: ${IS_DEV_ENV:-0}
+      CURRENT_UID: ${CURRENT_UID:-"1000:1000"}
     volumes:
       - ui-build:/ui-build
 
@@ -29,6 +30,7 @@ services:
       GH_TOKEN: ${GH_TOKEN:-}
       GITHUB_TOKEN: ${GITHUB_TOKEN:-}
       EP_GH_IGNORE_TIME: ${EP_GH_IGNORE_TIME:-true}
+      CURRENT_UID: ${CURRENT_UID:-"1000:1000"}
     volumes:
       - ui-build:/ui-build
       - ./dist:/dist
@@ -51,6 +53,7 @@ services:
       GH_TOKEN: ${GH_TOKEN:-}
       GITHUB_TOKEN: ${GITHUB_TOKEN:-}
       EP_GH_IGNORE_TIME: ${EP_GH_IGNORE_TIME:-true}
+      CURRENT_UID: ${CURRENT_UID:-"1000:1000"}
     volumes:
       - ui-build:/ui-build
       - ./dist:/dist
@@ -73,6 +76,7 @@ services:
       GH_TOKEN: ${GH_TOKEN:-}
       GITHUB_TOKEN: ${GITHUB_TOKEN:-}
       EP_GH_IGNORE_TIME: ${EP_GH_IGNORE_TIME:-true}
+      CURRENT_UID: ${CURRENT_UID:-"1000:1000"}
     volumes:
       - ui-build:/ui-build
       - ./dist:/dist

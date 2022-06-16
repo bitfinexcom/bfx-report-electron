@@ -7,6 +7,8 @@ ROOT="${ROOT:-"$(dirname "$SCRIPTPATH")"}"
 LAUNCH_CURRDIR="$PWD"
 DOT_ENV_FILE_PATH="$ROOT/.env"
 
+export CURRENT_UID="$(id -u):$(id -g)"
+
 set -a
 [ -f "$DOT_ENV_FILE_PATH" ] && . "$DOT_ENV_FILE_PATH"
 set +a
