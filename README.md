@@ -144,4 +144,4 @@ To launch `./scripts/launch.sh` script also can be used the following NPM script
 npm run launch -- -aop
 ```
 
-> Also, we provide TravisCI configs for automated building and publishing of the Electron app artifacts using the above-described script `./scripts/launch.sh`, see the corresponding file `.travis.yml`
+> Also, we provide [GitHub Actioins workflows](https://docs.github.com/en/actions/using-workflows/about-workflows) configs for automated building and publishing of the Electron app artifacts using the above-described scripts `./scripts/launch.sh` and `./scripts/build-release.sh`, see the corresponding file `.github/workflows/build-electron-app.yml`
