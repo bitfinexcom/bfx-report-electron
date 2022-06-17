@@ -33,6 +33,8 @@ UI_BUILD_FOLDER="$UI_FOLDER/build"
 COMMON_UI_BUILD_FOLDER="${COMMON_UI_BUILD_FOLDER:-}"
 DIST_FOLDER="$ROOT/dist"
 COMMON_DIST_FOLDER="${COMMON_DIST_FOLDER:-}"
+ELECTRON_CACHE="${ELECTRON_CACHE:-}"
+ELECTRON_BUILDER_CACHE="${ELECTRON_BUILDER_CACHE:-}"
 
 source "$ROOT/scripts/helpers/make-last-commit-json.sh"
 source "$ROOT/scripts/helpers/run-ui-watchdog.sh"
