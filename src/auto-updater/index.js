@@ -4,6 +4,7 @@ const { ipcMain, Menu } = require('electron')
 const fs = require('fs')
 const path = require('path')
 const {
+  AppImageUpdater,
   NsisUpdater,
   AppUpdater
 } = require('electron-updater')
@@ -11,7 +12,6 @@ const Alert = require('electron-alert')
 const yaml = require('js-yaml')
 
 const log = require('../error-manager/log')
-const BfxAppImageUpdater = require('./bfx.appimage.updater')
 const BfxMacUpdater = require('./bfx.mac.updater')
 const wins = require('../windows')
 const {
@@ -236,7 +236,7 @@ const _autoUpdaterFactory = () => {
     })
   }
   if (process.platform === 'linux') {
-    autoUpdater = new BfxAppImageUpdater()
+    autoUpdater = new AppImageUpdater()
   }
 
   autoUpdater.on('error', async (err) => {

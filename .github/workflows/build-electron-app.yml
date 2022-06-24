@@ -1,0 +1,97 @@
+name: build-electron-app
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+  workflow_dispatch:
+
+env:
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+
+jobs:
+  linux-win-docker-builder:
+    timeout-minutes: 90
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - name: Cache Docker images
+      uses: ScribeMD/docker-cache@0.1.4
+      env:
+        cache-name: docker-images-cache-v1
+      with:
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Dockerfile**', 'docker-compose.yaml') }}
+    - name: Cache Electron binaries
+      id: electron-cache
+      uses: actions/cache@v3
+      env:
+        cache-name: electron-cache-v1
+      with:
+        path: |
+          ~/.cache/electron
+          ~/.cache/electron-builder
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+    - name: Build release
+      id: release-builder
+      uses: nick-fields/retry@v2
+      continue-on-error: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        timeout_minutes: 20
+        retry_wait_seconds: 10
+        max_attempts: 3
+        retry_on: any
+        command: ./scripts/launch.sh -lwp
+    - name: Prepare cache folders
+      run: |
+        sudo chown -R $(id -u):$(id -g) ~/.cache/electron
+        sudo chown -R $(id -u):$(id -g) ~/.cache/electron-builder
+
+  mac-builder:
+    timeout-minutes: 90
+    runs-on: macos-11
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 14.16.0
+    - name: Cache Electron binaries
+      id: electron-cache
+      uses: actions/cache@v3
+      env:
+        cache-name: electron-cache-v1
+      with:
+        path: |
+          ~/Library/Caches/electron
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+    - name: Build release
+      id: release-builder
+      uses: nick-fields/retry@v2
+      continue-on-error: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ELECTRON_CACHE: ~/Library/Caches/electron
+      with:
+        timeout_minutes: 20
+        retry_wait_seconds: 10
+        max_attempts: 3
+        retry_on: any
+        command: ./scripts/build-release.sh -mp

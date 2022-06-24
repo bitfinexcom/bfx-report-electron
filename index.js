@@ -1,5 +1,16 @@
 'use strict'
 
+try {
+  const { NODE_ENV } = require('./electronEnv.json')
+
+  if (
+    !process.env.NODE_ENV &&
+    NODE_ENV
+  ) {
+    process.env.NODE_ENV = NODE_ENV
+  }
+} catch (err) {}
+
 const { app } = require('electron')
 
 const productName = require('./src/helpers/product-name')

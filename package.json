@@ -5,6 +5,9 @@
   "description": "Reporting tool",
   "author": "bitfinex.com",
   "main": "index.js",
+  "engine": {
+    "node": ">=14.16.0"
+  },
   "license": "Apache-2.0",
   "dependencies": {
     "archiver": "5.3.0",
@@ -19,7 +22,7 @@
     "electron-log": "4.4.1",
     "electron-root-path": "1.0.16",
     "electron-serve": "1.1.0",
-    "electron-updater": "4.3.8",
+    "electron-updater": "5.0.4",
     "extract-zip": "2.0.1",
     "find-free-port": "2.0.0",
     "github-markdown-css": "5.1.0",
@@ -35,8 +38,7 @@
     "@mapbox/node-pre-gyp": "1.0.6",
     "app-builder-bin": "4.1.0",
     "electron": "13.6.9",
-    "electron-builder": "22.11.7",
-    "node-gyp": "7.1.2",
+    "electron-builder": "23.0.9",
     "standard": "16.0.4"
   },
   "standard": {
@@ -48,185 +50,10 @@
     ]
   },
   "scripts": {
-    "start": "./scripts/init.sh -s&&npm run dist-linux&&npm run dist-win&&npm run dist-mac",
-    "startDev": "./scripts/init.sh -d -s&&npm run dist-linux&&npm run dist-win&&npm run dist-mac",
-    "init": "./scripts/init.sh",
-    "initDev": "./scripts/init.sh -d",
-    "dist-win": "./scripts/reinstall-deps.sh win32&&electron-builder build --win",
-    "dist-linux": "./scripts/reinstall-deps.sh linux&&electron-builder build --linux",
-    "dist-mac": "./scripts/reinstall-deps.sh darwin&&electron-builder build --mac",
-    "electron": "export NODE_ENV=development&&export DEBUG=*&&electron .",
-    "test": "standard"
-  },
-  "build": {
-    "publish": {
-      "provider": "github",
-      "repo": "bfx-report-electron",
-      "owner": "bitfinexcom",
-      "channel": "latest",
-      "allowPrerelease": true,
-      "useMultipleRangeRequest": false,
-      "updaterCacheDirName": "bfx-report-electron-updater"
-    },
-    "npmRebuild": false,
-    "extends": null,
-    "asar": false,
-    "productName": "Bitfinex Report",
-    "artifactName": "BitfinexReport-${version}-x64-${os}.${ext}",
-    "appId": "com.bitfinex.report",
-    "files": [
-      "**/*",
-      "build/icons",
-      "build/icon.*",
-      "build/loader.*",
-      "bfx-reports-framework",
-      "!.dockerignore",
-      "!scripts",
-      "!bfx-reports-framework/init.sh",
-      "!bfx-reports-framework/bfx-report-ui",
-      "!bfx-reports-framework/test",
-      "!bfx-report-ui",
-      "bfx-report-ui/build",
-      "bfx-report-ui/bfx-report-express",
-      "!bfx-report-ui/bfx-report-express/pm2.config.js",
-      "!**/.gitmodules",
-      "!**/.npmrc",
-      "!**/.mocharc.json",
-      "!**/README.md",
-      {
-        "from": "bfx-reports-framework/node_modules",
-        "to": "bfx-reports-framework/node_modules",
-        "filter": [
-          "**/*",
-          "!.bin",
-          "!**/node_modules/.bin",
-          "!**/*.md",
-          "!**/LICENSE",
-          "!**/CHANGELOG",
-          "!**/test"
-        ]
-      },
-      {
-        "from": "bfx-reports-framework/node_modules/bfx-api-node-rest/node_modules",
-        "to": "bfx-reports-framework/node_modules/bfx-api-node-rest/node_modules",
-        "filter": [
-          "**/*",
-          "!.bin",
-          "!**/node_modules/.bin",
-          "!**/*.md",
-          "!**/LICENSE",
-          "!**/CHANGELOG",
-          "!**/test"
-        ]
-      },
-      {
-        "from": "bfx-reports-framework/node_modules/bfx-svc-boot-js/node_modules",
-        "to": "bfx-reports-framework/node_modules/bfx-svc-boot-js/node_modules",
-        "filter": [
-          "**/*",
-          "!.bin",
-          "!**/node_modules/.bin",
-          "!**/*.md",
-          "!**/LICENSE",
-          "!**/CHANGELOG",
-          "!**/test"
-        ]
-      },
-      {
-        "from": "bfx-reports-framework/node_modules/yargs/node_modules",
-        "to": "bfx-reports-framework/node_modules/yargs/node_modules",
-        "filter": [
-          "**/*",
-          "!.bin",
-          "!**/node_modules/.bin",
-          "!**/*.md",
-          "!**/LICENSE",
-          "!**/CHANGELOG",
-          "!**/test"
-        ]
-      },
-      {
-        "from": "bfx-reports-framework/node_modules/bfx-report/node_modules",
-        "to": "bfx-reports-framework/node_modules/bfx-report/node_modules",
-        "filter": [
-          "**/*",
-          "!.bin",
-          "!**/node_modules/.bin",
-          "!**/*.md",
-          "!**/LICENSE",
-          "!**/CHANGELOG",
-          "!**/test"
-        ]
-      },
-      {
-        "from": "bfx-reports-framework/node_modules/request/node_modules",
-        "to": "bfx-reports-framework/node_modules/request/node_modules",
-        "filter": [
-          "**/*",
-          "!.bin",
-          "!**/node_modules/.bin",
-          "!**/*.md",
-          "!**/LICENSE",
-          "!**/CHANGELOG",
-          "!**/test"
-        ]
-      },
-      {
-        "from": "bfx-reports-framework/node_modules/lokue/node_modules",
-        "to": "bfx-reports-framework/node_modules/lokue/node_modules",
-        "filter": [
-          "**/*",
-          "!.bin",
-          "!**/node_modules/.bin",
-          "!**/*.md",
-          "!**/LICENSE",
-          "!**/CHANGELOG",
-          "!**/test"
-        ]
-      },
-      {
-        "from": "bfx-report-ui/bfx-report-express/node_modules",
-        "to": "bfx-report-ui/bfx-report-express/node_modules",
-        "filter": [
-          "**/*",
-          "!.bin",
-          "!**/node_modules/.bin",
-          "!**/*.md",
-          "!**/LICENSE",
-          "!**/CHANGELOG",
-          "!**/test"
-        ]
-      }
-    ],
-    "linux": {
-      "executableName": "app",
-      "description": "Bitfinex Report",
-      "maintainer": "<bitfinex.com>",
-      "category": "Network",
-      "target": [
-        "dir",
-        "AppImage"
-      ]
-    },
-    "win": {
-      "target": [
-        "dir",
-        "nsis"
-      ],
-      "publisherName": "Bitfinex Report",
-      "verifyUpdateCodeSignature": false
-    },
-    "mac": {
-      "type": "development",
-      "hardenedRuntime": true,
-      "gatekeeperAssess": false,
-      "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mas.inherit.plist",
-      "category": "public.app-category.finance",
-      "target": [
-        "dir",
-        "zip"
-      ]
-    }
+    "start": "export NODE_ENV=development&&export DEBUG=*&&electron .",
+    "test": "standard",
+    "setup": "./scripts/setup.sh",
+    "launch": "./scripts/launch.sh",
+    "sync-repo": "./scripts/sync-repo.sh"
   }
 }

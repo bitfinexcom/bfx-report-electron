@@ -15,6 +15,9 @@ const {
 const cwd = process.cwd()
 const packageJsonPath = path.join(cwd, 'package.json')
 const productName = require('../../src/helpers/product-name')
+const {
+  publish: { channel }
+} = require(path.join(cwd, 'electron-builder-config'))
 
 const {
   version: APP_VERSION
@@ -28,14 +31,22 @@ const APP_GENERATED_BINARY_PATH = path.join(
   APP_DIST_PATH,
   appReleaseFileName
 )
-const ymlPath = path.join(APP_DIST_PATH, 'latest-mac.yml')
+const ymlPath = path.join(APP_DIST_PATH, `${channel}-mac.yml`)
 
 try {
   const output = execSync(`${appBuilderPath} blockmap --input=${APP_GENERATED_BINARY_PATH} --output=${APP_GENERATED_BINARY_PATH}.blockmap --compression=gzip`)
   const { sha512, size } = JSON.parse(output)
-  const ymlData = yaml.load(fs.readFileSync(ymlPath, 'utf8'))
-
-  console.log(ymlData)
+  const ymlData = {
+    version: '',
+    files: [{
+      url: '',
+      sha512: '',
+      size: 0
+    }],
+    path: '',
+    sha512: '',
+    releaseDate: ''
+  }
 
   ymlData.version = APP_VERSION
   ymlData.path = appReleaseFileName
@@ -45,11 +56,12 @@ try {
   ymlData.files[0].sha512 = sha512
   ymlData.files[0].size = size
 
-  const yamlStr = yaml.dump(ymlData)
+  delete ymlData.files[0].blockMapSize
 
-  console.log(yamlStr)
+  const yamlStr = yaml.dump(ymlData, { lineWidth: -1 })
 
   fs.writeFileSync(ymlPath, yamlStr, 'utf8')
+
   console.log('Successfully updated YAML file and configurations with blockmap')
 } catch (e) {
   console.log('Error in updating YAML file and configurations with blockmap', e)

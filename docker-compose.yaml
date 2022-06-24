@@ -7,8 +7,10 @@ services:
       context: .
       dockerfile: Dockerfile.ui-builder
     environment:
-      BRANCH: ${BRANCH}
-      UI_BUILD_FOLDER: /ui-build
+      COMMON_UI_BUILD_FOLDER: /ui-build
+      IS_BFX_API_STAGING: ${IS_BFX_API_STAGING:-0}
+      IS_DEV_ENV: ${IS_DEV_ENV:-0}
+      CURRENT_UID: ${CURRENT_UID:-"1000:1000"}
     volumes:
       - ui-build:/ui-build
 
@@ -20,13 +22,20 @@ services:
     environment:
       ELECTRON_CACHE: /root/.cache/electron
       ELECTRON_BUILDER_CACHE: /root/.cache/electron-builder
-      BRANCH: ${BRANCH}
-      UI_BUILD_FOLDER: /ui-build
+      COMMON_UI_BUILD_FOLDER: /ui-build
+      COMMON_DIST_FOLDER: /dist
+      IS_BFX_API_STAGING: ${IS_BFX_API_STAGING:-0}
+      IS_DEV_ENV: ${IS_DEV_ENV:-0}
+      IS_PUBLISHED: ${IS_PUBLISHED:-0}
+      GH_TOKEN: ${GH_TOKEN:-}
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+      EP_GH_IGNORE_TIME: ${EP_GH_IGNORE_TIME:-true}
+      CURRENT_UID: ${CURRENT_UID:-"1000:1000"}
     volumes:
       - ui-build:/ui-build
       - ./dist:/dist
-      - electron-cache:/root/.cache/electron
-      - electron-builder-cache:/root/.cache/electron-builder
+      - ~/.cache/electron:/root/.cache/electron
+      - ~/.cache/electron-builder:/root/.cache/electron-builder
 
   win-builder:
     container_name: win-builder
@@ -36,13 +45,20 @@ services:
     environment:
       ELECTRON_CACHE: /root/.cache/electron
       ELECTRON_BUILDER_CACHE: /root/.cache/electron-builder
-      BRANCH: ${BRANCH}
-      UI_BUILD_FOLDER: /ui-build
+      COMMON_UI_BUILD_FOLDER: /ui-build
+      COMMON_DIST_FOLDER: /dist
+      IS_BFX_API_STAGING: ${IS_BFX_API_STAGING:-0}
+      IS_DEV_ENV: ${IS_DEV_ENV:-0}
+      IS_PUBLISHED: ${IS_PUBLISHED:-0}
+      GH_TOKEN: ${GH_TOKEN:-}
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+      EP_GH_IGNORE_TIME: ${EP_GH_IGNORE_TIME:-true}
+      CURRENT_UID: ${CURRENT_UID:-"1000:1000"}
     volumes:
       - ui-build:/ui-build
       - ./dist:/dist
-      - electron-cache:/root/.cache/electron
-      - electron-builder-cache:/root/.cache/electron-builder
+      - ~/.cache/electron:/root/.cache/electron
+      - ~/.cache/electron-builder:/root/.cache/electron-builder
 
   mac-builder:
     container_name: mac-builder
@@ -52,15 +68,20 @@ services:
     environment:
       ELECTRON_CACHE: /root/.cache/electron
       ELECTRON_BUILDER_CACHE: /root/.cache/electron-builder
-      BRANCH: ${BRANCH}
-      UI_BUILD_FOLDER: /ui-build
+      COMMON_UI_BUILD_FOLDER: /ui-build
+      COMMON_DIST_FOLDER: /dist
+      IS_BFX_API_STAGING: ${IS_BFX_API_STAGING:-0}
+      IS_DEV_ENV: ${IS_DEV_ENV:-0}
+      IS_PUBLISHED: ${IS_PUBLISHED:-0}
+      GH_TOKEN: ${GH_TOKEN:-}
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+      EP_GH_IGNORE_TIME: ${EP_GH_IGNORE_TIME:-true}
+      CURRENT_UID: ${CURRENT_UID:-"1000:1000"}
     volumes:
       - ui-build:/ui-build
       - ./dist:/dist
-      - electron-cache:/root/.cache/electron
-      - electron-builder-cache:/root/.cache/electron-builder
+      - ~/.cache/electron:/root/.cache/electron
+      - ~/.cache/electron-builder:/root/.cache/electron-builder
 
 volumes:
   ui-build:
-  electron-cache:
-  electron-builder-cache:
