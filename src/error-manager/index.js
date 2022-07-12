@@ -80,7 +80,9 @@ const _isLogSkipped = (log) => {
     typeof str === 'string' &&
     (
       str.includes('contextIsolation is deprecated') ||
-      str.includes('ERR_INTERNET_DISCONNECTED')
+      str.includes('ERR_INTERNET_DISCONNECTED') ||
+      // Skip error when can't get code signature on mac
+      str.includes('Could not get code signature')
     )
   )
 }
