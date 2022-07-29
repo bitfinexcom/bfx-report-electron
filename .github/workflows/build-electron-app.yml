@@ -11,6 +11,10 @@ on:
     branches:
     - master
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version'
+        required: false
 
 env:
   DOCKER_BUILDKIT: 1
@@ -30,6 +34,12 @@ jobs:
         sed -i -e \
           "s/owner: '.*'/owner: '${{ github.repository_owner }}'/g" \
           "./electron-builder-config.js"
+    - if: github.event.inputs.version != ''
+      name: Set release version
+      run: |
+        sed -i -e \
+          "s/\"version\": \".*\"/\"version\": \"${{ github.event.inputs.version }}\"/g" \
+          "./package.json"
     - name: Cache Docker images
       uses: ScribeMD/docker-cache@0.1.4
       env:
@@ -78,6 +88,12 @@ jobs:
         sed -i -e \
           "s/owner: '.*'/owner: '${{ github.repository_owner }}'/g" \
           "./electron-builder-config.js"
+    - if: github.event.inputs.version != ''
+      name: Set release version
+      run: |
+        sed -i -e \
+          "s/\"version\": \".*\"/\"version\": \"${{ github.event.inputs.version }}\"/g" \
+          "./package.json"
     - uses: actions/setup-node@v3
       with:
         node-version: 14.16.0
