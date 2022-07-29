@@ -1,4 +1,4 @@
-name: build-electron-app
+name: Build release
 
 permissions:
   contents: write
