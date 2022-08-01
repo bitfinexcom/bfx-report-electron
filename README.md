@@ -4,7 +4,15 @@
 
 Already complied binaries can be found on release section [release section](https://github.com/bitfinexcom/bfx-report-electron/releases)
 
-Download the correspondent binary according your operating system
+Download the correspondent binary according your operating system. Available the following binaries:
+
+- `AppImages` for the Linux
+- zipped `DMG` for the MacOS
+- `NSIS` installer for the Windows
+
+### I get some errors related to something called “FUSE”
+
+> AppImages require a Linux technology called Filesystem in Userspace (or short FUSE). The majority of systems ships with a working FUSE setup. However, sometimes, it doesn’t quite work. [This section explains](https://docs.appimage.org/user-guide/troubleshooting/fuse.html) a few solutions that fix the most frequently reported problems.
 
 ## Setup
 
