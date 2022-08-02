@@ -23,6 +23,9 @@ const showErrorModalDialog = require('./show-error-modal-dialog')
 const pauseApp = require('./pause-app')
 const relaunch = require('./relaunch')
 const { getConfigsKeeperByName } = require('./configs-keeper')
+const getAlertCustomClassObj = require(
+  './helpers/get-alert-custom-class-obj'
+)
 
 const _getSchedulerRule = (timeFormat, alertRes) => {
   if (timeFormat.value === 'days') {
@@ -125,11 +128,11 @@ module.exports = () => {
   const timeFormatAlertOptions = {
     title: 'Set time format',
     type: 'question',
-    customClass: {
+    customClass: getAlertCustomClassObj({
       title: 'titleColor',
-      content: 'textColor',
+      container: 'textColor',
       input: 'textColor radioInput'
-    },
+    }),
     focusConfirm: true,
     showCancelButton: true,
     progressSteps: [1, 2],

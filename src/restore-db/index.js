@@ -14,6 +14,9 @@ const {
 const isMainWinAvailable = require(
   '../helpers/is-main-win-available'
 )
+const getAlertCustomClassObj = require(
+  '../helpers/get-alert-custom-class-obj'
+)
 const showMessageModalDialog = require(
   '../show-message-modal-dialog'
 )
@@ -100,11 +103,11 @@ const _fireAlert = (params) => {
     position: 'center',
     allowOutsideClick: false,
     backdrop: 'rgba(0,0,0,0.0)',
-    customClass: {
+    customClass: getAlertCustomClassObj({
       title: 'titleColor',
-      content: 'select-db-backup textColor',
+      container: 'select-db-backup textColor',
       input: 'textColor radioInput'
-    },
+    }),
 
     type: 'question',
     title,

@@ -9,6 +9,9 @@ const { rootPath } = require('electron-root-path')
 
 const wins = require('../windows')
 const spawn = require('../helpers/spawn')
+const getAlertCustomClassObj = require(
+  '../helpers/get-alert-custom-class-obj'
+)
 const isMainWinAvailable = require(
   '../helpers/is-main-win-available'
 )
@@ -90,9 +93,9 @@ const _fireAlert = (params) => {
     position: 'center',
     allowOutsideClick: false,
     backdrop: 'rgba(0,0,0,0.0)',
-    customClass: {
-      content: 'markdown-body'
-    },
+    customClass: getAlertCustomClassObj({
+      container: 'markdown-body'
+    }),
 
     type: 'question',
     title,

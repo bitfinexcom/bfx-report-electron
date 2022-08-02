@@ -11,6 +11,9 @@ const wins = require('../windows')
 const isMainWinAvailable = require(
   '../helpers/is-main-win-available'
 )
+const getAlertCustomClassObj = require(
+  '../helpers/get-alert-custom-class-obj'
+)
 const {
   closeAlert
 } = require('../modal-dialog-src/utils')
@@ -95,9 +98,9 @@ const _fireAlert = (params) => {
     position: 'center',
     allowOutsideClick: false,
     backdrop: 'rgba(0,0,0,0.0)',
-    customClass: {
-      content: 'markdown-body'
-    },
+    customClass: getAlertCustomClassObj({
+      container: 'markdown-body'
+    }),
 
     type,
     title,
