@@ -32,7 +32,7 @@ body::-webkit-scrollbar-thumb,
 }
 
 .swal2-styled.swal2-confirm {
-  border-radius: 2;
+  border-radius: 2px;
   background-color: #82baf6;
   transition: all 0.3s;
 }
@@ -44,7 +44,7 @@ body::-webkit-scrollbar-thumb,
 }
 
 .swal2-styled.swal2-cancel {
-  border-radius: 2;
+  border-radius: 2px;
   background-color: #172d3e;
   border: 1px solid #19354a;
 }
