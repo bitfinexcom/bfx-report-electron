@@ -105,11 +105,12 @@ const _fireAlert = (params) => {
     backdrop: 'rgba(0,0,0,0.0)',
     customClass: getAlertCustomClassObj({
       title: 'titleColor',
-      container: 'select-db-backup textColor',
+      container: 'textColor',
+      htmlContainer: 'select-db-backup ',
       input: 'textColor radioInput'
     }),
 
-    type: 'question',
+    icon: 'question',
     title,
     showConfirmButton: true,
     focusCancel: true,
@@ -121,7 +122,7 @@ const _fireAlert = (params) => {
     inputValue,
     inputOptions,
 
-    onBeforeOpen: () => {
+    willOpen: () => {
       if (
         !alert ||
         !alert.browserWindow
@@ -129,7 +130,7 @@ const _fireAlert = (params) => {
 
       alert.browserWindow.hide()
     },
-    onOpen: () => {
+    didOpen: () => {
       if (
         !alert ||
         !alert.browserWindow
@@ -144,7 +145,7 @@ const _fireAlert = (params) => {
           : height
       })
     },
-    onClose: () => {
+    willClose: () => {
       if (
         !alert ||
         !alert.browserWindow
@@ -152,7 +153,7 @@ const _fireAlert = (params) => {
 
       alert.browserWindow.hide()
     },
-    onAfterClose: () => {
+    didClose: () => {
       win.removeListener('closed', _close)
     }
   }
