@@ -99,7 +99,7 @@ const _fireAlert = (params) => {
     allowOutsideClick: false,
     backdrop: 'rgba(0,0,0,0.0)',
     customClass: getAlertCustomClassObj({
-      container: 'markdown-body'
+      htmlContainer: 'markdown-body'
     }),
 
     type,
@@ -111,7 +111,7 @@ const _fireAlert = (params) => {
     cancelButtonText: 'Cancel',
     timerProgressBar: false,
 
-    onBeforeOpen: () => {
+    willOpen: () => {
       if (
         !alert ||
         !alert.browserWindow
@@ -119,7 +119,7 @@ const _fireAlert = (params) => {
 
       alert.browserWindow.hide()
     },
-    onOpen: () => {
+    didOpen: () => {
       if (
         !alert ||
         !alert.browserWindow
@@ -134,7 +134,7 @@ const _fireAlert = (params) => {
           : height
       })
     },
-    onClose: () => {
+    willClose: () => {
       if (
         !alert ||
         !alert.browserWindow
@@ -142,7 +142,7 @@ const _fireAlert = (params) => {
 
       alert.browserWindow.hide()
     },
-    onAfterClose: () => {
+    didClose: () => {
       win.removeListener('closed', _close)
     }
   }
