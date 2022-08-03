@@ -1,4 +1,4 @@
-body {
+body .swal2-container {
   font-family: "Roboto", sans-serif;
 }
 
@@ -57,7 +57,8 @@ body::-webkit-scrollbar-thumb,
 
 .markdown-body {
   background-color: #102331;
-  padding: 16px 16px 0;
+  padding: 16px;
+  font-size: 1em;
 }
 
 .markdown-body table {
@@ -184,7 +185,11 @@ body::-webkit-scrollbar-thumb,
   color: #82baf6;
 }
 
-.swal2-content,
+.swal2-html-container {
+  margin: 1em 1em .3em;
+}
+
+.swal2-html-container,
 .textColor {
   color: #f5f8fa;
 }

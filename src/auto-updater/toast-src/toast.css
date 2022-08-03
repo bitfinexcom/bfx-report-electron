@@ -1,4 +1,4 @@
-body {
+body .swal2-container {
   font-family: "Roboto", sans-serif;
   margin: 0;
 }
@@ -37,7 +37,7 @@ body {
   color: #82baf6;
 }
 
-.swal2-content {
+.swal2-html-container {
   color: #f5f8fa;
 }
 
