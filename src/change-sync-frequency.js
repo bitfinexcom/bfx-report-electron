@@ -127,7 +127,7 @@ module.exports = () => {
 
   const timeFormatAlertOptions = {
     title: 'Set time format',
-    type: 'question',
+    icon: 'question',
     customClass: getAlertCustomClassObj({
       title: 'titleColor',
       container: 'textColor',
@@ -144,7 +144,7 @@ module.exports = () => {
       hours: 'Hours',
       days: 'Days'
     },
-    onBeforeOpen: () => {
+    willOpen: () => {
       if (!timeFormatAlert.browserWindow) return
 
       timeFormatAlert.browserWindow.once('blur', closeTimeFormatAlert)
@@ -152,18 +152,18 @@ module.exports = () => {
   }
   const alertOptions = {
     title: 'Set sync frequency',
-    type: 'question',
-    customClass: {
+    icon: 'question',
+    customClass: getAlertCustomClassObj({
       title: 'titleColor',
-      content: 'textColor',
+      container: 'textColor',
       input: 'textColor rangeInput'
-    },
+    }),
     focusConfirm: true,
     showCancelButton: true,
     progressSteps: [1, 2],
     currentProgressStep: 1,
     input: 'range',
-    onBeforeOpen: () => {
+    willOpen: () => {
       if (!alert.browserWindow) return
 
       alert.browserWindow.once('blur', closeAlert)
