@@ -94,10 +94,10 @@ const _fireAlert = (params) => {
     allowOutsideClick: false,
     backdrop: 'rgba(0,0,0,0.0)',
     customClass: getAlertCustomClassObj({
-      container: 'markdown-body'
+      htmlContainer: 'markdown-body'
     }),
 
-    type: 'question',
+    icon: 'question',
     title,
     html,
     focusConfirm: true,
@@ -107,7 +107,7 @@ const _fireAlert = (params) => {
     cancelButtonText: isError ? 'Exit' : 'Cancel',
     timerProgressBar: false,
 
-    onBeforeOpen: () => {
+    willOpen: () => {
       if (
         !alert ||
         !alert.browserWindow
@@ -115,7 +115,7 @@ const _fireAlert = (params) => {
 
       alert.browserWindow.hide()
     },
-    onOpen: () => {
+    didOpen: () => {
       if (
         !alert ||
         !alert.browserWindow
@@ -130,7 +130,7 @@ const _fireAlert = (params) => {
           : height
       })
     },
-    onClose: () => {
+    willClose: () => {
       if (
         !alert ||
         !alert.browserWindow
@@ -138,7 +138,7 @@ const _fireAlert = (params) => {
 
       alert.browserWindow.hide()
     },
-    onAfterClose: () => {
+    didClose: () => {
       win.removeListener('closed', _close)
     }
   }
