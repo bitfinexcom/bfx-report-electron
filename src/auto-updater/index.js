@@ -1,6 +1,6 @@
 'use strict'
 
-const { ipcMain, Menu } = require('electron')
+const { app, ipcMain, Menu } = require('electron')
 const fs = require('fs')
 const path = require('path')
 const {
@@ -237,6 +237,27 @@ const _autoUpdaterFactory = () => {
   }
   if (process.platform === 'linux') {
     autoUpdater = new AppImageUpdater()
+
+    // An option to debug the auto-update flow non-packaged build
+    if (
+      process.env.IS_AUTO_UPDATE_BEING_TESTED &&
+      !process.env.APPIMAGE &&
+      !app.isPackaged
+    ) {
+      process.env.APPIMAGE = path.join(
+        __dirname, '../../stub.AppImage'
+      )
+
+      fs.closeSync(fs.openSync(process.env.APPIMAGE, 'w'))
+      Object.defineProperty(autoUpdater.app, 'isPackaged', {
+        get () { return true }
+      })
+      Object.defineProperty(autoUpdater.app, 'appUpdateConfigPath', {
+        get () {
+          return path.join(this.app.getAppPath(), 'dev-app-update.yml')
+        }
+      })
+    }
   }
 
   autoUpdater.on('error', async (err) => {
