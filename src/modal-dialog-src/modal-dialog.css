@@ -115,6 +115,11 @@ body::-webkit-scrollbar-thumb,
   border-left: .25em solid #19354a;
 }
 
+.radioInput,
+.rangeInput {
+  background: none;
+}
+
 .rangeInput {
   display: flex;
   align-items: center;
