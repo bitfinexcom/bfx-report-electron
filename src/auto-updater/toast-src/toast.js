@@ -6,6 +6,21 @@ window.addEventListener('load', () => {
 
     const container = document.body
     const processWrapper = document.createElement('div')
+    const htmlContainers = document.getElementsByClassName('swal2-popup')
+    const actionContainers = document.getElementsByClassName('swal2-actions')
+    const titleContainers = document.getElementsByClassName('swal2-title')
+    const elemContainers = [
+      ...actionContainers,
+      ...titleContainers
+    ]
+
+    for (const container of htmlContainers) {
+      container.style.display = 'flex'
+      container.style.width = 'auto'
+    }
+    for (const container of elemContainers) {
+      container.style.display = 'flex'
+    }
 
     processWrapper.className = 'process'
     container.append(processWrapper)
