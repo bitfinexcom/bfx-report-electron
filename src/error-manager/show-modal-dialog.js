@@ -103,8 +103,10 @@ const _fireAlert = (params) => {
     focusConfirm: true,
     showConfirmButton: true,
     confirmButtonText: 'Report',
-    showCancelButton: true,
-    cancelButtonText: isError ? 'Exit' : 'Cancel',
+    showDenyButton: true,
+    denyButtonText: 'Cancel',
+    showCancelButton: isError,
+    cancelButtonText: 'Exit',
     timerProgressBar: false,
 
     willOpen: () => {
@@ -170,20 +172,19 @@ module.exports = async (params) => {
     const html = converter.makeHtml(mdIssue)
 
     const {
-      value
+      value,
+      isDismissed
     } = await _fireAlert({ isError, html })
 
     return {
-      isExit: isError,
-      isReported: value,
-      isIgnored: !isError && !value
+      isExit: isDismissed,
+      isReported: value
     }
   }
 
   const res = {
     isExit: true,
-    isReported: true,
-    isIgnored: false
+    isReported: true
   }
 
   // If called before the app ready event on Linux,

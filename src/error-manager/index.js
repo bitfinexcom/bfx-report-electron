@@ -138,8 +138,7 @@ const manageNewGithubIssue = async (params) => {
 
     const {
       isExit,
-      isReported,
-      isIgnored
+      isReported
     } = await showModalDialog({
       isError,
       errBoxTitle,
@@ -147,11 +146,6 @@ const manageNewGithubIssue = async (params) => {
       mdIssue
     })
 
-    if (isIgnored) {
-      _unlockIssueManager()
-
-      return false
-    }
     if (isReported) {
       await openNewGithubIssue({
         title,
