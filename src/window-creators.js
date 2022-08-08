@@ -160,6 +160,8 @@ const _createChildWindow = async (
       winName
     },
     {
+      width,
+      height,
       minWidth: width,
       minHeight: height,
       x,
