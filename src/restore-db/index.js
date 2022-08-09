@@ -14,6 +14,9 @@ const {
 const isMainWinAvailable = require(
   '../helpers/is-main-win-available'
 )
+const getAlertCustomClassObj = require(
+  '../helpers/get-alert-custom-class-obj'
+)
 const showMessageModalDialog = require(
   '../show-message-modal-dialog'
 )
@@ -100,13 +103,14 @@ const _fireAlert = (params) => {
     position: 'center',
     allowOutsideClick: false,
     backdrop: 'rgba(0,0,0,0.0)',
-    customClass: {
+    customClass: getAlertCustomClassObj({
       title: 'titleColor',
-      content: 'select-db-backup textColor',
+      container: 'textColor',
+      htmlContainer: 'select-db-backup ',
       input: 'textColor radioInput'
-    },
+    }),
 
-    type: 'question',
+    icon: 'question',
     title,
     showConfirmButton: true,
     focusCancel: true,
@@ -118,7 +122,7 @@ const _fireAlert = (params) => {
     inputValue,
     inputOptions,
 
-    onBeforeOpen: () => {
+    willOpen: () => {
       if (
         !alert ||
         !alert.browserWindow
@@ -126,7 +130,7 @@ const _fireAlert = (params) => {
 
       alert.browserWindow.hide()
     },
-    onOpen: () => {
+    didOpen: () => {
       if (
         !alert ||
         !alert.browserWindow
@@ -141,7 +145,7 @@ const _fireAlert = (params) => {
           : height
       })
     },
-    onClose: () => {
+    willClose: () => {
       if (
         !alert ||
         !alert.browserWindow
@@ -149,7 +153,7 @@ const _fireAlert = (params) => {
 
       alert.browserWindow.hide()
     },
-    onAfterClose: () => {
+    didClose: () => {
       win.removeListener('closed', _close)
     }
   }

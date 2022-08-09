@@ -1,24 +1,49 @@
-body {
+body .swal2-container {
   font-family: "Roboto", sans-serif;
   margin: 0;
+}
+
+body.swal2-toast-shown .swal2-container {
+  width: auto;
+}
+
+.swal2-popup.swal2-toast .swal2-html-container,
+.swal2-popup.swal2-toast .swal2-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  white-space: nowrap;
 }
 
 .swal2-popup.swal2-toast {
   flex-direction: row;
   box-shadow: none;
-  padding: 5px 20px;
+  padding: 0 20px;
   border-radius: 0;
   min-width: 300px;
   width: max-content;
-}
-
-.swal2-popup {
+  min-height: 44px;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: content-box;
   background-color: #172d3e;
 }
 
 .swal2-popup.swal2-toast .swal2-styled,
 .swal2-popup.swal2-toast .swal2-actions {
   margin-right: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.swal2-popup.swal2-toast .swal2-actions {
+  padding-right: 0;
 }
 
 .swal2-popup.swal2-toast .swal2-styled {
@@ -37,32 +62,37 @@ body {
   color: #82baf6;
 }
 
-.swal2-content {
+.swal2-html-container {
   color: #f5f8fa;
 }
 
 .swal2-styled.swal2-confirm {
-  border-radius: 2;
+  border-radius: 2px;
   background-color: #82baf6;
   transition: all 0.3s;
+  color: #102331;
+  box-shadow: none;
 }
 
 .swal2-actions .swal2-styled.swal2-confirm:hover,
 .swal2-actions .swal2-styled.swal2-confirm:focus,
 .swal2-actions .swal2-styled.swal2-confirm:active {
   background-color: #4c88c8;
+  box-shadow: none;
 }
 
 .swal2-styled.swal2-cancel {
   border-radius: 2;
   background-color: #172d3e;
   border: 1px solid #19354a;
+  box-shadow: none;
 }
 
 .swal2-actions .swal2-styled.swal2-cancel:hover,
 .swal2-actions .swal2-styled.swal2-cancel:focus,
 .swal2-actions .swal2-styled.swal2-cancel:active {
   background-color: #19354a;
+  box-shadow: none;
 }
 
 .swal2-popup.swal2-toast .swal2-icon {
@@ -75,6 +105,10 @@ body {
 .swal2-actions.swal2-loading .swal2-styled.swal2-confirm {
   width: 1.8em;
   height: 1.8em;
+}
+
+.swal2-popup.swal2-toast .swal2-loader {
+  margin: 2px;
 }
 
 .process {

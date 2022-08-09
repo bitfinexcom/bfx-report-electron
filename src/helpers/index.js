@@ -13,6 +13,7 @@ const isMainWinAvailable = require(
   './is-main-win-available'
 )
 const productName = require('./product-name')
+const getAlertCustomClassObj = require('./get-alert-custom-class-obj')
 
 module.exports = {
   getFreePort,
@@ -21,5 +22,6 @@ module.exports = {
   deserializeError,
   rm,
   isMainWinAvailable,
-  productName
+  productName,
+  getAlertCustomClassObj
 }

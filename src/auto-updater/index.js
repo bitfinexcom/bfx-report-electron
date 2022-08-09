@@ -1,6 +1,6 @@
 'use strict'
 
-const { ipcMain, Menu } = require('electron')
+const { app, ipcMain, Menu } = require('electron')
 const fs = require('fs')
 const path = require('path')
 const {
@@ -61,8 +61,8 @@ const _fireToast = (
   hooks = {}
 ) => {
   const {
-    onOpen = () => {},
-    onAfterClose = () => {}
+    didOpen = () => {},
+    didClose = () => {}
   } = { ...hooks }
 
   closeAlert(toast)
@@ -106,7 +106,7 @@ const _fireToast = (
     allowOutsideClick: false,
     backdrop: 'rgba(0,0,0,0.0)',
 
-    type: 'info',
+    icon: 'info',
     title: 'Update',
     showConfirmButton: true,
     showCancelButton: false,
@@ -114,7 +114,7 @@ const _fireToast = (
 
     ...opts,
 
-    onBeforeOpen: () => {
+    willOpen: () => {
       if (
         !alert ||
         !alert.browserWindow
@@ -122,8 +122,8 @@ const _fireToast = (
 
       alert.browserWindow.hide()
     },
-    onOpen: () => {
-      onOpen(alert)
+    didOpen: () => {
+      didOpen(alert)
 
       if (
         !alert ||
@@ -132,7 +132,7 @@ const _fireToast = (
 
       alert.browserWindow.show()
     },
-    onClose: () => {
+    willClose: () => {
       if (
         !alert ||
         !alert.browserWindow
@@ -140,10 +140,10 @@ const _fireToast = (
 
       alert.browserWindow.hide()
     },
-    onAfterClose: () => {
+    didClose: () => {
       win.removeListener('closed', _closeAlert)
 
-      onAfterClose(alert)
+      didClose(alert)
     }
   }
 
@@ -237,6 +237,27 @@ const _autoUpdaterFactory = () => {
   }
   if (process.platform === 'linux') {
     autoUpdater = new AppImageUpdater()
+
+    // An option to debug the auto-update flow non-packaged build
+    if (
+      process.env.IS_AUTO_UPDATE_BEING_TESTED &&
+      !process.env.APPIMAGE &&
+      !app.isPackaged
+    ) {
+      process.env.APPIMAGE = path.join(
+        __dirname, '../../stub.AppImage'
+      )
+
+      fs.closeSync(fs.openSync(process.env.APPIMAGE, 'w'))
+      Object.defineProperty(autoUpdater.app, 'isPackaged', {
+        get () { return true }
+      })
+      Object.defineProperty(autoUpdater.app, 'appUpdateConfigPath', {
+        get () {
+          return path.join(this.app.getAppPath(), 'dev-app-update.yml')
+        }
+      })
+    }
   }
 
   autoUpdater.on('error', async (err) => {
@@ -260,7 +281,7 @@ const _autoUpdaterFactory = () => {
       ) {
         await _fireToast({
           title: 'Internet disconnected',
-          type: 'error',
+          icon: 'error',
           timer: 60000
         })
 
@@ -269,7 +290,7 @@ const _autoUpdaterFactory = () => {
 
       await _fireToast({
         title: 'Application update failed',
-        type: 'error',
+        icon: 'error',
         timer: 60000
       })
     } catch (err) {
@@ -289,7 +310,7 @@ const _autoUpdaterFactory = () => {
           timer: 10000
         },
         {
-          onOpen: (alert) => alert.showLoading()
+          didOpen: (alert) => alert.showLoading()
         }
       )
 
@@ -306,7 +327,7 @@ const _autoUpdaterFactory = () => {
         {
           title: `An update to v${version} is available`,
           text: 'Starting download...',
-          type: 'info',
+          icon: 'info',
           timer: 10000
         }
       )
@@ -341,7 +362,7 @@ const _autoUpdaterFactory = () => {
       await _fireToast(
         {
           title: 'No updates available',
-          type: 'success',
+          icon: 'success',
           timer: 10000
         }
       )
@@ -362,16 +383,16 @@ const _autoUpdaterFactory = () => {
       await _fireToast(
         {
           title: 'Downloading...',
-          type: 'info'
+          icon: 'info'
         },
         {
-          onOpen: (alert) => {
+          didOpen: (alert) => {
             _sendProgress(percent)
             alert.showLoading()
 
             isProgressToastEnabled = true
           },
-          onAfterClose: () => {
+          didClose: () => {
             isProgressToastEnabled = false
           }
         }
@@ -397,7 +418,7 @@ const _autoUpdaterFactory = () => {
         {
           title: `Update v${version} downloaded`,
           text: 'Should the app be updated right now?',
-          type: 'question',
+          icon: 'question',
           timer: 60000,
           showCancelButton: true
         }

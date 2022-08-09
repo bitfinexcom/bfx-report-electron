@@ -110,6 +110,12 @@ For Dev purpose to launch the Electron app locally might be used the following N
 npm start
 ```
 
+Also, there's available an option to debug the auto-update flow non-packaged build, in that case, just need to set the corresponding environment variable before running `npm start`:
+
+```console
+export IS_AUTO_UPDATE_BEING_TESTED=true
+```
+
 ### Launch build process
 
 For doing builds for other platforms please have [Multi Platform Build](https://www.electron.build/multi-platform-build) in consideration

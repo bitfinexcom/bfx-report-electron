@@ -1,4 +1,4 @@
-body {
+body .swal2-container {
   font-family: "Roboto", sans-serif;
 }
 
@@ -32,32 +32,38 @@ body::-webkit-scrollbar-thumb,
 }
 
 .swal2-styled.swal2-confirm {
-  border-radius: 2;
+  border-radius: 2px;
   background-color: #82baf6;
   transition: all 0.3s;
+  color: #102331;
+  box-shadow: none;
 }
 
 .swal2-actions .swal2-styled.swal2-confirm:hover,
 .swal2-actions .swal2-styled.swal2-confirm:focus,
 .swal2-actions .swal2-styled.swal2-confirm:active {
   background-color: #4c88c8;
+  box-shadow: none;
 }
 
 .swal2-styled.swal2-cancel {
-  border-radius: 2;
+  border-radius: 2px;
   background-color: #172d3e;
   border: 1px solid #19354a;
+  box-shadow: none;
 }
 
 .swal2-actions .swal2-styled.swal2-cancel:hover,
 .swal2-actions .swal2-styled.swal2-cancel:focus,
 .swal2-actions .swal2-styled.swal2-cancel:active {
   background-color: #19354a;
+  box-shadow: none;
 }
 
 .markdown-body {
   background-color: #102331;
-  padding: 16px 16px 0;
+  padding: 16px;
+  font-size: 1em;
 }
 
 .markdown-body table {
@@ -112,6 +118,11 @@ body::-webkit-scrollbar-thumb,
 
 .markdown-body blockquote {
   border-left: .25em solid #19354a;
+}
+
+.radioInput,
+.rangeInput {
+  background: none;
 }
 
 .rangeInput {
@@ -184,7 +195,11 @@ body::-webkit-scrollbar-thumb,
   color: #82baf6;
 }
 
-.swal2-content,
+.swal2-html-container {
+  margin: 1em 1em .3em;
+}
+
+.swal2-html-container,
 .textColor {
   color: #f5f8fa;
 }
