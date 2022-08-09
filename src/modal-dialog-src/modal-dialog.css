@@ -46,8 +46,7 @@ body::-webkit-scrollbar-thumb,
   box-shadow: none;
 }
 
-.swal2-styled.swal2-cancel,
-.swal2-styled.swal2-deny {
+.swal2-styled.swal2-cancel {
   border-radius: 2px;
   background-color: #172d3e;
   border: 1px solid #19354a;
@@ -56,10 +55,7 @@ body::-webkit-scrollbar-thumb,
 
 .swal2-actions .swal2-styled.swal2-cancel:hover,
 .swal2-actions .swal2-styled.swal2-cancel:focus,
-.swal2-actions .swal2-styled.swal2-cancel:active,
-.swal2-actions .swal2-styled.swal2-deny:hover,
-.swal2-actions .swal2-styled.swal2-deny:focus,
-.swal2-actions .swal2-styled.swal2-deny:active {
+.swal2-actions .swal2-styled.swal2-cancel:active {
   background-color: #19354a;
   box-shadow: none;
 }

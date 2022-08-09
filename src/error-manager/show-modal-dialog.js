@@ -49,7 +49,6 @@ const converter = new Converter({
 const _fireAlert = (params) => {
   const {
     title = 'Should a bug report be submitted?',
-    isError,
     html
   } = params
   const win = wins.mainWindow
@@ -103,10 +102,8 @@ const _fireAlert = (params) => {
     focusConfirm: true,
     showConfirmButton: true,
     confirmButtonText: 'Report',
-    showDenyButton: true,
-    denyButtonText: 'Cancel',
-    showCancelButton: isError,
-    cancelButtonText: 'Exit',
+    showCancelButton: true,
+    cancelButtonText: 'Cancel',
     timerProgressBar: false,
 
     willOpen: () => {
@@ -159,7 +156,6 @@ const _fireAlert = (params) => {
 
 module.exports = async (params) => {
   const {
-    isError,
     errBoxTitle = 'Bug report',
     errBoxDescription = 'A new Github issue will be opened',
     mdIssue
@@ -172,12 +168,11 @@ module.exports = async (params) => {
     const html = converter.makeHtml(mdIssue)
 
     const {
-      value,
-      isDismissed
-    } = await _fireAlert({ isError, html })
+      value
+    } = await _fireAlert({ html })
 
     return {
-      isExit: isDismissed,
+      isExit: false,
       isReported: value
     }
   }
