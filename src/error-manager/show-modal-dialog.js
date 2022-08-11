@@ -9,6 +9,9 @@ const { rootPath } = require('electron-root-path')
 
 const wins = require('../windows')
 const spawn = require('../helpers/spawn')
+const getAlertCustomClassObj = require(
+  '../helpers/get-alert-custom-class-obj'
+)
 const isMainWinAvailable = require(
   '../helpers/is-main-win-available'
 )
@@ -46,7 +49,6 @@ const converter = new Converter({
 const _fireAlert = (params) => {
   const {
     title = 'Should a bug report be submitted?',
-    isError,
     html
   } = params
   const win = wins.mainWindow
@@ -90,21 +92,21 @@ const _fireAlert = (params) => {
     position: 'center',
     allowOutsideClick: false,
     backdrop: 'rgba(0,0,0,0.0)',
-    customClass: {
-      content: 'markdown-body'
-    },
+    customClass: getAlertCustomClassObj({
+      htmlContainer: 'markdown-body'
+    }),
 
-    type: 'question',
+    icon: 'question',
     title,
     html,
     focusConfirm: true,
     showConfirmButton: true,
     confirmButtonText: 'Report',
     showCancelButton: true,
-    cancelButtonText: isError ? 'Exit' : 'Cancel',
+    cancelButtonText: 'Cancel',
     timerProgressBar: false,
 
-    onBeforeOpen: () => {
+    willOpen: () => {
       if (
         !alert ||
         !alert.browserWindow
@@ -112,7 +114,7 @@ const _fireAlert = (params) => {
 
       alert.browserWindow.hide()
     },
-    onOpen: () => {
+    didOpen: () => {
       if (
         !alert ||
         !alert.browserWindow
@@ -127,7 +129,7 @@ const _fireAlert = (params) => {
           : height
       })
     },
-    onClose: () => {
+    willClose: () => {
       if (
         !alert ||
         !alert.browserWindow
@@ -135,7 +137,7 @@ const _fireAlert = (params) => {
 
       alert.browserWindow.hide()
     },
-    onAfterClose: () => {
+    didClose: () => {
       win.removeListener('closed', _close)
     }
   }
@@ -154,7 +156,6 @@ const _fireAlert = (params) => {
 
 module.exports = async (params) => {
   const {
-    isError,
     errBoxTitle = 'Bug report',
     errBoxDescription = 'A new Github issue will be opened',
     mdIssue
@@ -168,19 +169,17 @@ module.exports = async (params) => {
 
     const {
       value
-    } = await _fireAlert({ isError, html })
+    } = await _fireAlert({ html })
 
     return {
-      isExit: isError,
-      isReported: value,
-      isIgnored: !isError && !value
+      isExit: false,
+      isReported: value
     }
   }
 
   const res = {
     isExit: true,
-    isReported: true,
-    isIgnored: false
+    isReported: true
   }
 
   // If called before the app ready event on Linux,

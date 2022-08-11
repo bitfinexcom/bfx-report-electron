@@ -23,6 +23,9 @@ const showErrorModalDialog = require('./show-error-modal-dialog')
 const pauseApp = require('./pause-app')
 const relaunch = require('./relaunch')
 const { getConfigsKeeperByName } = require('./configs-keeper')
+const getAlertCustomClassObj = require(
+  './helpers/get-alert-custom-class-obj'
+)
 
 const _getSchedulerRule = (timeFormat, alertRes) => {
   if (timeFormat.value === 'days') {
@@ -124,12 +127,12 @@ module.exports = () => {
 
   const timeFormatAlertOptions = {
     title: 'Set time format',
-    type: 'question',
-    customClass: {
+    icon: 'question',
+    customClass: getAlertCustomClassObj({
       title: 'titleColor',
-      content: 'textColor',
+      container: 'textColor',
       input: 'textColor radioInput'
-    },
+    }),
     focusConfirm: true,
     showCancelButton: true,
     progressSteps: [1, 2],
@@ -141,7 +144,7 @@ module.exports = () => {
       hours: 'Hours',
       days: 'Days'
     },
-    onBeforeOpen: () => {
+    willOpen: () => {
       if (!timeFormatAlert.browserWindow) return
 
       timeFormatAlert.browserWindow.once('blur', closeTimeFormatAlert)
@@ -149,18 +152,18 @@ module.exports = () => {
   }
   const alertOptions = {
     title: 'Set sync frequency',
-    type: 'question',
-    customClass: {
+    icon: 'question',
+    customClass: getAlertCustomClassObj({
       title: 'titleColor',
-      content: 'textColor',
+      container: 'textColor',
       input: 'textColor rangeInput'
-    },
+    }),
     focusConfirm: true,
     showCancelButton: true,
     progressSteps: [1, 2],
     currentProgressStep: 1,
     input: 'range',
-    onBeforeOpen: () => {
+    willOpen: () => {
       if (!alert.browserWindow) return
 
       alert.browserWindow.once('blur', closeAlert)

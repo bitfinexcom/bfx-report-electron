@@ -12,3 +12,4 @@ package-lock.json
 .env
 lastCommit.json
 electronEnv.json
+stub.AppImage
