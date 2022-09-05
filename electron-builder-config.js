@@ -8,6 +8,7 @@ const archiver = require('archiver')
 const exec = promisify(require('child_process').exec)
 
 let version
+let zippedAppImageArtifactPath
 const appOutDirs = new Map()
 
 /* eslint-disable no-template-curly-in-string */
@@ -236,6 +237,40 @@ module.exports = {
 
           console.log('Mac release has been zipped successfully')
         }
+        if (
+          targetPlatform === 'linux' &&
+          targetName === 'appimage'
+        ) {
+          zippedAppImageArtifactPath = path.join(
+            outDir,
+            `BitfinexReport-${version}-x64-${targetPlatform}.AppImage.zip`
+          )
+          await new Promise((resolve, reject) => {
+            try {
+              const output = fs.createWriteStream(zippedAppImageArtifactPath)
+              const archive = archiver('zip', {
+                zlib: { level: zlib.constants.Z_BEST_COMPRESSION }
+              })
+
+              output.on('close', resolve)
+              output.on('error', reject)
+              archive.on('error', reject)
+              archive.on('warning', reject)
+
+              archive.pipe(output)
+              archive.append(
+                fs.createReadStream(appFilePath),
+                { name: path.basename(appFilePath), mode: 0o777 }
+              )
+
+              archive.finalize()
+            } catch (err) {
+              reject(err)
+            }
+          })
+
+          console.log('AppImage release has been zipped successfully')
+        }
 
         await fs.promises.access(appFilePath, fs.constants.F_OK)
 
@@ -247,8 +282,16 @@ module.exports = {
       }
     }
 
-    return macBlockmapFilePaths.length > 0
+    const macFiles = macBlockmapFilePaths.length > 0
       ? [...artifactPaths, ...macBlockmapFilePaths]
       : []
+    const linuxFiles = zippedAppImageArtifactPath
+      ? [zippedAppImageArtifactPath]
+      : []
+
+    return [
+      ...macFiles,
+      ...linuxFiles
+    ]
   }
 }
