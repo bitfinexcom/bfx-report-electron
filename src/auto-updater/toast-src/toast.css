@@ -31,6 +31,7 @@ body.swal2-toast-shown .swal2-container {
   align-items: center;
   box-sizing: content-box;
   background-color: #172d3e;
+  overflow: revert;
 }
 
 .swal2-popup.swal2-toast .swal2-styled,
@@ -44,6 +45,7 @@ body.swal2-toast-shown .swal2-container {
 
 .swal2-popup.swal2-toast .swal2-actions {
   padding-right: 0;
+  flex-wrap: nowrap;
 }
 
 .swal2-popup.swal2-toast .swal2-styled {
@@ -64,6 +66,7 @@ body.swal2-toast-shown .swal2-container {
 
 .swal2-html-container {
   color: #f5f8fa;
+  overflow: revert;
 }
 
 .swal2-styled.swal2-confirm {
