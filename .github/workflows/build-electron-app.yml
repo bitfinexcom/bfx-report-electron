@@ -1,4 +1,5 @@
 name: Build release
+run-name: 'Release version: Commit ${{ github.sha }}'
 
 permissions:
   contents: write
