@@ -17,3 +17,4 @@ bfx-reports-framework/csv
 bfx-report-ui/build
 bfx-report-ui/bfx-report-express/logs/*.log
 bfx-report-ui/bfx-report-express/config/*.json
+stub.AppImage
