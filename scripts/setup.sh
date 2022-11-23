@@ -20,6 +20,7 @@ COLOR_NORMAL=${COLOR_NORMAL:-"\033[39m"}
 BFX_API_URL="https://api-pub.bitfinex.com"
 STAGING_BFX_API_URL="https://api.staging.bitfinex.com"
 
+ELECTRON_BUILDER_CONFIG_FILE_NAME="electron-builder-config.js"
 LAST_COMMIT_FILE_NAME="lastCommit.json"
 ELECTRON_ENV_FILE_NAME="electronEnv.json"
 
@@ -40,6 +41,7 @@ syncRepo=0
 syncSubModules=0
 isBfxApiStaging=${IS_BFX_API_STAGING:-0}
 isDevEnv=${IS_DEV_ENV:-0}
+isAutoUpdateDisabled=${IS_AUTO_UPDATE_DISABLED:-0}
 
 function usage {
   echo -e "\
@@ -49,6 +51,7 @@ function usage {
   -o    Sync only sub-modules
   -s    Use staging BFX API
   -d    Set development environment
+  -u    Turn off auto-update
   -h    Display help\
 ${COLOR_NORMAL}" 1>&2
 }
@@ -59,6 +62,7 @@ while getopts "rosdh" opt; do
     o) syncSubModules=1;;
     s) isBfxApiStaging=1;;
     d) isDevEnv=1;;
+    u) isAutoUpdateDisabled=1;;
     h)
       usage
       exit 0
@@ -80,6 +84,13 @@ if [ $isDevEnv == 1 ]; then
   echo "{\"NODE_ENV\":\"development\"}" > "$ROOT/$ELECTRON_ENV_FILE_NAME"
 else
   rm -f "$ROOT/$ELECTRON_ENV_FILE_NAME"
+fi
+if [ $isAutoUpdateDisabled == 1 ]; then
+  echo -e "\n${COLOR_YELLOW}Auto-update is turned off!${COLOR_NORMAL}"
+
+  sed -i -e \
+    "s/isAutoUpdateDisabled: '.*'/isAutoUpdateDisabled: true/g" \
+    "$ROOT/$ELECTRON_BUILDER_CONFIG_FILE_NAME"
 fi
 
 if [ $syncRepo == 1 ]; then
