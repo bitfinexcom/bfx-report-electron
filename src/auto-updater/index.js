@@ -1,6 +1,7 @@
 'use strict'
 
 const { app, ipcMain, Menu } = require('electron')
+const { rootPath: appDir } = require('electron-root-path')
 const fs = require('fs')
 const path = require('path')
 const {
@@ -21,6 +22,7 @@ const {
 const {
   closeAlert
 } = require('../modal-dialog-src/utils')
+const isAutoUpdateDisabled = require('../helpers/is-auto-update-disabled')
 
 const fontsStyle = fs.readFileSync(path.join(
   __dirname, '../../bfx-report-ui/build/fonts/roboto.css'
@@ -37,6 +39,11 @@ let autoUpdater
 let uCheckInterval
 let isIntervalUpdate = false
 let isProgressToastEnabled = false
+let electronBuilderConfig = {}
+
+try {
+  electronBuilderConfig = require(path.join(appDir, 'electron-builder-config'))
+} catch (err) {}
 
 const fonts = `<style>${fontsStyle}</style>`
 const style = `<style>${toastStyle}</style>`
@@ -451,6 +458,12 @@ const _autoUpdaterFactory = () => {
 const checkForUpdates = () => {
   return async () => {
     try {
+      if (isAutoUpdateDisabled) {
+        console.debug('Auto-update is disabled')
+
+        return
+      }
+
       isIntervalUpdate = false
       _switchMenuItem({
         isCheckMenuItemDisabled: true
@@ -468,6 +481,12 @@ const checkForUpdates = () => {
 
 const checkForUpdatesAndNotify = async (opts) => {
   try {
+    if (isAutoUpdateDisabled) {
+      console.debug('Auto-update is disabled')
+
+      return
+    }
+
     const {
       isIntervalUpdate: isIntUp = false
     } = { ...opts }
@@ -488,17 +507,33 @@ const checkForUpdatesAndNotify = async (opts) => {
 
 const quitAndInstall = () => {
   return () => {
+    if (isAutoUpdateDisabled) {
+      return
+    }
+
     return _autoUpdaterFactory()
       .quitAndInstall(false, true)
   }
 }
 
 const getAppUpdateConfigSync = () => {
-  const appUpdateConfigPath = _autoUpdaterFactory()
-    .app.appUpdateConfigPath
-  const fileContent = fs.readFileSync(appUpdateConfigPath, 'utf8')
+  try {
+    if (isAutoUpdateDisabled) {
+      return electronBuilderConfig
+        ?.publish ?? {}
+    }
 
-  return yaml.load(fileContent)
+    const appUpdateConfigPath = _autoUpdaterFactory()
+      .app.appUpdateConfigPath
+    const fileContent = fs.readFileSync(appUpdateConfigPath, 'utf8')
+
+    return yaml.load(fileContent)
+  } catch (err) {
+    console.debug(err)
+
+    return electronBuilderConfig
+      ?.publish ?? {}
+  }
 }
 
 module.exports = {
