@@ -44,9 +44,7 @@ jobs:
     - if: contains(fromJson('["true", "1", true, 1]'), github.event.inputs.isAutoUpdateDisabled)
       name: Turn off auto-update
       run: |
-        sed -i -e \
-          "s/isAutoUpdateDisabled: '.*'/isAutoUpdateDisabled: true/g" \
-          "./electron-builder-config.js"
+        echo "IS_AUTO_UPDATE_DISABLED=1" >> $GITHUB_ENV
     - name: Cache Docker images
       uses: ScribeMD/docker-cache@0.1.4
       env:
@@ -104,9 +102,7 @@ jobs:
     - if: contains(fromJson('["true", "1", true, 1]'), github.event.inputs.isAutoUpdateDisabled)
       name: Turn off auto-update
       run: |
-        sed -i -e \
-          "s/isAutoUpdateDisabled: '.*'/isAutoUpdateDisabled: true/g" \
-          "./electron-builder-config.js"
+        echo "IS_AUTO_UPDATE_DISABLED=1" >> $GITHUB_ENV
     - uses: actions/setup-node@v3
       with:
         node-version: 14.16.0
