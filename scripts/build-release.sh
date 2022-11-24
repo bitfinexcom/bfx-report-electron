@@ -132,22 +132,33 @@ if [ $buildMac == 1 ]; then
   targetPlatform="mac"
 fi
 
+cp "$ROOT/$ELECTRON_ENV_FILE_NAME.example" \
+  "$ROOT/$ELECTRON_ENV_FILE_NAME"
+
 if [ $isBfxApiStaging == 1 ]; then
   bfxApiUrl="$STAGING_BFX_API_URL"
 fi
 if [ $isDevEnv == 1 ]; then
   echo -e "\n${COLOR_YELLOW}Developer environment is turned on!${COLOR_NORMAL}"
 
-  echo "{\"NODE_ENV\":\"development\"}" > "$ROOT/$ELECTRON_ENV_FILE_NAME"
+  sed -i -e \
+    "s/\"NODE_ENV\": \".*\"/\"NODE_ENV\": \"development\"/g" \
+    "$ROOT/$ELECTRON_ENV_FILE_NAME"
 else
-  rm -f "$ROOT/$ELECTRON_ENV_FILE_NAME"
+  sed -i -e \
+    "s/\"NODE_ENV\": \".*\"/\"NODE_ENV\": \"production\"/g" \
+    "$ROOT/$ELECTRON_ENV_FILE_NAME"
 fi
 if [ $isAutoUpdateDisabled == 1 ]; then
   echo -e "\n${COLOR_YELLOW}Auto-update is turned off!${COLOR_NORMAL}"
 
   sed -i -e \
-    "s/isAutoUpdateDisabled: '.*'/isAutoUpdateDisabled: true/g" \
-    "$ELECTRON_BUILDER_CONFIG_FILE_PATH"
+    "s/\"IS_AUTO_UPDATE_DISABLED\": .*/\"IS_AUTO_UPDATE_DISABLED\": true/g" \
+    "$ROOT/$ELECTRON_ENV_FILE_NAME"
+else
+  sed -i -e \
+    "s/\"IS_AUTO_UPDATE_DISABLED\": .*/\"IS_AUTO_UPDATE_DISABLED\": false/g" \
+    "$ROOT/$ELECTRON_ENV_FILE_NAME"
 fi
 
 changeDirOwnershipToCurrUser "$ELECTRON_CACHE" "$(id -u):$(id -g)"
