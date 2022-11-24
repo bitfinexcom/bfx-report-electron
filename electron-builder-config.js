@@ -54,13 +54,6 @@ const getNodeModulesSubSources = (mainSource) => {
 }
 
 module.exports = {
-  /*
-   * This setting is not part of the electron-builder,
-   * used to turn off the auto-update for the releases of the app
-   * via GitHub actions or .env setting
-   */
-  isAutoUpdateDisabled: false,
-
   generateUpdatesFilesForAllChannels: true,
   npmRebuild: false,
   extends: null,
@@ -71,7 +64,7 @@ module.exports = {
   publish: {
     provider: 'github',
     repo: 'bfx-report-electron',
-    owner: 'bitfinexcom',
+    owner: 'ZIMkaRU',
     vPrefixedTagName: true,
     channel: 'latest',
 

@@ -1,13 +1,14 @@
 'use strict'
 
 try {
-  const { NODE_ENV } = require('./electronEnv.json')
+  const envVars = require('./electronEnv.json')
 
-  if (
-    !process.env.NODE_ENV &&
-    NODE_ENV
-  ) {
-    process.env.NODE_ENV = NODE_ENV
+  for (const [key, val] of Object.entries(envVars)) {
+    if (typeof process.env[key] !== 'undefined') {
+      continue
+    }
+
+    process.env[key] = val
   }
 } catch (err) {}
 

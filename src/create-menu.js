@@ -21,7 +21,7 @@ const {
 const { manageNewGithubIssue } = require('./error-manager')
 const showDocs = require('./show-docs')
 const { showChangelog } = require('./changelog-manager')
-const isAutoUpdateDisabled = require('./helpers/is-auto-update-disabled')
+const isAutoUpdateDisabled = !!process.env.IS_AUTO_UPDATE_DISABLED
 
 module.exports = ({
   pathToUserData,
