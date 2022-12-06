@@ -17,8 +17,10 @@ COLOR_YELLOW=${COLOR_YELLOW:-"\033[33m"}
 COLOR_BLUE=${COLOR_BLUE:-"\033[34m"}
 COLOR_NORMAL=${COLOR_NORMAL:-"\033[39m"}
 
-BFX_API_URL="${BFX_API_URL:-"https://api-pub.bitfinex.com"}"
-STAGING_BFX_API_URL="${STAGING_BFX_API_URL:-"https://api.staging.bitfinex.com"}"
+BFX_HOME_URL="${BFX_HOME_URL:-"https://bitfinex.com"}"
+BFX_KEY_URL="${BFX_KEY_URL:-"https://setting.bitfinex.com/api"}"
+STAGING_BFX_HOME_URL="${STAGING_BFX_HOME_URL:-"https://staging.bitfinex.com"}"
+STAGING_BFX_KEY_URL="${STAGING_BFX_KEY_URL:-"https://bfx-ui-settings.staging.bitfinex.com/api"}"
 BACKEND_ADDRESS="${BACKEND_ADDRESS:-"localhost:34343"}"
 
 UI_FOLDER="${UI_FOLDER:-"$ROOT/bfx-report-ui"}"
@@ -35,7 +37,8 @@ source "$ROOT/scripts/helpers/escape-string.sh"
 source "$ROOT/scripts/helpers/change-dir-ownership-to-curr-user.sh"
 
 programname=$0
-bfxApiUrl="$BFX_API_URL"
+bfxHomeUrl="$BFX_HOME_URL"
+bfxKeyUrl="$BFX_KEY_URL"
 
 isBfxApiStaging=${IS_BFX_API_STAGING:-0}
 isDevEnv=${IS_DEV_ENV:-0}
@@ -70,7 +73,8 @@ while getopts "sdh" opt; do
 done
 
 if [ $isBfxApiStaging == 1 ]; then
-  bfxApiUrl="$STAGING_BFX_API_URL"
+  bfxHomeUrl="$STAGING_BFX_HOME_URL"
+  bfxKeyUrl="$STAGING_BFX_KEY_URL"
 fi
 if [ $isDevEnv == 1 ]; then
   echo -e "\n${COLOR_YELLOW}UI developer environment is turned on!${COLOR_NORMAL}"
@@ -87,9 +91,10 @@ fi
 
 echo -e "\n${COLOR_BLUE}Setting UI configs${COLOR_NORMAL}"
 
-escapedBfxApiUrl=$(escapeString $bfxApiUrl)
+escapedBfxHomeUrl=$(escapeString $bfxHomeUrl)
+escapedBfxKeyUrl=$(escapeString $bfxKeyUrl)
 sed -i -e \
-  "s/HOME_URL: .*,/HOME_URL: \'$escapedBfxApiUrl\',/g" \
+  "s/HOME_URL: .*,/HOME_URL: \'$escapedBfxHomeUrl\',/g" \
   "$UI_CONFIGS_FILE"
 sed -i -e \
   "s/API_URL: .*,/API_URL: \'http:\/\/${BACKEND_ADDRESS}\/api\',/g" \
@@ -98,7 +103,7 @@ sed -i -e \
   "s/WS_ADDRESS: .*,/WS_ADDRESS: \'ws:\/\/${BACKEND_ADDRESS}\/ws\',/g" \
   "$UI_CONFIGS_FILE"
 sed -i -e \
-  "s/KEY_URL: .*,/KEY_URL: \'$escapedBfxApiUrl\/api\',/g" \
+  "s/KEY_URL: .*,/KEY_URL: \'$escapedBfxKeyUrl\/api\',/g" \
   "$UI_CONFIGS_FILE"
 
 sed -i -e \
