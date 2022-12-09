@@ -62,6 +62,7 @@ Options:
   -o    Sync only sub-modules
   -s    Use staging BFX API
   -d    Set development environment
+  -u    Turn off auto-update
   -h    Display help
 ```
 
@@ -137,6 +138,7 @@ Options:
   -o    Sync only sub-modules
   -s    Use staging BFX API
   -d    Set development environment
+  -u    Turn off auto-update
   -p    Publish artifacts
   -h    Display help
 ```

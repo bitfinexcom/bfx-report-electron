@@ -6,6 +6,7 @@
 *Dockerfile*
 *docker-compose*
 lastCommit.json
+electronEnv.json
 dev-app-update.yml
 dist
 bfx-reports-framework/db/*.db
