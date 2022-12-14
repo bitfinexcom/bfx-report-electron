@@ -21,6 +21,7 @@ const {
 const { manageNewGithubIssue } = require('./error-manager')
 const showDocs = require('./show-docs')
 const { showChangelog } = require('./changelog-manager')
+const isAutoUpdateDisabled = !!process.env.IS_AUTO_UPDATE_DISABLED
 
 module.exports = ({
   pathToUserData,
@@ -140,6 +141,7 @@ module.exports = ({
         { type: 'separator' },
         {
           label: 'Check for updates',
+          enabled: !isAutoUpdateDisabled,
           id: 'CHECK_UPDATE_MENU_ITEM',
           click: checkForUpdates()
         },

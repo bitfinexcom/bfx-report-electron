@@ -13,6 +13,9 @@ on:
       version:
         description: 'Release version'
         required: false
+      isAutoUpdateDisabled:
+        description: 'Is auto-update disabled (true / 1)?'
+        required: false
 
 env:
   DOCKER_BUILDKIT: 1
@@ -38,6 +41,10 @@ jobs:
         sed -i -e \
           "s/\"version\": \".*\"/\"version\": \"${{ github.event.inputs.version }}\"/g" \
           "./package.json"
+    - if: contains(fromJson('["true", "1", true, 1]'), github.event.inputs.isAutoUpdateDisabled)
+      name: Turn off auto-update
+      run: |
+        echo "IS_AUTO_UPDATE_DISABLED=1" >> $GITHUB_ENV
     - name: Cache Docker images
       uses: ScribeMD/docker-cache@0.1.4
       env:
@@ -92,6 +99,10 @@ jobs:
         sed -i -e \
           "s/\"version\": \".*\"/\"version\": \"${{ github.event.inputs.version }}\"/g" \
           "./package.json"
+    - if: contains(fromJson('["true", "1", true, 1]'), github.event.inputs.isAutoUpdateDisabled)
+      name: Turn off auto-update
+      run: |
+        echo "IS_AUTO_UPDATE_DISABLED=1" >> $GITHUB_ENV
     - uses: actions/setup-node@v3
       with:
         node-version: 14.16.0

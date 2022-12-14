@@ -56,6 +56,7 @@ buildWin=0
 buildMac=0
 isBfxApiStaging=${IS_BFX_API_STAGING:-0}
 isDevEnv=${IS_DEV_ENV:-0}
+isAutoUpdateDisabled=${IS_AUTO_UPDATE_DISABLED:-0}
 isPublished=${IS_PUBLISHED:-0}
 
 function usage {
@@ -67,6 +68,7 @@ function usage {
   -m    Build Mac release
   -s    Use staging BFX API
   -d    Set development environment
+  -u    Turn off auto-update
   -p    Publish artifacts
   -h    Display help\
 ${COLOR_NORMAL}" 1>&2
@@ -85,6 +87,7 @@ while getopts "lwmsdph" opt; do
     m) buildMac=1;;
     s) isBfxApiStaging=1;;
     d) isDevEnv=1;;
+    u) isAutoUpdateDisabled=1;;
     p) isPublished=1;;
     h)
       usage
@@ -129,15 +132,33 @@ if [ $buildMac == 1 ]; then
   targetPlatform="mac"
 fi
 
+cp "$ROOT/$ELECTRON_ENV_FILE_NAME.example" \
+  "$ROOT/$ELECTRON_ENV_FILE_NAME"
+
 if [ $isBfxApiStaging == 1 ]; then
   bfxApiUrl="$STAGING_BFX_API_URL"
 fi
 if [ $isDevEnv == 1 ]; then
   echo -e "\n${COLOR_YELLOW}Developer environment is turned on!${COLOR_NORMAL}"
 
-  echo "{\"NODE_ENV\":\"development\"}" > "$ROOT/$ELECTRON_ENV_FILE_NAME"
+  sed -i -e \
+    "s/\"NODE_ENV\": \".*\"/\"NODE_ENV\": \"development\"/g" \
+    "$ROOT/$ELECTRON_ENV_FILE_NAME"
 else
-  rm -f "$ROOT/$ELECTRON_ENV_FILE_NAME"
+  sed -i -e \
+    "s/\"NODE_ENV\": \".*\"/\"NODE_ENV\": \"production\"/g" \
+    "$ROOT/$ELECTRON_ENV_FILE_NAME"
+fi
+if [ $isAutoUpdateDisabled == 1 ]; then
+  echo -e "\n${COLOR_YELLOW}Auto-update is turned off!${COLOR_NORMAL}"
+
+  sed -i -e \
+    "s/\"IS_AUTO_UPDATE_DISABLED\": .*/\"IS_AUTO_UPDATE_DISABLED\": true/g" \
+    "$ROOT/$ELECTRON_ENV_FILE_NAME"
+else
+  sed -i -e \
+    "s/\"IS_AUTO_UPDATE_DISABLED\": .*/\"IS_AUTO_UPDATE_DISABLED\": false/g" \
+    "$ROOT/$ELECTRON_ENV_FILE_NAME"
 fi
 
 changeDirOwnershipToCurrUser "$ELECTRON_CACHE" "$(id -u):$(id -g)"

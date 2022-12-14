@@ -7,6 +7,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0] - 2022-12-09
+
+### Added
+
+- Added `ENET` errors for reconnection when fetching data from the `BFX api_v2`. PR: [bfx-report#273](https://github.com/bitfinexcom/bfx-report/pull/273)
+- Added ability to use the `inner max` request limit to the `BFX api_v2` to seed up syncing data. PR: [bfx-report#274](https://github.com/bitfinexcom/bfx-report/pull/274)
+- Added ability to display minimum derivative fees between sub-accounts. PR: [bfx-reports-framework#241](https://github.com/bitfinexcom/bfx-reports-framework/pull/241)
+- Added ability to turn off the auto-update while building releases using the env var `IS_AUTO_UPDATE_DISABLED=1` or the popup of GitHub Actions for `beta` releases [bfx-report-electron#170](https://github.com/bitfinexcom/bfx-report-electron/pull/170)
+- Added reports for Turkey. PR: [bfx-report-ui#561](https://github.com/bitfinexcom/bfx-report-ui/pull/561)
+- Implemented selected auth type persisting if the `Remember Me` option is selected for improving UX during page/app reloading. PR: [bfx-report-ui#568](https://github.com/bitfinexcom/bfx-report-ui/pull/568)
+- Implemented sub-accounts handling progress indicator, to improve UX for the cases when creation/updating requests can take some time due to slow network connection, etc. PR: [bfx-report-ui#573](https://github.com/bitfinexcom/bfx-report-ui/pull/573)
+
+### Changed
+
+- Provided a `new Sync Core` to use temp tables during sync processing. PR: [bfx-reports-framework#240](https://github.com/bitfinexcom/bfx-reports-framework/pull/240). The main idea is to put data fetched from the BFX api_v2 to temp tables to have consistent data in the main tables and allow users to request reports from all sections any time even sync is going on, except the first sync when the DB is empty. When the sync is finished and temp tables are filled all data will be moved to the main tables in one atomic transaction thus users don't have to experience transitional processes. Basic changes:
+  - Implemened `new Sync Core` to use temp tables
+  - Improved transaction flow to fix the `database is locked` issue
+  - Improved handling `ENET` errors from the `BFX api_v2`, added fetching data retries. Related to PR: [bfx-report#275](https://github.com/bitfinexcom/bfx-report/pull/275)
+  - Added DB migration `v31`
+  - Added create and update timestamps to service tables for easier debugging
+  - Significantly reduced the number of requests to the `BFX api_v2`, which increases the speed of the sync
+  - Fixed WebSocket timeout connection issue
+  - Reduced pragma `analysis_limit` to `400` for performance
+  - Used `inner max` request limit to `BFX api_v2` for syncing data to speed up
+- Actualized Spanish translations PR: [bfx-report-ui#562](https://github.com/bitfinexcom/bfx-report-ui/pull/562)
+- Improved invoices for not merchant users. PR: [bfx-report-ui#565](https://github.com/bitfinexcom/bfx-report-ui/pull/565)
+- Increased `Fee Perc` precision in the `Trades` report to 3 decimals for better representation. PR: [bfx-report-ui#570](https://github.com/bitfinexcom/bfx-report-ui/pull/570)
+
+### Fixed
+
+- Fixed WebSocket `GRENACHE_WS_IS_CLOCED` error. PR: [bfx-reports-framework#239](https://github.com/bitfinexcom/bfx-reports-framework/pull/239)
+- Fixed `URL` to get API keys when sign-in. PRs: [bfx-report-electron#172](https://github.com/bitfinexcom/bfx-report-electron/pull/172), [bfx-report-ui#582](https://github.com/bitfinexcom/bfx-report-ui/pull/582)
+- Fixed incorrect `rate` filter param type and value passing from `Public Funding` report. PR: [bfx-report-ui#553](https://github.com/bitfinexcom/bfx-report-ui/pull/553)
+- Fixed reports exporting. PR: [bfx-report-ui#558](https://github.com/bitfinexcom/bfx-report-ui/pull/558)
+- Fixed wrong auth via WebSockets for `sub-accounts`. PR: [bfx-report-ui#566](https://github.com/bitfinexcom/bfx-report-ui/pull/566)
+- Prevented redirection to the `Sign In` screen after the successful adding a sub-account for improving UX if the user wants to add several sub-accounts in a row. PR: [bfx-report-ui#571](https://github.com/bitfinexcom/bfx-report-ui/pull/571)
+- Fixed the possibility of creating several sub-accounts with one request in the `Multiple Accounts` sign up modal same way as we have in the main `Sub Accounts` section. PR: [bfx-report-ui#572](https://github.com/bitfinexcom/bfx-report-ui/pull/572)
+- Fixed missed time frame start/end params provided during exporting in CSV for `Average Win/Loss`, `Traded Volume`, `Account Balance`, `Loan` and `Fees` reports. PR: [bfx-report-ui#575](https://github.com/bitfinexcom/bfx-report-ui/pull/575)
+- Prevented the possibility for already created `sub-accounts` to being selected for the creation of new one. PR: [bfx-report-ui#576](https://github.com/bitfinexcom/bfx-report-ui/pull/576)
+- Fixed issue with the staled `Master Account` still selected after the dropping database, restarting the backend and reloading the app. PR: [bfx-report-ui#577](https://github.com/bitfinexcom/bfx-report-ui/pull/577)
+- Prevented the possibility of `Sub Account` creation submission if the `Master Account` hadn't been selected or registered, fixed `Sign Up` modal overlay styling. PR: [bfx-report-ui#578](https://github.com/bitfinexcom/bfx-report-ui/pull/578)
+- Fixed issue with stuck sync progress percentage when the main worker is restarted while the synchronization is in progress and UI performs a successful reconnection via WebSockets. PR: [bfx-report-ui#579](https://github.com/bitfinexcom/bfx-report-ui/pull/579)
+- Fixed `USDt` symbols and pairs parsing. PR: [bfx-report-ui#580](https://github.com/bitfinexcom/bfx-report-ui/pull/580)
+- Fixed `sign-out` issue by providing token. PR: [bfx-report-ui#583](https://github.com/bitfinexcom/bfx-report-ui/pull/583)
+- Fixed issues with unavailability for selection registered users while creating `Sub Accounts` in some cases. PR: [bfx-report-ui#584](https://github.com/bitfinexcom/bfx-report-ui/pull/584)
+
+### Security
+
+- Updated dependencies versions to fix vulnerabilities. PRs: [bfx-facs-db-better-sqlite#4](https://github.com/bitfinexcom/bfx-facs-db-better-sqlite/pull/4), [bfx-report-express#28](https://github.com/bitfinexcom/bfx-report-express/pull/28), [bfx-report#276](https://github.com/bitfinexcom/bfx-report/pull/276), [bfx-reports-framework#242](https://github.com/bitfinexcom/bfx-reports-framework/pull/242)
+
 ## [3.8.1] - 2022-09-29
 
 ### Changed
