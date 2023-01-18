@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.0] - 2023-01-18
+
+### Added
+
+- Added the possibility of removing the account from the `Preferences` menu. PR: [bfx-report-ui#600](https://github.com/bitfinexcom/bfx-report-ui/pull/600)
+- Added estimated time info of the synchronization process. PRs: [bfx-reports-framework#245](https://github.com/bitfinexcom/bfx-reports-framework/pull/245), [bfx-report-ui#601](https://github.com/bitfinexcom/bfx-report-ui/pull/601)
+- Added the possibility for users to sign out by email property. PR: [bfx-reports-framework#247](https://github.com/bitfinexcom/bfx-reports-framework/pull/247)
+- Added the [weighted averages report](https://www.investopedia.com/terms/w/weightedaverage.asp) to the backend side. PR: [bfx-reports-framework#246](https://github.com/bitfinexcom/bfx-reports-framework/pull/246)
+
+### Fixed
+
+- Fixed error handling, added an option to not throw `ENET` error in the case when there are going to make retries to resume the internet connection. API requests should not be logged to `std error` stream when making an internal call and can have some attempts due to an internet connection issue. It's important for sync to avoid showing redundant error modal dialogs in the electron app. PR: [bfx-report#278](https://github.com/bitfinexcom/bfx-report/pull/278)
+
 ## [4.0.0] - 2022-12-09
 
 ### Added
