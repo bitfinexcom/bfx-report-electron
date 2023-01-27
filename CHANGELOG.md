@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.2.0-beta.0] - 2023-01-27
+
+### Added
+
+- Added the [weighted averages report](https://www.investopedia.com/terms/w/weightedaverage.asp) representation and corresponding functionalities. PR: [bfx-report-ui#607](https://github.com/bitfinexcom/bfx-report-ui/pull/607)
+- Added the ability to make releases using `GitHub Actions` against the `BFX API Staging` manually. PR: [bfx-report-electron#179](https://github.com/bitfinexcom/bfx-report-electron/pull/179)
+
+### Fixed
+
+- Fixed sync progress percentage calculation. PR: [bfx-reports-framework#250](https://github.com/bitfinexcom/bfx-reports-framework/pull/250)
+- Fixed handling some `null` responses from the `Account Summary` endpoint. PR: [bfx-reports-framework#251](https://github.com/bitfinexcom/bfx-reports-framework/pull/251)
+- Fixed navigation menu representation on some mobile screens. PR: [bfx-report-ui#606](https://github.com/bitfinexcom/bfx-report-ui/pull/606)
+- Fixed issue with dropping selected pairs on `Derivatives` refreshing. PR: [bfx-report-ui#608](https://github.com/bitfinexcom/bfx-report-ui/pull/608)
+
 ## [4.1.0] - 2023-01-18
 
 ### Added
