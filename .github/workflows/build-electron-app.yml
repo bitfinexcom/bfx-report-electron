@@ -16,6 +16,9 @@ on:
       isAutoUpdateDisabled:
         description: 'Is auto-update disabled (true / 1)?'
         required: false
+      isBfxApiStaging:
+        description: 'Is it necessary to use BFX API Staging? (true / 1)?'
+        required: false
 
 env:
   DOCKER_BUILDKIT: 1
@@ -45,6 +48,10 @@ jobs:
       name: Turn off auto-update
       run: |
         echo "IS_AUTO_UPDATE_DISABLED=1" >> $GITHUB_ENV
+    - if: contains(fromJson('["true", "1", true, 1]'), github.event.inputs.isBfxApiStaging)
+      name: Use BFX API Staging for queries
+      run: |
+        echo "IS_BFX_API_STAGING=1" >> $GITHUB_ENV
     - name: Cache Docker images
       uses: ScribeMD/docker-cache@0.1.4
       env:
@@ -103,6 +110,10 @@ jobs:
       name: Turn off auto-update
       run: |
         echo "IS_AUTO_UPDATE_DISABLED=1" >> $GITHUB_ENV
+    - if: contains(fromJson('["true", "1", true, 1]'), github.event.inputs.isBfxApiStaging)
+      name: Use BFX API Staging for queries
+      run: |
+        echo "IS_BFX_API_STAGING=1" >> $GITHUB_ENV
     - uses: actions/setup-node@v3
       with:
         node-version: 14.16.0
