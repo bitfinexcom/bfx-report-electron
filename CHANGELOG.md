@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.0-beta.0] - 2023-02-24
+
+### Added
+
+- Added `BFX` auth token support to the backend of the framework mode. PRs: [bfx-report#281](https://github.com/bitfinexcom/bfx-report/pull/281), [bfx-reports-framework#256](https://github.com/bitfinexcom/bfx-reports-framework/pull/256)
+
+### Changed
+
+- Restructures `Reports` main navigation using navigation `item -> sub item -> tabs` approach. Reworks and unifies sub-sections switching flow for better reusability across various reports and cleans redundant duplicated logic. Moves `Logins History`, `Sub Accounts` and `Change Logs` reports to the account dropdown menu. PR: [bfx-report-ui#612](https://github.com/bitfinexcom/bfx-report-ui/pull/612)
+- Reworks mobile navigation as a drawer according to the latest design updates. Implements dynamic chevrons for the navigation menus collapsible sections. Removes duplicated time frame selector from the header. Minor fixes and redundant code cleanup. PR: [bfx-report-ui#613](https://github.com/bitfinexcom/bfx-report-ui/pull/613)
+
 ## [4.2.0] - 2023-02-01
 
 ### Added
