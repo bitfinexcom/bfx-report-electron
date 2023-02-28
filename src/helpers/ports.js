@@ -30,7 +30,9 @@ const _checkPortsUniq = (port, ports = {}) => {
     .every(([key, nextPort]) => port !== nextPort)
 }
 
-const getFreePort = async (ports = {}) => {
+const getFreePort = async (
+  ports = getDefaultPorts()
+) => {
   const res = {}
 
   await _asyncForEach(Object.entries(ports), async ([key, port]) => {
