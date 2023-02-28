@@ -13,7 +13,15 @@ const triggerElectronLoadStr = fs.readFileSync(
   'utf8'
 )
 
-module.exports = () => {
+const placeholderPattern = /\$\{apiPort\}/
+
+module.exports = (args) => {
+  const { expressApiPort = null } = args ?? {}
+  const scriptStr = triggerElectronLoadStr.replace(
+    placeholderPattern,
+    expressApiPort
+  )
+
   return wins.mainWindow.webContents
-    .executeJavaScript(triggerElectronLoadStr)
+    .executeJavaScript(scriptStr)
 }
