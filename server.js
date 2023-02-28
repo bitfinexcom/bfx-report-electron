@@ -27,13 +27,10 @@ process.env.NODE_CONFIG_DIR = pathToExpressConfDir
 
 const env = { ...process.env }
 const {
-  getDefaultPorts,
-  getFreePort,
   serializeError
 } = require('./src/helpers')
 
 const {
-  RunningExpressOnPortError,
   WrongPathToUserDataError,
   WrongPathToUserCsvError,
   WrongSecretKeyError
@@ -101,6 +98,13 @@ const allowedProcessStatesSet = _getAllowedStatesSet({
     const pathToUserCsv = process.env.PATH_TO_USER_CSV
     const schedulerRule = process.env.SCHEDULER_RULE
     const secretKey = process.env.SECRET_KEY
+    const grape1DhtPort = process.env.GRAPE_1DHT_PORT
+    const grape1ApiPort = process.env.GRAPE_1API_PORT
+    const grape2DhtPort = process.env.GRAPE_2DHT_PORT
+    const grape2ApiPort = process.env.GRAPE_2API_PORT
+    const workerApiPort = process.env.WORKER_API_PORT
+    const workerWsPort = process.env.WORKER_WS_PORT
+    const expressApiPort = process.env.EXPRESS_API_PORT
 
     if (!secretKey) {
       throw new WrongSecretKeyError()
@@ -112,29 +116,10 @@ const allowedProcessStatesSet = _getAllowedStatesSet({
       throw new WrongPathToUserCsvError()
     }
 
-    const defaultPorts = getDefaultPorts()
-    const {
-      grape1DhtPort,
-      grape1ApiPort,
-      grape2DhtPort,
-      grape2ApiPort,
-      workerApiPort,
-      workerWsPort,
-      expressApiPort
-    } = await getFreePort(defaultPorts)
     const grape = `http://127.0.0.1:${grape2ApiPort}`
 
     confFacsGrc.p0.grape = grape
     confFacsGrc.p1.grape = grape
-
-    if (defaultPorts.expressApiPort !== expressApiPort) {
-      process.send({
-        state: 'error:express-port-required',
-        err: serializeError(new RunningExpressOnPortError())
-      })
-
-      return
-    }
 
     process.env.NODE_CONFIG = JSON.stringify({
       app: {
