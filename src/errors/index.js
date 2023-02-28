@@ -41,12 +41,6 @@ class InvalidFolderPathError extends BaseError {
   }
 }
 
-class RunningExpressOnPortError extends BaseError {
-  constructor (message = 'ERR_EXPRESS_PORT_IS_REQUIRED') {
-    super(message)
-  }
-}
-
 class IpcMessageError extends BaseError {
   constructor (message = 'ERR_IPC_MESSAGE') {
     super(message)
@@ -120,7 +114,6 @@ module.exports = {
   DbImportingError,
   DbRemovingError,
   InvalidFolderPathError,
-  RunningExpressOnPortError,
   IpcMessageError,
   AppInitializationError,
   FreePortError,
