@@ -55,7 +55,7 @@ function usage {
 ${COLOR_NORMAL}" 1>&2
 }
 
-while getopts "rosdh" opt; do
+while getopts "rosduh" opt; do
   case "${opt}" in
     r) syncRepo=1;;
     o) syncSubModules=1;;
