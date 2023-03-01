@@ -7,6 +7,8 @@ const {
   FreePortError
 } = require('../errors')
 
+let getPortModule = null
+
 const getDefaultPorts = () => {
   return {
     grape1DhtPort: 20002,
@@ -33,6 +35,18 @@ const _checkPortsUniq = (port, ports = {}) => {
 const getFreePort = async (
   ports = getDefaultPorts()
 ) => {
+  getPortModule = getPortModule ?? (await import('get-port'))
+  const { default: getPort, portNumbers } = getPortModule
+
+  // TODO:
+  console.log(
+    '[-----PORT-----]:',
+    await getPort({
+      port: [20000, ...portNumbers(20001, 20005)],
+      exclude: [...portNumbers(20001, 20003)]
+    })
+  )
+
   const res = {}
 
   await _asyncForEach(Object.entries(ports), async ([key, port]) => {
