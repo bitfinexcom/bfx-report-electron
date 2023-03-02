@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.0] - 2023-03-01
+
+### Added
+
+- Added `BFX` auth token support to the backend of the framework mode. PRs: [bfx-report#281](https://github.com/bitfinexcom/bfx-report/pull/281), [bfx-reports-framework#256](https://github.com/bitfinexcom/bfx-reports-framework/pull/256)
+- Added ability to send `emitCsvGenerationCompletedToOne` event by the WS when CSV reports generation is finished in the background queue, only for the framework mode. In the UI we will show a spinner on the export btn and the corresponding popup at an appropriate time after finishing generation (in some cases it can take a lot of time). PRs: [bfx-report#282](https://github.com/bitfinexcom/bfx-report/pull/282), [bfx-reports-framework#257](https://github.com/bitfinexcom/bfx-reports-framework/pull/257)
+
+### Changed
+
+- Restructures `Reports` main navigation using navigation `item -> sub item -> tabs` approach. Reworks and unifies sub-sections switching flow for better reusability across various reports and cleans redundant duplicated logic. Moves `Logins History`, `Sub Accounts` and `Change Logs` reports to the account dropdown menu. PR: [bfx-report-ui#612](https://github.com/bitfinexcom/bfx-report-ui/pull/612)
+- Reworks mobile navigation as a drawer according to the latest design updates. Implements dynamic chevrons for the navigation menus collapsible sections. Removes duplicated time frame selector from the header. Minor fixes and redundant code cleanup. PR: [bfx-report-ui#613](https://github.com/bitfinexcom/bfx-report-ui/pull/613)
+- Reworks the main layout as cards according to the latest design updates. Actualizes navigation menu collapsible sections icons. Updates colors and various styling improvements. PR: [bfx-report-ui#614](https://github.com/bitfinexcom/bfx-report-ui/pull/614)
+
 ## [4.2.0] - 2023-02-01
 
 ### Added
