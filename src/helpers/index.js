@@ -1,8 +1,7 @@
 'use strict'
 
 const {
-  getFreePort,
-  getDefaultPorts
+  getFreePort
 } = require('./ports')
 const {
   serializeError,
@@ -17,7 +16,6 @@ const getAlertCustomClassObj = require('./get-alert-custom-class-obj')
 
 module.exports = {
   getFreePort,
-  getDefaultPorts,
   serializeError,
   deserializeError,
   rm,
