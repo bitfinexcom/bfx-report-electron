@@ -24,7 +24,6 @@
     "electron-serve": "1.1.0",
     "electron-updater": "5.0.4",
     "extract-zip": "2.0.1",
-    "find-free-port": "2.0.0",
     "get-port": "6.1.2",
     "github-markdown-css": "5.1.0",
     "grenache-grape": "git+https://github.com/bitfinexcom/grenache-grape.git",
