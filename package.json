@@ -37,8 +37,10 @@
   "devDependencies": {
     "@mapbox/node-pre-gyp": "1.0.6",
     "app-builder-bin": "4.1.0",
+    "chai": "4.3.7",
     "electron": "13.6.9",
     "electron-builder": "23.0.9",
+    "mocha": "10.2.0",
     "standard": "16.0.4"
   },
   "standard": {
@@ -51,7 +53,8 @@
   },
   "scripts": {
     "start": "export NODE_ENV=development&&export DEBUG=*&&electron .",
-    "test": "standard",
+    "test": "standard && npm run unit",
+    "unit": "export NODE_ENV=test && mocha './src/**/__test__/*.spec.js' --config .mocharc.json",
     "setup": "./scripts/setup.sh",
     "launch": "./scripts/launch.sh",
     "sync-repo": "./scripts/sync-repo.sh"
