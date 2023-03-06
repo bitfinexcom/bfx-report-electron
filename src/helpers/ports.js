@@ -5,6 +5,7 @@ const DHT = require('bittorrent-dht')
 const {
   FreePortError
 } = require('../errors')
+const { getServerPromise } = require('./utils')
 
 let getPortModule = null
 
@@ -76,17 +77,7 @@ const getFreePort = async () => {
       const dht = new DHT()
 
       try {
-        await new Promise((resolve, reject) => {
-          dht.once('error', (err) => {
-            dht.removeListener('listening', resolve)
-            reject(err)
-          })
-          dht.once('listening', () => {
-            dht.removeListener('error', reject)
-            resolve()
-          })
-          dht.listen(newFreePort)
-        })
+        await getServerPromise(dht, newFreePort)
 
         dht.destroy()
 

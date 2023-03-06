@@ -11,6 +11,7 @@ const {
   getDefaultPorts,
   getPortRangesForLookingUp
 } = require('../ports')
+const { getServerPromise } = require('../utils')
 
 const checkAssertions = (res) => {
   assert.isObject(res)
@@ -68,17 +69,7 @@ describe('getFreePort helper', () => {
           const dht = new DHT()
           dhts.push(dht)
 
-          await new Promise((resolve, reject) => {
-            dht.once('error', (err) => {
-              dht.removeListener('listening', resolve)
-              reject(err)
-            })
-            dht.once('listening', () => {
-              dht.removeListener('error', reject)
-              resolve()
-            })
-            dht.listen(newPort)
-          })
+          await getServerPromise(dht, newPort)
 
           continue
         }
@@ -87,17 +78,7 @@ describe('getFreePort helper', () => {
         srv.unref()
         srvs.push(srv)
 
-        await new Promise((resolve, reject) => {
-          srv.once('error', (err) => {
-            srv.removeListener('listening', resolve)
-            reject(err)
-          })
-          srv.once('listening', () => {
-            srv.removeListener('error', reject)
-            resolve()
-          })
-          srv.listen(newPort)
-        })
+        await getServerPromise(srv, newPort)
       }
     }
 
