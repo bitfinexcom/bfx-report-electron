@@ -6,7 +6,8 @@ const {
 const {
   serializeError,
   deserializeError,
-  rm
+  rm,
+  getServerPromise
 } = require('./utils')
 const isMainWinAvailable = require(
   './is-main-win-available'
@@ -19,6 +20,7 @@ module.exports = {
   serializeError,
   deserializeError,
   rm,
+  getServerPromise,
   isMainWinAvailable,
   productName,
   getAlertCustomClassObj
