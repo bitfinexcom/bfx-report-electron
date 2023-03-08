@@ -37,7 +37,6 @@
   "devDependencies": {
     "@mapbox/node-pre-gyp": "1.0.6",
     "app-builder-bin": "4.1.0",
-    "chai": "4.3.7",
     "electron": "13.6.9",
     "electron-builder": "23.0.9",
     "mocha": "10.2.0",

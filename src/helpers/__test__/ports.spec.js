@@ -1,6 +1,7 @@
 'use strict'
 
-const { assert } = require('chai')
+const { isObject } = require('lodash')
+const assert = require('assert').strict
 const { Server } = require('net')
 const DHT = require('bittorrent-dht')
 
@@ -14,31 +15,33 @@ const {
 const { getServerPromise } = require('../utils')
 
 const checkAssertions = (res) => {
-  assert.isObject(res)
-  assert.containsAllKeys(res, [
-    'grape1DhtPort',
-    'grape1ApiPort',
-    'grape2DhtPort',
-    'grape2ApiPort',
-    'workerApiPort',
-    'workerWsPort',
-    'expressApiPort'
-  ])
+  assert.ok(isObject(res))
+  assert.ok(
+    [
+      'grape1DhtPort',
+      'grape1ApiPort',
+      'grape2DhtPort',
+      'grape2ApiPort',
+      'workerApiPort',
+      'workerWsPort',
+      'expressApiPort'
+    ].every((key) => Number.isFinite(res[key]))
+  )
 
   const maxPort = getMaxPort()
   const defaultPorts = getDefaultPorts()
   const ranges = getPortRangesForLookingUp()
 
   for (const [name, port] of Object.entries(res)) {
-    assert.isAtLeast(port, defaultPorts[name])
-    assert.isAtMost(port, maxPort)
+    assert.ok(port >= defaultPorts[name])
+    assert.ok(port <= maxPort)
 
     const errors = []
 
     for (const { from, to } of ranges) {
       try {
-        assert.isAtLeast(port, from)
-        assert.isAtMost(port, to)
+        assert.ok(port >= from)
+        assert.ok(port <= to)
       } catch (err) {
         errors.push(err)
       }
