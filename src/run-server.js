@@ -11,9 +11,20 @@ const cwd = path.join(__dirname, '..')
 
 module.exports = ({
   pathToUserData,
-  secretKey
+  secretKey,
+  portsMap
 }) => {
   const mainConfsKeeper = getConfigsKeeperByName('main')
+  const {
+    grape1DhtPort,
+    grape1ApiPort,
+    grape2DhtPort,
+    grape2ApiPort,
+    workerApiPort,
+    workerWsPort,
+    expressApiPort
+  } = portsMap
+
   const env = {
     ...process.env,
     PATH_TO_USER_DATA: pathToUserData,
@@ -21,7 +32,14 @@ module.exports = ({
       .getConfigByName('pathToUserCsv'),
     SCHEDULER_RULE: mainConfsKeeper
       .getConfigByName('schedulerRule'),
-    SECRET_KEY: secretKey
+    SECRET_KEY: secretKey,
+    GRAPE_1DHT_PORT: grape1DhtPort,
+    GRAPE_1API_PORT: grape1ApiPort,
+    GRAPE_2DHT_PORT: grape2DhtPort,
+    GRAPE_2API_PORT: grape2ApiPort,
+    WORKER_API_PORT: workerApiPort,
+    WORKER_WS_PORT: workerWsPort,
+    EXPRESS_API_PORT: expressApiPort
   }
   const ipc = fork(serverPath, [], {
     env,

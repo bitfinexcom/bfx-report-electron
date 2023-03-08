@@ -80,7 +80,7 @@ if [ $# == 0 ]; then
   exit 1
 fi
 
-while getopts "lwmsdph" opt; do
+while getopts "lwmsduph" opt; do
   case "${opt}" in
     l) buildLinux=1;;
     w) buildWin=1;;
