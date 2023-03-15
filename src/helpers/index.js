@@ -1,13 +1,13 @@
 'use strict'
 
 const {
-  getFreePort,
-  getDefaultPorts
+  getFreePort
 } = require('./ports')
 const {
   serializeError,
   deserializeError,
-  rm
+  rm,
+  getServerPromise
 } = require('./utils')
 const isMainWinAvailable = require(
   './is-main-win-available'
@@ -17,10 +17,10 @@ const getAlertCustomClassObj = require('./get-alert-custom-class-obj')
 
 module.exports = {
   getFreePort,
-  getDefaultPorts,
   serializeError,
   deserializeError,
   rm,
+  getServerPromise,
   isMainWinAvailable,
   productName,
   getAlertCustomClassObj

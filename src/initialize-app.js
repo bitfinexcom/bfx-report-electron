@@ -21,12 +21,12 @@ const {
   configsKeeperFactory
 } = require('./configs-keeper')
 const {
-  RunningExpressOnPortError,
   IpcMessageError,
   AppInitializationError
 } = require('./errors')
 const {
-  deserializeError
+  deserializeError,
+  getFreePort
 } = require('./helpers')
 const {
   checkForUpdatesAndNotify
@@ -44,14 +44,10 @@ const manageWorkerMessages = require(
 const pathToLayouts = path.join(__dirname, 'layouts')
 const pathToLayoutAppInitErr = path
   .join(pathToLayouts, 'app-init-error.html')
-const pathToLayoutExprPortReq = path
-  .join(pathToLayouts, 'express-port-required.html')
 
 const { rule: schedulerRule } = require(
   '../bfx-reports-framework/config/schedule.json'
 )
-
-let isExpressPortError = false
 
 const _resetCsvPath = async (
   configsKeeper,
@@ -131,14 +127,6 @@ const _ipcMessToPromise = (ipc) => {
 
           return
         }
-        if (state === 'error:express-port-required') {
-          isExpressPortError = true
-
-          rmHandler()
-          reject(err || new RunningExpressOnPortError())
-
-          return
-        }
         if (state === 'error:app-init') {
           rmHandler()
           reject(err || new AppInitializationError())
@@ -211,9 +199,11 @@ module.exports = async () => {
       pathToUserData,
       pathToUserDocuments
     })
+    const portsMap = await getFreePort()
     const ipc = runServer({
       pathToUserData,
-      secretKey
+      secretKey,
+      portsMap
     })
     const isServerReadyPromise = _ipcMessToPromise(ipc)
     manageWorkerMessages(ipc)
@@ -226,16 +216,10 @@ module.exports = async () => {
     }
 
     await hideLoadingWindow({ isRequiredToShowMainWin: true })
-    await triggerElectronLoad()
+    await triggerElectronLoad(portsMap)
     await checkForUpdatesAndNotify()
     await manageChangelog()
   } catch (err) {
-    if (isExpressPortError) {
-      await createErrorWindow(pathToLayoutExprPortReq)
-
-      throw err
-    }
-
     await createErrorWindow(pathToLayoutAppInitErr)
 
     throw err

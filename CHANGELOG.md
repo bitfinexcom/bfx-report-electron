@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.3.1] - 2023-03-15
+
+### Changed
+
+- Improved the lookup of the free ports for the backend side of the app and fixes the issue: [#171](https://github.com/bitfinexcom/bfx-report-electron/issues/171). PRs: [bfx-report-electron#187](https://github.com/bitfinexcom/bfx-report-electron/pull/187), [bfx-report-ui#619](https://github.com/bitfinexcom/bfx-report-ui/pull/619)
+- Reworked `getUsers` call without auth params that are redundant for this public endpoint. PR: [bfx-report-ui#618](https://github.com/bitfinexcom/bfx-report-ui/pull/618)
+
+### Fixed
+
+- Fixed issues with some symbols representation in the `Symbol Filter` dropdown list. PR: [bfx-report-ui#617](https://github.com/bitfinexcom/bfx-report-ui/pull/617)
+
 ## [4.3.0] - 2023-03-01
 
 ### Added

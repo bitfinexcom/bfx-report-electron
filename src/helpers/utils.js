@@ -84,8 +84,23 @@ const rm = async (
   return Promise.all(promisesArr)
 }
 
+const getServerPromise = (srv, port) => {
+  return new Promise((resolve, reject) => {
+    srv.once('error', (err) => {
+      srv.removeListener('listening', resolve)
+      reject(err)
+    })
+    srv.once('listening', () => {
+      srv.removeListener('error', reject)
+      resolve()
+    })
+    srv.listen(port)
+  })
+}
+
 module.exports = {
   serializeError,
   deserializeError,
-  rm
+  rm,
+  getServerPromise
 }

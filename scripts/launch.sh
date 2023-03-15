@@ -55,7 +55,7 @@ if [ $# == 0 ]; then
   exit 1
 fi
 
-while getopts "alwmrosdph" opt; do
+while getopts "alwmrosduph" opt; do
   case "${opt}" in
     a)
       buildLinux=1
