@@ -163,7 +163,8 @@ const _manageConfigs = (params = {}) => {
     {
       pathToUserCsv,
       schedulerRule,
-      shownChangelogVer: '0.0.0'
+      shownChangelogVer: '0.0.0',
+      triggeredSyncAfterUpdatesVer: '0.0.0'
     }
   )
   _resetCsvPath(
