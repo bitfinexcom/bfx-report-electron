@@ -107,6 +107,12 @@ class ShowingChangelogError extends BaseError {
   }
 }
 
+class TriggeringSyncAfterUpdatesError extends BaseError {
+  constructor (message = 'ERR_SYNC_AFTER_UPDATES_REQUEST_HAS_TRIGGERED') {
+    super(message)
+  }
+}
+
 module.exports = {
   BaseError,
   InvalidFilePathError,
@@ -124,5 +130,6 @@ module.exports = {
   SyncFrequencyChangingError,
   UserManualShowingError,
   DbRestoringError,
-  ShowingChangelogError
+  ShowingChangelogError,
+  TriggeringSyncAfterUpdatesError
 }
