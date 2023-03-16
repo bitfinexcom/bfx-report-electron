@@ -5,6 +5,7 @@ const path = require('path')
 
 const { CSV_PATH_VERSION } = require('./const')
 
+const triggerSyncAfterUpdates = require('./trigger-sync-after-updates')
 const triggerElectronLoad = require('./trigger-electron-load')
 const wins = require('./windows')
 const runServer = require('./run-server')
@@ -208,6 +209,7 @@ module.exports = async () => {
     const isServerReadyPromise = _ipcMessToPromise(ipc)
     manageWorkerMessages(ipc)
     await isServerReadyPromise
+    await triggerSyncAfterUpdates()
 
     // Legacy fix related to reprodducing the same behavior on all OS,
     // waiting for checks that it was resolved in the last electron ver
