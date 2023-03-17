@@ -23,8 +23,13 @@ module.exports = async () => {
     }
 
     const wasRequested = await _requestSyncAfterUpdates()
+    const wasSaved = await configsKeeper
+      .saveConfigs({ triggeredSyncAfterUpdatesVer: version })
 
-    if (wasRequested) {
+    if (
+      wasRequested &&
+      wasSaved
+    ) {
       return
     }
 
