@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.4.0] - 2023-03-29
+
+### Added
+
+- Implemented `username/password` auth support with `Two-Factor Authentication` for simple users in a framework mode and corresponding logic to handle various `Reports` authorization flow-related specifics. Improved `Reports` login modal styling according to the actual theme. PR: [bfx-report-ui#622](https://github.com/bitfinexcom/bfx-report-ui/pull/622)
+- Added ability to auto-start sync after the auto-update of the electron app. The idea is to have a configurable option (by default turned on) to force sync after the auto-update or DB migration due to changes in the DB schema, the aim is to bring data consistency after significant updates. PRs: [bfx-report-electron#190](https://github.com/bitfinexcom/bfx-report-electron/pull/190), [bfx-reports-framework#261](https://github.com/bitfinexcom/bfx-reports-framework/pull/261)
+- Added `isAuthTokenGenerationError: true` flag into the `Unauthorized 401` repronse in cases when token is expired for better UX of 2FA. PRs: [bfx-report#285](https://github.com/bitfinexcom/bfx-report/pull/285), [bfx-reports-framework#262](https://github.com/bitfinexcom/bfx-reports-framework/pull/262)
+- Added `login/verify` proxy endpoints to resolve the `CORS` issue for the BFX `username/password` auth for `/v2/login` and `/v2/login/verify` links. PRs: [bfx-reports-framework#263](https://github.com/bitfinexcom/bfx-reports-framework/pull/263), [bfx-report#286](https://github.com/bitfinexcom/bfx-report/pull/286)
+
+### Changed
+
+- Changed the `Sign Up` section title and button to `Add Account` for better clearance to the users of how auth flow works in the `Reports` app. Hid the `Remove Account` button in the `Preferences` menu during syncing to avoid causing related errors. Prevented the `Remember Me` from being prefilled by default. Updated passwords titles. PR: [bfx-report-ui#623](https://github.com/bitfinexcom/bfx-report-ui/pull/623)
+- Fixed the `getUsers` endpoint response, `isRestrictedToBeAddedToSubAccount` flag doesn't show the correct state, it should be `true` in a case when the user signed in with the BFX auth token (using BFX username/password). PR: [bfx-reports-framework#260](https://github.com/bitfinexcom/bfx-reports-framework/pull/260)
+
 ## [4.3.1] - 2023-03-15
 
 ### Changed
