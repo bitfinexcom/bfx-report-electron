@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.5.0] - 2023-03-29
+
+### Added
+
+- Added the `Weighted Averages` report to the web version. The main part of logic moved to the `bfx-report` and the behavior is the same as in the previous PR [bfx-reports-framework#246](https://github.com/bitfinexcom/bfx-reports-framework/pull/246). PRs: [bfx-report#289](https://github.com/bitfinexcom/bfx-report/pull/289), [bfx-reports-framework#266](https://github.com/bitfinexcom/bfx-reports-framework/pull/266), [bfx-report-ui#631](https://github.com/bitfinexcom/bfx-report-ui/pull/631)
+- Added ability to set the selected `TTL` of the BFX auth token to the backend side. PR: [bfx-reports-framework#268](https://github.com/bitfinexcom/bfx-reports-framework/pull/268)
+- Implemented logic for injection and usage of customizable ports for `API_URL` and `WS_ADDRESS` if available on `electronLoad` custom event in the framework mode, it's related to these previous changes: [bfx-report-electron#187](https://github.com/bitfinexcom/bfx-report-electron/pull/187), [bfx-report-ui#619](https://github.com/bitfinexcom/bfx-report-ui/pull/619). PR: [bfx-report-ui#630](https://github.com/bitfinexcom/bfx-report-ui/pull/630)
+
+### Changed
+
+- Added the `temporarily_unavailable` BFX error handler, it's related to issues when the main platform is under maintenance. Instead showing an error modal dialog under the electron app would show the network issue message. And also it added some retries for fetching data as it was done earlier for the common `isENetError` checker. PR: [bfx-report#290](https://github.com/bitfinexcom/bfx-report/pull/290)
+
+### Fixed
+
+- Disallowed user removal when sync going to prevent unexpected behavior. PR: [bfx-reports-framework#267](https://github.com/bitfinexcom/bfx-reports-framework/pull/267)
+- Fixed issues with incorrect pairs formatting and providing a `symbol` param for the `getPublicTrades` request in some cases. Adjusted `Symbol Filter` width to fit better for all available pairs. PR: [bfx-report-ui#626](https://github.com/bitfinexcom/bfx-report-ui/pull/626)
+- Fixed issues with incorrect `TEST` symbols/pairs mapping. Fixed selector width to fit better for all available pairs. PR: [bfx-report-ui#628](https://github.com/bitfinexcom/bfx-report-ui/pull/628)
+
 ## [4.4.0] - 2023-03-29
 
 ### Added
