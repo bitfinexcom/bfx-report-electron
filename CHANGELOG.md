@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.5.1] - 2023-04-26
+
+### Added
+
+- Added ability to name multiple accounts on sign-up to the backend. For example, if a user has some sub-accounts where run `Bitcoin` strategies, the user can call them `The BTC` group. For older created accounts, it will not be there. PR: [bfx-reports-framework#271](https://github.com/bitfinexcom/bfx-reports-framework/pull/271)
+- Added a dedicated flag to recognize an account registering type: via API keys or without for the UI porpuses to cover new user login flow. PR: [bfx-reports-framework#273](https://github.com/bitfinexcom/bfx-reports-framework/pull/273)
+
+### Changed
+
+- Reworked and improved `Add Account` authorization section according to the latest design updates to enhance users experience. Made `Remember Me` feature always active and removes unused corresponding checkboxes from all auth sections. Reworked and unifies several related sub-sections for better composition and reusability. Actualizes elements styling and fields descriptions. PR: [bfx-report-ui#635](https://github.com/bitfinexcom/bfx-report-ui/pull/635)
+- Improved `Forgot Password` authorization section according to the latest design updates to enhance users experience. Reworked and unified several related sub-sections for better composition and reusability. Actualized elements styling and descriptions. Added `Bitfinex` logo. PR: [bfx-report-ui#637](https://github.com/bitfinexcom/bfx-report-ui/pull/637)
+
+### Fixed
+
+- Fixed `emitBfxUnamePwdAuthRequired` WebSocket event handling on which the user should be logged out and re-login via `username/password` and `Two-Factor Authentication` to receive a new auth token. PR: [bfx-report-ui#634](https://github.com/bitfinexcom/bfx-report-ui/pull/634)
+- Fixed issues with the availability to the selection of restricted users with `isRestrictedToBeAddedToSubAccount` flag for `Multiple Accounts` in some specific cases. PR: [bfx-report-ui#636](https://github.com/bitfinexcom/bfx-report-ui/pull/636)
+
 ## [4.5.0] - 2023-04-12
 
 ### Added
