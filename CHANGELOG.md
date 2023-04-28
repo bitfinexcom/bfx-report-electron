@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.5.2] - 2023-04-28
+
+### Fixed
+
+- Fixed the `auto-update` issue to turn on by default. The issue is in the parsing of the environment variable `IS_AUTO_UPDATE_DISABLED` from string to boolean. PR: [bfx-report-electron#198](https://github.com/bitfinexcom/bfx-report-electron/pull/198)
+
 ## [4.5.1] - 2023-04-26
 
 ### Added
