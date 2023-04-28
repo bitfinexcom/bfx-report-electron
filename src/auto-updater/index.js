@@ -22,7 +22,9 @@ const {
 const {
   closeAlert
 } = require('../modal-dialog-src/utils')
-const isAutoUpdateDisabled = !!process.env.IS_AUTO_UPDATE_DISABLED
+const parseEnvValToBool = require('../helpers/parse-env-val-to-bool')
+
+const isAutoUpdateDisabled = parseEnvValToBool(process.env.IS_AUTO_UPDATE_DISABLED)
 
 const fontsStyle = fs.readFileSync(path.join(
   __dirname, '../../bfx-report-ui/build/fonts/roboto.css'
