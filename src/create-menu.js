@@ -21,7 +21,9 @@ const {
 const { manageNewGithubIssue } = require('./error-manager')
 const showDocs = require('./show-docs')
 const { showChangelog } = require('./changelog-manager')
-const isAutoUpdateDisabled = !!process.env.IS_AUTO_UPDATE_DISABLED
+const parseEnvValToBool = require('./helpers/parse-env-val-to-bool')
+
+const isAutoUpdateDisabled = parseEnvValToBool(process.env.IS_AUTO_UPDATE_DISABLED)
 
 module.exports = ({
   pathToUserData,
