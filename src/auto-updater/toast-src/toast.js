@@ -53,6 +53,18 @@ window.addEventListener('load', () => {
         console.error(err)
       }
     })
+
+    let width = 0
+
+    for (const container of htmlContainers) {
+      width = Math.max(
+        width,
+        container.getBoundingClientRect().width ?? 0,
+        container.scrollWidth ?? 0
+      )
+    }
+
+    ipcRenderer.send('auto-update-toast:width', { width })
   } catch (err) {
     console.error(err)
   }
