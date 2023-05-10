@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.6.0] - 2023-05-10
+
+### Added
+
+- Added `symbol` field to the `currencies` model in order to have the same payload as from the `bfx-report`. PR: [bfx-reports-framework#278](https://github.com/bitfinexcom/bfx-reports-framework/pull/278)
+
+### Changed
+
+- Bumped ElectronJS version up to `v21.3.3` to have NodeJS `v16` under the hood to resolve the ability to build UI and ElectronJS releases using the same NodeJS version. PRs: [bfx-report-electron#201](https://github.com/bitfinexcom/bfx-report-electron/pull/201), [bfx-report-ui#640](https://github.com/bitfinexcom/bfx-report-ui/pull/640), [bfx-facs-db-better-sqlite#5](https://github.com/bitfinexcom/bfx-facs-db-better-sqlite/pull/5)
+- Resolved deprecation warning `fs.rmdir` for the `bfx-reports-framework` due to migration NodeJS to `v16`. PR: [bfx-reports-framework#276](https://github.com/bitfinexcom/bfx-reports-framework/pull/276)
+- Improved selected dates range representation for better clearance to the users. PR: [bfx-report-ui#643](https://github.com/bitfinexcom/bfx-report-ui/pull/643)
+- Reworked and improved `Sign In` and `Add Accounts` sections according to the latest design updates to enhance users experienc. Reworked and unifies several related sub-sections for better composition and reusability. Implemented new flow for adding `sub-accounts` to the users registered via `API keys`. Actualizes related elements styling and fields descriptions. PR: [bfx-report-ui#644](https://github.com/bitfinexcom/bfx-report-ui/pull/644)
+- Updated `pt-BR`, `ru` and `tr` translations for the UI. PR: [bfx-report-ui#646](https://github.com/bitfinexcom/bfx-report-ui/pull/646)
+
+### Fixed
+
+- Fixed `Test` pairs/symbols handling to prevent pairs duplication/overlapping and fixed incorrect request symbol params providing in some cases. PR: [bfx-report-ui#641](https://github.com/bitfinexcom/bfx-report-ui/pull/641)
+- Fixed a display issue on `Test` pairs/symbols in production. PR: [bfx-report-ui#642](https://github.com/bitfinexcom/bfx-report-ui/pull/642)
+
 ## [4.5.2] - 2023-04-28
 
 ### Fixed

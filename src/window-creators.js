@@ -1,9 +1,8 @@
 'use strict'
 
 const electron = require('electron')
-const serve = require('electron-serve')
 const path = require('path')
-const url = require('url')
+const { URL } = require('url')
 
 const { BrowserWindow } = electron
 const isDevEnv = process.env.NODE_ENV === 'development'
@@ -11,6 +10,7 @@ const isMac = process.platform === 'darwin'
 
 const wins = require('./windows')
 const ipcs = require('./ipcs')
+const serve = require('./serve')
 const appStates = require('./app-states')
 const windowStateKeeper = require('./window-state-keeper')
 const createMenu = require('./create-menu')
@@ -29,6 +29,22 @@ const loadURL = serve({ directory: publicDir })
 
 const pathToLayouts = path.join(__dirname, 'layouts')
 const pathToLayoutAppInit = path.join(pathToLayouts, 'app-init.html')
+
+const _getFileURL = (params) => {
+  const {
+    protocol = 'file',
+    hostname = '',
+    pathname = ''
+  } = params ?? {}
+
+  const fileURL = new URL('file://./')
+
+  fileURL.protocol = protocol
+  fileURL.hostname = hostname
+  fileURL.pathname = pathname
+
+  return fileURL.toString()
+}
 
 const _createWindow = async (
   {
@@ -81,18 +97,6 @@ const _createWindow = async (
 
   wins[winName] = new BrowserWindow(_props)
 
-  const startUrl = pathname
-    ? url.format({
-        pathname,
-        protocol: 'file:',
-        slashes: true
-      })
-    : 'app://-'
-
-  if (!pathname) {
-    await loadURL(wins[winName])
-  }
-
   wins[winName].on('closed', () => {
     wins[winName] = null
 
@@ -107,8 +111,9 @@ const _createWindow = async (
   const isReadyToShowPromise = new Promise((resolve) => {
     wins[winName].once('ready-to-show', resolve)
   })
-  const didFinishLoadPromise = wins[winName]
-    .loadURL(startUrl)
+  const didFinishLoadPromise = pathname
+    ? wins[winName].loadURL(_getFileURL({ pathname }))
+    : loadURL(wins[winName])
 
   await Promise.all([
     isReadyToShowPromise,
