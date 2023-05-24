@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.7.0] - 2023-05-24
+
+### Added
+
+- Added the `localUsername` field to the `getUsers` method response to be able to modify the local username on sign-in for sub-accounts. PR: [bfx-reports-framework#281](https://github.com/bitfinexcom/bfx-reports-framework/pull/281)
+- Added the possibility of optional naming for multiple accounts during creating or updating, implemented displaying optional `localUsername` (if available) instead of the account email. PR: [bfx-report-ui#650](https://github.com/bitfinexcom/bfx-report-ui/pull/650)
+
+### Changed
+
+- Prevented selected dates range preserving by default between login sessions, the default range `Last 2 Weeks` will be set from the start until the `Preserve Timeframe` option won't be turned on in the `Preferences` menu. PR: [bfx-report-ui#651](https://github.com/bitfinexcom/bfx-report-ui/pull/651)
+- Reworked and improved the `Manage Accounts` section according to the latest design updates to enhance users experience. Implemented the possibility of picking the `Use API key` option in the registered accounts selector and adding a sub-account via API key/secret in this case. Prefills the optional group name field with the master account name by default. Actualizes related elements styling and fields descriptions. Improves sub-accounts section scroll representation. PR: [bfx-report-ui#652](https://github.com/bitfinexcom/bfx-report-ui/pull/652)
+- Improved `Weighted Averages` web version limit note representation according to the latest design updates. PR: [bfx-report-ui#654](https://github.com/bitfinexcom/bfx-report-ui/pull/654)
+
+### Fixed
+
+- Fixed issues with auth token invalidate intervals. The issue is at this moment UI flow intends to remove `sub-account` without login using `email`, it means we have to handle the absence of a user session on deletion. PR: [bfx-reports-framework#282](https://github.com/bitfinexcom/bfx-reports-framework/pull/282)
+- Fixed columns filter elements overflowing issues. PR: [bfx-report-ui#649](https://github.com/bitfinexcom/bfx-report-ui/pull/649)
+- Fixed the issue with the `Password` input availability on the main registered users list screen in some specific cases. PR: [bfx-report-ui#653](https://github.com/bitfinexcom/bfx-report-ui/pull/653)
+
 ## [4.6.0] - 2023-05-10
 
 ### Added
