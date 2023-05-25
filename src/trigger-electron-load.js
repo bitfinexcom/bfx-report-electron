@@ -14,9 +14,11 @@ const triggerElectronLoadStr = fs.readFileSync(
 )
 
 const placeholderPattern = /\$\{apiPort\}/
+let cachedExpressApiPort = null
 
 module.exports = (args) => {
-  const { expressApiPort = null } = args ?? {}
+  const { expressApiPort = cachedExpressApiPort } = args ?? {}
+  cachedExpressApiPort = expressApiPort
   const scriptStr = triggerElectronLoadStr.replace(
     placeholderPattern,
     expressApiPort
