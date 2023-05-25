@@ -15,6 +15,7 @@ const isMainWinAvailable = require(
 const productName = require('./product-name')
 const getAlertCustomClassObj = require('./get-alert-custom-class-obj')
 const parseEnvValToBool = require('./parse-env-val-to-bool')
+const isBfxApiStaging = require('./is-bfx-api-staging')
 
 module.exports = {
   getFreePort,
@@ -25,5 +26,6 @@ module.exports = {
   isMainWinAvailable,
   productName,
   getAlertCustomClassObj,
-  parseEnvValToBool
+  parseEnvValToBool,
+  isBfxApiStaging
 }
