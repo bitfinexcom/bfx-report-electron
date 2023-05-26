@@ -16,6 +16,7 @@ ${description}
 | CPUs | ${cpuModel} x ${cpuCount} |
 | RAM | ${totalRamGb}GB (${freeRamGb}GB free) |
 | App RAM limit | ${ramLimitMb}Mb (${usedRamMb}MB used) |
+| Is BFX API Staging used | ${isBfxApiStagingUsed} |
 
 <details>
 
