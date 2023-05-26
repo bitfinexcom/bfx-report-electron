@@ -117,7 +117,7 @@ module.exports = (eol = os.EOL) => {
     : repository
   const isBfxApiStagingUsed = isBfxApiStaging()
   const bfxApiStagingDetail = isBfxApiStagingUsed
-    ? `${eol} Is BFX API Staging used: Yes`
+    ? `${eol}Is BFX API Staging used: Yes`
     : ''
 
   const detail = `\
