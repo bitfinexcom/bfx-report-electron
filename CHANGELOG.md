@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.7.1] - 2023-06-07
+
+### Added
+
+- Added a note to the electron app that `BFX API Staging` is used. PR: [bfx-report-electron#207](https://github.com/bitfinexcom/bfx-report-electron/pull/207)
+- Added app download section available for the web users and corresponding logic where they can get the latest `Reports App` version for their OS. PR: [bfx-report-ui#657](https://github.com/bitfinexcom/bfx-report-ui/pull/657)
+- Implemented displaying accounts group name (if available) for multiple accounts instead of the primary account email on the main `Sign In` screen for better clearance to the users. Implemented the possibility of changing existing accounts groups names for multiple accounts. PR: [bfx-report-ui#659](https://github.com/bitfinexcom/bfx-report-ui/pull/659)
+
+### Changed
+
+- Increased `getAccountSummary` request timeout to `30s`, the rest requests will use `20s` timeout for the `bfx-api-node-rest` lib. PR: [bfx-report#293](https://github.com/bitfinexcom/bfx-report/pull/293)
+- Added `3` retries instead of `2` when catching `Rate Limit` error to help users to go through sync in the electron app. PR: [bfx-report#294](https://github.com/bitfinexcom/bfx-report/pull/294)
+- Implemented navigation via tabs between `Balances` and `Movements` reports in the `Wallets` sub-section. Expanded `My Account` and `My History` sections by default for better UX. Actualized several sub-sections naming. PR: [bfx-report-ui#658](https://github.com/bitfinexcom/bfx-report-ui/pull/658)
+
+### Fixed
+
+- Fixed issue with reloading UI page via the menu bar options. In the electron env need to `trigger-electron-load` event after running `Force Reload` and `Reload` menu commands with express api port. PR: [bfx-report-electron#206](https://github.com/bitfinexcom/bfx-report-electron/pull/206)
+
 ## [4.7.0] - 2023-05-24
 
 ### Added
