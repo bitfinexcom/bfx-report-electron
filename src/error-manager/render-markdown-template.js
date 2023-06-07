@@ -42,13 +42,14 @@ const _renderMarkdownTemplate = (
   const str = template.replace(placeholderPattern, (match) => {
     const propName = match.replace('${', '').replace('}', '')
 
+    if (typeof params?.[propName] === 'boolean') {
+      params[propName] = params[propName]
+        ? 'Yes'
+        : 'No'
+    }
     if (
-      !params ||
-      typeof params !== 'object' ||
-      (
-        !Number.isFinite(params[propName]) &&
-        typeof params[propName] !== 'string'
-      )
+      !Number.isFinite(params?.[propName]) &&
+      typeof params?.[propName] !== 'string'
     ) {
       return ''
     }

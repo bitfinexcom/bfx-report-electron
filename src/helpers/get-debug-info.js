@@ -9,6 +9,7 @@ const { getAppUpdateConfigSync } = require('../auto-updater')
 
 const packageJson = require(path.join(appDir, 'package.json'))
 const productName = require('./product-name')
+const isBfxApiStaging = require('./is-bfx-api-staging')
 
 let lastCommit = { hash: '-', date: '-' }
 
@@ -114,6 +115,10 @@ module.exports = (eol = os.EOL) => {
   )
     ? `https://${provider}.com/${owner}/${repo}`
     : repository
+  const isBfxApiStagingUsed = isBfxApiStaging()
+  const bfxApiStagingDetail = isBfxApiStagingUsed
+    ? `${eol}Is BFX API Staging used: Yes`
+    : ''
 
   const detail = `\
 Version: ${version}${eol}\
@@ -125,6 +130,7 @@ Node.js: ${nodeVersion}${eol}\
 V8: ${v8Version}${eol}\
 OS version: ${osVersion}${eol}\
 OS release: ${osType} ${osArch} ${osRelease}\
+${bfxApiStagingDetail}
 `
 
   return {
@@ -150,6 +156,7 @@ OS release: ${osType} ${osArch} ${osRelease}\
     usedRamMb,
     cpuModel,
     cpuCount,
+    isBfxApiStagingUsed,
     detail
   }
 }

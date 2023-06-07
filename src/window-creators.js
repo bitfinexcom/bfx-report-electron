@@ -23,6 +23,7 @@ const {
   hideWindow,
   centerWindow
 } = require('./helpers/manage-window')
+const isBfxApiStaging = require('./helpers/is-bfx-api-staging')
 
 const publicDir = path.join(__dirname, '../bfx-report-ui/build')
 const loadURL = serve({ directory: publicDir })
@@ -221,6 +222,11 @@ const createMainWindow = async ({
 
   if (isDevEnv) {
     wins.mainWindow.webContents.openDevTools()
+  }
+  if (isBfxApiStaging()) {
+    const title = wins.mainWindow.getTitle()
+
+    wins.mainWindow.setTitle(`${title} - BFX API STAGING USED`)
   }
 
   createMenu({ pathToUserData, pathToUserDocuments })
