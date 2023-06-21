@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.8.0] - 2023-06-21
+
+### Added
+
+- Added currency movement info endpoint https://docs.bitfinex.com/reference/movement-info. Due to the changed signatures of the `bitfinex-api-node` library methods in the new major version, to add this endpoint, the way of passing parameters to all bfx api methods is also changed/refactored. PRs: [bfx-report#297](https://github.com/bitfinexcom/bfx-report/pull/297), [bfx-reports-framework#287](https://github.com/bitfinexcom/bfx-reports-framework/pull/287)
+- Added ability to return the `timestamp` when the last sync was launched to add this info to the layouts of the new design. PR: [bfx-reports-framework#289](https://github.com/bitfinexcom/bfx-reports-framework/pull/289)
+- Added the possibility of removing registered accounts from the main `Sign In` screen. PR: [bfx-report-ui#662](https://github.com/bitfinexcom/bfx-report-ui/pull/662)
+- Added the possibility of creating/updating sub-accounts for password protected users. PR: [bfx-report-ui#663](https://github.com/bitfinexcom/bfx-report-ui/pull/663)
+
+### Changed
+
+- Prevented proxying all `HTML` of the `BFX API` error. PR: [bfx-report#299](https://github.com/bitfinexcom/bfx-report/pull/299)
+- Enhanced `Reports` tables representation according to the latest design updates. PR: [bfx-report-ui#664](https://github.com/bitfinexcom/bfx-report-ui/pull/664)
+
+### Fixed
+
+- Fixed `BFX API` error handling due to the last major changes of the rest-api lib: https://github.com/bitfinexcom/bfx-api-node-rest/blame/master/lib/rest2.js#LL157C14-L170C4. PRs: [bfx-report#298](https://github.com/bitfinexcom/bfx-report/pull/298), [bfx-report#300](https://github.com/bitfinexcom/bfx-report/pull/300)
+- Fixed `sub-account` updating for password-protected account, it's necessary to pass the password to the master account if it's passed in the request. PR: [bfx-reports-framework#288](https://github.com/bitfinexcom/bfx-reports-framework/pull/288)
+
 ## [4.7.1] - 2023-06-07
 
 ### Added
