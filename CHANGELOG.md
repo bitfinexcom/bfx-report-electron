@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.8.1] - 2023-06-22
+
+### Fixed
+
+- Fixed issue with passing symbol parameter for `Order Trades` due to the last major changes of the `BFX API` [library](https://github.com/bitfinexcom/bfx-api-node-rest/blob/master/lib/rest2.js#L918). PR: [bfx-report#303](https://github.com/bitfinexcom/bfx-report/pull/303)
+- Reverted [(improvements) Reports tables representation](https://github.com/bitfinexcom/bfx-report-ui/pull/664) due to an issue with table scroll. PR: [bfx-report-ui#667](https://github.com/bitfinexcom/bfx-report-ui/pull/667)
+
 ## [4.8.0] - 2023-06-21
 
 ### Added
