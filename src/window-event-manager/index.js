@@ -23,7 +23,7 @@ const addOnceProcEventHandler = (eventName, handler, window) => {
     }
   }
 
-  const handlerSet = _setWinEventHandler(eventName, handler, window)
+  const handlerSet = _setWinEventHandler(eventName, handler, _window)
 
   const ctx = {
     isAdded: true,
