@@ -23,6 +23,10 @@ const {
   closeAlert
 } = require('../modal-dialog-src/utils')
 const parseEnvValToBool = require('../helpers/parse-env-val-to-bool')
+const {
+  WINDOW_EVENT_NAMES,
+  addOnceProcEventHandler
+} = require('../window-event-manager')
 
 const isAutoUpdateDisabled = parseEnvValToBool(process.env.IS_AUTO_UPDATE_DISABLED)
 
@@ -90,9 +94,10 @@ const _fireToast = (
   const alert = new Alert([fonts, style, script])
   toast = alert
 
-  const _closeAlert = () => closeAlert(alert)
-
-  win.once('closed', _closeAlert)
+  const eventHandlerCtx = addOnceProcEventHandler(
+    WINDOW_EVENT_NAMES.CLOSED,
+    () => closeAlert(alert)
+  )
 
   const bwOptions = {
     frame: false,
@@ -151,7 +156,7 @@ const _fireToast = (
       alert.browserWindow.hide()
     },
     didClose: () => {
-      win.removeListener('closed', _closeAlert)
+      eventHandlerCtx.removeListener()
 
       didClose(alert)
     }
