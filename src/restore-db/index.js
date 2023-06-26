@@ -26,6 +26,10 @@ const {
 const {
   DbRestoringError
 } = require('../errors')
+const {
+  WINDOW_EVENT_NAMES,
+  addOnceProcEventHandler
+} = require('../window-event-manager')
 
 const fontsStyle = fs.readFileSync(path.join(
   rootPath, 'bfx-report-ui/build/fonts/roboto.css'
@@ -79,9 +83,11 @@ const _fireAlert = (params) => {
   const maxHeight = Math.floor(screenHeight * 0.90)
 
   const alert = new Alert([fonts, style, script])
-  const _close = () => closeAlert(alert)
 
-  win.once('closed', _close)
+  const eventHandlerCtx = addOnceProcEventHandler(
+    WINDOW_EVENT_NAMES.CLOSED,
+    () => closeAlert(alert)
+  )
 
   const bwOptions = {
     resizable: true,
@@ -154,7 +160,7 @@ const _fireAlert = (params) => {
       alert.browserWindow.hide()
     },
     didClose: () => {
-      win.removeListener('closed', _close)
+      eventHandlerCtx.removeListener()
     }
   }
 
