@@ -26,6 +26,10 @@ const { getConfigsKeeperByName } = require('./configs-keeper')
 const getAlertCustomClassObj = require(
   './helpers/get-alert-custom-class-obj'
 )
+const {
+  WINDOW_EVENT_NAMES,
+  addOnceProcEventHandler
+} = require('./window-event-manager')
 
 const _getSchedulerRule = (timeFormat, alertRes) => {
   if (timeFormat.value === 'days') {
@@ -219,8 +223,16 @@ module.exports = () => {
 
   return async () => {
     const win = electron.BrowserWindow.getFocusedWindow()
-    win.once('closed', closeTimeFormatAlert)
-    win.once('closed', closeAlert)
+    const timeFormatAlertEventHandlerCtx = addOnceProcEventHandler(
+      WINDOW_EVENT_NAMES.CLOSED,
+      closeTimeFormatAlert,
+      win
+    )
+    const alertEventHandlerCtx = addOnceProcEventHandler(
+      WINDOW_EVENT_NAMES.CLOSED,
+      closeAlert,
+      win
+    )
 
     try {
       const savedSchedulerRule = await configsKeeper
@@ -234,7 +246,7 @@ module.exports = () => {
           inputValue: timeData.timeFormat
         }
       )
-      win.removeListener('closed', closeTimeFormatAlert)
+      timeFormatAlertEventHandlerCtx.removeListener()
 
       if (timeFormat.dismiss) {
         return
@@ -244,7 +256,7 @@ module.exports = () => {
         alert,
         getAlertOpts(timeFormat, timeData)
       )
-      win.removeListener('closed', closeAlert)
+      alertEventHandlerCtx.removeListener()
 
       if (alertRes.dismiss) {
         return
