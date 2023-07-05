@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.9.0] - 2023-07-05
+
+### Added
+
+- Added ability to fetch `Weighted Averages` data from the `BFX API` using `v2/auth/r/trades/calc` endpoint for hosted version. PRs: [bfx-report#306](https://github.com/bitfinexcom/bfx-report/pull/306), [bfx-report#307](https://github.com/bitfinexcom/bfx-report/pull/307), [bfx-reports-framework#292](https://github.com/bitfinexcom/bfx-reports-framework/pull/292)
+
+### Changed
+
+- Reworked navigation for the `Ledgers`, `Trades`, `Orders` and `Positions` reports as separate sub-sections in the `My History` menu instead of tabs in the `Ledgers & Trading` sub-section. PR: [bfx-report-ui#673](https://github.com/bitfinexcom/bfx-report-ui/pull/673)
+- Reworked `Weighted Averages` report representation. PR: [bfx-report-ui#674](https://github.com/bitfinexcom/bfx-report-ui/pull/674)
+
+### Fixed
+
+- Fixed the issue with the active state losing in the `Wallets` section when switching to the `Movements` tab. PR: [bfx-report-ui#669](https://github.com/bitfinexcom/bfx-report-ui/pull/669)
+- Fixed issues with the incorrect accounts registration type detection. PR: [bfx-report-ui#670](https://github.com/bitfinexcom/bfx-report-ui/pull/670)
+- Fixed the `Export` option unavailability in the top navigation menu and showing `Start Sync` only in the `framework mode`. PR: [bfx-report-ui#672](https://github.com/bitfinexcom/bfx-report-ui/pull/672)
+
 ## [4.8.1] - 2023-06-22
 
 ### Fixed
