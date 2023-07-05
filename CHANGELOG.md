@@ -11,12 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added ability to fetch `Weighted Averages` data from the `BFX API` using `v2/auth/r/trades/calc` endpoint for hosted version. PRs: [bfx-report#306](https://github.com/bitfinexcom/bfx-report/pull/306), [bfx-report#307](https://github.com/bitfinexcom/bfx-report/pull/307), [bfx-reports-framework#292](https://github.com/bitfinexcom/bfx-reports-framework/pull/292)
+- Added ability to fetch `Weighted Averages` data from the `BFX API` using `v2/auth/r/trades/calc` endpoint for hosted version. PRs: [bfx-report#306](https://github.com/bitfinexcom/bfx-report/pull/306), [bfx-report#307](https://github.com/bitfinexcom/bfx-report/pull/307), [bfx-report#310](https://github.com/bitfinexcom/bfx-report/pull/310), [bfx-report#311](https://github.com/bitfinexcom/bfx-report/pull/311), [bfx-reports-framework#292](https://github.com/bitfinexcom/bfx-reports-framework/pull/292)
 
 ### Changed
 
 - Reworked navigation for the `Ledgers`, `Trades`, `Orders` and `Positions` reports as separate sub-sections in the `My History` menu instead of tabs in the `Ledgers & Trading` sub-section. PR: [bfx-report-ui#673](https://github.com/bitfinexcom/bfx-report-ui/pull/673)
-- Reworked `Weighted Averages` report representation. PR: [bfx-report-ui#674](https://github.com/bitfinexcom/bfx-report-ui/pull/674)
+- Reworked `Weighted Averages` report representation. PRs: [bfx-report-ui#674](https://github.com/bitfinexcom/bfx-report-ui/pull/674), [bfx-report-ui#677](https://github.com/bitfinexcom/bfx-report-ui/pull/677), [bfx-report-ui#678](https://github.com/bitfinexcom/bfx-report-ui/pull/678)
 
 ### Fixed
 
