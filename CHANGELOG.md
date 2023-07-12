@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.9.1] - 2023-07-12
+
+### Added
+
+- Added `last/first` trades timestamps into the `Weighted Averages` report for the framework mode. PRs: [bfx-report#315](https://github.com/bitfinexcom/bfx-report/pull/315), [bfx-reports-framework#299](https://github.com/bitfinexcom/bfx-reports-framework/pull/299)
+
+### Fixed
+
+- Added `Rate Limit` router to control `BFX API` requests bandwidth to resolve the long timeout issue and help users to go through the data sync. Bumped API call timeout to `90s`. Reduced redundant `positionsAudit` calls to facilitate sync. Fixed stuck event loop to fix `WS` timeout on big data. PRs: [bfx-report#314](https://github.com/bitfinexcom/bfx-report/pull/314), [bfx-reports-framework#298](https://github.com/bitfinexcom/bfx-reports-framework/pull/298)
+
 ## [4.9.0] - 2023-07-05
 
 ### Added
