@@ -52,12 +52,6 @@ jobs:
       name: Use BFX API Staging for queries
       run: |
         echo "IS_BFX_API_STAGING=1" >> $GITHUB_ENV
-    - name: Cache Docker images
-      uses: ScribeMD/docker-cache@0.1.4
-      env:
-        cache-name: docker-images-cache-v1
-      with:
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('Dockerfile**', 'docker-compose.yaml') }}
     - name: Cache Electron binaries
       id: electron-cache
       uses: actions/cache@v3
