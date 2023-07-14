@@ -57,13 +57,11 @@ const script = `<script type="text/javascript">${toastScript}</script>`
 const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
 
 const _sendProgress = (progress) => {
-  if (
-    !toast ||
-    !toast.browserWindow ||
-    !Number.isFinite(progress)
-  ) return
+  if (!Number.isFinite(progress)) {
+    return
+  }
 
-  toast.browserWindow.webContents.send(
+  toast?.browserWindow?.webContents.send(
     'progress',
     progress
   )
@@ -392,13 +390,15 @@ const _autoUpdaterFactory = () => {
   })
   autoUpdater.on('download-progress', async (progressObj) => {
     try {
-      const { percent } = { ...progressObj }
+      const { percent } = progressObj ?? {}
 
       if (isProgressToastEnabled) {
         _sendProgress(percent)
 
         return
       }
+
+      isProgressToastEnabled = true
 
       await _fireToast(
         {
@@ -409,8 +409,6 @@ const _autoUpdaterFactory = () => {
           didOpen: (alert) => {
             _sendProgress(percent)
             alert.showLoading()
-
-            isProgressToastEnabled = true
           },
           didClose: () => {
             isProgressToastEnabled = false
