@@ -23,6 +23,10 @@ const {
   closeAlert
 } = require('../modal-dialog-src/utils')
 const parseEnvValToBool = require('../helpers/parse-env-val-to-bool')
+const {
+  WINDOW_EVENT_NAMES,
+  addOnceProcEventHandler
+} = require('../window-event-manager')
 
 const isAutoUpdateDisabled = parseEnvValToBool(process.env.IS_AUTO_UPDATE_DISABLED)
 
@@ -53,13 +57,11 @@ const script = `<script type="text/javascript">${toastScript}</script>`
 const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
 
 const _sendProgress = (progress) => {
-  if (
-    !toast ||
-    !toast.browserWindow ||
-    !Number.isFinite(progress)
-  ) return
+  if (!Number.isFinite(progress)) {
+    return
+  }
 
-  toast.browserWindow.webContents.send(
+  toast?.browserWindow?.webContents.send(
     'progress',
     progress
   )
@@ -90,9 +92,10 @@ const _fireToast = (
   const alert = new Alert([fonts, style, script])
   toast = alert
 
-  const _closeAlert = () => closeAlert(alert)
-
-  win.once('closed', _closeAlert)
+  const eventHandlerCtx = addOnceProcEventHandler(
+    WINDOW_EVENT_NAMES.CLOSED,
+    () => closeAlert(alert)
+  )
 
   const bwOptions = {
     frame: false,
@@ -151,7 +154,7 @@ const _fireToast = (
       alert.browserWindow.hide()
     },
     didClose: () => {
-      win.removeListener('closed', _closeAlert)
+      eventHandlerCtx.removeListener()
 
       didClose(alert)
     }
@@ -387,13 +390,15 @@ const _autoUpdaterFactory = () => {
   })
   autoUpdater.on('download-progress', async (progressObj) => {
     try {
-      const { percent } = { ...progressObj }
+      const { percent } = progressObj ?? {}
 
       if (isProgressToastEnabled) {
         _sendProgress(percent)
 
         return
       }
+
+      isProgressToastEnabled = true
 
       await _fireToast(
         {
@@ -404,8 +409,6 @@ const _autoUpdaterFactory = () => {
           didOpen: (alert) => {
             _sendProgress(percent)
             alert.showLoading()
-
-            isProgressToastEnabled = true
           },
           didClose: () => {
             isProgressToastEnabled = false
