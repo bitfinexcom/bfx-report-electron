@@ -23,6 +23,10 @@ const mdUserManual = fs.readFileSync(
   path.join(rootPath, 'docs/user-manual.md'),
   'utf8'
 )
+const {
+  WINDOW_EVENT_NAMES,
+  addOnceProcEventHandler
+} = require('../window-event-manager')
 
 const mdStyle = fs.readFileSync(path.join(
   rootPath, 'node_modules', 'github-markdown-css/github-markdown.css'
@@ -75,9 +79,11 @@ const _fireAlert = (params) => {
   const maxHeight = Math.floor(screenHeight * 0.90)
 
   const alert = new Alert([mdS, fonts, style, script])
-  const _close = () => closeAlert(alert)
 
-  win.once('closed', _close)
+  const eventHandlerCtx = addOnceProcEventHandler(
+    WINDOW_EVENT_NAMES.CLOSED,
+    () => closeAlert(alert)
+  )
 
   const bwOptions = {
     frame: false,
@@ -143,7 +149,7 @@ const _fireAlert = (params) => {
       alert.browserWindow.hide()
     },
     didClose: () => {
-      win.removeListener('closed', _close)
+      eventHandlerCtx.removeListener()
     }
   }
 
