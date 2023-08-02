@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.9.2] - 2023-08-02
+
+### Changed
+
+- Removed the `Cumulative Weighted Price` column and corresponding logic from the `Weighted Averages` report according to the latest requirements. Added `Cost` and `Sale` columns to the `Weighted Averages` report. PRs: [bfx-report#319](https://github.com/bitfinexcom/bfx-report/pull/319), [bfx-reports-framework#302](https://github.com/bitfinexcom/bfx-reports-framework/pull/302), [bfx-report-ui#681](https://github.com/bitfinexcom/bfx-report-ui/pull/681)
+- Improved sync time estimation flow as follows: in addition to existing emitting `WS` events when the next collection is syncing to not hold the previous time value (some collections can sync very long) adds an ability to emit the `progress` event every `1sec` with new values `spentTime` and `leftTime` for better UX (so that the user does not think that sync has stalled). PR: [bfx-reports-framework#303](https://github.com/bitfinexcom/bfx-reports-framework/pull/303)
+- Changed `Rate Limits` for public endpoints: `trades` to 15 req/min, `candles` to 60 req/min. PR: [bfx-reports-framework#304](https://github.com/bitfinexcom/bfx-reports-framework/pull/304)
+
+### Fixed
+
+- Fixed issues with the incorrect synchronization estimation time conversion and representation. PR: [bfx-report-ui#680](https://github.com/bitfinexcom/bfx-report-ui/pull/680)
+- Fixed handling bfx api `ERR_AUTH_API: ERR_INVALID_CREDENTIALS` error to prevent showing `500 Internal Server Error` and error modal dialog in the electron app. PR: [bfx-report#318](https://github.com/bitfinexcom/bfx-report/pull/318)
+- Fixed the issue [#215](https://github.com/bitfinexcom/bfx-report-electron/issues/215) related to `MaxListenersExceededWarning` warning for the electron windows. PR: [bfx-report-electron#229](https://github.com/bitfinexcom/bfx-report-electron/pull/229)
+
 ## [4.9.1] - 2023-07-12
 
 ### Added
