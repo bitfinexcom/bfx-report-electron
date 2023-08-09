@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.9.3] - 2023-08-09
+
+### Fixed
+
+- Fixed `start` timestamp of `BFX API` queries to be at least `Date.UTC(2013)` = `1356998400000` ms. The issue is the following: some restrictions of the `BFX API` are changed for the `Funding Credits History`, if we set `start: 0` throws `Internal Server Error` from the `API` side. It's an issue for the `sync` mode (as we start syncing with `0`) and setting the default value for requests. PRs: [bfx-report#324](https://github.com/bitfinexcom/bfx-report/pull/324), [bfx-reports-framework#307](https://github.com/bitfinexcom/bfx-reports-framework/pull/307)
+
 ## [4.9.2] - 2023-08-02
 
 ### Changed
