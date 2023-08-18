@@ -127,7 +127,9 @@ const allowedProcessStatesSet = _getAllowedStatesSet({
 
     process.env.NODE_CONFIG = JSON.stringify({
       app: {
-        port: expressApiPort
+        port: expressApiPort,
+        httpRpcTimeout: 10 * 60 * 1000,
+        wsRpcTimeout: 10 * 60 * 1000
       },
       grenacheClient: {
         grape
