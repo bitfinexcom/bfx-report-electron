@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.10.0] - 2023-08-23
+
+### Added
+
+- Added currency lists for platform consistency. PRs: [bfx-report#323](https://github.com/bitfinexcom/bfx-report/pull/323), [bfx-reports-framework#310](https://github.com/bitfinexcom/bfx-reports-framework/pull/310), [bfx-report-ui#688](https://github.com/bitfinexcom/bfx-report-ui/pull/688)
+- Added support to DB migration for `temp` tables, `temp` tables will be removed for the non-completed sync if DB schema is changed. PR: [bfx-reports-framework#311](https://github.com/bitfinexcom/bfx-reports-framework/pull/311)
+- Added ability to overwrite `RPC` timeout to have `httpRpcTimeout` and `wsRpcTimeout` options that can be overwritten in the electron environment to `10mins` for complicated reports which can have a lot of internal calls to the `BFX API` that can take significant time. It fixed the following issues: [bfx-report-electron#238](https://github.com/bitfinexcom/bfx-report-electron/issues/238), [bfx-report-electron#240](https://github.com/bitfinexcom/bfx-report-electron/issues/240), [bfx-report-electron#241](https://github.com/bitfinexcom/bfx-report-electron/issues/241). PRs: [bfx-report-express#31](https://github.com/bitfinexcom/bfx-report-express/pull/31), [bfx-report-electron#242](https://github.com/bitfinexcom/bfx-report-electron/pull/242)
+- Implemented colored displaying on mobiles `amounts`, `volumes`, etc, the same way as on the desktop for better readability. PR: [bfx-report-ui#691](https://github.com/bitfinexcom/bfx-report-ui/pull/691)
+
+### Changed
+
+- Improved tables representation according to the latest design updates. PR: [bfx-report-ui#682](https://github.com/bitfinexcom/bfx-report-ui/pull/682)
+- Enhanced `Reports` filter panels representation. PR: [bfx-report-ui#693](https://github.com/bitfinexcom/bfx-report-ui/pull/693)
+
+### Fixed
+
+- Fixed the error message of the `json rpc` response. The idea is to have extra data in case we catch an error from `BFX API` side and on the UI use a transparent error message which can contain `BFX API` error reasons. PRs: [bfx-report#327](https://github.com/bitfinexcom/bfx-report/pull/327), [bfx-report-ui#692](https://github.com/bitfinexcom/bfx-report-ui/pull/692)
+- Fixed notifications positioning on page scrolling: When setting Table Scroll is turned off, the results of using `Sum` can appear below or above the part of the table that's currently visible. Fixed to be anchored to a specific part of the currently visible screen rather than a specific point in the table. PR: [bfx-report-ui#686](https://github.com/bitfinexcom/bfx-report-ui/pull/686)
+- Fixed redundant `getUsers` calls for the hosted version. PR: [bfx-report-ui#689](https://github.com/bitfinexcom/bfx-report-ui/pull/689)
+- Fixed issue with crashing `Change Logs` report when users remove the `2FA` option from their account. PR: [bfx-report-ui#690](https://github.com/bitfinexcom/bfx-report-ui/pull/690)
+
 ## [4.9.3] - 2023-08-09
 
 ### Fixed
