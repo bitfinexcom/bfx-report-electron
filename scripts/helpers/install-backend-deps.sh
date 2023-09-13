@@ -77,6 +77,8 @@ function installBackendDeps {
   npm i --production --no-audit --progress=false
   checkNodeModulesDir "$WORKER_FOLDER"
   npm ls --depth=0 --only=prod 1<&-
+  cd "./node_modules/better-sqlite3"
+  npx node-gyp rebuild --debug --build-from-source --runtime="$npm_config_runtime" --target="$ELECTRON_VER" --dist-url="$DIST_URL"
 
   cd "$INSTALL_BACKEND_CURRDIR"
 }
