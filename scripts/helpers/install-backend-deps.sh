@@ -42,7 +42,7 @@ function installBackendDeps {
   cd "$ROOT"
   echo -e "\n${COLOR_BLUE}Installing the main dev deps...${COLOR_NORMAL}"
   rm -rf ./node_modules
-  npm i --development --no-audit --progress=false
+  npm i --development --no-audit --progress=false --force
   npm ls --depth=0 --only=dev 1<&-
 
   export npm_config_target_platform="$targetPlatform"
@@ -55,7 +55,7 @@ function installBackendDeps {
   export npm_config_disturl="$DIST_URL"
 
   echo -e "\n${COLOR_BLUE}Installing the main prod deps...${COLOR_NORMAL}"
-  npm i --production --include=dev --no-audit --progress=false
+  npm i --production --include=dev --no-audit --progress=false --force
   rm -rf "$ROOT/node_modules/ed25519-supercop/build"
   checkNodeModulesDir "$ROOT"
   depsErr=$(npm ls --depth=0 --only=prod 2>&1 >/dev/null | grep -E -v "missing: eslint|--omit=dev" || [[ $? == 1 ]])
