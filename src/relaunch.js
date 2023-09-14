@@ -3,8 +3,6 @@
 const electron = require('electron')
 
 module.exports = () => {
-  const app = electron.app || electron.remote.app
-
   const options = {
     args: process.argv.slice(1).concat(['--relaunch'])
   }
@@ -14,6 +12,6 @@ module.exports = () => {
     options.args.unshift('--appimage-extract-and-run')
   }
 
-  app.relaunch(options)
-  app.exit(0)
+  electron.app.relaunch(options)
+  electron.app.exit(0)
 }

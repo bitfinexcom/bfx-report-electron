@@ -1,6 +1,6 @@
 'use strict'
 
-const electron = require('electron')
+const { dialog, BrowserWindow } = require('electron')
 
 const {
   InvalidFilePathError,
@@ -38,10 +38,8 @@ module.exports = ({
   pathToUserData,
   pathToUserDocuments
 }) => {
-  const dialog = electron.dialog || electron.remote.dialog
-
   return async () => {
-    const win = electron.BrowserWindow.getFocusedWindow()
+    const win = BrowserWindow.getFocusedWindow()
 
     try {
       const {
