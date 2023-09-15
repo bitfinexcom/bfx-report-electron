@@ -110,7 +110,7 @@ jobs:
         echo "IS_BFX_API_STAGING=1" >> $GITHUB_ENV
     - uses: actions/setup-node@v3
       with:
-        node-version: 18.17.1
+        node-version: 18.15.0
     - name: Cache Electron binaries
       id: electron-cache
       uses: actions/cache@v3
