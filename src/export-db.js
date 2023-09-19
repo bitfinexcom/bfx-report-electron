@@ -1,7 +1,7 @@
 'use strict'
 
 const path = require('path')
-const electron = require('electron')
+const { dialog, BrowserWindow } = require('electron')
 
 const { InvalidFilePathError } = require('./errors')
 const { zip } = require('./archiver')
@@ -23,8 +23,6 @@ module.exports = ({
   pathToUserData,
   pathToUserDocuments
 }) => {
-  const dialog = electron.dialog || electron.remote.dialog
-
   const _timestamp = (new Date()).toISOString().split('.')[0]
   const timestamp = _timestamp.replace(/[:]/g, '-')
   const defaultPath = path.join(
@@ -37,7 +35,7 @@ module.exports = ({
   const secretKeyPath = path.join(pathToUserData, SECRET_KEY_FILE_NAME)
 
   return async () => {
-    const win = electron.BrowserWindow.getFocusedWindow()
+    const win = BrowserWindow.getFocusedWindow()
 
     try {
       const {

@@ -1,12 +1,10 @@
 'use strict'
 
-const electron = require('electron')
+const { screen } = require('electron')
 
 const { getConfigsKeeperByName } = require('./configs-keeper')
 
 module.exports = (options) => {
-  const screen = electron.screen || electron.remote.screen
-
   let state = null
   let winRef = null
   let stateChangeTimer = null
@@ -33,8 +31,8 @@ module.exports = (options) => {
   }
 
   const resetStateToDefault = () => {
-    const point = electron.screen.getCursorScreenPoint()
-    const displayBounds = electron.screen.getDisplayNearestPoint(point)
+    const point = screen.getCursorScreenPoint()
+    const displayBounds = screen.getDisplayNearestPoint(point)
 
     state = {
       width: config.defaultWidth || 800,
@@ -49,7 +47,7 @@ module.exports = (options) => {
     const {
       maxWidth,
       maxHeight
-    } = electron.screen.getAllDisplays().reduce((
+    } = screen.getAllDisplays().reduce((
       { maxWidth, maxHeight },
       { workAreaSize: { width, height } }
     ) => {

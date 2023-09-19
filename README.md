@@ -16,7 +16,7 @@ Download the correspondent binary according your operating system. Available the
 
 ## Setup
 
-Functionality has been tested on `Ubuntu 20.04 LTS`
+Functionality has been tested on `Ubuntu 22.04 LTS`
 
 ### Main Structure
 
@@ -24,7 +24,7 @@ To simplify setup/build/publish processes the following bash scripts are provide
 
 - `./scripts/setup.sh` - CLI as an easy way to get through the setup process. It will launch `./scripts/sync-repo.sh` script and then setup the development environment
 - `./scripts/sync-repo.sh` - CLI to fetch the last changes of the repository/sub-modules from the main remote repo
-- `./scripts/launch.sh` - CLI to launch docker-compose services to build releases and publish executable artifacts of the electron app with the last fetched changes
+- `./scripts/launch.sh` - CLI to launch Docker Compose services to build releases and publish executable artifacts of the electron app with the last fetched changes
 
 Additional bash scripts:
 
@@ -37,14 +37,14 @@ Additional bash scripts:
 
 The setup was tested with the following dependencies:
 
-- Docker version 20.10.12
-- docker-compose version 1.29.2
+- Docker version 24.0.6
+- Docker Compose version 2.21.0
 - git version 2.24.1
 
-To install `Docker`/`docker-compose` check the corresponding sections of the official docs:
+To install `Docker`/`Docker Compose` check the corresponding sections of the official docs:
 
 - [install Docker](https://docs.docker.com/engine/install)
-- [install docker-compose](https://docs.docker.com/compose/install)
+- [install Docker Compose](https://docs.docker.com/compose/install) Compose V2 is included with all currently supported versions of Docker Desktop
 - if you don’t want to preface the docker command with sudo, create a Unix group called docker and add users to it, [check the doc](https://docs.docker.com/engine/install/linux-postinstall)
 
 ### Setup electron app
@@ -121,7 +121,7 @@ export IS_AUTO_UPDATE_BEING_TESTED=true
 
 For doing builds for other platforms please have [Multi Platform Build](https://www.electron.build/multi-platform-build) in consideration
 
-To launch docker-compose services to build releases and publish executable artifacts of the electron app available the `./scripts/launch.sh` bash script.
+To launch Docker Compose services to build releases and publish executable artifacts of the electron app available the `./scripts/launch.sh` bash script.
 Available the following arguments:
 
 ```console

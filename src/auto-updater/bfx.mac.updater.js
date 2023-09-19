@@ -2,6 +2,7 @@
 
 const path = require('path')
 const fs = require('fs')
+const fsPromises = require('fs/promises')
 const { spawn } = require('child_process')
 const { MacUpdater } = require('electron-updater')
 const extract = require('extract-zip')
@@ -54,7 +55,7 @@ class BfxMacUpdater extends MacUpdater {
       const dist = path.join(root, '..')
       const exec = path.join(root, 'Contents/MacOS/Bitfinex Report')
 
-      await fs.promises.rmdir(root, { recursive: true })
+      await fsPromises.rm(root, { recursive: true })
 
       await extract(
         downloadedFilePath,

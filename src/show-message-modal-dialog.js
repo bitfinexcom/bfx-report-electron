@@ -1,12 +1,11 @@
 'use strict'
 
-const electron = require('electron')
+const { dialog, BrowserWindow } = require('electron')
 
 module.exports = async (win, opts = {}) => {
-  const dialog = electron.dialog || electron.remote.dialog
   const _win = win && typeof win === 'object'
     ? win
-    : electron.BrowserWindow.getFocusedWindow()
+    : BrowserWindow.getFocusedWindow()
 
   const {
     response: btnId,

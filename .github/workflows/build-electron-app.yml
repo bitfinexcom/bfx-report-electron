@@ -27,7 +27,7 @@ env:
 jobs:
   linux-win-docker-builder:
     timeout-minutes: 90
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -110,7 +110,7 @@ jobs:
         echo "IS_BFX_API_STAGING=1" >> $GITHUB_ENV
     - uses: actions/setup-node@v3
       with:
-        node-version: 16.20.0
+        node-version: 18.15.0
     - name: Cache Electron binaries
       id: electron-cache
       uses: actions/cache@v3
