@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.11.0] - 2023-09-20
+
+### Added
+
+- Added ability to show success dialog for `CSV` exporting only after the `emitCsvGenerationCompletedToOne` event was sent by the backend for better understanding by users when the exporting process actually completed. PR: [bfx-report-ui#698](https://github.com/bitfinexcom/bfx-report-ui/pull/698)
+- Added the possibility of tweaking the ability to auto-start sync after the auto-update of the electron app via the `Preferences` menu: `shouldNotSyncOnStartupAfterUpdate` flag received on sign in. PR: [bfx-report-ui#699](https://github.com/bitfinexcom/bfx-report-ui/pull/699)
+- Implemented [extra information](https://docs.bitfinex.com/reference/movement-info) handling and representation for the `Movements` report. PR: [bfx-report-ui#702](https://github.com/bitfinexcom/bfx-report-ui/pull/702)
+- Implemented `LNX (LN-BTC)` availability in the `Symbol` selector. PR: [bfx-report-ui#703](https://github.com/bitfinexcom/bfx-report-ui/pull/703)
+
+### Changed
+
+- Decreased `candles` request limit to `30 reqs/min` to prevent `Rate Limit` restriction. PR: [bfx-reports-framework#316](https://github.com/bitfinexcom/bfx-reports-framework/pull/316)
+- Improved server availability error message to be persistent. PR: [bfx-reports-framework#317](https://github.com/bitfinexcom/bfx-reports-framework/pull/317)
+- Updated `Nodejs` to `v18` in `Docker` containers and fixes UI dependencies installation under container. PR: [bfx-reports-framework#318](https://github.com/bitfinexcom/bfx-reports-framework/pull/318)
+- Bumped `Electron` version up to `v25` to have under hood `Nodejs` `v18`. PRs: [bfx-report-electron#251](https://github.com/bitfinexcom/bfx-report-electron/pull/251), [bfx-report-ui#701](https://github.com/bitfinexcom/bfx-report-ui/pull/701)
+- Prevented showing error modal dialog due to `inet` issue. When the sync starts we send a ping request to `BFX API` to check that API is available. The idea is to not show error modal dialog for issues, just show error toast via UI when fetching the corresponding error with progress event via WS. PR: [bfx-report-electron#252](https://github.com/bitfinexcom/bfx-report-electron/pull/252)
+- Reworked and enhanced `Columns` filter to display the actual selected filters quantity for better clearance to the users. Reworked refresh button representation according to the design updates. PR: [bfx-report-ui#697](https://github.com/bitfinexcom/bfx-report-ui/pull/697)
+- Improved user notification when data should be synced. Implemented synchronization auto-initiation if not syncing at the moment. PR: [bfx-report-ui#700](https://github.com/bitfinexcom/bfx-report-ui/pull/700)
+- Updated translations for UI. PR: [bfx-report-ui#704](https://github.com/bitfinexcom/bfx-report-ui/pull/704)
+
+### Fixed
+- Bumped `better-sqlite3` driver up to `8.6.0` to have this fix: `random "database is locked" timeouts` [better-sqlite3#597](https://github.com/WiseLibs/better-sqlite3/issues/597). And also to have the ability to launch the db driver on `Nodejs` `v18` under Electron env. PR: [bfx-facs-db-better-sqlite#6](https://github.com/bitfinexcom/bfx-facs-db-better-sqlite/pull/6)
+- Fixed the `always-on-top` state for the `loading` window. Commit: [bfx-report-electron#251/commit#be0af27](https://github.com/bitfinexcom/bfx-report-electron/pull/251/commits/be0af278d0145558706230e2d688dbe682903f2d)
+
 ## [4.10.0] - 2023-08-23
 
 ### Added
