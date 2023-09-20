@@ -1,6 +1,6 @@
 'use strict'
 
-const electron = require('electron')
+const { screen } = require('electron')
 
 const hideWindow = (win, opts) => {
   return new Promise((resolve, reject) => {
@@ -74,7 +74,6 @@ const showWindow = (win, opts) => {
 }
 
 const centerWindow = (win, workArea) => {
-  const screen = electron.screen || electron.remote.screen
   const {
     getCursorScreenPoint,
     getDisplayNearestPoint

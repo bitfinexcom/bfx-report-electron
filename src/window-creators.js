@@ -129,7 +129,8 @@ const _createWindow = async (
   }
 
   if (!pathname) {
-    await createLoadingWindow()
+    const props = await createLoadingWindow()
+    props.win.setAlwaysOnTop(true)
 
     return res
   }

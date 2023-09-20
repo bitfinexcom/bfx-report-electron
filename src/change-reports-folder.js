@@ -1,6 +1,6 @@
 'use strict'
 
-const electron = require('electron')
+const { dialog, BrowserWindow } = require('electron')
 
 const { CSV_PATH_VERSION } = require('./const')
 
@@ -14,10 +14,8 @@ const relaunch = require('./relaunch')
 const { getConfigsKeeperByName } = require('./configs-keeper')
 
 module.exports = ({ pathToUserDocuments }) => {
-  const dialog = electron.dialog || electron.remote.dialog
-
   return async () => {
-    const win = electron.BrowserWindow.getFocusedWindow()
+    const win = BrowserWindow.getFocusedWindow()
 
     try {
       const {

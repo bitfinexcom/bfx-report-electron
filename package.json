@@ -1,12 +1,12 @@
 {
   "name": "bfx-report-electron",
-  "version": "4.10.0",
+  "version": "4.11.0",
   "repository": "https://github.com/bitfinexcom/bfx-report-electron",
   "description": "Reporting tool",
   "author": "bitfinex.com",
   "main": "index.js",
   "engine": {
-    "node": ">=14.16.0"
+    "node": ">=18.15.0"
   },
   "license": "Apache-2.0",
   "dependencies": {
@@ -19,7 +19,7 @@
     "cron-validate": "1.4.3",
     "ed25519-supercop": "2.0.1",
     "electron-alert": "0.1.20",
-    "electron-log": "4.4.1",
+    "electron-log": "4.4.8",
     "electron-root-path": "1.0.16",
     "electron-updater": "5.3.0",
     "extract-zip": "2.0.1",
@@ -36,7 +36,7 @@
   "devDependencies": {
     "@mapbox/node-pre-gyp": "1.0.6",
     "app-builder-bin": "4.1.0",
-    "electron": "21.3.3",
+    "electron": "25.8.1",
     "electron-builder": "23.6.0",
     "mocha": "10.2.0",
     "standard": "16.0.4"

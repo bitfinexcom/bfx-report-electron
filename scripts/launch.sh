@@ -133,7 +133,7 @@ if [ $syncSubModules == 1 ]; then
   source "$ROOT/scripts/sync-repo.sh" "-wue"
 fi
 
-docker-compose up $composeCommonFlags $uiBuilderService \
+docker compose up $composeCommonFlags $uiBuilderService \
   $linuxBuilderService $winBuilderService $macBuilderService
 
 if [ $buildLinux == 1 ]; then
