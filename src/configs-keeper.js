@@ -3,7 +3,7 @@
 const { promisify } = require('util')
 const path = require('path')
 const fs = require('fs')
-const { cloneDeep } = require('lodash')
+const { cloneDeep } = require('lib-js-util-base')
 
 const {
   writeFileSync,

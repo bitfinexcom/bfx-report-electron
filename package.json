@@ -27,7 +27,7 @@
     "github-markdown-css": "5.1.0",
     "grenache-grape": "git+https://github.com/bitfinexcom/grenache-grape.git",
     "js-yaml": "4.1.0",
-    "lodash": "4.17.21",
+    "lib-js-util-base": "git+https://github.com/bitfinexcom/lib-js-util-base.git",
     "new-github-issue-url": "0.2.1",
     "showdown": "2.0.3",
     "truncate-utf8-bytes": "1.0.2",

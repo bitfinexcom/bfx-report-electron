@@ -1,6 +1,5 @@
 'use strict'
 
-const { isObject } = require('lodash')
 const assert = require('assert').strict
 const { Server } = require('net')
 const DHT = require('bittorrent-dht')
@@ -15,7 +14,10 @@ const {
 const { getServerPromise } = require('../utils')
 
 const checkAssertions = (res) => {
-  assert.ok(isObject(res))
+  assert.ok(
+    res &&
+    typeof res === 'object'
+  )
   assert.ok(
     [
       'grape1DhtPort',
