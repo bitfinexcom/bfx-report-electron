@@ -1,6 +1,6 @@
 'use strict'
 
-const { pick } = require('lodash')
+const { pick } = require('lib-js-util-base')
 const { fork } = require('child_process')
 const path = require('path')
 const EventEmitter = require('events')
