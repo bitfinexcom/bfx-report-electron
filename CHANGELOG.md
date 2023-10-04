@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.12.0] - 2023-10-04
+
+### Added
+
+- Added ability to inform user that the `platform` is marked in the `maintenance` mode by `WebSocket`. PRs: [bfx-report#331](https://github.com/bitfinexcom/bfx-report/pull/331), [bfx-reports-framework#321](https://github.com/bitfinexcom/bfx-reports-framework/pull/321), [bfx-api-mock-srv#56](https://github.com/bitfinexcom/bfx-api-mock-srv/pull/56)
+- Added `Vietnamese` language. PRs: [bfx-report-ui#711](https://github.com/bitfinexcom/bfx-report-ui/pull/711), [bfx-report-ui#712](https://github.com/bitfinexcom/bfx-report-ui/pull/712)
+
+### Changed
+
+- Actualized synchronization progress handling flow according to the latest backend updates. PR: [bfx-report-ui#710](https://github.com/bitfinexcom/bfx-report-ui/pull/710)
+
+### Fixed
+
+- Fixed `MaxListenersExceededWarning` for complicated csv reports using the `transform` csv stream waiting for writing to complete `one by one` instead of pipelining all csv streams `simultaneously`. And it also fixed `MaxListenersExceededWarning` for the `process message manager`. PRs: [bfx-report#333](https://github.com/bitfinexcom/bfx-report/pull/333), [bfx-reports-framework#322](https://github.com/bitfinexcom/bfx-reports-framework/pull/322)
+- Fixed `Movements` extra info representation for fiat transfers. PR: [bfx-report-ui#707](https://github.com/bitfinexcom/bfx-report-ui/pull/707)
+
+### Security
+
+- Removed `lodash` lib usage. PRs: [bfx-report#332](https://github.com/bitfinexcom/bfx-report/pull/332), [bfx-facs-deflate#4](https://github.com/bitfinexcom/bfx-facs-deflate/pull/4), [bfx-report-express#34](https://github.com/bitfinexcom/bfx-report-express/pull/34), [bfx-report-electron#255](https://github.com/bitfinexcom/bfx-report-electron/pull/255)
+
 ## [4.11.0] - 2023-09-20
 
 ### Added
