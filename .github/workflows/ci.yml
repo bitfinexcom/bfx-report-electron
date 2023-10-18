@@ -1,0 +1,32 @@
+name: CI
+run-name: 'Run tests: Commit ${{ github.sha }}'
+
+on:
+  pull_request:
+    types: [opened, reopened, edited]
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  linux-test-runner:
+    name: Linux Test Runner
+    timeout-minutes: 30
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18.17.1
+    - name: Setup configs and install deps
+      run: ./scripts/setup.sh -u
+    - name: Run tests
+      run: npm test -- -- --reporter=json --reporter-option output=test-report.json
+    - uses: actions/upload-artifact@v3
+      if: success() || failure()
+      with:
+        name: test-results
+        path: test-report.json

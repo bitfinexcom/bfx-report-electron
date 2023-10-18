@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.13.0] - 2023-10-18
+
+### Added
+
+- Added `test` runner and `HTML report` maker workflows to the GitHub Actions which launch after creating PRs against the `master` branch. PRs: [bfx-report#337](https://github.com/bitfinexcom/bfx-report/pull/337), [bfx-reports-framework#325](https://github.com/bitfinexcom/bfx-reports-framework/pull/325), [bfx-report-electron#259](https://github.com/bitfinexcom/bfx-report-electron/pull/259)
+- Implemented `Account Fees`, `Account Value` and `LEO level` sections on the new `Summary` page, added minor styling adjustments. PR: [bfx-report-ui#716](https://github.com/bitfinexcom/bfx-report-ui/pull/716)
+
+### Security
+
+- Removed `lodash` lib usage. PRs: [bfx-report#336](https://github.com/bitfinexcom/bfx-report/pull/336), [bfx-report-ui#717](https://github.com/bitfinexcom/bfx-report-ui/pull/717), [lib-js-util-base#6](https://github.com/bitfinexcom/lib-js-util-base/pull/6)
+
 ## [4.12.0] - 2023-10-04
 
 ### Added
