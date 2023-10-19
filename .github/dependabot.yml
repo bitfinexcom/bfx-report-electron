@@ -1,0 +1,15 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    target-branch: "staging"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "thursday"
+      time: "00:00"
+      timezone: "Etc/UTC"
+    commit-message:
+      prefix: "[npm] "
+    labels:
+      - "npm"
+      - "dependencies"
