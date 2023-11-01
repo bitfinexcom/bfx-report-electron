@@ -6,6 +6,7 @@ const { URL } = require('url')
 
 const { BrowserWindow } = electron
 const isDevEnv = process.env.NODE_ENV === 'development'
+const isTestEnv = process.env.NODE_ENV === 'test'
 const isMac = process.platform === 'darwin'
 
 const wins = require('./windows')
@@ -93,7 +94,13 @@ const _createWindow = async (
     icon: path.join(__dirname, '../build/icons/512x512.png'),
     backgroundColor: '#172d3e',
     show: false,
-    ...props
+    ...props,
+
+    webPreferences: {
+      sandbox: !isTestEnv,
+      preload: path.join(__dirname, 'preload.js'),
+      ...props?.webPreferences
+    }
   }
 
   wins[winName] = new BrowserWindow(_props)
