@@ -60,6 +60,7 @@
     "unit": "export NODE_ENV=test && mocha './src/**/__test__/*.spec.js' --config .mocharc.json",
     "setup": "./scripts/setup.sh",
     "launch": "./scripts/launch.sh",
-    "sync-repo": "./scripts/sync-repo.sh"
+    "sync-repo": "./scripts/sync-repo.sh",
+    "e2e": "export NODE_ENV=test && wdio run ./wdio.conf.js"
   }
 }
