@@ -37,7 +37,7 @@
     "@mapbox/node-pre-gyp": "1.0.6",
     "app-builder-bin": "4.1.0",
     "electron": "27.0.2",
-    "electron-builder": "23.6.0",
+    "electron-builder": "24.6.4",
     "mocha": "10.2.0",
     "standard": "16.0.4"
   },
