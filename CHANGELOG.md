@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.14.0] - 2023-11-01
+
+### Added
+
+- Added test runner and report to the `GitHub Actions` of the `bfx-facs-db-better-sqlite` repo. PR: [bfx-facs-db-better-sqlite#8](https://github.com/bitfinexcom/bfx-facs-db-better-sqlite/pull/8)
+- Added an endpoint to get the `summary by asset` (for 30 day period) for the new summary page of the framework mode. PR: [bfx-reports-framework#330](https://github.com/bitfinexcom/bfx-reports-framework/pull/330)
+- Implemented currency name representation depending on the transport layer used for the `Tether` transactions in the `Movements` report. PR: [bfx-report-ui#721](https://github.com/bitfinexcom/bfx-report-ui/pull/721)
+- Implemented the possibility of submitting `username/password` and `OTP` via the `Enter` button during the `2FA` sign-up flow. PR: [bfx-report-ui#722](https://github.com/bitfinexcom/bfx-report-ui/pull/722)
+
+### Changed
+
+- Bumped `Electronjs` version up to `v27` to have under hood Nodejs `v18.17.1`, to have Nodejs version similar to UI build requirements. PR: [bfx-report-electron#263](https://github.com/bitfinexcom/bfx-report-electron/pull/263)
+- Bumped `better-sqlite3` up to `9.0.0` to have the ability to launch the DB driver on Nodejs `v18.17.1` under electron env at least `v27`. PR: [bfx-facs-db-better-sqlite#7](https://github.com/bitfinexcom/bfx-facs-db-better-sqlite/pull/7)
+- Set the [dependabot](https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file) against the `stagin` branch to not trigger test-runner workflow
+
+### Fixed
+
+- Fixed the `candles` sync for the `currency converter`, to convert the first ledgers to USD it needs to provide some overlap of candles (5 days). PR: [bfx-reports-framework#329](https://github.com/bitfinexcom/bfx-reports-framework/pull/329)
+- Fixed deep clone of arguments with `lib-js-util-base`, the issue is the following: when calling `generateToken/invalidateAuthToken` methods pass whole session object with `setInterval` id, and that id cannot be serialized with `JSON.stringify`, it should be omitted. PR: [bfx-reports-framework#331](https://github.com/bitfinexcom/bfx-reports-framework/pull/331)
+- Fixed the [dependabot](https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file) config path for the `bfx-report-ui` repo. PR: [bfx-report-ui#720](https://github.com/bitfinexcom/bfx-report-ui/pull/720)
+
+### Security
+
+- Removed `lodash` lib usage. PRs: [bfx-report#340](https://github.com/bitfinexcom/bfx-report/pull/340), [bfx-reports-framework#328](https://github.com/bitfinexcom/bfx-reports-framework/pull/328), [bfx-report-ui#723](https://github.com/bitfinexcom/bfx-report-ui/pull/723)
+
 ## [4.13.0] - 2023-10-18
 
 ### Added
