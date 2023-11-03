@@ -76,6 +76,16 @@ jobs:
         max_attempts: 3
         retry_on: any
         command: ./scripts/launch.sh -lwp
+    - name: Upload Linux Unpacked build
+      uses: actions/upload-artifact@v3
+      with:
+        name: linux-unpacked
+        path: dist/linux-unpacked
+    - name: Upload Win Unpacked build
+      uses: actions/upload-artifact@v3
+      with:
+        name: win-unpacked
+        path: dist/win-unpacked
     - name: Prepare cache folders
       run: |
         sudo chown -R $(id -u):$(id -g) ~/.cache/electron
@@ -135,3 +145,33 @@ jobs:
         max_attempts: 3
         retry_on: any
         command: ./scripts/build-release.sh -mp
+    - name: Upload Mac Unpacked build
+      uses: actions/upload-artifact@v3
+      with:
+        name: mac-unpacked
+        path: dist/mac
+
+  linux-e2e-test-runner:
+    name: Linux E2E Test Runner
+    timeout-minutes: 30
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18.17.1
+    - name: Install main dev deps
+      run: npm i --development --no-audit --progress=false --force
+    - name: Download Linux Unpacked build
+      uses: actions/download-artifact@v3
+      with:
+        name: linux-unpacked
+        path: dist
+    - name: Run tests
+      run: npm run e2e
+    - name: Upload Linux E2E test report
+      uses: actions/upload-artifact@v3
+      with:
+        name: linux-e2e-test-report
+        path: e2e-test-report.xml
