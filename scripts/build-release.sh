@@ -236,7 +236,9 @@ node "$ROOT/node_modules/.bin/electron-builder" \
 
 unpackedFolder=$(ls -d "$DIST_FOLDER/"*/ | grep $targetPlatform | head -1)
 
-rm -rf "$unpackedFolder"
+# Don't remove the unpacked folder of the app for e2e test runner
+# but keep it for further debugging purposes
+# rm -rf "$unpackedFolder"
 rm -rf "$DIST_FOLDER/.icon-ico"
 rm -f "$DIST_FOLDER/builder-effective-config.yaml"
 rm -f "$DIST_FOLDER/builder-debug.yml"
