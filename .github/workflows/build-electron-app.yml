@@ -76,16 +76,20 @@ jobs:
         max_attempts: 3
         retry_on: any
         command: ./scripts/launch.sh -lwp
+    - name: Zip Linux Unpacked build
+      run: zip -r dist/linux-unpacked.zip dist/linux-unpacked
     - name: Upload Linux Unpacked build
       uses: actions/upload-artifact@v3
       with:
         name: linux-unpacked
-        path: dist/linux-unpacked
+        path: dist/linux-unpacked.zip
+    - name: Zip Win Unpacked build
+      run: zip -r dist/win-unpacked.zip dist/win-unpacked
     - name: Upload Win Unpacked build
       uses: actions/upload-artifact@v3
       with:
         name: win-unpacked
-        path: dist/win-unpacked
+        path: dist/win-unpacked.zip
     - name: Prepare cache folders
       run: |
         sudo chown -R $(id -u):$(id -g) ~/.cache/electron
@@ -145,11 +149,13 @@ jobs:
         max_attempts: 3
         retry_on: any
         command: ./scripts/build-release.sh -mp
+    - name: Zip Mac Unpacked build
+      run: zip -r dist/mac.zip dist/mac
     - name: Upload Mac Unpacked build
       uses: actions/upload-artifact@v3
       with:
         name: mac-unpacked
-        path: dist/mac
+        path: dist/mac.zip
 
   linux-e2e-test-runner:
     name: Linux E2E Test Runner
@@ -169,6 +175,8 @@ jobs:
       with:
         name: linux-unpacked
         path: dist
+    - name: Unzip Linux Unpacked build
+      run: unzip dist/linux-unpacked.zip
     - name: Run tests
       run: npm run e2e
     - name: Upload Linux E2E test results
