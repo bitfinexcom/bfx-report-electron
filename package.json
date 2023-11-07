@@ -41,7 +41,7 @@
     "@wdio/mocha-framework": "8.21.0",
     "@wdio/spec-reporter": "8.21.0",
     "app-builder-bin": "4.1.0",
-    "electron": "27.0.2",
+    "electron": "27.0.3",
     "electron-builder": "23.6.0",
     "mocha": "10.2.0",
     "standard": "16.0.4",
