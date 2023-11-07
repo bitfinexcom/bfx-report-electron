@@ -181,6 +181,8 @@ jobs:
       uses: coactions/setup-xvfb@v1.0.1
       with:
         run: npm run e2e
+    - name: Normalize E2E test report
+      run: node ./scripts/node/normalize-e2e-test-report e2e-test-report.xml
     - name: Upload Linux E2E test results
       uses: actions/upload-artifact@v3
       with:
