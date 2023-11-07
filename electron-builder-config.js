@@ -106,6 +106,10 @@ module.exports = {
     'build/icon.*',
     'build/loader.*',
     '!scripts${/*}',
+    '!test/${/*}',
+    '!electronEnv.json.example',
+    '!e2e-test-report.xml',
+    '!wdio.conf.js',
 
     '!bfx-report-ui',
     'bfx-report-ui/build',
@@ -132,6 +136,8 @@ module.exports = {
     '!**/LICENSE.md',
     '!**/.gitmodules',
     '!**/.npmrc',
+    '!**/.mocharc.json',
+    '!**/.github/${/*}',
     {
       from: 'bfx-reports-framework/node_modules',
       to: 'bfx-reports-framework/node_modules',
