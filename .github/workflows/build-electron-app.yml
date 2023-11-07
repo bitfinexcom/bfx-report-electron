@@ -178,7 +178,9 @@ jobs:
     - name: Unzip Linux Unpacked build
       run: unzip dist/linux-unpacked.zip
     - name: Run tests
-      run: npm run e2e
+      uses: coactions/setup-xvfb@v1.0.1
+      with:
+        run: npm run e2e
     - name: Upload Linux E2E test results
       uses: actions/upload-artifact@v3
       with:
