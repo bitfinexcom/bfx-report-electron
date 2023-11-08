@@ -97,7 +97,7 @@ jobs:
 
   mac-builder:
     timeout-minutes: 90
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -187,4 +187,36 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: linux-e2e-test-results
+        path: e2e-test-report.xml
+
+  mac-e2e-test-runner:
+    name: Mac E2E Test Runner
+    timeout-minutes: 30
+    runs-on: macos-12
+    needs: [mac-builder]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18.17.1
+    - name: Install main dev deps
+      run: npm i --development --no-audit --progress=false --force
+    - name: Download Mac Unpacked build
+      uses: actions/download-artifact@v3
+      with:
+        name: mac-unpacked
+        path: dist
+    - name: Unzip Mac Unpacked build
+      run: unzip dist/mac.zip
+    - name: Run tests
+      uses: coactions/setup-xvfb@v1.0.1
+      with:
+        run: npm run e2e
+    - name: Normalize E2E test report
+      run: node ./scripts/node/normalize-e2e-test-report e2e-test-report.xml
+    - name: Upload Mac E2E test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: mac-e2e-test-results
         path: e2e-test-report.xml
