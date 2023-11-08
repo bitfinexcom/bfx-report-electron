@@ -24,8 +24,16 @@ jobs:
         name: Linux E2E Tests
         path: e2e-test-report.xml
         reporter: jest-junit
+    - uses: dorny/test-reporter@v1
+      id: mac-e2e-test-results
+      with:
+        artifact: mac-e2e-test-results
+        name: Mac E2E Tests
+        path: e2e-test-report.xml
+        reporter: jest-junit
     - name: E2E Test Report Summary
       run: |
         echo "### E2E Test Report page is ready! :rocket:" >> $GITHUB_STEP_SUMMARY
         echo "And available at the following links for applicable OSs:" >> $GITHUB_STEP_SUMMARY
         echo "- [Linux](${{ steps.linux-e2e-test-results.outputs.url_html }})" >> $GITHUB_STEP_SUMMARY
+        echo "- [Mac](${{ steps.mac-e2e-test-results.outputs.url_html }})" >> $GITHUB_STEP_SUMMARY
