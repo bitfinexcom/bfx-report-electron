@@ -208,7 +208,7 @@ jobs:
         name: win-unpacked
         path: dist
     - name: Unzip Win Unpacked build
-      run: 7z e dist/win-unpacked.zip
+      run: 7z -y x dist/win-unpacked.zip
     - name: Run tests
       uses: coactions/setup-xvfb@v1.0.1
       with:
