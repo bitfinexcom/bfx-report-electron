@@ -53,7 +53,7 @@ class BfxMacUpdater extends MacUpdater {
 
       const root = path.join(appDir, '../../..')
       const dist = path.join(root, '..')
-      const exec = path.join(root, 'Contents/MacOS/Bitfinex Report')
+      const exec = path.join(root, 'Contents/MacOS/bfx-report-electron')
 
       await fsPromises.rm(root, { recursive: true })
 
