@@ -59,6 +59,7 @@ module.exports = {
   extends: null,
   asar: false,
   productName: 'Bitfinex Report',
+  executableName: 'bfx-report-electron',
   artifactName: 'BitfinexReport-${version}-x64-${os}.${ext}',
   appId: 'com.bitfinex.report',
   publish: {
