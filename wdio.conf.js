@@ -1,5 +1,17 @@
 process.env.TEST = 'true'
 
+const getAppBinaryPath = () => {
+  if (process.platform === 'win32') {
+    return './dist/win-unpacked/bfx-report-electron.exe'
+  }
+  if (process.platform === 'darwin') {
+    return './dist/mac/bfx-report-electron.app/Contents/MacOS/bfx-report-electron'
+  }
+  if (process.platform === 'linux') {
+    return './dist/linux-unpacked/bfx-report-electron'
+  }
+}
+
 exports.config = {
   //
   // ====================
@@ -57,6 +69,8 @@ exports.config = {
     // Electron service options
     // see https://webdriver.io/docs/wdio-electron-service/#configuration
     'wdio:electronServiceOptions': {
+      appBinaryPath: getAppBinaryPath(),
+
       // custom application args
       appArgs: []
     }
