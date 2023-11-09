@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         submodules: recursive
     - name: Set repo owner
@@ -100,7 +100,7 @@ jobs:
     runs-on: macos-12
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         submodules: recursive
     - name: Set repo owner
@@ -164,7 +164,7 @@ jobs:
     needs: [linux-win-docker-builder]
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - uses: actions/setup-node@v3
       with:
         node-version: 18.17.1
@@ -196,7 +196,7 @@ jobs:
     needs: [linux-win-docker-builder]
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - uses: actions/setup-node@v3
       with:
         node-version: 18.17.1
@@ -228,7 +228,7 @@ jobs:
     needs: [mac-builder]
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - uses: actions/setup-node@v3
       with:
         node-version: 18.17.1
