@@ -229,6 +229,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+    - name: Prepare macOS runner
+      run: ./scripts/mac/prepare-macos-runner.sh
     - uses: actions/setup-node@v3
       with:
         node-version: 18.17.1
