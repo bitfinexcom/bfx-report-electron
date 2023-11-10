@@ -3,7 +3,7 @@
 # Turn uninterrupted testing on mac
 
 # Change Local name to avoid name clash causing alert
-uniqueComputerName="${GITHUB_WORKFLOW:-"mac-e2e-test-runner"}-$RANDOM"
+uniqueComputerName="mac-e2e-test-runner-$RANDOM"
 sudo scutil --set LocalHostName "$uniqueComputerName"
 sudo scutil --set ComputerName "$uniqueComputerName"
 
