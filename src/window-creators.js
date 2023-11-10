@@ -6,7 +6,6 @@ const { URL } = require('url')
 
 const { BrowserWindow } = electron
 const isDevEnv = process.env.NODE_ENV === 'development'
-const isTestEnv = process.env.NODE_ENV === 'test'
 const isMac = process.platform === 'darwin'
 
 const wins = require('./windows')
@@ -97,7 +96,6 @@ const _createWindow = async (
     ...props,
 
     webPreferences: {
-      sandbox: !isTestEnv,
       preload: path.join(__dirname, 'preload.js'),
       ...props?.webPreferences
     }
