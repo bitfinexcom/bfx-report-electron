@@ -2,13 +2,13 @@ process.env.TEST = 'true'
 
 const getAppBinaryPath = () => {
   if (process.platform === 'win32') {
-    return './dist/win-unpacked/bfx-report-electron.exe'
+    return './dist/win-unpacked/Bitfinex Report.exe'
   }
   if (process.platform === 'darwin') {
-    return './dist/mac/bfx-report-electron.app/Contents/MacOS/bfx-report-electron'
+    return './dist/mac/Bitfinex Report.app/Contents/MacOS/Bitfinex Report'
   }
   if (process.platform === 'linux') {
-    return './dist/linux-unpacked/bfx-report-electron'
+    return './dist/linux-unpacked/app'
   }
 }
 

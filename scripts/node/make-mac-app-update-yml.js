@@ -19,7 +19,7 @@ if (
 const ymlName = 'app-update.yml'
 const ymlPath = path.join(
   cwd,
-  'dist/mac/bfx-report-electron.app/Contents/Resources',
+  'dist/mac/Bitfinex Report.app/Contents/Resources',
   ymlName
 )
 

@@ -59,7 +59,6 @@ module.exports = {
   extends: null,
   asar: false,
   productName: 'Bitfinex Report',
-  executableName: 'bfx-report-electron',
   artifactName: 'BitfinexReport-${version}-x64-${os}.${ext}',
   appId: 'com.bitfinex.report',
   publish: {
@@ -74,6 +73,7 @@ module.exports = {
     updaterCacheDirName: 'bfx-report-electron-updater'
   },
   linux: {
+    executableName: 'app',
     description: 'Bitfinex Report',
     maintainer: '<bitfinex.com>',
     category: 'Network',
