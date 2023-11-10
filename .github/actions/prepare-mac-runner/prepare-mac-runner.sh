@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Turn uninterrupted testing on macOS
+# Turn uninterrupted testing on mac
 
 # Change Local name to avoid name clash causing alert
 uniqueComputerName="${GITHUB_WORKFLOW:-"mac-e2e-test-runner"}-$RANDOM"
