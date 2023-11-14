@@ -92,6 +92,7 @@ module.exports = {
     verifyUpdateCodeSignature: false
   },
   mac: {
+    type: 'distribution',
     hardenedRuntime: true,
     gatekeeperAssess: false,
     entitlements: 'build/entitlements.mac.plist',
