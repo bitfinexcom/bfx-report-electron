@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.15.0] - 2023-11-15
+
+### Added
+
+- Added `Automated Testing` for electron app binaries. To be sure that the release build of the Electron app has been successful added ability to auto-validate that the application works fine on all OSs (Linux, Mac, Win). PR: [bfx-report-electron#276](https://github.com/bitfinexcom/bfx-report-electron/pull/276)
+- Added `Summary by Asset` section for the last 30 days on the new `Summary` for the `Reports` app. Added refreshing for all `Summary` sections on the `Filter` button click. PR: [bfx-report-ui#726](https://github.com/bitfinexcom/bfx-report-ui/pull/726)
+
+### Fixed
+
+- Prevented throwing error when `GitHub` server can't respond to auto-update requests. It fixed the following issues: [bfx-report-electron#239](https://github.com/bitfinexcom/bfx-report-electron/issues/239), [bfx-report-electron#264](https://github.com/bitfinexcom/bfx-report-electron/issues/264). PR: [bfx-report-electron#265](https://github.com/bitfinexcom/bfx-report-electron/pull/265)
+
+### Security
+
+- Replaced `Lodash` `_get` helper usage all across the app with the corresponding one from the internal library for security reasons. PR: [bfx-report-ui#727](https://github.com/bitfinexcom/bfx-report-ui/pull/727)
+
 ## [4.14.0] - 2023-11-01
 
 ### Added
