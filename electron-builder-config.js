@@ -92,15 +92,18 @@ module.exports = {
     verifyUpdateCodeSignature: false
   },
   mac: {
-    type: 'development',
     hardenedRuntime: true,
     gatekeeperAssess: false,
     entitlements: 'build/entitlements.mac.plist',
     entitlementsInherit: 'build/entitlements.mas.inherit.plist',
     category: 'public.app-category.finance',
     target: [
-      'dir'
+      'dir',
+      'dmg'
     ]
+  },
+  dmg: {
+    sign: false
   },
   files: [
     '**/*',
