@@ -1,5 +1,6 @@
 'use strict'
 
+require('dotenv').config()
 const fs = require('fs')
 const path = require('path')
 const zlib = require('zlib')
@@ -100,6 +101,9 @@ module.exports = {
     category: 'public.app-category.finance',
     minimumSystemVersion: '11',
     darkModeSupport: true,
+    notarize: {
+      teamId: process.env.APPLE_TEAM_ID
+    },
     target: [
       'dir',
       'dmg'
