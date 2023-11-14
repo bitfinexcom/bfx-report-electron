@@ -98,6 +98,7 @@ module.exports = {
     entitlements: 'build/entitlements.mac.plist',
     entitlementsInherit: 'build/entitlements.mas.inherit.plist',
     category: 'public.app-category.finance',
+    minimumSystemVersion: '11',
     darkModeSupport: true,
     target: [
       'dir',
