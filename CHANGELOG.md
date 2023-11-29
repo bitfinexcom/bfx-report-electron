@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.15.0] - 2023-11-29
+
+### Added
+
+- Added `Summary by Asset` section for the last 30 days on the new `Summary` for the `Reports` app. Added refreshing for all `Summary` sections on the `Filter` button click. PR: [bfx-report-ui#726](https://github.com/bitfinexcom/bfx-report-ui/pull/726)
+- Added ability to sync daily `candles` once per day to reduce the number of sync requests to `BFX API` and as a result improve the situation with the `Rate Limit` restriction. PR: [bfx-reports-framework#334](https://github.com/bitfinexcom/bfx-reports-framework/pull/334)
+- Added ability to reference specific user currencies when `candles` sync. The aim is to reduce the amount of requests to the `BFX API` candles endpoint and speed up the sync essentially. Also for better UX, added approximate candles sync time estimation considering the amount of syncing currencies. And set candles limit `20 reqs/min` instead of 30 to go through the `Rate Limit`. PR: [bfx-reports-framework#335](https://github.com/bitfinexcom/bfx-reports-framework/pull/335)
+
+### Changed
+
+- Set `10 reqs/min` for `BFX API` `trades` endpoint to help big users go through `Rate Limit` for the `Tax Report`. PR: [bfx-reports-framework#337](https://github.com/bitfinexcom/bfx-reports-framework/pull/337)
+- Temporarily hidden `Unrealized Profit` selectors from the new app `Summary` and `Account Balance` reports. PR: [bfx-report-ui#730](https://github.com/bitfinexcom/bfx-report-ui/pull/730)
+- Updated TW Translations. PR: [bfx-report-ui#734](https://github.com/bitfinexcom/bfx-report-ui/pull/734)
+- Improved `Balance Change` representation in the `Summary by Asset` section. PR: [bfx-report-ui#736](https://github.com/bitfinexcom/bfx-report-ui/pull/736)
+
+### Fixed
+
+- Prevented throwing error when `GitHub` server can't respond to auto-update requests. It fixed the following issues: [bfx-report-electron#239](https://github.com/bitfinexcom/bfx-report-electron/issues/239), [bfx-report-electron#264](https://github.com/bitfinexcom/bfx-report-electron/issues/264). PR: [bfx-report-electron#265](https://github.com/bitfinexcom/bfx-report-electron/pull/265)
+- Fixed double requests while syncing `candles`. The issue is: when we sync data in the framework mode, candles request can give only one item, in this case, we shouldn't process the part of logic with handling of containing the same timestamps in all items. PR: [bfx-report#343](https://github.com/bitfinexcom/bfx-report/pull/343)
+- Fixed getting data from `BFX API` with undefined args. PRs: [bfx-report#344](https://github.com/bitfinexcom/bfx-report/pull/344), [lib-js-util-base#15](https://github.com/bitfinexcom/lib-js-util-base/pull/15)
+- Fixed `BFX` auth token refreshing. PR: [bfx-reports-framework#336](https://github.com/bitfinexcom/bfx-reports-framework/pull/336)
+- Fixed initial synchronization flow, improved data handling for `Summary` sections. PR: [bfx-report-ui#731](https://github.com/bitfinexcom/bfx-report-ui/pull/731)
+- Fixed `candles/trades` requests duplication on `Candles` report refreshing. PR: [bfx-report-ui#732](https://github.com/bitfinexcom/bfx-report-ui/pull/732)
+- Fixed synchronization state checking flow and fixed a couple of potential issues that have been spotted in some syncing scenarios. PR: [bfx-report-ui#735](https://github.com/bitfinexcom/bfx-report-ui/pull/735)
+
+### Security
+
+- Replaced `Lodash` `_get` helper usage all across the app with the corresponding one from the internal library for security reasons. PR: [bfx-report-ui#727](https://github.com/bitfinexcom/bfx-report-ui/pull/727)
+
 ## [4.14.0] - 2023-11-01
 
 ### Added

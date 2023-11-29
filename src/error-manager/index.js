@@ -205,9 +205,16 @@ const initLogger = () => {
     if (message.level === 'error') {
       const error = message.data.join(os.EOL)
 
-      // Don't open a new issue when can't download differentially
-      // it would fallback to full download
-      if (/Cannot download differentially/gi.test(error)) {
+      /*
+       * Don't open a new issue when:
+       *   - It can't download differentially it would fallback to full download
+       *   - GitHub server can't respond to the auto-update requests
+       */
+      if (
+        /Cannot download differentially/gi.test(error) ||
+        /ERR_CONNECTION_REFUSED/gi.test(error) ||
+        /objects\.githubusercontent\.com/gi.test(error)
+      ) {
         return message
       }
 
