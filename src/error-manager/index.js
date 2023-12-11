@@ -84,7 +84,8 @@ const _isLogSkipped = (log) => {
       // Skip error when can't get code signature on mac
       str.includes('Could not get code signature') ||
       str.includes('ERR_BFX_API_SERVER_IS_NOT_AVAILABLE') ||
-      str.includes('database is locked')
+      str.includes('database is locked') ||
+      str.includes('network timeout')
     )
   )
 }
