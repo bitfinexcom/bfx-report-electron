@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.16.0] - 2023-12-13
+
+### Added
+
+- Added the `start` param to the `Summary by Asset` to be able to select a period more than `30d`. PR: [bfx-reports-framework#342](https://github.com/bitfinexcom/bfx-reports-framework/pull/342)
+- Added exchange volume and trading fee values to the the `Summary by Asset`. PR: [bfx-reports-framework/pull/344](https://github.com/bitfinexcom/bfx-reports-framework/pull/344)
+- Added exceptions for the error modal window. It should cover the follow cases: `database is locked` and `network timeout`. PR: [bfx-report-electron#285](https://github.com/bitfinexcom/bfx-report-electron/pull/285)
+- Implemented `ETH2P (ETH2Pending)`, `ETH2R (ETH2Rewards)` and `ETH2U (ETH2Unstaking)` availability in the `Symbol` selector. PR: [bfx-report-ui#740](https://github.com/bitfinexcom/bfx-report-ui/pull/740)
+- Implemented dynamic selectable date range support for the `Summary by Asset` section. PR: [bfx-report-ui#741](https://github.com/bitfinexcom/bfx-report-ui/pull/741)
+- Implemented representation of `Volume (eligible for fee tier calculation) in the last 30 days` in the `Account Fees` table of the `Summary` page. PR: [bfx-report-ui#743](https://github.com/bitfinexcom/bfx-report-ui/pull/743)
+- Implemented displaying the selected period as a subtitle in the `Summary by Asset` section. PR: [bfx-report-ui#745](https://github.com/bitfinexcom/bfx-report-ui/pull/745)
+
+### Changed
+
+- Considered the requested `start` time point instead of the existing one in the `ledgers` for the `Account Balance`. The idea is to show users the Account Balance started from the wallet snapshot of the start time point. PR: [bfx-reports-framework#341](https://github.com/bitfinexcom/bfx-reports-framework/pull/341)
+- Removed the `Profits` column from the `Summary by Asset` table temporally. PR: [bfx-report-ui#744](https://github.com/bitfinexcom/bfx-report-ui/pull/744)
+- Actualized columns for the `Summary by Asset` section. PR: [bfx-report-ui#746](https://github.com/bitfinexcom/bfx-report-ui/pull/746)
+
+### Fixed
+
+- Fixed `Account Balance` unrealized profit. The issue is in passing the correct timestamp for currency conversion of PL values of daily positions snapshot. PR: [bfx-reports-framework#340](https://github.com/bitfinexcom/bfx-reports-framework/pull/340)
+- Fixed initialization requests order for all reports according to the proposals to prevent received data inconsistency in some cases. PR: [bfx-report-ui#742](https://github.com/bitfinexcom/bfx-report-ui/pull/742)
+
+### Security
+
+- Used `max` and `min` utils from the `lib-js-util-base` lib instead of the `lodash`. PRs: [bfx-reports-framework#343](https://github.com/bitfinexcom/bfx-reports-framework/pull/343), [lib-js-util-base#19](https://github.com/bitfinexcom/lib-js-util-base/pull/19)
+
 ## [4.15.0] - 2023-11-29
 
 ### Added
