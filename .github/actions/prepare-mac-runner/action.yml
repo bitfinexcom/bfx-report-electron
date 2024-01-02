@@ -1,0 +1,7 @@
+name: 'Prepare Mac runner'
+description: 'Turn uninterrupted testing on mac'
+runs:
+  using: composite
+  steps:
+    - run: ${{ github.action_path }}/prepare-mac-runner.sh
+      shell: bash

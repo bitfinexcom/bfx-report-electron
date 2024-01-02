@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         submodules: recursive
     - name: Set repo owner
@@ -76,6 +76,20 @@ jobs:
         max_attempts: 3
         retry_on: any
         command: ./scripts/launch.sh -lwp
+    - name: Zip Linux Unpacked build
+      run: zip -r dist/linux-unpacked.zip dist/linux-unpacked
+    - name: Upload Linux Unpacked build
+      uses: actions/upload-artifact@v3
+      with:
+        name: linux-unpacked
+        path: dist/linux-unpacked.zip
+    - name: Zip Win Unpacked build
+      run: zip -r dist/win-unpacked.zip dist/win-unpacked
+    - name: Upload Win Unpacked build
+      uses: actions/upload-artifact@v3
+      with:
+        name: win-unpacked
+        path: dist/win-unpacked.zip
     - name: Prepare cache folders
       run: |
         sudo chown -R $(id -u):$(id -g) ~/.cache/electron
@@ -83,10 +97,10 @@ jobs:
 
   mac-builder:
     timeout-minutes: 90
-    runs-on: macos-11
+    runs-on: macos-12
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         submodules: recursive
     - name: Set repo owner
@@ -135,3 +149,108 @@ jobs:
         max_attempts: 3
         retry_on: any
         command: ./scripts/build-release.sh -mp
+    - name: Zip Mac Unpacked build
+      run: zip -r dist/mac.zip dist/mac
+    - name: Upload Mac Unpacked build
+      uses: actions/upload-artifact@v3
+      with:
+        name: mac-unpacked
+        path: dist/mac.zip
+
+  linux-e2e-test-runner:
+    name: Linux E2E Test Runner
+    timeout-minutes: 30
+    runs-on: ubuntu-22.04
+    needs: [linux-win-docker-builder]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18.17.1
+    - name: Install main dev deps
+      run: npm i --development --no-audit --progress=false --force
+    - name: Download Linux Unpacked build
+      uses: actions/download-artifact@v3
+      with:
+        name: linux-unpacked
+        path: dist
+    - name: Unzip Linux Unpacked build
+      run: unzip dist/linux-unpacked.zip
+    - name: Run tests
+      uses: coactions/setup-xvfb@v1.0.1
+      with:
+        run: npm run e2e
+    - name: Normalize E2E test report
+      run: node ./scripts/node/normalize-e2e-test-report e2e-test-report.xml
+    - name: Upload Linux E2E test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: linux-e2e-test-results
+        path: e2e-test-report.xml
+
+  win-e2e-test-runner:
+    name: Win E2E Test Runner
+    timeout-minutes: 30
+    runs-on: windows-2022
+    needs: [linux-win-docker-builder]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18.17.1
+    - name: Install main dev deps
+      run: npm i --development --no-audit --progress=false --force
+    - name: Download Linux Unpacked build
+      uses: actions/download-artifact@v3
+      with:
+        name: win-unpacked
+        path: dist
+    - name: Unzip Win Unpacked build
+      run: 7z -y x dist/win-unpacked.zip
+    - name: Run tests
+      uses: coactions/setup-xvfb@v1.0.1
+      with:
+        run: npm run e2e
+    - name: Normalize E2E test report
+      run: node ./scripts/node/normalize-e2e-test-report e2e-test-report.xml
+    - name: Upload Win E2E test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: win-e2e-test-results
+        path: e2e-test-report.xml
+
+  mac-e2e-test-runner:
+    name: Mac E2E Test Runner
+    timeout-minutes: 30
+    runs-on: macos-12
+    needs: [mac-builder]
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Prepare Mac runner
+      uses: ./.github/actions/prepare-mac-runner
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18.17.1
+    - name: Install main dev deps
+      run: npm i --development --no-audit --progress=false --force
+    - name: Download Mac Unpacked build
+      uses: actions/download-artifact@v3
+      with:
+        name: mac-unpacked
+        path: dist
+    - name: Unzip Mac Unpacked build
+      run: unzip dist/mac.zip
+    - name: Run tests
+      uses: coactions/setup-xvfb@v1.0.1
+      with:
+        run: npm run e2e
+    - name: Normalize E2E test report
+      run: node ./scripts/node/normalize-e2e-test-report e2e-test-report.xml
+    - name: Upload Mac E2E test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: mac-e2e-test-results
+        path: e2e-test-report.xml

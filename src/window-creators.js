@@ -93,7 +93,12 @@ const _createWindow = async (
     icon: path.join(__dirname, '../build/icons/512x512.png'),
     backgroundColor: '#172d3e',
     show: false,
-    ...props
+    ...props,
+
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      ...props?.webPreferences
+    }
   }
 
   wins[winName] = new BrowserWindow(_props)

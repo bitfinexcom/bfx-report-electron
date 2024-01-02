@@ -19,3 +19,5 @@ bfx-report-ui/build
 bfx-report-ui/bfx-report-express/logs/*.log
 bfx-report-ui/bfx-report-express/config/*.json
 stub.AppImage
+e2e-test-report.xml
+test-report.json
