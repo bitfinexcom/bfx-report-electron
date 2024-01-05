@@ -3,6 +3,7 @@
 'use strict'
 
 const path = require('path')
+const { chmodSync } = require('fs')
 const {
   execSync
 } = require('child_process')
@@ -34,6 +35,10 @@ const APP_GENERATED_BINARY_PATH = path.join(
 const ymlPath = path.join(APP_DIST_PATH, `${channel}-mac.yml`)
 
 try {
+  // It's required as binary does not have an execute permission by default
+  // https://github.com/develar/app-builder/issues/97
+  chmodSync(appBuilderPath, '755')
+
   const output = execSync(`${appBuilderPath} blockmap --input=${APP_GENERATED_BINARY_PATH} --output=${APP_GENERATED_BINARY_PATH}.blockmap --compression=gzip`)
   const { sha512, size } = JSON.parse(output)
   const ymlData = {

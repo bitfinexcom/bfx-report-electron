@@ -74,9 +74,9 @@ const _createWindow = async (
     manage
   } = isMainWindow
     ? windowStateKeeper({
-        defaultWidth,
-        defaultHeight
-      })
+      defaultWidth,
+      defaultHeight
+    })
     : {}
   const _props = {
     autoHideMenuBar: true,

@@ -235,8 +235,6 @@ module.exports = (ipc) => {
         }
 
         ipc.send({ state: PROCESS_STATES.REMOVE_ALL_TABLES })
-
-        return
       }
     } catch (err) {
       console.error(err)
