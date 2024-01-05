@@ -9,6 +9,7 @@ const exec = promisify(require('child_process').exec)
 
 let version
 let zippedAppImageArtifactPath
+let zippedMacArtifactPath
 const appOutDirs = new Map()
 
 /* eslint-disable no-template-curly-in-string */
@@ -205,24 +206,25 @@ module.exports = {
         !targets.has('zip')
       ) {
         targets.set('zip', {})
-        artifactPaths.push(path.join(
-          outDir,
-          `BitfinexReport-${version}-x64-${targetPlatform}.zip`
-        ))
       }
 
       for (const [targetName] of targets) {
         const ext = targetName === 'nsis'
           ? 'exe'
           : targetName
-        const appFilePath = artifactPaths.find((path) => (
+        const foundAppFilePath = artifactPaths.find((path) => (
           new RegExp(`${targetPlatform}.*${ext}$`, 'i').test(path)
         ))
+        const appFilePath = foundAppFilePath ?? path.join(
+          outDir,
+          `BitfinexReport-${version}-x64-${targetPlatform}.${ext}`
+        )
 
         if (
           targetPlatform === 'mac' &&
           targetName === 'zip'
         ) {
+          zippedMacArtifactPath = appFilePath
           macBlockmapFilePaths.push(
             `${appFilePath}.blockmap`,
             path.join(outDir, `${channel}-mac.yml`)
@@ -299,7 +301,7 @@ module.exports = {
     }
 
     const macFiles = macBlockmapFilePaths.length > 0
-      ? [...artifactPaths, ...macBlockmapFilePaths]
+      ? [zippedMacArtifactPath, ...macBlockmapFilePaths]
       : []
     const linuxFiles = zippedAppImageArtifactPath
       ? [zippedAppImageArtifactPath]
