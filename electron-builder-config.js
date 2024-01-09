@@ -13,6 +13,22 @@ let zippedAppImageArtifactPath
 let zippedMacArtifactPath
 const appOutDirs = new Map()
 
+// Notarize can be done only on MacOS
+const macNotarize = (
+  process.platform === 'darwin' &&
+  process.env.NOTARIZE
+)
+  ? {
+      notarize: {
+        teamId: process.env.APPLE_TEAM_ID
+      }
+    }
+  : {}
+// DMG can be built only on MacOS
+const macSpecificTargets = process.platform === 'darwin'
+  ? ['dmg']
+  : []
+
 /* eslint-disable no-template-curly-in-string */
 
 const nodeModulesFilter = [
@@ -101,12 +117,10 @@ module.exports = {
     category: 'public.app-category.finance',
     minimumSystemVersion: '11',
     darkModeSupport: true,
-    notarize: {
-      teamId: process.env.APPLE_TEAM_ID
-    },
+    ...macNotarize,
     target: [
       'dir',
-      'dmg'
+      ...macSpecificTargets
     ]
   },
   dmg: {
