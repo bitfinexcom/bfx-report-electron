@@ -19,6 +19,9 @@ on:
       isBfxApiStaging:
         description: 'Is it necessary to use BFX API Staging? (true / 1)?'
         required: false
+      isNotarizeDisabled:
+        description: 'Is notarize disabled (true / 1)?'
+        required: false
 
 env:
   DOCKER_BUILDKIT: 1
@@ -118,6 +121,10 @@ jobs:
       name: Turn off auto-update
       run: |
         echo "IS_AUTO_UPDATE_DISABLED=1" >> $GITHUB_ENV
+    - if: ${{ !contains(fromJson('["true", "1", true, 1]'), github.event.inputs.isNotarizeDisabled) }}
+      name: Turn on notarize
+      run: |
+        echo "NOTARIZE=1" >> $GITHUB_ENV
     - if: contains(fromJson('["true", "1", true, 1]'), github.event.inputs.isBfxApiStaging)
       name: Use BFX API Staging for queries
       run: |
@@ -141,11 +148,11 @@ jobs:
       uses: nick-fields/retry@v2
       continue-on-error: false
       env:
-        APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
-        APPLE_ID: ${{ secrets.APPLE_ID }}
-        APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-        CSC_LINK: ${{ secrets.APPLE_CERTIFICATE }}
-        CSC_KEY_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+        APPLE_TEAM_ID: ${{ secrets.BFX_APPLE_TEAM_ID }}
+        APPLE_ID: ${{ secrets.BFX_APPLE_ID_USERNAME }}
+        APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.BFX_APPLE_ID_REPORT_PASSWORD }}
+        CSC_LINK: ${{ secrets.BFX_APPLE_BUILD_CERTIFICATE_B64 }}
+        CSC_KEY_PASSWORD: ${{ secrets.BFX_APPLE_BUILD_CERTIFICATE_PASSWORD }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         ELECTRON_CACHE: ~/Library/Caches/electron
       with:
@@ -153,7 +160,14 @@ jobs:
         retry_wait_seconds: 10
         max_attempts: 3
         retry_on: any
-        command: ./scripts/build-release.sh -mp
+        command: |
+          if [[ -z "${APPLE_TEAM_ID}" ]]; then unset NOTARIZE; fi
+          if [[ -z "${APPLE_TEAM_ID}" ]]; then unset APPLE_TEAM_ID; fi
+          if [[ -z "${APPLE_ID}" ]]; then unset APPLE_ID; fi
+          if [[ -z "${APPLE_APP_SPECIFIC_PASSWORD}" ]]; then unset APPLE_APP_SPECIFIC_PASSWORD; fi
+          if [[ -z "${CSC_LINK}" ]]; then unset CSC_LINK; fi
+          if [[ -z "${CSC_KEY_PASSWORD}" ]]; then unset CSC_KEY_PASSWORD; fi
+          ./scripts/build-release.sh -mp
     - name: Zip Mac Unpacked build
       run: zip -r dist/mac.zip dist/mac
     - name: Upload Mac Unpacked build
