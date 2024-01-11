@@ -13,3 +13,5 @@ package-lock.json
 lastCommit.json
 electronEnv.json
 stub.AppImage
+e2e-test-report.xml
+test-report.json

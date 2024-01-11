@@ -180,7 +180,7 @@ const _fireToast = (
 
     const boundsOpts = {
       x: (x + width) - alWidth,
-      y: y,
+      y,
       height
     }
 

@@ -74,9 +74,9 @@ const _createWindow = async (
     manage
   } = isMainWindow
     ? windowStateKeeper({
-        defaultWidth,
-        defaultHeight
-      })
+      defaultWidth,
+      defaultHeight
+    })
     : {}
   const _props = {
     autoHideMenuBar: true,
@@ -93,7 +93,12 @@ const _createWindow = async (
     icon: path.join(__dirname, '../build/icons/512x512.png'),
     backgroundColor: '#172d3e',
     show: false,
-    ...props
+    ...props,
+
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      ...props?.webPreferences
+    }
   }
 
   wins[winName] = new BrowserWindow(_props)

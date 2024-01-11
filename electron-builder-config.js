@@ -9,6 +9,7 @@ const exec = promisify(require('child_process').exec)
 
 let version
 let zippedAppImageArtifactPath
+let zippedMacArtifactPath
 const appOutDirs = new Map()
 
 /* eslint-disable no-template-curly-in-string */
@@ -107,6 +108,10 @@ module.exports = {
     'build/icon.*',
     'build/loader.*',
     '!scripts${/*}',
+    '!test/${/*}',
+    '!electronEnv.json.example',
+    '!e2e-test-report.xml',
+    '!wdio.conf.js',
 
     '!bfx-report-ui',
     'bfx-report-ui/build',
@@ -133,6 +138,8 @@ module.exports = {
     '!**/LICENSE.md',
     '!**/.gitmodules',
     '!**/.npmrc',
+    '!**/.mocharc.json',
+    '!**/.github/${/*}',
     {
       from: 'bfx-reports-framework/node_modules',
       to: 'bfx-reports-framework/node_modules',
@@ -141,6 +148,16 @@ module.exports = {
     {
       from: 'bfx-report-ui/bfx-report-express/node_modules',
       to: 'bfx-report-ui/bfx-report-express/node_modules',
+      filter: nodeModulesFilter
+    },
+    {
+      from: 'node_modules/wdio-electron-service',
+      to: 'node_modules/wdio-electron-service',
+      filter: nodeModulesFilter
+    },
+    {
+      from: 'node_modules/wdio-electron-service/node_modules',
+      to: 'node_modules/wdio-electron-service/node_modules',
       filter: nodeModulesFilter
     },
     ...getNodeModulesSubSources('bfx-reports-framework'),
@@ -189,24 +206,25 @@ module.exports = {
         !targets.has('zip')
       ) {
         targets.set('zip', {})
-        artifactPaths.push(path.join(
-          outDir,
-          `BitfinexReport-${version}-x64-${targetPlatform}.zip`
-        ))
       }
 
       for (const [targetName] of targets) {
         const ext = targetName === 'nsis'
           ? 'exe'
           : targetName
-        const appFilePath = artifactPaths.find((path) => (
+        const foundAppFilePath = artifactPaths.find((path) => (
           new RegExp(`${targetPlatform}.*${ext}$`, 'i').test(path)
         ))
+        const appFilePath = foundAppFilePath ?? path.join(
+          outDir,
+          `BitfinexReport-${version}-x64-${targetPlatform}.${ext}`
+        )
 
         if (
           targetPlatform === 'mac' &&
           targetName === 'zip'
         ) {
+          zippedMacArtifactPath = appFilePath
           macBlockmapFilePaths.push(
             `${appFilePath}.blockmap`,
             path.join(outDir, `${channel}-mac.yml`)
@@ -283,7 +301,7 @@ module.exports = {
     }
 
     const macFiles = macBlockmapFilePaths.length > 0
-      ? [...artifactPaths, ...macBlockmapFilePaths]
+      ? [zippedMacArtifactPath, ...macBlockmapFilePaths]
       : []
     const linuxFiles = zippedAppImageArtifactPath
       ? [zippedAppImageArtifactPath]
