@@ -15,7 +15,7 @@
     "bittorrent-dht": "10.0.2",
     "changelog-parser": "3.0.1",
     "clean-stack": "3.0.1",
-    "compare-versions": "4.1.1",
+    "compare-versions": "6.1.0",
     "cron-validate": "1.4.3",
     "ed25519-supercop": "2.0.1",
     "electron-alert": "0.1.20",
