@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.17.0] - 2024-01-10
+
+### Added
+
+- Added ability to define what kind of API keys are stored `prod`/`staging`. The `prod`/`staging` is detected by existing the `staging` string in the restUrl config option: `https://api-pub.bitfinex.com`/`https://api.staging.bitfinex.com`. And `isStagingBfxApi` flag is set or updated on `signUp`/`signIn` to the `user` table. Than, `getUsers` endpoint will return the `isStagingBfxApi` flag to be shown in the UI for each user on the login stage. PR: [bfx-reports-framework#347](https://github.com/bitfinexcom/bfx-reports-framework/pull/347)
+- Added automated testing for electron app binaries. The flow: build release on GitHub Actions, use unpacked builds for E2E tests, launch E2E test on Linux and Mac and Win OSs independently, provide E2E test reports for every OS launch. PR: [bfx-report-electron#276](https://github.com/bitfinexcom/bfx-report-electron/pull/276)
+
+### Fixed
+
+- Fixed `parentCellHeight` related warnings for the several column configurations. PR: [bfx-report-ui#749](https://github.com/bitfinexcom/bfx-report-ui/pull/749)
+- Fixes skipping publishing of artifact for `Mac` by `electron-builder`. The issue came from this PR of `electron-builder`: [electron-builder#7715](https://github.com/electron-userland/electron-builder/pull/7715). PR: [bfx-report-electron#290](https://github.com/bitfinexcom/bfx-report-electron/pull/290)
+
+### Security
+
+- Replaced `Lodash` `_isEqual` helper usage all across the app with the corresponding one from the internal library for security reasons. PR: [bfx-report-ui#750](https://github.com/bitfinexcom/bfx-report-ui/pull/750)
+- Resolved `dependabot` dependency updates: [bfx-report-electron#269](https://github.com/bitfinexcom/bfx-report-electron/pull/269), [bfx-report-electron#270](https://github.com/bitfinexcom/bfx-report-electron/pull/270), [bfx-report-electron#272](https://github.com/bitfinexcom/bfx-report-electron/pull/272), [bfx-report-electron#273](https://github.com/bitfinexcom/bfx-report-electron/pull/273), [bfx-report-electron#280](https://github.com/bitfinexcom/bfx-report-electron/pull/280). PR: [bfx-report-electron#289](https://github.com/bitfinexcom/bfx-report-electron/pull/289)
+
 ## [4.16.0] - 2023-12-13
 
 ### Added
