@@ -99,7 +99,7 @@ jobs:
         sudo chown -R $(id -u):$(id -g) ~/.cache/electron-builder
 
   mac-builder:
-    timeout-minutes: 90
+    timeout-minutes: 150
     runs-on: macos-12
     steps:
     - name: Checkout
@@ -156,7 +156,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         ELECTRON_CACHE: ~/Library/Caches/electron
       with:
-        timeout_minutes: 20
+        timeout_minutes: 40
         retry_wait_seconds: 10
         max_attempts: 3
         retry_on: any
