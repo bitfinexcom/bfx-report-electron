@@ -31,7 +31,7 @@ const macNotarize = (
   : {}
 // DMG can be built only on MacOS
 const macSpecificTargets = process.platform === 'darwin'
-  ? ['dmg']
+  ? ['dmg', 'zip']
   : []
 
 /* eslint-disable no-template-curly-in-string */
@@ -252,6 +252,8 @@ module.exports = {
         )
 
         if (
+          // Outside darwin zip release can't be built successfully
+          process.platform !== 'darwin' &&
           targetPlatform === 'mac' &&
           targetName === 'zip'
         ) {
