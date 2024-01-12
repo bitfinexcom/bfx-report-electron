@@ -17,6 +17,7 @@ let zippedAppImageArtifactPath
 let zippedMacArtifactPath
 const appOutDirs = new Map()
 const isNotarize = parseEnvValToBool(process.env.NOTARIZE)
+const arch = process.env.ARCH ?? 'x64'
 
 // Notarize can be done only on MacOS
 const macNotarize = (
@@ -82,7 +83,7 @@ module.exports = {
   extends: null,
   asar: false,
   productName: 'Bitfinex Report',
-  artifactName: 'BitfinexReport-${version}-x64-${os}.${ext}',
+  artifactName: 'BitfinexReport-${version}-' + arch + '-${os}.${ext}',
   appId: 'com.bitfinex.report',
   publish: {
     provider: 'github',
@@ -244,11 +245,11 @@ module.exports = {
           ? 'exe'
           : targetName
         const foundAppFilePath = artifactPaths.find((path) => (
-          new RegExp(`${targetPlatform}.*${ext}$`, 'i').test(path)
+          new RegExp(`${arch}.*${targetPlatform}.*${ext}$`, 'i').test(path)
         ))
         const appFilePath = foundAppFilePath ?? path.join(
           outDir,
-          `BitfinexReport-${version}-x64-${targetPlatform}.${ext}`
+          `BitfinexReport-${version}-${arch}-${targetPlatform}.${ext}`
         )
 
         if (
@@ -294,7 +295,7 @@ module.exports = {
         ) {
           zippedAppImageArtifactPath = path.join(
             outDir,
-            `BitfinexReport-${version}-x64-${targetPlatform}.AppImage.zip`
+            `BitfinexReport-${version}-${arch}-${targetPlatform}.AppImage.zip`
           )
           await new Promise((resolve, reject) => {
             try {
