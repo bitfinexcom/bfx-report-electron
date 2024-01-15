@@ -83,22 +83,22 @@ fi
 if [ $isDevEnv == 1 ]; then
   echo -e "\n${COLOR_YELLOW}Developer environment is turned on!${COLOR_NORMAL}"
 
-  sed -i'' -e \
+  sed -i -e \
     "s/\"NODE_ENV\": \".*\"/\"NODE_ENV\": \"development\"/g" \
     "$ROOT/$ELECTRON_ENV_FILE_NAME"
 else
-  sed -i'' -e \
+  sed -i -e \
     "s/\"NODE_ENV\": \".*\"/\"NODE_ENV\": \"production\"/g" \
     "$ROOT/$ELECTRON_ENV_FILE_NAME"
 fi
 if [ $isAutoUpdateDisabled == 1 ]; then
   echo -e "\n${COLOR_YELLOW}Auto-update is turned off!${COLOR_NORMAL}"
 
-  sed -i'' -e \
+  sed -i -e \
     "s/\"IS_AUTO_UPDATE_DISABLED\": .*/\"IS_AUTO_UPDATE_DISABLED\": true/g" \
     "$ROOT/$ELECTRON_ENV_FILE_NAME"
 else
-  sed -i'' -e \
+  sed -i -e \
     "s/\"IS_AUTO_UPDATE_DISABLED\": .*/\"IS_AUTO_UPDATE_DISABLED\": false/g" \
     "$ROOT/$ELECTRON_ENV_FILE_NAME"
 fi
@@ -132,7 +132,7 @@ cp "$EXPRESS_FOLDER/config/default.json.example" \
 echo -e "\n${COLOR_BLUE}Setting backend configs${COLOR_NORMAL}"
 
 escapedBfxApiUrl=$(escapeString $bfxApiUrl)
-sed -i'' -e \
+sed -i -e \
   "s/\"restUrl\": \".*\"/\"restUrl\": \"$escapedBfxApiUrl\"/g" \
   "$WORKER_FOLDER/config/service.report.json"
 

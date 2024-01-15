@@ -10,7 +10,7 @@ COPY ./scripts/helpers/install-nodejs.sh ./scripts/helpers/install-nodejs.sh
 RUN ./scripts/helpers/install-nodejs.sh ${NODE_VERSION} \
   # Remove the `Wine` source entry to resolve
   # the release key expiration issue for `apt-get update`
-  && sed -i'' '/Wine/d' /etc/apt/sources.list \
+  && sed -i '/Wine/d' /etc/apt/sources.list \
   && apt-get update -y \
   && apt-get install -y --no-install-recommends \
     p7zip-full \
