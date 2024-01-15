@@ -38,13 +38,13 @@ jobs:
         submodules: recursive
     - name: Set repo owner
       run: |
-        sed -i -e \
+        sed -i'' -e \
           "s/owner: '.*'/owner: '${{ github.repository_owner }}'/g" \
           "./electron-builder-config.js"
     - if: github.event.inputs.version != ''
       name: Set release version
       run: |
-        sed -i -e \
+        sed -i'' -e \
           "s/\"version\": \".*\"/\"version\": \"${{ github.event.inputs.version }}\"/g" \
           "./package.json"
     - if: contains(fromJson('["true", "1", true, 1]'), github.event.inputs.isAutoUpdateDisabled)
@@ -108,13 +108,13 @@ jobs:
         submodules: recursive
     - name: Set repo owner
       run: |
-        sed -i -e \
+        sed -i'' -e \
           "s/owner: '.*'/owner: '${{ github.repository_owner }}'/g" \
           "./electron-builder-config.js"
     - if: github.event.inputs.version != ''
       name: Set release version
       run: |
-        sed -i -e \
+        sed -i'' -e \
           "s/\"version\": \".*\"/\"version\": \"${{ github.event.inputs.version }}\"/g" \
           "./package.json"
     - if: contains(fromJson('["true", "1", true, 1]'), github.event.inputs.isAutoUpdateDisabled)

@@ -93,32 +93,32 @@ echo -e "\n${COLOR_BLUE}Setting UI configs${COLOR_NORMAL}"
 
 escapedBfxHomeUrl=$(escapeString $bfxHomeUrl)
 escapedBfxKeyUrl=$(escapeString $bfxKeyUrl)
-sed -i -e \
+sed -i'' -e \
   "s/HOME_URL: .*,/HOME_URL: \'$escapedBfxHomeUrl\',/g" \
   "$UI_CONFIGS_FILE"
-sed -i -e \
+sed -i'' -e \
   "s/API_URL: .*,/API_URL: \'http:\/\/${BACKEND_ADDRESS}\/api\',/g" \
   "$UI_CONFIGS_FILE"
-sed -i -e \
+sed -i'' -e \
   "s/WS_ADDRESS: .*,/WS_ADDRESS: \'ws:\/\/${BACKEND_ADDRESS}\/ws\',/g" \
   "$UI_CONFIGS_FILE"
-sed -i -e \
+sed -i'' -e \
   "s/KEY_URL: .*,/KEY_URL: \'$escapedBfxKeyUrl\/api\',/g" \
   "$UI_CONFIGS_FILE"
 
-sed -i -e \
+sed -i'' -e \
   "s/localExport: false/localExport: true/g" \
   "$UI_CONFIGS_FILE"
-sed -i -e \
+sed -i'' -e \
   "s/showAuthPage: false/showAuthPage: true/g" \
   "$UI_CONFIGS_FILE"
-sed -i -e \
+sed -i'' -e \
   "s/showFrameworkMode: false/showFrameworkMode: true/g" \
   "$UI_CONFIGS_FILE"
-sed -i -e \
+sed -i'' -e \
   "s/hostedFrameworkMode: true/hostedFrameworkMode: false/g" \
   "$UI_CONFIGS_FILE"
-sed -i -e \
+sed -i'' -e \
   "s/isElectronApp: false/isElectronApp: true/g" \
   "$UI_CONFIGS_FILE"
 
