@@ -139,7 +139,7 @@ jobs:
         cache-name: electron-cache-v1
       with:
         path: |
-          ~/Library/Caches/electron
+          ${{ runner.temp }}/.cache/electron
         key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('package.json') }}
         restore-keys: |
           ${{ runner.os }}-build-${{ env.cache-name }}-
@@ -154,7 +154,7 @@ jobs:
         CSC_LINK: ${{ secrets.BFX_APPLE_BUILD_CERTIFICATE_B64 }}
         CSC_KEY_PASSWORD: ${{ secrets.BFX_APPLE_BUILD_CERTIFICATE_PASSWORD }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        ELECTRON_CACHE: ~/Library/Caches/electron
+        ELECTRON_CACHE: ${{ runner.temp }}/.cache/electron
       with:
         timeout_minutes: 40
         retry_wait_seconds: 10
