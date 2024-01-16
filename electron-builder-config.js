@@ -129,11 +129,6 @@ module.exports = {
       ...macSpecificTargets
     ]
   },
-  dmg: {
-    // TODO: Need to check
-    // https://kilianvalkhof.com/2019/electron/notarizing-your-electron-application
-    // sign: !isNotarize
-  },
   files: [
     '**/*',
     'build/icons',
