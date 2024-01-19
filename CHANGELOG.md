@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.18.0] - 2024-01-24
+
+### Added
+
+- Added Apple signing and notarization workflow. PR: [bfx-report-electron#299](https://github.com/bitfinexcom/bfx-report-electron/pull/299)
+- Implemented users informing about the [platform maintenance](https://bitfinex.statuspage.io/) mode. PR: [bfx-report-ui#756](https://github.com/bitfinexcom/bfx-report-ui/pull/756)
+- Implemented configurable balances representation `Filter` for the `Summary by Asset` section. PR: [bfx-report-ui#753](https://github.com/bitfinexcom/bfx-report-ui/pull/753)
+
+### Security
+
+- Resolved `dependabot` dependency updates, bumped `follow-redirects` from `1.15.3` to `1.15.4`. PR: [bfx-report-ui#755](https://github.com/bitfinexcom/bfx-report-ui/pull/755)
+
 ## [4.17.0] - 2024-01-10
 
 ### Added
