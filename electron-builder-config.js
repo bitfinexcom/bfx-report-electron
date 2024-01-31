@@ -1,5 +1,6 @@
 'use strict'
 
+require('dotenv').config()
 const fs = require('fs')
 const path = require('path')
 const zlib = require('zlib')
@@ -7,10 +8,32 @@ const { promisify } = require('util')
 const archiver = require('archiver')
 const exec = promisify(require('child_process').exec)
 
+const parseEnvValToBool = require(
+  './src/helpers/parse-env-val-to-bool'
+)
+
 let version
 let zippedAppImageArtifactPath
 let zippedMacArtifactPath
 const appOutDirs = new Map()
+const isNotarize = parseEnvValToBool(process.env.NOTARIZE)
+const arch = process.env.ARCH ?? 'x64'
+
+// Notarize can be done only on MacOS
+const macNotarize = (
+  process.platform === 'darwin' &&
+  isNotarize
+)
+  ? {
+      notarize: {
+        teamId: process.env.APPLE_TEAM_ID
+      }
+    }
+  : {}
+// DMG can be built only on MacOS
+const macSpecificTargets = process.platform === 'darwin'
+  ? ['dmg', 'zip']
+  : []
 
 /* eslint-disable no-template-curly-in-string */
 
@@ -60,7 +83,7 @@ module.exports = {
   extends: null,
   asar: false,
   productName: 'Bitfinex Report',
-  artifactName: 'BitfinexReport-${version}-x64-${os}.${ext}',
+  artifactName: 'BitfinexReport-${version}-' + arch + '-${os}.${ext}',
   appId: 'com.bitfinex.report',
   publish: {
     provider: 'github',
@@ -92,14 +115,18 @@ module.exports = {
     verifyUpdateCodeSignature: false
   },
   mac: {
-    type: 'development',
+    type: 'distribution',
     hardenedRuntime: true,
     gatekeeperAssess: false,
     entitlements: 'build/entitlements.mac.plist',
     entitlementsInherit: 'build/entitlements.mas.inherit.plist',
     category: 'public.app-category.finance',
+    minimumSystemVersion: '11',
+    darkModeSupport: true,
+    ...macNotarize,
     target: [
-      'dir'
+      'dir',
+      ...macSpecificTargets
     ]
   },
   files: [
@@ -213,14 +240,16 @@ module.exports = {
           ? 'exe'
           : targetName
         const foundAppFilePath = artifactPaths.find((path) => (
-          new RegExp(`${targetPlatform}.*${ext}$`, 'i').test(path)
+          new RegExp(`${arch}.*${targetPlatform}.*${ext}$`, 'i').test(path)
         ))
         const appFilePath = foundAppFilePath ?? path.join(
           outDir,
-          `BitfinexReport-${version}-x64-${targetPlatform}.${ext}`
+          `BitfinexReport-${version}-${arch}-${targetPlatform}.${ext}`
         )
 
         if (
+          // Outside darwin zip release can't be built successfully
+          process.platform !== 'darwin' &&
           targetPlatform === 'mac' &&
           targetName === 'zip'
         ) {
@@ -261,7 +290,7 @@ module.exports = {
         ) {
           zippedAppImageArtifactPath = path.join(
             outDir,
-            `BitfinexReport-${version}-x64-${targetPlatform}.AppImage.zip`
+            `BitfinexReport-${version}-${arch}-${targetPlatform}.AppImage.zip`
           )
           await new Promise((resolve, reject) => {
             try {

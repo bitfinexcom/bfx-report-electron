@@ -2,6 +2,7 @@
 
 'use strict'
 
+require('dotenv').config()
 const path = require('path')
 const { chmodSync } = require('fs')
 const {
@@ -24,7 +25,7 @@ const {
   version: APP_VERSION
 } = require(packageJsonPath)
 
-const ARCH = 'x64'
+const ARCH = process.env.ARCH ?? 'x64'
 const APP_NAME = productName.replace(/\s/g, '')
 const APP_DIST_PATH = path.join(cwd, 'dist')
 const appReleaseFileName = `${APP_NAME}-${APP_VERSION}-${ARCH}-mac.zip`

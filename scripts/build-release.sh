@@ -17,7 +17,7 @@ COLOR_YELLOW=${COLOR_YELLOW:-"\033[33m"}
 COLOR_BLUE=${COLOR_BLUE:-"\033[34m"}
 COLOR_NORMAL=${COLOR_NORMAL:-"\033[39m"}
 
-ARCH="x64"
+export ARCH=${ARCH:-"x64"}
 BFX_API_URL="https://api-pub.bitfinex.com"
 STAGING_BFX_API_URL="https://api.staging.bitfinex.com"
 
@@ -230,7 +230,7 @@ fi
 
 rm -rf "$DIST_FOLDER/"*"$targetPlatform"*
 node "$ROOT/node_modules/.bin/electron-builder" \
-  "build" "--$targetPlatform" \
+  "build" "--$targetPlatform" "--$ARCH" \
   "--config" "$ELECTRON_BUILDER_CONFIG_FILE_PATH" \
   $publishOption
 

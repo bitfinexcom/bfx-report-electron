@@ -4,6 +4,9 @@ module.exports = (value) => {
   if (typeof value === 'boolean') {
     return value
   }
+  if (!value) {
+    return false
+  }
 
   const normalizedValue = value.toString()
     .trim()
