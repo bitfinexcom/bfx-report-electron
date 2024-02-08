@@ -24,7 +24,7 @@
     "electron-updater": "5.3.0",
     "extract-zip": "2.0.1",
     "get-port": "7.0.0",
-    "github-markdown-css": "5.1.0",
+    "github-markdown-css": "5.5.1",
     "grenache-grape": "git+https://github.com/bitfinexcom/grenache-grape.git",
     "js-yaml": "4.1.0",
     "lib-js-util-base": "git+https://github.com/bitfinexcom/lib-js-util-base.git",
