@@ -41,6 +41,7 @@ const enforceMacOSAppLocation = require(
 const manageWorkerMessages = require(
   './manage-worker-messages'
 )
+const printToPDF = require('./print-to-pdf')
 
 const pathToLayouts = path.join(__dirname, 'layouts')
 const pathToLayoutAppInitErr = path
@@ -193,6 +194,8 @@ module.exports = async () => {
     await triggerElectronLoad(portsMap)
     await checkForUpdatesAndNotify()
     await manageChangelog()
+
+    printToPDF()
   } catch (err) {
     await createErrorWindow(pathToLayoutAppInitErr)
 

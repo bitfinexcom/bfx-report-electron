@@ -76,7 +76,9 @@ const allowedProcessMessagesSet = _getAllowedStatesSet({
 
     'RESPONSE_GET_BACKUP_FILES_METADATA',
 
-    'RESPONSE_UPDATE_USERS_SYNC_ON_STARTUP_REQUIRED_STATE'
+    'RESPONSE_UPDATE_USERS_SYNC_ON_STARTUP_REQUIRED_STATE',
+
+    'CREATE_PDF'
   ]
 })
 const allowedProcessStatesSet = _getAllowedStatesSet({
@@ -92,7 +94,10 @@ const allowedProcessStatesSet = _getAllowedStatesSet({
 
     'REQUEST_GET_BACKUP_FILES_METADATA',
 
-    'REQUEST_UPDATE_USERS_SYNC_ON_STARTUP_REQUIRED_STATE'
+    'REQUEST_UPDATE_USERS_SYNC_ON_STARTUP_REQUIRED_STATE',
+
+    'CREATED_PDF_BUFFER',
+    'ERROR_PDF_CREATION'
   ]
 })
 
