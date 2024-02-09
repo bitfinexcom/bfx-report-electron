@@ -1,6 +1,8 @@
 'use strict'
 
 const { BrowserWindow } = require('electron')
+const fs = require('fs/promises')
+const path = require('path')
 
 const ipcs = require('../ipcs')
 const wins = require('../windows')
@@ -20,11 +22,25 @@ module.exports = () => {
       }
 
       const {
+        templateFilePath,
         template = 'No data',
         format = 'portrait',
         orientation = 'Letter',
         uid = null
       } = mess?.data ?? {}
+
+      const isTemplateFilePathUsed = (
+        templateFilePath &&
+        typeof templateFilePath === 'string'
+      )
+
+      const html = isTemplateFilePathUsed
+        ? await fs.readFile(templateFilePath, { encoding: 'utf8' })
+        : template
+
+      if (isTemplateFilePathUsed) {
+        await fs.rm(templateFilePath, { force: true, maxRetries: 3 })
+      }
 
       const win = new BrowserWindow({
         show: false,
@@ -33,7 +49,7 @@ module.exports = () => {
           nodeIntegration: true
         }
       })
-      win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(template)}`)
+      win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`)
 
       await new Promise((resolve, reject) => {
         win.webContents.on('did-finish-load', resolve)
@@ -62,6 +78,20 @@ module.exports = () => {
   Page <span class=pageNumber></span> from <span class=totalPages></span>
 </span>`
       })
+
+      if (isTemplateFilePathUsed) {
+        const { dir, name } = path.parse(templateFilePath)
+        const pdfFilePath = path.format({ dir, name, ext: '.pdf' })
+
+        await fs.writeFile(pdfFilePath, buffer)
+
+        ipcs.serverIpc.send({
+          state: PROCESS_STATES.RESPONSE_PDF_CREATION,
+          data: { pdfFilePath, uid }
+        })
+
+        return
+      }
 
       ipcs.serverIpc.send({
         state: PROCESS_STATES.RESPONSE_PDF_CREATION,
