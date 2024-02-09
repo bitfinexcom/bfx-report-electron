@@ -15,7 +15,7 @@ const PROCESS_STATES = require(
 module.exports = () => {
   ipcs.serverIpc.on('message', async (mess) => {
     try {
-      if (mess?.state !== PROCESS_MESSAGES.CREATE_PDF) {
+      if (mess?.state !== PROCESS_MESSAGES.REQUEST_PDF_CREATION) {
         return
       }
 
@@ -64,16 +64,16 @@ module.exports = () => {
       })
 
       ipcs.serverIpc.send({
-        state: PROCESS_STATES.CREATED_PDF_BUFFER,
+        state: PROCESS_STATES.RESPONSE_PDF_CREATION,
         data: { buffer, uid }
       })
-    } catch (error) {
+    } catch (err) {
       ipcs.serverIpc.send({
-        state: PROCESS_STATES.ERROR_PDF_CREATION,
-        data: { error, uid: mess?.data?.uid ?? null }
+        state: PROCESS_STATES.RESPONSE_PDF_CREATION,
+        data: { err, uid: mess?.data?.uid ?? null }
       })
 
-      console.error(error)
+      console.error(err)
     }
   })
 }

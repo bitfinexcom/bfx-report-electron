@@ -78,7 +78,7 @@ const allowedProcessMessagesSet = _getAllowedStatesSet({
 
     'RESPONSE_UPDATE_USERS_SYNC_ON_STARTUP_REQUIRED_STATE',
 
-    'CREATE_PDF'
+    'REQUEST_PDF_CREATION'
   ]
 })
 const allowedProcessStatesSet = _getAllowedStatesSet({
@@ -96,8 +96,7 @@ const allowedProcessStatesSet = _getAllowedStatesSet({
 
     'REQUEST_UPDATE_USERS_SYNC_ON_STARTUP_REQUIRED_STATE',
 
-    'CREATED_PDF_BUFFER',
-    'ERROR_PDF_CREATION'
+    'RESPONSE_PDF_CREATION'
   ]
 })
 
