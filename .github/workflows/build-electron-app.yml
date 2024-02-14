@@ -165,12 +165,12 @@ jobs:
         max_attempts: 3
         retry_on: any
         command: |
-          if [[ -z "${APPLE_TEAM_ID}" ]]; then unset NOTARIZE; fi
-          if [[ -z "${APPLE_TEAM_ID}" ]]; then unset APPLE_TEAM_ID; fi
-          if [[ -z "${APPLE_ID}" ]]; then unset APPLE_ID; fi
-          if [[ -z "${APPLE_APP_SPECIFIC_PASSWORD}" ]]; then unset APPLE_APP_SPECIFIC_PASSWORD; fi
-          if [[ -z "${CSC_LINK}" ]]; then unset CSC_LINK; fi
-          if [[ -z "${CSC_KEY_PASSWORD}" ]]; then unset CSC_KEY_PASSWORD; fi
+          if [[ -z "${APPLE_TEAM_ID}" || "${NOTARIZE:-}" != "1" ]]; then unset NOTARIZE; fi
+          if [[ -z "${APPLE_TEAM_ID}" || "${NOTARIZE:-}" != "1" ]]; then unset APPLE_TEAM_ID; fi
+          if [[ -z "${APPLE_ID}" || "${NOTARIZE:-}" != "1" ]]; then unset APPLE_ID; fi
+          if [[ -z "${APPLE_APP_SPECIFIC_PASSWORD}" || "${NOTARIZE:-}" != "1" ]]; then unset APPLE_APP_SPECIFIC_PASSWORD; fi
+          if [[ -z "${CSC_LINK}" || "${NOTARIZE:-}" != "1" ]]; then unset CSC_LINK; fi
+          if [[ -z "${CSC_KEY_PASSWORD}" || "${NOTARIZE:-}" != "1" ]]; then unset CSC_KEY_PASSWORD; fi
           ./scripts/build-release.sh -mp
     - name: Zip Mac Unpacked build
       run: zip -r dist/mac.zip dist/mac
