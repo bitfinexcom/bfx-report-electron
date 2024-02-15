@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.19.0] - 2024-02-14
+
+### Added
+
+- Added ability to close the drawer on mobile when clicking on a item of the menu. PR: [bfx-report-ui#764](https://github.com/bitfinexcom/bfx-report-ui/pull/764)
+- Added environment configuration during the `Google Tag Manager` initialization. PR: [bfx-report-ui#767](https://github.com/bitfinexcom/bfx-report-ui/pull/767)
+- Added an option to skip `Mac` build notarizing and signing when running manually. PR: [bfx-report-electron#314](https://github.com/bitfinexcom/bfx-report-electron/pull/314)
+
+### Changed
+
+- Enhanced representation of the app `Summary` sections loading states according to the latest design updates. Added showing loading states for them during initial sync. PR: [bfx-report-ui#768](https://github.com/bitfinexcom/bfx-report-ui/pull/768)
+
 ## [4.18.0] - 2024-01-31
 
 ### Added
