@@ -2,7 +2,7 @@
 
 const { dialog, BrowserWindow } = require('electron')
 
-const { CSV_PATH_VERSION } = require('./const')
+const { REPORT_FILES_PATH_VERSION } = require('./const')
 
 const {
   InvalidFilePathError,
@@ -52,8 +52,8 @@ module.exports = ({ pathToUserDocuments }) => {
       await pauseApp()
       const isSaved = await getConfigsKeeperByName('main')
         .saveConfigs({
-          csvPathVersion: CSV_PATH_VERSION,
-          pathToUserCsv: filePaths[0]
+          reportFilesPathVersion: REPORT_FILES_PATH_VERSION,
+          pathToUserReportFiles: filePaths[0]
         })
 
       if (!isSaved) {

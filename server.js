@@ -32,7 +32,7 @@ const {
 
 const {
   WrongPathToUserDataError,
-  WrongPathToUserCsvError,
+  WrongPathToUserReportFilesError,
   WrongSecretKeyError
 } = require('./src/errors')
 
@@ -76,7 +76,9 @@ const allowedProcessMessagesSet = _getAllowedStatesSet({
 
     'RESPONSE_GET_BACKUP_FILES_METADATA',
 
-    'RESPONSE_UPDATE_USERS_SYNC_ON_STARTUP_REQUIRED_STATE'
+    'RESPONSE_UPDATE_USERS_SYNC_ON_STARTUP_REQUIRED_STATE',
+
+    'REQUEST_PDF_CREATION'
   ]
 })
 const allowedProcessStatesSet = _getAllowedStatesSet({
@@ -92,14 +94,16 @@ const allowedProcessStatesSet = _getAllowedStatesSet({
 
     'REQUEST_GET_BACKUP_FILES_METADATA',
 
-    'REQUEST_UPDATE_USERS_SYNC_ON_STARTUP_REQUIRED_STATE'
+    'REQUEST_UPDATE_USERS_SYNC_ON_STARTUP_REQUIRED_STATE',
+
+    'RESPONSE_PDF_CREATION'
   ]
 })
 
 ;(async () => {
   try {
     const pathToUserData = process.env.PATH_TO_USER_DATA
-    const pathToUserCsv = process.env.PATH_TO_USER_CSV
+    const pathToUserReportFiles = process.env.PATH_TO_USER_REPORT_FILES
     const schedulerRule = process.env.SCHEDULER_RULE
     const secretKey = process.env.SECRET_KEY
     const grape1DhtPort = process.env.GRAPE_1DHT_PORT
@@ -116,8 +120,8 @@ const allowedProcessStatesSet = _getAllowedStatesSet({
     if (!pathToUserData) {
       throw new WrongPathToUserDataError()
     }
-    if (!pathToUserCsv) {
-      throw new WrongPathToUserCsvError()
+    if (!pathToUserReportFiles) {
+      throw new WrongPathToUserReportFilesError()
     }
 
     const grape = `http://127.0.0.1:${grape2ApiPort}`
@@ -162,7 +166,7 @@ const allowedProcessStatesSet = _getAllowedStatesSet({
       '--isSchedulerEnabled=true',
       '--isElectronjsEnv=true',
       '--isLoggerDisabled=false',
-      `--csvFolder=${pathToUserCsv}`,
+      `--reportFolder=${pathToUserReportFiles}`,
       `--tempFolder=${pathToUserData}/temp`,
       `--logsFolder=${pathToUserData}/logs`,
       `--dbFolder=${pathToUserData}`,

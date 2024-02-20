@@ -3,7 +3,7 @@
 const { app } = require('electron')
 const path = require('path')
 
-const { CSV_PATH_VERSION } = require('./const')
+const { REPORT_FILES_PATH_VERSION } = require('./const')
 
 const triggerSyncAfterUpdates = require('./trigger-sync-after-updates')
 const triggerElectronLoad = require('./trigger-electron-load')
@@ -41,6 +41,7 @@ const enforceMacOSAppLocation = require(
 const manageWorkerMessages = require(
   './manage-worker-messages'
 )
+const printToPDF = require('./print-to-pdf')
 
 const pathToLayouts = path.join(__dirname, 'layouts')
 const pathToLayoutAppInitErr = path
@@ -50,52 +51,26 @@ const { rule: schedulerRule } = require(
   '../bfx-reports-framework/config/schedule.json'
 )
 
-const _resetCsvPath = async (
+const _resetReportFilesPath = async (
   configsKeeper,
   opts = {}
 ) => {
   const {
-    pathToUserCsv,
-    isRelativeCsvPath
+    pathToUserReportFiles
   } = opts
 
-  // Need to use a new csv folder path for export
-  const storedPathToUserCsv = configsKeeper
-    .getConfigByName('pathToUserCsv')
-  const csvPathVersion = configsKeeper
-    .getConfigByName('csvPathVersion')
+  // Need to use a new report folder path for export
+  const reportFilesPathVersion = configsKeeper
+    .getConfigByName('reportFilesPathVersion') ??
+    configsKeeper.getConfigByName('csvPathVersion') // For back compatibility
 
-  if (csvPathVersion === CSV_PATH_VERSION) {
-    return
-  }
-  if (
-    (
-      isRelativeCsvPath &&
-      !storedPathToUserCsv.endsWith('csv')
-    ) ||
-    (
-      !isRelativeCsvPath &&
-      !storedPathToUserCsv.endsWith('bitfinex/reports')
-    ) ||
-    (
-      !isRelativeCsvPath &&
-      !path.isAbsolute(storedPathToUserCsv)
-    ) ||
-    (
-      isRelativeCsvPath &&
-      path.isAbsolute(storedPathToUserCsv)
-    )
-  ) {
-    await configsKeeper.saveConfigs({
-      csvPathVersion: CSV_PATH_VERSION,
-      pathToUserCsv
-    })
-
+  if (reportFilesPathVersion === REPORT_FILES_PATH_VERSION) {
     return
   }
 
   await configsKeeper.saveConfigs({
-    csvPathVersion: CSV_PATH_VERSION
+    reportFilesPathVersion: REPORT_FILES_PATH_VERSION,
+    pathToUserReportFiles
   })
 }
 
@@ -153,7 +128,7 @@ const _manageConfigs = (params = {}) => {
     pathToUserDocuments
   } = params
 
-  const pathToUserCsv = path.join(
+  const pathToUserReportFiles = path.join(
     pathToUserDocuments,
     'bitfinex/reports'
   )
@@ -161,18 +136,15 @@ const _manageConfigs = (params = {}) => {
   const configsKeeper = configsKeeperFactory(
     { pathToUserData },
     {
-      pathToUserCsv,
+      pathToUserReportFiles,
       schedulerRule,
       shownChangelogVer: '0.0.0',
       triggeredSyncAfterUpdatesVer: '0.0.0'
     }
   )
-  _resetCsvPath(
+  _resetReportFilesPath(
     configsKeeper,
-    {
-      pathToUserCsv,
-      isRelativeCsvPath: true
-    }
+    { pathToUserReportFiles }
   )
 }
 
@@ -222,6 +194,8 @@ module.exports = async () => {
     await triggerElectronLoad(portsMap)
     await checkForUpdatesAndNotify()
     await manageChangelog()
+
+    printToPDF()
   } catch (err) {
     await createErrorWindow(pathToLayoutAppInitErr)
 

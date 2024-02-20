@@ -155,6 +155,7 @@ module.exports = {
     '!bfx-reports-framework/*/*.sh',
     '!bfx-reports-framework/*.sh',
     '!bfx-reports-framework/.mocharc.json',
+    '!bfx-reports-framework/node_modules/phantomjs-prebuilt',
 
     '!**/.dockerignore',
     '!**/*Dockerfile*',
