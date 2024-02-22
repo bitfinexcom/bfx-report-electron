@@ -1,4 +1,5 @@
 {
   "NODE_ENV": "production",
-  "IS_AUTO_UPDATE_DISABLED": false
+  "IS_AUTO_UPDATE_DISABLED": false,
+  "REPO_OWNER": "bitfinexcom"
 }

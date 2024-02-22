@@ -28,6 +28,7 @@ services:
       IS_PUBLISHED: ${IS_PUBLISHED:-0}
       GH_TOKEN: ${GH_TOKEN:-}
       GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+      REPO_OWNER: ${REPO_OWNER:-}
       EP_GH_IGNORE_TIME: ${EP_GH_IGNORE_TIME:-true}
       CURRENT_UID: ${CURRENT_UID:-"1000:1000"}
     volumes:
@@ -52,6 +53,7 @@ services:
       IS_PUBLISHED: ${IS_PUBLISHED:-0}
       GH_TOKEN: ${GH_TOKEN:-}
       GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+      REPO_OWNER: ${REPO_OWNER:-}
       EP_GH_IGNORE_TIME: ${EP_GH_IGNORE_TIME:-true}
       CURRENT_UID: ${CURRENT_UID:-"1000:1000"}
     volumes:
@@ -76,6 +78,7 @@ services:
       IS_PUBLISHED: ${IS_PUBLISHED:-0}
       GH_TOKEN: ${GH_TOKEN:-}
       GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+      REPO_OWNER: ${REPO_OWNER:-}
       EP_GH_IGNORE_TIME: ${EP_GH_IGNORE_TIME:-true}
       CURRENT_UID: ${CURRENT_UID:-"1000:1000"}
     volumes:
