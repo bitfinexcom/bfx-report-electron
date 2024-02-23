@@ -18,14 +18,14 @@ jobs:
       uses: actions/checkout@v4
       with:
         submodules: recursive
-    - uses: actions/setup-node@v3
+    - uses: actions/setup-node@v4
       with:
         node-version: 18.17.1
     - name: Setup configs and install deps
       run: ./scripts/setup.sh -u
     - name: Run tests
       run: npm test -- -- --reporter=json --reporter-option output=test-report.json
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: success() || failure()
       with:
         name: test-results
