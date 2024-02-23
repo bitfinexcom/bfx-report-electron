@@ -193,7 +193,7 @@ jobs:
     - name: Unzip Linux Unpacked build
       run: unzip dist/linux-unpacked.zip
     - name: Run tests
-      uses: coactions/setup-xvfb@v1.0.1
+      uses: coactions/setup-xvfb@6b00cf1889f4e1d5a48635647013c0508128ee1a
       with:
         run: npm run e2e
     - name: Normalize E2E test report
@@ -225,7 +225,7 @@ jobs:
     - name: Unzip Win Unpacked build
       run: 7z -y x dist/win-unpacked.zip
     - name: Run tests
-      uses: coactions/setup-xvfb@v1.0.1
+      uses: coactions/setup-xvfb@6b00cf1889f4e1d5a48635647013c0508128ee1a
       with:
         run: npm run e2e
     - name: Normalize E2E test report
@@ -259,7 +259,7 @@ jobs:
     - name: Unzip Mac Unpacked build
       run: unzip dist/mac.zip
     - name: Run tests
-      uses: coactions/setup-xvfb@v1.0.1
+      uses: coactions/setup-xvfb@6b00cf1889f4e1d5a48635647013c0508128ee1a
       with:
         run: npm run e2e
     - name: Normalize E2E test report
