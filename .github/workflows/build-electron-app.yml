@@ -199,7 +199,7 @@ jobs:
     - name: Normalize E2E test report
       run: node ./scripts/node/normalize-e2e-test-report e2e-test-report.xml
     - name: Upload Linux E2E test results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: linux-e2e-test-results
         path: e2e-test-report.xml
@@ -231,7 +231,7 @@ jobs:
     - name: Normalize E2E test report
       run: node ./scripts/node/normalize-e2e-test-report e2e-test-report.xml
     - name: Upload Win E2E test results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: win-e2e-test-results
         path: e2e-test-report.xml
@@ -265,7 +265,7 @@ jobs:
     - name: Normalize E2E test report
       run: node ./scripts/node/normalize-e2e-test-report e2e-test-report.xml
     - name: Upload Mac E2E test results
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: mac-e2e-test-results
         path: e2e-test-report.xml
