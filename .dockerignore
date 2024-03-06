@@ -15,6 +15,7 @@ bfx-reports-framework/config/*.json
 bfx-reports-framework/config/facs/*.json
 bfx-reports-framework/logs/*.log
 bfx-reports-framework/csv
+bfx-reports-framework/report-files
 bfx-report-ui/build
 bfx-report-ui/bfx-report-express/logs/*.log
 bfx-report-ui/bfx-report-express/config/*.json

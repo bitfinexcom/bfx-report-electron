@@ -6,7 +6,7 @@ const DB_FILE_NAME = 'db-sqlite_sync_m0.db'
 const DB_SHM_FILE_NAME = `${DB_FILE_NAME}-shm`
 const DB_WAL_FILE_NAME = `${DB_FILE_NAME}-wal`
 const SECRET_KEY_FILE_NAME = 'secret-key'
-const CSV_PATH_VERSION = 1
+const REPORT_FILES_PATH_VERSION = 1
 
 module.exports = {
   CONFIGS_FILE_NAME,
@@ -15,5 +15,5 @@ module.exports = {
   DB_SHM_FILE_NAME,
   DB_WAL_FILE_NAME,
   SECRET_KEY_FILE_NAME,
-  CSV_PATH_VERSION
+  REPORT_FILES_PATH_VERSION
 }

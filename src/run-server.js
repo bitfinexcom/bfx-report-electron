@@ -28,8 +28,8 @@ module.exports = ({
   const env = {
     ...process.env,
     PATH_TO_USER_DATA: pathToUserData,
-    PATH_TO_USER_CSV: mainConfsKeeper
-      .getConfigByName('pathToUserCsv'),
+    PATH_TO_USER_REPORT_FILES: mainConfsKeeper
+      .getConfigByName('pathToUserReportFiles'),
     SCHEDULER_RULE: mainConfsKeeper
       .getConfigByName('schedulerRule'),
     SECRET_KEY: secretKey,

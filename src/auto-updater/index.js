@@ -96,6 +96,23 @@ const _fireToast = (
     WINDOW_EVENT_NAMES.CLOSED,
     () => closeAlert(alert)
   )
+  const autoUpdateToastWidthHandler = (event, data) => {
+    alert.browserWindow?.setBounds({
+      width: Math.round(data?.width ?? 0)
+    })
+  }
+  const autoUpdateToastRepositionHandler = () => {
+    const { x, y, width } = win.getContentBounds()
+    const { width: alWidth } = alert.browserWindow.getContentBounds()
+
+    const boundsOpts = {
+      x: (x + width) - alWidth,
+      y,
+      height
+    }
+
+    alert.browserWindow.setBounds(boundsOpts)
+  }
 
   const bwOptions = {
     frame: false,
@@ -155,6 +172,14 @@ const _fireToast = (
     },
     didClose: () => {
       eventHandlerCtx.removeListener()
+      ipcMain.removeListener(
+        'auto-update-toast:width',
+        autoUpdateToastWidthHandler
+      )
+      ipcMain.removeListener(
+        alert.uid + 'reposition',
+        autoUpdateToastRepositionHandler
+      )
 
       didClose(alert)
     }
@@ -169,23 +194,8 @@ const _fireToast = (
     sound
   )
 
-  ipcMain.on('auto-update-toast:width', (event, data) => {
-    alert.browserWindow?.setBounds({
-      width: Math.round(data?.width ?? 0)
-    })
-  })
-  ipcMain.on(alert.uid + 'reposition', () => {
-    const { x, y, width } = win.getContentBounds()
-    const { width: alWidth } = alert.browserWindow.getContentBounds()
-
-    const boundsOpts = {
-      x: (x + width) - alWidth,
-      y,
-      height
-    }
-
-    alert.browserWindow.setBounds(boundsOpts)
-  })
+  ipcMain.on('auto-update-toast:width', autoUpdateToastWidthHandler)
+  ipcMain.on(alert.uid + 'reposition', autoUpdateToastRepositionHandler)
 
   return res
 }

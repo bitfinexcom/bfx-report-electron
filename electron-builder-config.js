@@ -12,6 +12,59 @@ const parseEnvValToBool = require(
   './src/helpers/parse-env-val-to-bool'
 )
 
+const electronEnvVars = {
+  REPO_OWNER: 'bitfinexcom'
+}
+let electronEnvVarsFromFile = {}
+
+const electronEnvFilePath = path.join(
+  __dirname, 'electronEnv.json'
+)
+const electronEnvExampleFilePath = path.join(
+  __dirname, 'electronEnv.json.example'
+)
+
+let hasElectronEnv = false
+let hasNewElectronEnv = false
+
+try {
+  electronEnvVarsFromFile = require(electronEnvFilePath)
+  Object.assign(electronEnvVars, electronEnvVarsFromFile)
+  hasElectronEnv = true
+} catch (err) {}
+
+if (!hasElectronEnv) {
+  try {
+    electronEnvVarsFromFile = JSON.parse(
+      fs.readFileSync(electronEnvExampleFilePath, 'utf8')
+    )
+    Object.assign(electronEnvVars, electronEnvVarsFromFile)
+    fs.writeFileSync(
+      electronEnvFilePath,
+      JSON.stringify(electronEnvVars, null, 2),
+      'utf8'
+    )
+    hasElectronEnv = true
+  } catch (err) {}
+}
+
+if (process.env.REPO_OWNER) {
+  electronEnvVars.REPO_OWNER = process.env.REPO_OWNER
+}
+if (electronEnvVars.REPO_OWNER !== electronEnvVarsFromFile.REPO_OWNER) {
+  hasNewElectronEnv = true
+}
+
+if (hasNewElectronEnv) {
+  try {
+    fs.writeFileSync(
+      electronEnvFilePath,
+      JSON.stringify(electronEnvVars, null, 2),
+      'utf8'
+    )
+  } catch (err) {}
+}
+
 let version
 let zippedAppImageArtifactPath
 let zippedMacArtifactPath
@@ -88,7 +141,7 @@ module.exports = {
   publish: {
     provider: 'github',
     repo: 'bfx-report-electron',
-    owner: 'bitfinexcom',
+    owner: electronEnvVars.REPO_OWNER,
     vPrefixedTagName: true,
     channel: 'latest',
 
@@ -155,6 +208,7 @@ module.exports = {
     '!bfx-reports-framework/*/*.sh',
     '!bfx-reports-framework/*.sh',
     '!bfx-reports-framework/.mocharc.json',
+    '!bfx-reports-framework/node_modules/phantomjs-prebuilt',
 
     '!**/.dockerignore',
     '!**/*Dockerfile*',

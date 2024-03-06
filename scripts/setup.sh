@@ -94,12 +94,12 @@ fi
 if [ $isAutoUpdateDisabled == 1 ]; then
   echo -e "\n${COLOR_YELLOW}Auto-update is turned off!${COLOR_NORMAL}"
 
-  sed -i -e \
-    "s/\"IS_AUTO_UPDATE_DISABLED\": .*/\"IS_AUTO_UPDATE_DISABLED\": true/g" \
+  sed -i -E -e \
+    "s/\"IS_AUTO_UPDATE_DISABLED\": (false)|(true)/\"IS_AUTO_UPDATE_DISABLED\": true/g" \
     "$ROOT/$ELECTRON_ENV_FILE_NAME"
 else
-  sed -i -e \
-    "s/\"IS_AUTO_UPDATE_DISABLED\": .*/\"IS_AUTO_UPDATE_DISABLED\": false/g" \
+  sed -i -E -e \
+    "s/\"IS_AUTO_UPDATE_DISABLED\": (false)|(true)/\"IS_AUTO_UPDATE_DISABLED\": false/g" \
     "$ROOT/$ELECTRON_ENV_FILE_NAME"
 fi
 
