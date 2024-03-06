@@ -22,6 +22,9 @@ on:
       isNotarizeDisabled:
         description: 'Is notarize disabled (true / 1)?'
         required: false
+      repoOwner:
+        description: 'Repository owner for auto-update'
+        required: false
 
 env:
   DOCKER_BUILDKIT: 1
@@ -50,6 +53,13 @@ jobs:
       name: Use BFX API Staging for queries
       run: |
         echo "IS_BFX_API_STAGING=1" >> $GITHUB_ENV
+    - name: Set repository owner for auto-update
+      run: |
+        if [[ "${{ github.event.inputs.repoOwner }}" != "" ]]; then
+          echo "REPO_OWNER=${{ github.event.inputs.repoOwner }}" >> $GITHUB_ENV
+        else
+          echo "REPO_OWNER=${{ github.repository_owner }}" >> $GITHUB_ENV
+        fi
     - name: Cache Electron binaries
       id: electron-cache
       uses: actions/cache@v4
@@ -68,7 +78,6 @@ jobs:
       continue-on-error: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        REPO_OWNER: ${{ github.repository_owner }}
       with:
         timeout_minutes: 20
         retry_wait_seconds: 10
@@ -124,6 +133,13 @@ jobs:
       name: Use BFX API Staging for queries
       run: |
         echo "IS_BFX_API_STAGING=1" >> $GITHUB_ENV
+    - name: Set repository owner for auto-update
+      run: |
+        if [[ "${{ github.event.inputs.repoOwner }}" != "" ]]; then
+          echo "REPO_OWNER=${{ github.event.inputs.repoOwner }}" >> $GITHUB_ENV
+        else
+          echo "REPO_OWNER=${{ github.repository_owner }}" >> $GITHUB_ENV
+        fi
     - uses: actions/setup-node@v4
       with:
         node-version: 18.17.1
@@ -149,7 +165,6 @@ jobs:
         CSC_LINK: ${{ secrets.BFX_APPLE_BUILD_CERTIFICATE_B64 }}
         CSC_KEY_PASSWORD: ${{ secrets.BFX_APPLE_BUILD_CERTIFICATE_PASSWORD }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        REPO_OWNER: ${{ github.repository_owner }}
         ELECTRON_CACHE: ${{ runner.temp }}/.cache/electron
       with:
         timeout_minutes: 40
