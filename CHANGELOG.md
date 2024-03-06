@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.20.0] - 2024-03-06
+
+### Added
+
+- Added missing translations for `2FA`. PR: [bfx-report-ui#774](https://github.com/bitfinexcom/bfx-report-ui/pull/774)
+- Implemented exporting to PDF support for `Ledgers` and `Tax Reports`. PRs: [bfx-report#347](https://github.com/bitfinexcom/bfx-report/pull/347), [bfx-reports-framework#352](https://github.com/bitfinexcom/bfx-reports-framework/pull/352), [bfx-report-electron#319](https://github.com/bitfinexcom/bfx-report-electron/pull/319), [bfx-ext-pdf-js#4](https://github.com/bitfinexcom/bfx-ext-pdf-js/pull/4), [bfx-report#349](https://github.com/bitfinexcom/bfx-report/pull/349), [bfx-reports-framework#354](https://github.com/bitfinexcom/bfx-reports-framework/pull/354), [bfx-report-ui#775](https://github.com/bitfinexcom/bfx-report-ui/pull/775)
+- Added detection for `BFX` auth error: `ERR_AUTH_API: ERR_TOKEN_ALREADY_USED`. PR: [bfx-report#348](https://github.com/bitfinexcom/bfx-report/pull/348)
+- Added improvements to the token refresh flow: stop the auth token refresh interval if catch an auth error. PR: [bfx-reports-framework#353](https://github.com/bitfinexcom/bfx-reports-framework/pull/353)
+- Added option to set repo owner for auto-update in manual run. PR: [bfx-report-electron#331](https://github.com/bitfinexcom/bfx-report-electron/pull/331)
+
+### Changed
+
+- Reworked navigation for the `Movements` report according to the latest UX improvement proposals: remove tabs from wallets & movements, make movements a separate navigation item under `My History`. PR: [bfx-report-ui#771](https://github.com/bitfinexcom/bfx-report-ui/pull/771)
+- Reworked navigation for the `My History` section according to the latest UX improvement proposals. PR: [bfx-report-ui#778](https://github.com/bitfinexcom/bfx-report-ui/pull/778)
+- Enhanced `loading` and `no data` states representation for reports with tables. PR: [bfx-report-ui#779](https://github.com/bitfinexcom/bfx-report-ui/pull/779)
+- Set `90sec` timeout for grc requests to have the same timeout as for api requests. PR: [bfx-report#351](https://github.com/bitfinexcom/bfx-report/pull/351)
+- Set `90sec` timeout for `html-pdf` lib. PR: [bfx-reports-framework#355](https://github.com/bitfinexcom/bfx-reports-framework/pull/355)
+- Optimized GitHub Actions Workflow for release build. PR: [bfx-report-electron#322](https://github.com/bitfinexcom/bfx-report-electron/pull/322)
+- Updated Actions to use Nodejs `v20`. PR: [bfx-report-electron#323](https://github.com/bitfinexcom/bfx-report-electron/pull/323)
+
+### Fixed
+
+- Updated UI engines configuration to prevent issues. PR: [bfx-report-ui#772](https://github.com/bitfinexcom/bfx-report-ui/pull/772)
+- Fixed `2FA` authorization flow according to: After the first push of the auth button, we should lock the button (till we get any response from this endpoint) to prevent sending several of the same requests. PR: [bfx-report-ui#776](https://github.com/bitfinexcom/bfx-report-ui/pull/776)
+- Fixed the potential possibility of duplicated sending for correct `OTP`: it should keep btn disabled until the successful auth will be completed. PR: [bfx-report-ui#780](https://github.com/bitfinexcom/bfx-report-ui/pull/780)
+- Fixed 11 `auto-update-toast:width` listeners added. PR: [bfx-report-electron#330](https://github.com/bitfinexcom/bfx-report-electron/pull/330)
+
 ## [4.19.0] - 2024-02-14
 
 ### Added
