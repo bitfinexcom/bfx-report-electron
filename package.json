@@ -29,7 +29,7 @@
     "js-yaml": "4.1.0",
     "lib-js-util-base": "git+https://github.com/bitfinexcom/lib-js-util-base.git",
     "new-github-issue-url": "0.2.1",
-    "showdown": "2.0.3",
+    "showdown": "2.1.0",
     "truncate-utf8-bytes": "1.0.2",
     "yauzl": "2.10.0"
   },
