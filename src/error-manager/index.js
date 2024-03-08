@@ -169,6 +169,7 @@ const manageNewGithubIssue = async (params) => {
 }
 
 const initLogger = () => {
+  log.transports.ipc.level = false
   log.transports.console.level = isDevEnv
     ? 'debug'
     : 'warn'
