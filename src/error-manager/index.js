@@ -169,6 +169,7 @@ const manageNewGithubIssue = async (params) => {
 }
 
 const initLogger = () => {
+  log.transports.ipc.level = false
   log.transports.console.level = isDevEnv
     ? 'debug'
     : 'warn'
@@ -215,7 +216,9 @@ const initLogger = () => {
       if (
         /Cannot download differentially/gi.test(error) ||
         /ERR_CONNECTION_REFUSED/gi.test(error) ||
-        /objects\.githubusercontent\.com/gi.test(error)
+        /objects\.githubusercontent\.com/gi.test(error) ||
+        /Error: ERR_FAILED \(-2\) loading 'file:.*\.html'/gi.test(error) ||
+        /Failed to generate PDF/gi.test(error)
       ) {
         return message
       }

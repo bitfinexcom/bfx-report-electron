@@ -16,6 +16,8 @@ const PROCESS_STATES = require(
 
 module.exports = () => {
   ipcs.serverIpc.on('message', async (mess) => {
+    let templateFilePathForRm = null
+
     try {
       if (mess?.state !== PROCESS_MESSAGES.REQUEST_PDF_CREATION) {
         return
@@ -33,14 +35,9 @@ module.exports = () => {
         templateFilePath &&
         typeof templateFilePath === 'string'
       )
-
-      const html = isTemplateFilePathUsed
-        ? await fs.readFile(templateFilePath, { encoding: 'utf8' })
-        : template
-
-      if (isTemplateFilePathUsed) {
-        await fs.rm(templateFilePath, { force: true, maxRetries: 3 })
-      }
+      templateFilePathForRm = isTemplateFilePathUsed
+        ? templateFilePath
+        : null
 
       const win = new BrowserWindow({
         show: false,
@@ -49,14 +46,15 @@ module.exports = () => {
           nodeIntegration: true
         }
       })
-      win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`)
+      const closedEventPromise = new Promise((resolve) => (
+        win.once('closed', resolve)
+      ))
+      const loadPromise = isTemplateFilePathUsed
+        ? win.loadFile(templateFilePath)
+        : win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(template)}`)
 
-      await new Promise((resolve, reject) => {
-        win.webContents.on('did-finish-load', resolve)
-        win.webContents.on('did-fail-load', (e, code, err) => {
-          reject(err)
-        })
-      })
+      await loadPromise
+
       const buffer = await win.webContents.printToPDF({
         landscape: format !== 'portrait',
         pageSize: orientation,
@@ -79,7 +77,12 @@ module.exports = () => {
 </span>`
       })
 
+      win.close()
+      await closedEventPromise
+
       if (isTemplateFilePathUsed) {
+        await fs.rm(templateFilePath, { force: true, maxRetries: 3 })
+
         const { dir, name } = path.parse(templateFilePath)
         const pdfFilePath = path.format({ dir, name, ext: '.pdf' })
 
@@ -98,9 +101,14 @@ module.exports = () => {
         data: { buffer, uid }
       })
     } catch (err) {
+      if (templateFilePathForRm) {
+        fs.rm(templateFilePathForRm, { force: true, maxRetries: 3 })
+          .then(() => {}, (err) => { console.debug(err) })
+      }
+
       ipcs.serverIpc.send({
         state: PROCESS_STATES.RESPONSE_PDF_CREATION,
-        data: { err, uid: mess?.data?.uid ?? null }
+        data: { err: err.stack ?? err, uid: mess?.data?.uid ?? null }
       })
 
       console.error(err)
