@@ -43,7 +43,7 @@
     "app-builder-bin": "4.2.0",
     "cross-env": "7.0.3",
     "dotenv": "16.3.1",
-    "electron": "27.3.5",
+    "electron": "29.1.1",
     "electron-builder": "24.10.0",
     "mocha": "10.2.0",
     "standard": "17.1.0",
