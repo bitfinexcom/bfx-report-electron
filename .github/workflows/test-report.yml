@@ -31,6 +31,9 @@ jobs:
         name: Mocha Tests
         path: test-results/test-report.json
         reporter: mocha-json
+        # Workaround for error 'fatal: not a git repository' caused by a call to 'git ls-files'
+        # See: https://github.com/dorny/test-reporter/issues/169#issuecomment-1583560458
+        max-annotations: 0
     - name: Test Report Summary
       run: |
         echo "### Test Report page is ready! :rocket:" >> $GITHUB_STEP_SUMMARY
