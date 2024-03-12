@@ -21,6 +21,8 @@ jobs:
     - name: Download Linux E2E test results
       uses: actions/download-artifact@v4
       with:
+        run-id: ${{ github.event.workflow_run.id }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         name: linux-e2e-test-results
         path: linux-e2e-test-results
     - uses: dorny/test-reporter@v1.8.0
@@ -32,6 +34,8 @@ jobs:
     - name: Download Win E2E test results
       uses: actions/download-artifact@v4
       with:
+        run-id: ${{ github.event.workflow_run.id }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         name: win-e2e-test-results
         path: win-e2e-test-results
     - uses: dorny/test-reporter@v1.8.0
@@ -43,6 +47,8 @@ jobs:
     - name: Download Mac E2E test results
       uses: actions/download-artifact@v4
       with:
+        run-id: ${{ github.event.workflow_run.id }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
         name: mac-e2e-test-results
         path: mac-e2e-test-results
     - uses: dorny/test-reporter@v1.8.0
