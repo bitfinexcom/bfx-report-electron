@@ -25,7 +25,7 @@ jobs:
       run: ./scripts/setup.sh -u
     - name: Run tests
       run: npm test -- -- --reporter=json --reporter-option output=test-report.json
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       if: success() || failure()
       with:
         name: test-results
