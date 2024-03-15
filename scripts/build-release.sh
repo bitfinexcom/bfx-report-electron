@@ -226,6 +226,8 @@ publishOption=""
 if [ $isPublished == 1 ]; then
   # Available: 'onTag', 'onTagOrDraft', 'always', 'never'
   publishOption="--publish always"
+else
+  publishOption="--publish never"
 fi
 
 rm -rf "$DIST_FOLDER/"*"$targetPlatform"*
