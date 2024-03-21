@@ -18,27 +18,50 @@ jobs:
     runs-on: ubuntu-22.04
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
-    - uses: dorny/test-reporter@v1
+    - name: Download Linux E2E test results
+      uses: actions/download-artifact@v4
+      with:
+        run-id: ${{ github.event.workflow_run.id }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        name: linux-e2e-test-results
+        path: linux-e2e-test-results
+    - uses: dorny/test-reporter@v1.8.0
       id: linux-e2e-test-results
       with:
-        artifact: linux-e2e-test-results
         name: Linux E2E Tests
-        path: e2e-test-report.xml
+        path: linux-e2e-test-results/e2e-test-report.xml
         reporter: jest-junit
-    - uses: dorny/test-reporter@v1
+        # Workaround for error 'fatal: not a git repository' caused by a call to 'git ls-files'
+        # See: https://github.com/dorny/test-reporter/issues/169#issuecomment-1583560458
+        max-annotations: 0
+    - name: Download Win E2E test results
+      uses: actions/download-artifact@v4
+      with:
+        run-id: ${{ github.event.workflow_run.id }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        name: win-e2e-test-results
+        path: win-e2e-test-results
+    - uses: dorny/test-reporter@v1.8.0
       id: win-e2e-test-results
       with:
-        artifact: win-e2e-test-results
         name: Win E2E Tests
-        path: e2e-test-report.xml
+        path: win-e2e-test-results/e2e-test-report.xml
         reporter: jest-junit
-    - uses: dorny/test-reporter@v1
+        max-annotations: 0
+    - name: Download Mac E2E test results
+      uses: actions/download-artifact@v4
+      with:
+        run-id: ${{ github.event.workflow_run.id }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        name: mac-e2e-test-results
+        path: mac-e2e-test-results
+    - uses: dorny/test-reporter@v1.8.0
       id: mac-e2e-test-results
       with:
-        artifact: mac-e2e-test-results
         name: Mac E2E Tests
-        path: e2e-test-report.xml
+        path: mac-e2e-test-results/e2e-test-report.xml
         reporter: jest-junit
+        max-annotations: 0
     - name: E2E Test Report Summary
       run: |
         echo "### E2E Test Report page is ready! :rocket:" >> $GITHUB_STEP_SUMMARY

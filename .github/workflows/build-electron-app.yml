@@ -83,7 +83,12 @@ jobs:
         retry_wait_seconds: 10
         max_attempts: 3
         retry_on: any
-        command: ./scripts/launch.sh -lwp
+        command: |
+          if [[ "${REPO_OWNER}" != "${{ github.repository_owner }}" ]]; then
+            ./scripts/launch.sh -lw
+          else
+            ./scripts/launch.sh -lwp
+          fi
     - name: Zip Linux Unpacked build
       run: zip -r dist/linux-unpacked.zip dist/linux-unpacked
     - name: Upload Linux Unpacked build
@@ -98,6 +103,24 @@ jobs:
       with:
         name: win-unpacked
         path: dist/win-unpacked.zip
+    - if: env.REPO_OWNER != github.repository_owner
+      name: Upload Linux Dist Release
+      uses: actions/upload-artifact@v4
+      with:
+        name: linux-dist-release
+        path: |
+          dist/*-linux.AppImage
+          dist/*-linux.AppImage.zip
+          dist/latest-linux.yml
+    - if: env.REPO_OWNER != github.repository_owner
+      name: Upload Win Dist Release
+      uses: actions/upload-artifact@v4
+      with:
+        name: win-dist-release
+        path: |
+          dist/*-win.exe
+          dist/*-win.exe.blockmap
+          dist/latest.yml
     - name: Prepare cache folders
       run: |
         sudo chown -R $(id -u):$(id -g) ~/.cache/electron
@@ -178,7 +201,11 @@ jobs:
           if [[ -z "${APPLE_APP_SPECIFIC_PASSWORD}" || "${NOTARIZE:-}" != "1" ]]; then unset APPLE_APP_SPECIFIC_PASSWORD; fi
           if [[ -z "${CSC_LINK}" || "${NOTARIZE:-}" != "1" ]]; then unset CSC_LINK; fi
           if [[ -z "${CSC_KEY_PASSWORD}" || "${NOTARIZE:-}" != "1" ]]; then unset CSC_KEY_PASSWORD; fi
-          ./scripts/build-release.sh -mp
+          if [[ "${REPO_OWNER}" != "${{ github.repository_owner }}" ]]; then
+            ./scripts/build-release.sh -m
+          else
+            ./scripts/build-release.sh -mp
+          fi
     - name: Zip Mac Unpacked build
       run: zip -r dist/mac.zip dist/mac
     - name: Upload Mac Unpacked build
@@ -186,6 +213,15 @@ jobs:
       with:
         name: mac-unpacked
         path: dist/mac.zip
+    - if: env.REPO_OWNER != github.repository_owner
+      name: Upload Mac Dist Release
+      uses: actions/upload-artifact@v4
+      with:
+        name: mac-dist-release
+        path: |
+          dist/*-mac.zip
+          dist/*-mac.zip.blockmap
+          dist/latest-mac.yml
 
   linux-e2e-test-runner:
     name: Linux E2E Test Runner
@@ -214,7 +250,7 @@ jobs:
     - name: Normalize E2E test report
       run: node ./scripts/node/normalize-e2e-test-report e2e-test-report.xml
     - name: Upload Linux E2E test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: linux-e2e-test-results
         path: e2e-test-report.xml
@@ -246,7 +282,7 @@ jobs:
     - name: Normalize E2E test report
       run: node ./scripts/node/normalize-e2e-test-report e2e-test-report.xml
     - name: Upload Win E2E test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: win-e2e-test-results
         path: e2e-test-report.xml
@@ -280,7 +316,7 @@ jobs:
     - name: Normalize E2E test report
       run: node ./scripts/node/normalize-e2e-test-report e2e-test-report.xml
     - name: Upload Mac E2E test results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: mac-e2e-test-results
         path: e2e-test-report.xml

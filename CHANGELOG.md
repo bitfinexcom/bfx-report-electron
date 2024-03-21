@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.21.0] - 2024-03-20
+
+### Added
+
+- Added ability to handle `PDFBufferUnderElectronCreationError` error to use WebSockets to inform users for better UX. PRs: [bfx-report#354](https://github.com/bitfinexcom/bfx-report/pull/354), [bfx-reports-framework#359](https://github.com/bitfinexcom/bfx-reports-framework/pull/359)
+- Implemented support for `emitReportFileGenerationFailedToOne` ws events on UI side to inform users about report generation failing. PR: [bfx-report-ui#787](https://github.com/bitfinexcom/bfx-report-ui/pull/787)
+- Added missing translations for PDF reports. PRs: [bfx-report#356](https://github.com/bitfinexcom/bfx-report/pull/356), [bfx-reports-framework#362](https://github.com/bitfinexcom/bfx-reports-framework/pull/362)
+- Added DB migration for `publicCollsConf` table name with Cyrillic `c`. PR: [bfx-reports-framework#360](https://github.com/bitfinexcom/bfx-reports-framework/pull/360)
+- Added migration for public colls conf endpoint name with Cyrillic `c`. PR: [bfx-report-ui#788](https://github.com/bitfinexcom/bfx-report-ui/pull/788)
+- Added ability to upload dist release if repo owner is customized using manual build run. PR: [bfx-report-electron#347](https://github.com/bitfinexcom/bfx-report-electron/pull/347)
+
+### Changed
+
+- Updated `GH Actions` to use Nodejs `v20` to prevent breaking changes in workflow. PRs: [bfx-report#355](https://github.com/bitfinexcom/bfx-report/pull/355), [bfx-reports-framework#361](https://github.com/bitfinexcom/bfx-reports-framework/pull/361), [bfx-report-electron#344](https://github.com/bitfinexcom/bfx-report-electron/pull/344), [bfx-facs-db-better-sqlite#9](https://github.com/bitfinexcom/bfx-facs-db-better-sqlite/pull/9)
+- Migrated from the `deprecated` reports generation methods usage to the actual ones according to the latest backend changes. PR: [bfx-report-ui#784](https://github.com/bitfinexcom/bfx-report-ui/pull/784)
+- Allowed all pairs removal at the `Market History / Spot` section according to the latest UX improvement proposals: We should allow the user to remove the current pair and display an empty table that says `No history to display`. PR: [bfx-report-ui#786](https://github.com/bitfinexcom/bfx-report-ui/pull/786)
+- Improved print PDF under Electronjs. Turned off ipc log transport between render and main process as unused, it prevents ipc transport error from `electron-log` lib. Suppressed error modal window if pdf gen failed: the idea here is to inform the user if something goes wrong using WS event for better UX instead of showing a modal window error as it is annoying in most cases. Improved pdf generation performance for big html templates, uses `loadFile` method of electron api instead of `base64` encoding. Bumped up Electronjs minor version to have the last fixes. PR: [bfx-report-electron#342](https://github.com/bitfinexcom/bfx-report-electron/pull/342)
+
+### Fixed
+
+- Prevented duplication possibility for items in the selectors of the UI. PR: [bfx-report-ui#785](https://github.com/bitfinexcom/bfx-report-ui/pull/785)
+
 ## [4.20.0] - 2024-03-06
 
 ### Added
