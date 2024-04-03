@@ -221,6 +221,8 @@ jobs:
         path: |
           dist/*-mac.zip
           dist/*-mac.zip.blockmap
+          dist/*-mac.dmg
+          dist/*-mac.dmg.blockmap
           dist/latest-mac.yml
 
   linux-e2e-test-runner:
