@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.22.0] - 2024-04-03
+
+### Added
+
+- Implemented dynamic width support for the `Reports` tables according to: the tables should stretch and fill horizontally (width 100%). PR: [bfx-report-ui#794](https://github.com/bitfinexcom/bfx-report-ui/pull/794)
+- Added `DMG` Mac dist release uploading in case of manual build on a fork. Related to this issue: [bfx-report-electron#352](https://github.com/bitfinexcom/bfx-report-electron/issues/352). PR: [bfx-report-electron#357](https://github.com/bitfinexcom/bfx-report-electron/pull/357)
+- Added handling unexpected BFX API errors, added `3` retries with a timeout `10sec` if catches any unexpected errors during report generation or DB sync in framework mode. Related to these issues: [bfx-report-electron#354](https://github.com/bitfinexcom/bfx-report-electron/issues/354), [bfx-report-electron#355](https://github.com/bitfinexcom/bfx-report-electron/issues/355). PR: [bfx-report#359](https://github.com/bitfinexcom/bfx-report/pull/359)
+- Added additional processing for JSON DB file of the `LokiJS`. In some rare cases due to an unexpected termination of the app process, the JSON file used for LokiJS can not be finished recording correctly. Related to this issue: [bfx-report-electron#353](https://github.com/bitfinexcom/bfx-report-electron/issues/353). PR: [bfx-reports-framework#365](https://github.com/bitfinexcom/bfx-reports-framework/pull/365)
+
+### Changed
+
+- Improved export type selection, added Export Format selector (similar to Date Format) with 2 options: 1-export as CSV (should be selected by default), 2-export as PDF. PR: [bfx-report-ui#795](https://github.com/bitfinexcom/bfx-report-ui/pull/795)
+- Extended error logs for sync proc, the idea is to add `serializedError` field to the error object with a serialized error string that contains composed error metadata for easier debugging of the user's error reports. This field will be used for logging in case catching error occurs during sync in the framework mode. PRs: [bfx-report#360](https://github.com/bitfinexcom/bfx-report/pull/360), [bfx-reports-framework#366](https://github.com/bitfinexcom/bfx-reports-framework/pull/366)
+
+### Security
+
+- Resolved `dependabot` dependency updates, bumped `follow-redirects` from `1.15.5` to `1.15.6`, `webpack-dev-middleware` from `5.3.3` to `5.3.4`, `express` from `4.18.2` to `4.19.2`. PRs: [bfx-report-ui#792](https://github.com/bitfinexcom/bfx-report-ui/pull/792), [bfx-report-ui#797](https://github.com/bitfinexcom/bfx-report-ui/pull/797)
+
 ## [4.21.0] - 2024-03-20
 
 ### Added
