@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.23.0] - 2024-04-17
+
+### Added
+
+- Implemented `isStagingBfxApi` flag handling and shows `Staging` prefix for the corresponding keys stored in the DB to improve the manual testing process convenience. PR: [bfx-report-ui#800](https://github.com/bitfinexcom/bfx-report-ui/pull/800)
+- Implemented the possibility of manually adjusting columns width and persisting these between sessions. Added the ability to set the auto-calculated dynamic defaults via the context menu. Improved charts responsiveness. PR: [bfx-report-ui#805](https://github.com/bitfinexcom/bfx-report-ui/pull/805)
+
+### Changed
+
+- Updated `GH Actions` `setup-node` to `v4` to prevent breaking changes in workflow. PRs: [bfx-facs-db-better-sqlite#10](https://github.com/bitfinexcom/bfx-facs-db-better-sqlite/pull/10), [bfx-report#365](https://github.com/bitfinexcom/bfx-report/pull/365), [bfx-reports-framework#369](https://github.com/bitfinexcom/bfx-reports-framework/pull/369)
+- Increased the inner `limit` for the BFX API `trades/{symbol}/hist` endpoint. It's useful for the `Transaction Tax Report` in case of currency conversion to USD to reduce the amount of calls and help users to go through `Rate Limit`. PR: [bfx-report#363](https://github.com/bitfinexcom/bfx-report/pull/363)
+- Speeded up `auth` in case token expiration to prevent redundant awaiting. PR: [bfx-report#364](https://github.com/bitfinexcom/bfx-report/pull/364)
+- Reverted tables responsiveness in the UI. PR: [bfx-report-ui#801](https://github.com/bitfinexcom/bfx-report-ui/pull/801)
+- Reverted the option to revert table width as an always dynamic component. PR: [bfx-report-ui#802](https://github.com/bitfinexcom/bfx-report-ui/pull/802)
+- Extended and improved click tracking all across the `Reports`. PR: [bfx-report-ui#803](https://github.com/bitfinexcom/bfx-report-ui/pull/803)
+- Enhanced `Reports` navigation menu representation. PR: [bfx-report-ui#804](https://github.com/bitfinexcom/bfx-report-ui/pull/804)
+
+### Fixed
+
+- Fixed `action` prop passing for the `WS` in case an error. PR: [bfx-report-express#38](https://github.com/bitfinexcom/bfx-report-express/pull/38)
+
 ## [4.22.0] - 2024-04-03
 
 ### Added
