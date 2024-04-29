@@ -163,6 +163,7 @@ module.exports = ({
         },
         {
           label: 'Changelog',
+          id: MENU_ITEM_IDS.SHOW_CHANGE_LOG_MENU_ITEM,
           click: () => showChangelog()
         },
         ...(isMac
