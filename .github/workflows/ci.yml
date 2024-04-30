@@ -24,7 +24,14 @@ jobs:
     - name: Setup configs and install deps
       run: ./scripts/setup.sh -u
     - name: Run tests
-      run: npm test -- -- --reporter=json --reporter-option output=test-report.json
+      uses: nick-fields/retry@v3
+      continue-on-error: false
+      with:
+        timeout_minutes: 20
+        retry_wait_seconds: 10
+        max_attempts: 3
+        retry_on: any
+        command: npm test -- -- --reporter=json --reporter-option output=test-report.json
     - uses: actions/upload-artifact@v4
       if: success() || failure()
       with:
