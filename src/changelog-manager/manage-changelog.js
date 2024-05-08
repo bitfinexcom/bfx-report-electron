@@ -23,14 +23,21 @@ module.exports = async () => {
       return
     }
 
-    const isShown = await showChangelog({ version })
+    const {
+      error,
+      isShown
+    } = await showChangelog({ version })
+
+    if (!isShown) {
+      return
+    }
 
     const isSaved = await configsKeeper
       .saveConfigs({ shownChangelogVer: version })
 
     if (
       isSaved &&
-      isShown
+      !error
     ) {
       return
     }

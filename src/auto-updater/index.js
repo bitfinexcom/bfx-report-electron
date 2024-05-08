@@ -28,6 +28,8 @@ const {
   addOnceProcEventHandler
 } = require('../window-event-manager')
 
+const MENU_ITEM_IDS = require('../create-menu/menu.item.ids')
+
 const isAutoUpdateDisabled = parseEnvValToBool(process.env.IS_AUTO_UPDATE_DISABLED)
 
 const fontsStyle = fs.readFileSync(path.join(
@@ -219,8 +221,12 @@ const _switchMenuItem = (opts = {}) => {
     isCheckMenuItemDisabled,
     isInstallMenuItemVisible
   } = { ...opts }
-  const checkMenuItem = _getUpdateMenuItemById('CHECK_UPDATE_MENU_ITEM')
-  const installMenuItem = _getUpdateMenuItemById('INSTALL_UPDATE_MENU_ITEM')
+  const checkMenuItem = _getUpdateMenuItemById(
+    MENU_ITEM_IDS.CHECK_UPDATE_MENU_ITEM
+  )
+  const installMenuItem = _getUpdateMenuItemById(
+    MENU_ITEM_IDS.INSTALL_UPDATE_MENU_ITEM
+  )
 
   if (
     !checkMenuItem ||

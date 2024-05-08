@@ -14,6 +14,8 @@ const openNewGithubIssue = require('./open-new-github-issue')
 const collectLogs = require('./collect-logs')
 const getDebugInfo = require('../helpers/get-debug-info')
 
+const MENU_ITEM_IDS = require('../create-menu/menu.item.ids')
+
 let _isLocked = false
 let _isIssueAutoManagerLocked = false
 let caughtError
@@ -97,7 +99,7 @@ const _getReportBugMenuItem = () => {
     return {}
   }
 
-  return menu.getMenuItemById('REPORT_BUG_MENU_ITEM') || {}
+  return menu.getMenuItemById(MENU_ITEM_IDS.REPORT_BUG_MENU_ITEM) || {}
 }
 
 const _lockIssueManager = () => {
