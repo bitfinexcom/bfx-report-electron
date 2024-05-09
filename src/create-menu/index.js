@@ -5,23 +5,25 @@ const electron = require('electron')
 const { app, Menu } = electron
 const isMac = process.platform === 'darwin'
 
-const exportDB = require('./export-db')
-const importDB = require('./import-db')
-const removeDB = require('./remove-db')
-const restoreDB = require('./restore-db')
-const backupDB = require('./backup-db')
-const changeReportsFolder = require('./change-reports-folder')
-const changeSyncFrequency = require('./change-sync-frequency')
-const triggerElectronLoad = require('./trigger-electron-load')
-const showAboutModalDialog = require('./show-about-modal-dialog')
+const exportDB = require('../export-db')
+const importDB = require('../import-db')
+const removeDB = require('../remove-db')
+const restoreDB = require('../restore-db')
+const backupDB = require('../backup-db')
+const changeReportsFolder = require('../change-reports-folder')
+const changeSyncFrequency = require('../change-sync-frequency')
+const triggerElectronLoad = require('../trigger-electron-load')
+const showAboutModalDialog = require('../show-about-modal-dialog')
 const {
   checkForUpdates,
   quitAndInstall
-} = require('./auto-updater')
-const { manageNewGithubIssue } = require('./error-manager')
-const showDocs = require('./show-docs')
-const { showChangelog } = require('./changelog-manager')
-const parseEnvValToBool = require('./helpers/parse-env-val-to-bool')
+} = require('../auto-updater')
+const { manageNewGithubIssue } = require('../error-manager')
+const showDocs = require('../show-docs')
+const { showChangelog } = require('../changelog-manager')
+const parseEnvValToBool = require('../helpers/parse-env-val-to-bool')
+
+const MENU_ITEM_IDS = require('./menu.item.ids')
 
 const isAutoUpdateDisabled = parseEnvValToBool(process.env.IS_AUTO_UPDATE_DISABLED)
 
@@ -137,20 +139,20 @@ module.exports = ({
       submenu: [
         {
           label: 'Open new GitHub issue',
-          id: 'REPORT_BUG_MENU_ITEM',
+          id: MENU_ITEM_IDS.REPORT_BUG_MENU_ITEM,
           click: manageNewGithubIssue
         },
         { type: 'separator' },
         {
           label: 'Check for updates',
           enabled: !isAutoUpdateDisabled,
-          id: 'CHECK_UPDATE_MENU_ITEM',
+          id: MENU_ITEM_IDS.CHECK_UPDATE_MENU_ITEM,
           click: checkForUpdates()
         },
         {
           label: 'Quit and install updates',
           visible: false,
-          id: 'INSTALL_UPDATE_MENU_ITEM',
+          id: MENU_ITEM_IDS.INSTALL_UPDATE_MENU_ITEM,
           click: quitAndInstall()
         },
         { type: 'separator' },
@@ -161,6 +163,7 @@ module.exports = ({
         },
         {
           label: 'Changelog',
+          id: MENU_ITEM_IDS.SHOW_CHANGE_LOG_MENU_ITEM,
           click: () => showChangelog()
         },
         ...(isMac

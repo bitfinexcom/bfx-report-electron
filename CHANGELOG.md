@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.24.0] - 2024-05-08
+
+### Added
+
+- Added `3` retries for the test run before it fails, increased timeouts for mocha hooks. PRs: [bfx-report#368](https://github.com/bitfinexcom/bfx-report/pull/368), [bfx-report-electron#374](https://github.com/bitfinexcom/bfx-report-electron/pull/374), [bfx-reports-framework#372](https://github.com/bitfinexcom/bfx-reports-framework/pull/372), [bfx-reports-framework#374](https://github.com/bitfinexcom/bfx-reports-framework/pull/374)
+- Implemented the possibility to `Reset Column Widths` via the context menu (right click) on column headers. PR: [bfx-report-ui#808](https://github.com/bitfinexcom/bfx-report-ui/pull/808)
+- Implemented the possibility to customize (1-7 days range supported) authorization token TTL via the `Preferences` menu in the app. PR: [bfx-report-ui#809](https://github.com/bitfinexcom/bfx-report-ui/pull/809)
+
+### Changed
+
+- Disabled the `Changelog` menu option if the description of the current version is not available. PR: [bfx-report-electron#373](https://github.com/bitfinexcom/bfx-report-electron/pull/373)
+- Enhanced `sub-account` ledger balance recalc to prevent setting non-recalced balances. Prevented `funding trades` sync issue when `end` less than `start`. Related to this issue: [bfx-report-electron#375](https://github.com/bitfinexcom/bfx-report-electron/issues/375). PR: [bfx-reports-framework#375](https://github.com/bitfinexcom/bfx-reports-framework/pull/375)
+- Enhanced default column widths calculation flow using dynamic calculated average and widths multipliers based on the column types. PR: [bfx-report-ui#810](https://github.com/bitfinexcom/bfx-report-ui/pull/810)
+
+### Security
+
+- Resolved `dependabot` dependency updates, bumped `ejs` from `3.1.9` to `3.1.10`. PR: [bfx-report-ui#813](https://github.com/bitfinexcom/bfx-report-ui/pull/813)
+
 ## [4.23.0] - 2024-04-17
 
 ### Added
