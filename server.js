@@ -58,6 +58,9 @@ const allowedProcessMessagesSet = _getAllowedStatesSet({
     'READY_MIGRATIONS',
     'ERROR_MIGRATIONS',
 
+    'READY_TRX_TAX_REPORT',
+    'ERROR_TRX_TAX_REPORT',
+
     'ALL_TABLE_HAVE_BEEN_CLEARED',
     'ALL_TABLE_HAVE_NOT_BEEN_CLEARED',
 
