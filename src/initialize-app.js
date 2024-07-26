@@ -157,6 +157,11 @@ module.exports = async () => {
     await app.whenReady()
     await enforceMacOSAppLocation()
 
+    // https://www.electronjs.org/docs/latest/tutorial/notifications#windows
+    if (process.platform === 'win32') {
+      app.setAppUserModelId(app.name)
+    }
+
     const pathToUserData = app.getPath('userData')
     const pathToUserDocuments = app.getPath('documents')
 
