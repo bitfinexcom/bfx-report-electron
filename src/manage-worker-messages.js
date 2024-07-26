@@ -11,6 +11,7 @@ const isMainWinAvailable = require(
   './helpers/is-main-win-available'
 )
 const { showWindow } = require('./helpers/manage-window')
+const showNotification = require('./show-notification')
 const PROCESS_MESSAGES = require(
   '../bfx-reports-framework/workers/loc.api/process.message.manager/process.messages'
 )
@@ -235,6 +236,21 @@ module.exports = (ipc) => {
         }
 
         ipc.send({ state: PROCESS_STATES.REMOVE_ALL_TABLES })
+      }
+      if (
+        (
+          state === PROCESS_MESSAGES.READY_TRX_TAX_REPORT ||
+          state === PROCESS_MESSAGES.ERROR_TRX_TAX_REPORT
+        ) &&
+        !wins?.mainWindow?.isVisible()
+      ) {
+        const isError = state === PROCESS_MESSAGES.ERROR_TRX_TAX_REPORT
+        const body = isError
+          ? 'An unexpected error occurred while generating the tax report!'
+          : 'Your tax report is ready!'
+        const urgency = isError ? 'critical' : 'normal'
+
+        showNotification({ body, urgency })
       }
     } catch (err) {
       console.error(err)
