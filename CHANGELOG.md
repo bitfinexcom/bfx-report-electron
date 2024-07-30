@@ -7,6 +7,61 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.25.0] - 2024-07-31
+
+### Added
+
+- Added transaction tax report. PRs: [bfx-reports-framework#373](https://github.com/bitfinexcom/bfx-reports-framework/pull/373), [bfx-reports-framework#378](https://github.com/bitfinexcom/bfx-reports-framework/pull/378), [bfx-reports-framework#379](https://github.com/bitfinexcom/bfx-reports-framework/pull/379), [bfx-reports-framework#380](https://github.com/bitfinexcom/bfx-reports-framework/pull/380), [bfx-reports-framework#381](https://github.com/bitfinexcom/bfx-reports-framework/pull/381), [bfx-reports-framework#382](https://github.com/bitfinexcom/bfx-reports-framework/pull/382), [bfx-reports-framework#383](https://github.com/bitfinexcom/bfx-reports-framework/pull/383), [bfx-reports-framework#384](https://github.com/bitfinexcom/bfx-reports-framework/pull/384), [bfx-reports-framework#385](https://github.com/bitfinexcom/bfx-reports-framework/pull/385)
+- Increased the math precision of the trx tax report using `bignumber.js`. PR: [bfx-reports-framework#386](https://github.com/bitfinexcom/bfx-reports-framework/pull/386)
+- Added test coverage for the transaction tax report. PR: [bfx-reports-framework#387](https://github.com/bitfinexcom/bfx-reports-framework/pull/387)
+- Added unit test for core `look-up-trades` fn of the transaction tax report. PR: [bfx-reports-framework#388](https://github.com/bitfinexcom/bfx-reports-framework/pull/388)
+- Added ability to select `EXCHANGE` trades for the trx tax report. PR: [bfx-reports-framework#389](https://github.com/bitfinexcom/bfx-reports-framework/pull/389)
+- Added `_isInvoicePayOrder`, `_isAirdropOnWallet`, `_isMarginFundingPayment`, `_isAffiliateRebate`, `_isStakingPayments` ledgers to movements. PR: [bfx-reports-framework#391](https://github.com/bitfinexcom/bfx-reports-framework/pull/391)
+- Added ability to show taxable payment amounts in the tax report. PR: [bfx-reports-framework#392](https://github.com/bitfinexcom/bfx-reports-framework/pull/392)
+- Added perc progress of the trx tax report based on transactions that should be converted to USD using the pub-trade endpoint. PR: [bfx-reports-framework#394](https://github.com/bitfinexcom/bfx-reports-framework/pull/394)
+- Added ability to send `IPC` messages when the trx tax report is ready. This is used in the electronjs environment to show a native OS notification to the app in case the tax report is being generated in the background. PR: [bfx-reports-framework#397](https://github.com/bitfinexcom/bfx-reports-framework/pull/397)
+- Added ability to overwrite common interrupter when query bfx api. PR: [bfx-report#371](https://github.com/bitfinexcom/bfx-report/pull/371)
+- Added interruption ability in case rate limit. When getting `Rate Limit` or `cool down` due to `Rate Limit` for 1min occurs, it needs to provide a feature to interrupt the tax report and sync being processed. PR: [bfx-report#373](https://github.com/bitfinexcom/bfx-report/pull/373)
+- Added `TRY` to the FOREX ccy list. PR: [bfx-report#377](https://github.com/bitfinexcom/bfx-report/pull/377)
+- Added `CSV`/`PDF` formatter for the tax report `source` field to follow the UI view, eg show `AIRDROP_ON_WALLET` as `Airdrop on wallet`. PR: [bfx-report#381](https://github.com/bitfinexcom/bfx-report/pull/381)
+- Added `source` field to `CSV`/`PDF` of the tax report to follow the UI view. PR: [bfx-reports-framework#398](https://github.com/bitfinexcom/bfx-reports-framework/pull/398)
+- Added ability to show the native notification in the electron app in case the tax report is being generated in the background. There we check if the main window is invisible show a notification otherwise don't. PR: [bfx-report-electron#386](https://github.com/bitfinexcom/bfx-report-electron/pull/386)
+- Implemented UI representation for the new Tax Report. PR: [bfx-report-ui#816](https://github.com/bitfinexcom/bfx-report-ui/pull/816)
+- Implemented dismissable `Disclaimer` message for the new `Tax Report`. PR: [bfx-report-ui#831](https://github.com/bitfinexcom/bfx-report-ui/pull/831)
+- Implemented `Source` column representation for the new Tax Report and formatted like `Airdrop on wallet`. PR: [bfx-report-ui#836](https://github.com/bitfinexcom/bfx-report-ui/pull/836)
+- Implemented generation `progress` representation for the new `Tax Report`. Implemented notification on `Tax Report` generation finish. PR: [bfx-report-ui#837](https://github.com/bitfinexcom/bfx-report-ui/pull/837)
+
+### Changed
+
+- Refactored DB models to be moved to separate files for easier supporting and readability. PR: [bfx-reports-framework#393](https://github.com/bitfinexcom/bfx-reports-framework/pull/393)
+- Refactored sync schema to be moved to separate files for easier supporting and readability. PR: [bfx-reports-framework#395](https://github.com/bitfinexcom/bfx-reports-framework/pull/395)
+- Refactored and optimizes `CollapsedTable` component. PR: [bfx-report-ui#815](https://github.com/bitfinexcom/bfx-report-ui/pull/815)
+- Reworked and optimized `Spot` report column configuration getters. PR: [bfx-report-ui#817](https://github.com/bitfinexcom/bfx-report-ui/pull/817)
+- Refactored and optimized the `DateFormatSelector` component. PR: [bfx-report-ui#818](https://github.com/bitfinexcom/bfx-report-ui/pull/818)
+- Reworked and optimized `Funding Bids & Offers`, `Funding Loans (Unused)` and `Funding Credits (Used)` reports column configuration getters. Extended unified cell getter customizability for the cases when the tooltip content should be formatted differently from the main cell content. PR: [bfx-report-ui#819](https://github.com/bitfinexcom/bfx-report-ui/pull/819)
+- Reworked and optimized the `LangMenu` component in a more performant way and reduces redundant code to avoid potential issues in the future. PR: [bfx-report-ui#820](https://github.com/bitfinexcom/bfx-report-ui/pull/820)
+- Enhanced and unified `Ledgers`, `Funding Earnings`, `Staking Earnings` and `Affiliates Earnings` reports configuration getters. PR: [bfx-report-ui#821](https://github.com/bitfinexcom/bfx-report-ui/pull/821)
+- Reworked and optimized the `Export` menu toggler component in a more performant way and reduces redundant code. PR: [bfx-report-ui#822](https://github.com/bitfinexcom/bfx-report-ui/pull/822)
+- Reworked and optimized `Public Trades`, `Public Funding` and `Derivatives` reports column configuration getters. Implemented unified `formatType` utility for better reusability. PR: [bfx-report-ui#823](https://github.com/bitfinexcom/bfx-report-ui/pull/823)
+- Reworked and optimized the `NavSwitcher` component and improved props linting. PR: [bfx-report-ui#824](https://github.com/bitfinexcom/bfx-report-ui/pull/824)
+- Reworked and optimized `Invoices` report columns configuration getters. Implemented unified `getLinkCell` and `getJsonFormattedCell` utilities for better reusability. PR: [bfx-report-ui#827](https://github.com/bitfinexcom/bfx-report-ui/pull/827)
+- Reworked and optimized the `ShowMilliseconds` component  in a more performant way and reduces redundant code. PR: [bfx-report-ui#828](https://github.com/bitfinexcom/bfx-report-ui/pull/828)
+- Prevented the `Tax Report` loading state still active in cases when the `emitTrxTaxReportGenerationInBackgroundToOne` event returns an `error` during report generation. PR: [bfx-report-ui#832](https://github.com/bitfinexcom/bfx-report-ui/pull/832)
+
+### Fixed
+
+- Strengthened consistency data for export. PR: [bfx-report#372](https://github.com/bitfinexcom/bfx-report/pull/372)
+- Fixed pub-trade price lookup for the trx tax report. PR: [bfx-reports-framework#390](https://github.com/bitfinexcom/bfx-reports-framework/pull/390)
+- Fixed the tax report if bfx-api `pub-trades` endpoint does not return array. PR: [bfx-reports-framework#396](https://github.com/bitfinexcom/bfx-reports-framework/pull/396)
+- Prevented requests duplication on `Tax Report` refreshing in some cases. PR: [bfx-report-ui#833](https://github.com/bitfinexcom/bfx-report-ui/pull/833)
+- Fixed issue with showing the sync state in some cases when the scheduler launches the synchronization. PR: [bfx-report-ui#835](https://github.com/bitfinexcom/bfx-report-ui/pull/835)
+- Fixed `disabling` the `Authenticate` button during the `2FA` login flow to prevent the possibility of requests with the same token duplication and related errors. PR: [bfx-report-ui#838](https://github.com/bitfinexcom/bfx-report-ui/pull/838)
+
+### Security
+
+- Added `dependabot` config for the ability to open new PRs against the `staging` branch. Also bumped `pug` version to `3.0.3` to have a [security improvement](https://github.com/pugjs/pug/pull/3438). PR: [bfx-report#380](https://github.com/bitfinexcom/bfx-report/pull/380)
+- Bumped `braces` from `3.0.2` to `3.0.3`. PR: [bfx-report-ui#826](https://github.com/bitfinexcom/bfx-report-ui/pull/826)
+
 ## [4.24.0] - 2024-05-08
 
 ### Added
