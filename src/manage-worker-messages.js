@@ -242,7 +242,10 @@ module.exports = (ipc) => {
           state === PROCESS_MESSAGES.READY_TRX_TAX_REPORT ||
           state === PROCESS_MESSAGES.ERROR_TRX_TAX_REPORT
         ) &&
-        !wins?.mainWindow?.isVisible()
+        (
+          !wins?.mainWindow?.isVisible() ||
+          !wins?.mainWindow?.isFocused()
+        )
       ) {
         const isError = state === PROCESS_MESSAGES.ERROR_TRX_TAX_REPORT
         const body = isError
