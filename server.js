@@ -61,6 +61,9 @@ const allowedProcessMessagesSet = _getAllowedStatesSet({
     'READY_TRX_TAX_REPORT',
     'ERROR_TRX_TAX_REPORT',
 
+    'READY_SYNC',
+    'ERROR_SYNC',
+
     'ALL_TABLE_HAVE_BEEN_CLEARED',
     'ALL_TABLE_HAVE_NOT_BEEN_CLEARED',
 
