@@ -10,8 +10,12 @@ const showMessageModalDialog = require(
 const isMainWinAvailable = require(
   './helpers/is-main-win-available'
 )
-const { showWindow } = require('./helpers/manage-window')
+const {
+  showWindow,
+  isWindowInvisible
+} = require('./helpers/manage-window')
 const showNotification = require('./show-notification')
+const showSyncNotification = require('./show-notification/show-sync-notification')
 const PROCESS_MESSAGES = require(
   '../bfx-reports-framework/workers/loc.api/process.message.manager/process.messages'
 )
@@ -242,10 +246,7 @@ module.exports = (ipc) => {
           state === PROCESS_MESSAGES.READY_TRX_TAX_REPORT ||
           state === PROCESS_MESSAGES.ERROR_TRX_TAX_REPORT
         ) &&
-        (
-          !wins?.mainWindow?.isVisible() ||
-          !wins?.mainWindow?.isFocused()
-        )
+        isWindowInvisible(wins?.mainWindow)
       ) {
         const isError = state === PROCESS_MESSAGES.ERROR_TRX_TAX_REPORT
         const body = isError
@@ -254,6 +255,15 @@ module.exports = (ipc) => {
         const urgency = isError ? 'critical' : 'normal'
 
         showNotification({ body, urgency })
+      }
+      if (
+        (
+          state === PROCESS_MESSAGES.READY_SYNC ||
+          state === PROCESS_MESSAGES.ERROR_SYNC
+        ) &&
+        isWindowInvisible(wins?.mainWindow)
+      ) {
+        showSyncNotification(mess)
       }
     } catch (err) {
       console.error(err)
