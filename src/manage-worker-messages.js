@@ -14,7 +14,7 @@ const {
   showWindow
 } = require('./helpers/manage-window')
 const showTrxTaxReportNotification = require(
-  './show-trx-tax-report-notification'
+  './show-notification/show-trx-tax-report-notification'
 )
 const showSyncNotification = require(
   './show-notification/show-sync-notification'
