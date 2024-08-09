@@ -111,8 +111,16 @@ const centerWindow = (win, workArea) => {
   win.setBounds(boundsOpts)
 }
 
+const isWindowInvisible = (win) => {
+  return (
+    !win?.isVisible() ||
+    !win?.isFocused()
+  )
+}
+
 module.exports = {
   hideWindow,
   showWindow,
-  centerWindow
+  centerWindow,
+  isWindowInvisible
 }
