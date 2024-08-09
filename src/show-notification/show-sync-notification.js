@@ -3,6 +3,8 @@
 const PROCESS_MESSAGES = require(
   '../../bfx-reports-framework/workers/loc.api/process.message.manager/process.messages'
 )
+const wins = require('./windows')
+const { isWindowInvisible } = require('../helpers/manage-window')
 const showNotification = require('./')
 
 const getBody = (params) => {
@@ -26,6 +28,10 @@ module.exports = (mess) => {
     state = '',
     data = {}
   } = mess ?? {}
+
+  if (!isWindowInvisible(wins?.mainWindow)) {
+    return
+  }
 
   const isError = state === PROCESS_MESSAGES.ERROR_SYNC
   const isInterrupted = !!data?.isInterrupted

@@ -11,8 +11,7 @@ const isMainWinAvailable = require(
   './helpers/is-main-win-available'
 )
 const {
-  showWindow,
-  isWindowInvisible
+  showWindow
 } = require('./helpers/manage-window')
 const showTrxTaxReportNotification = require(
   './show-trx-tax-report-notification'
@@ -252,11 +251,8 @@ module.exports = (ipc) => {
         showTrxTaxReportNotification(mess)
       }
       if (
-        (
-          state === PROCESS_MESSAGES.READY_SYNC ||
-          state === PROCESS_MESSAGES.ERROR_SYNC
-        ) &&
-        isWindowInvisible(wins?.mainWindow)
+        state === PROCESS_MESSAGES.READY_SYNC ||
+        state === PROCESS_MESSAGES.ERROR_SYNC
       ) {
         showSyncNotification(mess)
       }
