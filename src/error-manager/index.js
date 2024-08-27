@@ -6,6 +6,10 @@ const cleanStack = require('clean-stack')
 
 const isDevEnv = process.env.NODE_ENV === 'development'
 
+const { isENetError } = require(
+  '../../bfx-reports-framework/workers/loc.api/helpers/api-errors-testers'
+)
+
 const log = require('./log')
 const getErrorDescription = require('./get-error-description')
 const showModalDialog = require('./show-modal-dialog')
@@ -216,8 +220,8 @@ const initLogger = () => {
        *   - GitHub server can't respond to the auto-update requests
        */
       if (
+        isENetError(error) ||
         /Cannot download differentially/gi.test(error) ||
-        /ERR_CONNECTION_REFUSED/gi.test(error) ||
         /objects\.githubusercontent\.com/gi.test(error) ||
         /Error: ERR_FAILED \(-2\) loading 'file:.*\.html'/gi.test(error) ||
         /Failed to generate PDF/gi.test(error)
