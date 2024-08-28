@@ -161,3 +161,14 @@ npm run launch -- -aop
 ```
 
 > Also, we provide [GitHub Actioins workflows](https://docs.github.com/en/actions/using-workflows/about-workflows) configs for automated building and publishing of the Electron app artifacts using the above-described scripts `./scripts/launch.sh` and `./scripts/build-release.sh`, see the corresponding file `.github/workflows/build-electron-app.yml`
+
+## Locations of ElectronJS App files on different OSs
+
+- Logs:
+  - Ubuntu: `~/.config/Bitfinex Report/logs`
+  - Windows: `C:\Users\$username\AppData\Roaming\Bitfinex Report\logs`
+  - Mac: ElectronJS logs: `~/Library/Logs/Bitfinex Report` and app logs `~/Library/Application Support/Bitfinex Report/logs`
+- DB files `db-sqlite_sync_m0.db`, `db-sqlite_sync_m0.db-shm` (optional), `db-sqlite_sync_m0.db-wal` (optional):
+  - Ubuntu: `~/.config/Bitfinex Report`
+  - Windows: `C:\Users\$username\AppData\Roaming\Bitfinex Report`
+  - Mac: `~/Library/Application Support/Bitfinex Report`
