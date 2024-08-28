@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.26.0] - 2024-08-28
+
+### Added
+
+- Added ability to send `IPC` messages when the sync is ready. PR: [bfx-reports-framework#405](https://github.com/bitfinexcom/bfx-reports-framework/pull/405)
+- Added ability to show native notifications in case another screen is displayed and the app window is not hidden with multiple workspaces mode in `Ubuntu`/`Mac`. PR: [bfx-report-electron#389](https://github.com/bitfinexcom/bfx-report-electron/pull/389)
+- Added ability to show the native notification in the electron app in case the `sync` is being processed in the background with the hidden main window. There we check if the main window is invisible and show a notification otherwise don't. PR: [bfx-report-electron#390](https://github.com/bitfinexcom/bfx-report-electron/pull/390)
+
+### Changed
+
+- Enhanced and unified `Logins` and `Change Logs` reports column configuration getters and reduced redundant code. PR: [bfx-report-ui#840](https://github.com/bitfinexcom/bfx-report-ui/pull/840)
+- Reworked and optimized the `TimeFrameSelector` component in a more performant way and reduced redundant code. PR: [bfx-report-ui#841](https://github.com/bitfinexcom/bfx-report-ui/pull/841)
+- Reworked cell generation configurations more concisely and optimally for `Wallets`, `Weighted Averages` and `Concentration Risk` reports. PR: [bfx-report-ui#842](https://github.com/bitfinexcom/bfx-report-ui/pull/842)
+- Reworked and optimized `LedgersCategorySelect` in a more concise and performant way. PR: [bfx-report-ui#843](https://github.com/bitfinexcom/bfx-report-ui/pull/843)
+- Reworked and optimized `Movements`, `Trades`, `Orders` and `Positions` reports column configuration getters. Implemented unified `getFeeCell` and `getActionCell` helpers for better reusability. PR: [bfx-report-ui#844](https://github.com/bitfinexcom/bfx-report-ui/pull/844)
+- Reworked `CandlesTimeframe` in a more performant way and improved props linting. PR: [bfx-report-ui#845](https://github.com/bitfinexcom/bfx-report-ui/pull/845)
+- Enhanced and unified `Snapshots` sections column configuration getters and reduced redundant code. PR: [bfx-report-ui#846](https://github.com/bitfinexcom/bfx-report-ui/pull/846)
+- Removed deprecated methods and fields without breaking the logic and UI functionality. PRs: [bfx-report#389](https://github.com/bitfinexcom/bfx-report/pull/389), [bfx-reports-framework#403](https://github.com/bitfinexcom/bfx-reports-framework/pull/403)
+- Improved DB file cleanups for test coverage hooks. PRs: [bfx-report#390](https://github.com/bitfinexcom/bfx-report/pull/390), [bitfinexcom/lokue#3](https://github.com/bitfinexcom/lokue/pull/3)
+- Removed unused public colls conf accessor endpoints to use the common `getAllPublicCollsConfs`/`editAllPublicCollsConfs` ones without breaking the logic and UI functionality. PR: [bfx-reports-framework#404](https://github.com/bitfinexcom/bfx-reports-framework/pull/404)
+- Implemented a class for DB models to typify and unify model objects. PR: [bfx-reports-framework#406](https://github.com/bitfinexcom/bfx-reports-framework/pull/406)
+- Proxied `ENet` error tester for import in electron env. PR: [bfx-reports-framework#407](https://github.com/bitfinexcom/bfx-reports-framework/pull/407)
+
+### Fixed
+
+- Extended network error processing. Related to these issues: [bfx-report-electron#396](https://github.com/bitfinexcom/bfx-report-electron/issues/396), [bfx-report-electron#274](https://github.com/bitfinexcom/bfx-report-electron/issues/274). PR: [bfx-report#392](https://github.com/bitfinexcom/bfx-report/pull/392)
+- Improved the tax report ccy conversion by adding `6` retries with `10sec` delay for getting `pub-trades` if returns non-array. PR: [bfx-reports-framework#402](https://github.com/bitfinexcom/bfx-reports-framework/pull/402)
+- Extended network error processing and prevented showing the error modal dialog. Related to these issues: [bfx-report-electron#396](https://github.com/bitfinexcom/bfx-report-electron/issues/396), [bfx-report-electron#274](https://github.com/bitfinexcom/bfx-report-electron/issues/274). PR: [bfx-report-electron#397](https://github.com/bitfinexcom/bfx-report-electron/pull/397)
+
 ## [4.25.0] - 2024-07-31
 
 ### Added
