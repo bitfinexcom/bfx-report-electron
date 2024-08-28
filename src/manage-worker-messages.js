@@ -10,8 +10,15 @@ const showMessageModalDialog = require(
 const isMainWinAvailable = require(
   './helpers/is-main-win-available'
 )
-const { showWindow } = require('./helpers/manage-window')
-const showNotification = require('./show-notification')
+const {
+  showWindow
+} = require('./helpers/manage-window')
+const showTrxTaxReportNotification = require(
+  './show-notification/show-trx-tax-report-notification'
+)
+const showSyncNotification = require(
+  './show-notification/show-sync-notification'
+)
 const PROCESS_MESSAGES = require(
   '../bfx-reports-framework/workers/loc.api/process.message.manager/process.messages'
 )
@@ -238,22 +245,16 @@ module.exports = (ipc) => {
         ipc.send({ state: PROCESS_STATES.REMOVE_ALL_TABLES })
       }
       if (
-        (
-          state === PROCESS_MESSAGES.READY_TRX_TAX_REPORT ||
-          state === PROCESS_MESSAGES.ERROR_TRX_TAX_REPORT
-        ) &&
-        (
-          !wins?.mainWindow?.isVisible() ||
-          !wins?.mainWindow?.isFocused()
-        )
+        state === PROCESS_MESSAGES.READY_TRX_TAX_REPORT ||
+        state === PROCESS_MESSAGES.ERROR_TRX_TAX_REPORT
       ) {
-        const isError = state === PROCESS_MESSAGES.ERROR_TRX_TAX_REPORT
-        const body = isError
-          ? 'An unexpected error occurred while generating the tax report!'
-          : 'Your tax report is ready!'
-        const urgency = isError ? 'critical' : 'normal'
-
-        showNotification({ body, urgency })
+        showTrxTaxReportNotification(mess)
+      }
+      if (
+        state === PROCESS_MESSAGES.READY_SYNC ||
+        state === PROCESS_MESSAGES.ERROR_SYNC
+      ) {
+        showSyncNotification(mess)
       }
     } catch (err) {
       console.error(err)
