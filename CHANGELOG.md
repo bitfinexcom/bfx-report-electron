@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.27.0] - 2024-09-11
+
+### Added
+
+- Added `DNS` availability error processing: `net::ERR_NAME_NOT_RESOLVED`. PR: [bitfinexcom/bfx-report#395](https://github.com/bitfinexcom/bfx-report/pull/395)
+- Added `socket hang up` error processing as `ENet` error. PR: [bfx-report#396](https://github.com/bitfinexcom/bfx-report/pull/396)
+- Added common net `net::ERR_` error processing as `ENet` error. PR: [bfx-report#397](https://github.com/bitfinexcom/bfx-report/pull/397)
+- Implemented endpoint to get the last finished sync timestamp for the UI/UX. PR: [bfx-reports-framework#410](https://github.com/bitfinexcom/bfx-reports-framework/pull/410)
+- Implemented the possibility of `Cancel` the generation process for the tax report. PR: [bfx-report-ui#854](https://github.com/bitfinexcom/bfx-report-ui/pull/854)
+
+### Changed
+
+- Improved the interruption flow of getting data from the `BFX API` for the tax report, provided event-driven flow after delay processing, speeded up interruption not to wait for timeout in case of a slow internet connection. PRs: [bfx-report#399](https://github.com/bitfinexcom/bfx-report/pull/399), [bfx-reports-framework#411](https://github.com/bitfinexcom/bfx-reports-framework/pull/411)
+- Reworked DB model usage to use the new model interface implemented, speeded up the work by avoiding the usage of `cloneDeep` fn based on `JSON.parse(JSON.stringify(obj))` for the models. PR: [bfx-reports-framework#412](https://github.com/bitfinexcom/bfx-reports-framework/pull/412)
+- Removed duplicate buttons with the same functionality, improved and unified reports refreshing flow. PR: [bfx-report-ui#852](https://github.com/bitfinexcom/bfx-report-ui/pull/852)
+- Reworked and enhanced navigation tabs positioning and representation to be more consistent all across the app. Adjusted app `Summary` section spacing. PR: [bfx-report-ui#853](https://github.com/bitfinexcom/bfx-report-ui/pull/853)
+
+### Fixed
+
+- Fixed `node-fetch` timeout error processing for slow network connection. PR: [bfx-report#398](https://github.com/bitfinexcom/bfx-report/pull/398)
+
+### Security
+
+- Bumped `webpack` from `5.90.0` to `5.94.0`, `axios` from `1.6.7` to `1.7.4`. PR: [bfx-report-ui#851](https://github.com/bitfinexcom/bfx-report-ui/pull/851)
+
 ## [4.26.0] - 2024-08-28
 
 ### Added
