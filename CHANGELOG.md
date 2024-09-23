@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.28.0] - 2024-09-25
+
+### Added
+
+- Implemented dynamic height calculation for the `Concentration Risk` pie chart to prevent overflow issues possibility spotted in some cases. PR: [bfx-report-ui#859](https://github.com/bitfinexcom/bfx-report-ui/pull/859)
+- Implemented `Last Sync time` handling and representation (approximately in hours) for the `Reports`. PR: [bfx-report-ui#863](https://github.com/bitfinexcom/bfx-report-ui/pull/863)
+- Implemented `Profits` section (port of the `Win/Loss` chart with several predefined parameters) on the app `Summary` page. Removed charts smoothness for better precision. PR: [bfx-report-ui#864](https://github.com/bitfinexcom/bfx-report-ui/pull/864)
+- Added logic to have separated translations by language in `JSON` files using `i18next` lib for easier translation maintenance. PRs: [bfx-report#402](https://github.com/bitfinexcom/bfx-report/pull/402), [bfx-reports-framework#417](https://github.com/bitfinexcom/bfx-reports-framework/pull/417)
+
+### Changed
+
+- Improved user notification and auth flow behavior for the cases when the user tries to re-add an existing account via email/password. PR: [bfx-report-ui#860](https://github.com/bitfinexcom/bfx-report-ui/pull/860)
+
+### Fixed
+
+- Improved `Docker`/`Terraform` deployment, fixed `html-pdf` module usage under Docker container with using docker container based on the `Debian` image to make `html-pdf` module workable, fixed deprecation warnings. PR: [bfx-reports-framework#415](https://github.com/bitfinexcom/bfx-reports-framework/pull/415)
+- Fixed an infrequent case for `process.send()` when the app is on its way to being closed and the child process channel is closed but the worker still sends a message to the main one. PR: [bfx-reports-framework#416](https://github.com/bitfinexcom/bfx-reports-framework/pull/416)
+
+### Security
+
+- Bumped `path-to-regexp` from `1.8.0` to `1.9.0`, `express` from `4.19.2` to `4.21.0`. PR: [bfx-report-ui#858](https://github.com/bitfinexcom/bfx-report-ui/pull/858)
+
 ## [4.27.0] - 2024-09-11
 
 ### Added
