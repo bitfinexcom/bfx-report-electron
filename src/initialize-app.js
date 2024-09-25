@@ -5,6 +5,9 @@ const path = require('path')
 
 const { REPORT_FILES_PATH_VERSION } = require('./const')
 
+const TranslationIpcChannelHandlers = require(
+  './window-creators/main-renderer-ipc-bridge/translation-ipc-channel-handlers'
+)
 const triggerSyncAfterUpdates = require('./trigger-sync-after-updates')
 const triggerElectronLoad = require('./trigger-electron-load')
 const wins = require('./window-creators/windows')
@@ -169,6 +172,7 @@ module.exports = async () => {
       pathToUserData,
       pathToUserDocuments
     })
+    TranslationIpcChannelHandlers.create()
 
     const secretKey = await makeOrReadSecretKey(
       { pathToUserData }
