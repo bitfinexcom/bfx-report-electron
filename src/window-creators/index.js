@@ -96,7 +96,7 @@ const _createWindow = async (
     ...props,
 
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, 'main-renderer-ipc-bridge/preload.js'),
       ...props?.webPreferences
     }
   }
