@@ -10,7 +10,7 @@ const showMessageModalDialog = require('./show-message-modal-dialog')
 const {
   showLoadingWindow,
   hideLoadingWindow
-} = require('./change-loading-win-visibility-state')
+} = require('./window-creators/change-loading-win-visibility-state')
 const {
   DEFAULT_ARCHIVE_DB_FILE_NAME,
   DB_FILE_NAME,

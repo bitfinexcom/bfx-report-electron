@@ -7,7 +7,7 @@ const { REPORT_FILES_PATH_VERSION } = require('./const')
 
 const triggerSyncAfterUpdates = require('./trigger-sync-after-updates')
 const triggerElectronLoad = require('./trigger-electron-load')
-const wins = require('./windows')
+const wins = require('./window-creators/windows')
 const runServer = require('./run-server')
 const appStates = require('./app-states')
 const {
@@ -16,7 +16,7 @@ const {
 } = require('./window-creators')
 const {
   hideLoadingWindow
-} = require('./change-loading-win-visibility-state')
+} = require('./window-creators/change-loading-win-visibility-state')
 const makeOrReadSecretKey = require('./make-or-read-secret-key')
 const {
   configsKeeperFactory
@@ -43,7 +43,7 @@ const manageWorkerMessages = require(
 )
 const printToPDF = require('./print-to-pdf')
 
-const pathToLayouts = path.join(__dirname, 'layouts')
+const pathToLayouts = path.join(__dirname, 'window-creators/layouts')
 const pathToLayoutAppInitErr = path
   .join(pathToLayouts, 'app-init-error.html')
 

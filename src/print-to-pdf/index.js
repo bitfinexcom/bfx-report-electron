@@ -5,7 +5,7 @@ const fs = require('fs/promises')
 const path = require('path')
 
 const ipcs = require('../ipcs')
-const wins = require('../windows')
+const wins = require('../window-creators/windows')
 
 const PROCESS_MESSAGES = require(
   '../../bfx-reports-framework/workers/loc.api/process.message.manager/process.messages'

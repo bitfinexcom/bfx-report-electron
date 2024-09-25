@@ -9,11 +9,11 @@ const isDevEnv = process.env.NODE_ENV === 'development'
 const isMac = process.platform === 'darwin'
 
 const wins = require('./windows')
-const ipcs = require('./ipcs')
-const serve = require('./serve')
-const appStates = require('./app-states')
+const ipcs = require('../ipcs')
+const serve = require('../serve')
+const appStates = require('../app-states')
 const windowStateKeeper = require('./window-state-keeper')
-const createMenu = require('./create-menu')
+const createMenu = require('../create-menu')
 const {
   showLoadingWindow,
   hideLoadingWindow
@@ -22,10 +22,10 @@ const {
   showWindow,
   hideWindow,
   centerWindow
-} = require('./helpers/manage-window')
-const isBfxApiStaging = require('./helpers/is-bfx-api-staging')
+} = require('../helpers/manage-window')
+const isBfxApiStaging = require('../helpers/is-bfx-api-staging')
 
-const publicDir = path.join(__dirname, '../bfx-report-ui/build')
+const publicDir = path.join(__dirname, '../../bfx-report-ui/build')
 const loadURL = serve({ directory: publicDir })
 
 const pathToLayouts = path.join(__dirname, 'layouts')
@@ -90,7 +90,7 @@ const _createWindow = async (
     y: !y
       ? bounds.y
       : y,
-    icon: path.join(__dirname, '../build/icons/512x512.png'),
+    icon: path.join(__dirname, '../../build/icons/512x512.png'),
     backgroundColor: '#172d3e',
     show: false,
     ...props,

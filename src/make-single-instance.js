@@ -2,7 +2,7 @@
 
 const { app } = require('electron')
 
-const windows = require('./windows')
+const windows = require('./window-creators/windows')
 
 module.exports = () => {
   const isGottenLock = app.requestSingleInstanceLock()

@@ -14,11 +14,11 @@ const yaml = require('js-yaml')
 
 const log = require('../error-manager/log')
 const BfxMacUpdater = require('./bfx.mac.updater')
-const wins = require('../windows')
+const wins = require('../window-creators/windows')
 const {
   showLoadingWindow,
   hideLoadingWindow
-} = require('../change-loading-win-visibility-state')
+} = require('../window-creators/change-loading-win-visibility-state')
 const {
   closeAlert
 } = require('../modal-dialog-src/utils')
@@ -26,7 +26,7 @@ const parseEnvValToBool = require('../helpers/parse-env-val-to-bool')
 const {
   WINDOW_EVENT_NAMES,
   addOnceProcEventHandler
-} = require('../window-event-manager')
+} = require('../window-creators/window-event-manager')
 
 const MENU_ITEM_IDS = require('../create-menu/menu.item.ids')
 
