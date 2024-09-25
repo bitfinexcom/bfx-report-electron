@@ -29,7 +29,7 @@ const getAlertCustomClassObj = require(
 const {
   WINDOW_EVENT_NAMES,
   addOnceProcEventHandler
-} = require('./window-event-manager')
+} = require('./window-creators/window-event-manager')
 
 const _getSchedulerRule = (timeFormat, alertRes) => {
   if (timeFormat.value === 'days') {

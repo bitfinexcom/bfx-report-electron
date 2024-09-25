@@ -2,7 +2,7 @@
 
 const { app, BrowserWindow } = require('electron')
 
-const wins = require('./windows')
+const wins = require('./window-creators/windows')
 const relaunch = require('./relaunch')
 const showMessageModalDialog = require(
   './show-message-modal-dialog'

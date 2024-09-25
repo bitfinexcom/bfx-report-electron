@@ -2,7 +2,7 @@
 
 const { screen } = require('electron')
 
-const { getConfigsKeeperByName } = require('./configs-keeper')
+const { getConfigsKeeperByName } = require('../configs-keeper')
 
 module.exports = (options) => {
   let state = null

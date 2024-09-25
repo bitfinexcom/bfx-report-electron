@@ -3,7 +3,7 @@
 const ipcs = require('./ipcs')
 const {
   showLoadingWindow
-} = require('./change-loading-win-visibility-state')
+} = require('./window-creators/change-loading-win-visibility-state')
 
 const _closeServer = () => {
   return new Promise((resolve, reject) => {

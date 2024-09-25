@@ -3,7 +3,7 @@
 const path = require('path')
 const fs = require('fs')
 
-const wins = require('./windows')
+const wins = require('./window-creators/windows')
 const pathToTriggerElectronLoad = path.join(
   __dirname,
   '../bfx-report-ui/build/triggerElectronLoad.js'

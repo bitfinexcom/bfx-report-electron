@@ -7,7 +7,7 @@ const Alert = require('electron-alert')
 const { rootPath } = require('electron-root-path')
 
 const ipcs = require('../ipcs')
-const wins = require('../windows')
+const wins = require('../window-creators/windows')
 const {
   deserializeError
 } = require('../helpers/utils')
@@ -29,7 +29,7 @@ const {
 const {
   WINDOW_EVENT_NAMES,
   addOnceProcEventHandler
-} = require('../window-event-manager')
+} = require('../window-creators/window-event-manager')
 
 const fontsStyle = fs.readFileSync(path.join(
   rootPath, 'bfx-report-ui/build/fonts/roboto.css'

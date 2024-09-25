@@ -7,7 +7,7 @@ const { Converter } = require('showdown')
 const Alert = require('electron-alert')
 const { rootPath } = require('electron-root-path')
 
-const wins = require('../windows')
+const wins = require('../window-creators/windows')
 const isMainWinAvailable = require(
   '../helpers/is-main-win-available'
 )
@@ -26,7 +26,7 @@ const mdUserManual = fs.readFileSync(
 const {
   WINDOW_EVENT_NAMES,
   addOnceProcEventHandler
-} = require('../window-event-manager')
+} = require('../window-creators/window-event-manager')
 
 const mdStyle = fs.readFileSync(path.join(
   rootPath, 'node_modules', 'github-markdown-css/github-markdown.css'
