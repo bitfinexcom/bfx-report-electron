@@ -139,6 +139,7 @@ const _manageConfigs = (params = {}) => {
   const configsKeeper = configsKeeperFactory(
     { pathToUserData },
     {
+      language: 'en', // TODO:
       pathToUserReportFiles,
       schedulerRule,
       shownChangelogVer: '0.0.0',

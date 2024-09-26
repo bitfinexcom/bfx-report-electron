@@ -8,6 +8,7 @@ const CHANNEL_NAMES = {
 }
 
 const INVOKE_METHOD_NAMES = {
+  SET_LANGUAGE: 'setLanguage',
   GET_DEFAULT_LANGUAGE: 'getDefaultLanguage',
   GET_AVAILABLE_LANGUAGES: 'getAvailableLanguages'
 }
