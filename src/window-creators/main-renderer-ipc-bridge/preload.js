@@ -8,7 +8,8 @@ const CHANNEL_NAMES = {
 }
 
 const INVOKE_METHOD_NAMES = {
-  GET_DEFAULT_LANG: 'getDefaultLang'
+  GET_DEFAULT_LANGUAGE: 'getDefaultLanguage',
+  GET_AVAILABLE_LANGUAGES: 'getAvailableLanguages'
 }
 
 const getEventName = (channel, method) => {
@@ -33,4 +34,7 @@ if (isTestEnv) {
   require('wdio-electron-service/preload')
 }
 
-contextBridge.exposeInMainWorld('bfxReportElectronApi', bfxReportElectronApi)
+contextBridge.exposeInMainWorld(
+  'bfxReportElectronApi',
+  bfxReportElectronApi
+)
