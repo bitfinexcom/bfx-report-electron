@@ -1,9 +1,10 @@
 'use strict'
 
-const { app } = require('electron')
 const i18next = require('i18next')
+
 const IpcChannelHandlers = require('./ipc.channel.handlers')
 const { getConfigsKeeperByName } = require('../../configs-keeper')
+const { getAvailableLanguages } = require('../../i18next')
 
 class TranslationIpcChannelHandlers extends IpcChannelHandlers {
   constructor () {
@@ -13,30 +14,34 @@ class TranslationIpcChannelHandlers extends IpcChannelHandlers {
   }
 
   async setLanguageHandler (event, args) {
-    const lng = args?.language ?? 'en'
+    const lng = args?.language
+
+    if (
+      !lng ||
+      typeof lng !== 'string'
+    ) {
+      return false
+    }
 
     await i18next.changeLanguage(lng)
 
     const language = i18next.resolvedLanguage
-    await this.configsKeeper
+    const isSaved = await this.configsKeeper
       .saveConfigs({ language })
 
-    return language
+    if (isSaved) {
+      return language
+    }
+
+    return false
   }
 
-  // TODO:
-  async getDefaultLanguageHandler (event, args) {
-    const availableDefaultLanguages = [
-      ...app.getPreferredSystemLanguages(),
-      app.getLocale(),
-      'en'
-    ]
-
-    return availableDefaultLanguages
+  async getLanguageHandler (event, args) {
+    return i18next.resolvedLanguage
   }
 
   async getAvailableLanguagesHandler (event, args) {
-    return i18next.options.preload
+    return getAvailableLanguages()
   }
 }
 
