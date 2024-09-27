@@ -22,13 +22,44 @@ const availableLanguages = [...allFileNames.reduce((accum, fileName) => {
 
 let i18nextInstance = null
 
-// TODO:
+const _getLanguageFromAvailableOnes = (language) => {
+  const lngs = getAvailableLanguages()
+
+  if (lngs.some((lng) => lng === language)) {
+    return language
+  }
+
+  const lng = lngs.find((lng) => (
+    lng.startsWith(language) ||
+    language.startsWith(lng)
+  ))
+
+  if (lng) {
+    return lng
+  }
+
+  const normalizedLng = language.replace(/-\S*/, '')
+
+  return lngs.find((lng) => lng.startsWith(normalizedLng))
+}
+
 const _getDefaultLanguage = () => {
-  const availableDefaultLanguages = [
+  const defaultLanguages = [
     ...app.getPreferredSystemLanguages(),
     app.getLocale(),
     'en'
   ]
+
+  for (const defaultLanguage of defaultLanguages) {
+    const availableLanguage = _getLanguageFromAvailableOnes(defaultLanguage)
+
+    if (
+      availableLanguage &&
+      typeof availableLanguage === 'string'
+    ) {
+      return availableLanguage
+    }
+  }
 
   return 'en'
 }
