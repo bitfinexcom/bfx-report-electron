@@ -30,6 +30,40 @@ const isAutoUpdateDisabled = parseEnvValToBool(process.env.IS_AUTO_UPDATE_DISABL
 
 let pathToUserData = null
 let pathToUserDocuments = null
+let isMenuInitialized = false
+
+const _getPrevMenuItemPropsById = (id, params) => {
+  const paramsArr = Array.isArray(params)
+    ? params
+    : [params]
+  const res = {}
+
+  for (const opts of paramsArr) {
+    const {
+      propName,
+      defaultVal = true
+    } = opts ?? {}
+
+    if (!propName) {
+      continue
+    }
+    if (
+      !id ||
+      !isMenuInitialized
+    ) {
+      res[propName] = defaultVal
+
+      continue
+    }
+
+    const prevMenu = Menu.getApplicationMenu()
+    const menuItem = prevMenu?.getMenuItemById?.(id)
+
+    res[propName] = menuItem?.[propName] ?? defaultVal
+  }
+
+  return res
+}
 
 module.exports = (params) => {
   pathToUserData = params?.pathToUserData ?? pathToUserData
@@ -154,20 +188,30 @@ module.exports = (params) => {
         {
           label: i18next.t('menu.helpSubMenu.openNewGitHubIssueLabel'),
           id: MENU_ITEM_IDS.REPORT_BUG_MENU_ITEM,
-          click: manageNewGithubIssue
+          click: manageNewGithubIssue,
+          ..._getPrevMenuItemPropsById(MENU_ITEM_IDS.REPORT_BUG_MENU_ITEM, [
+            { propName: 'visible', defaultVal: true },
+            { propName: 'enabled', defaultVal: true }
+          ])
         },
         { type: 'separator' },
         {
           label: i18next.t('menu.helpSubMenu.checkForUpdatesLabel'),
-          enabled: !isAutoUpdateDisabled,
           id: MENU_ITEM_IDS.CHECK_UPDATE_MENU_ITEM,
-          click: checkForUpdates()
+          click: checkForUpdates(),
+          ..._getPrevMenuItemPropsById(MENU_ITEM_IDS.CHECK_UPDATE_MENU_ITEM, [
+            { propName: 'visible', defaultVal: true },
+            { propName: 'enabled', defaultVal: !isAutoUpdateDisabled }
+          ])
         },
         {
           label: i18next.t('menu.helpSubMenu.quitAndInstallUpdatesLabel'),
-          visible: false,
           id: MENU_ITEM_IDS.INSTALL_UPDATE_MENU_ITEM,
-          click: quitAndInstall()
+          click: quitAndInstall(),
+          ..._getPrevMenuItemPropsById(MENU_ITEM_IDS.INSTALL_UPDATE_MENU_ITEM, [
+            { propName: 'visible', defaultVal: false },
+            { propName: 'enabled', defaultVal: true }
+          ])
         },
         { type: 'separator' },
         {
@@ -178,7 +222,11 @@ module.exports = (params) => {
         {
           label: i18next.t('menu.helpSubMenu.changelogLabel'),
           id: MENU_ITEM_IDS.SHOW_CHANGE_LOG_MENU_ITEM,
-          click: () => showChangelog()
+          click: () => showChangelog(),
+          ..._getPrevMenuItemPropsById(MENU_ITEM_IDS.SHOW_CHANGE_LOG_MENU_ITEM, [
+            { propName: 'visible', defaultVal: true },
+            { propName: 'enabled', defaultVal: true }
+          ])
         },
         ...(isMac
           ? []
@@ -197,4 +245,5 @@ module.exports = (params) => {
   ]
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate))
+  isMenuInitialized = true
 }
