@@ -5,6 +5,7 @@ const i18next = require('i18next')
 const IpcChannelHandlers = require('./ipc.channel.handlers')
 const { getConfigsKeeperByName } = require('../../configs-keeper')
 const { getAvailableLanguages } = require('../../i18next')
+const createMenu = require('../../create-menu')
 
 class TranslationIpcChannelHandlers extends IpcChannelHandlers {
   constructor () {
@@ -23,9 +24,14 @@ class TranslationIpcChannelHandlers extends IpcChannelHandlers {
       return false
     }
 
+    const prevLanguage = i18next.resolvedLanguage
     await i18next.changeLanguage(lng)
-
     const language = i18next.resolvedLanguage
+
+    if (prevLanguage !== language) {
+      createMenu()
+    }
+
     const isSaved = await this.configsKeeper
       .saveConfigs({ language })
 
