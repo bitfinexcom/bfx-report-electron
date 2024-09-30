@@ -3,34 +3,54 @@
     "title": "Отчет"
   },
   "menu": {
-    "mainSubmenu": {
-      "label": "О {{appName}}"
+    "macMainSubmenu": {
+      "servicesLabel": "Услуги",
+      "hideLabel": "Скрыть",
+      "hideOthersLabel": "Скрыть Другие",
+      "unhideLabel": "Показать",
+      "quitLabel": "Выйти"
+    },
+    "fileSubMenu": {
+      "label": "Файл"
+    },
+    "editSubMenu": {
+      "label": "Редактировать"
     },
     "viewSubMenu": {
       "label": "Вид",
       "reloadLabel": "Перезагрузить",
-      "forceReloadLabel": "Принудительно Перезагрузить"
+      "forceReloadLabel": "Принудительно Перезагрузить",
+      "toggleDevToolsLabel": "Переключить Инструменты Разработчика",
+      "resetZoomLabel": "Фактический Размер",
+      "zoomInLabel": "Увеличить",
+      "zoomOutLabel": "Уменьшить",
+      "togglefullscreenLabel": "Переключить на Полный Экран"
+    },
+    "windowSubMenu": {
+      "label": "Окно"
     },
     "toolsSubMenu": {
       "label": "Инструменты",
       "dataManagementSubMenu": {
-        "label": "Управление данными",
+        "label": "Управление Данными",
         "exportDbLabel": "Экспортировать БД",
         "importDbLabel": "Импортировать БД",
         "restoreDbLabel": "Восстановить БД",
         "backupDbLabel": "Резервная копия БД",
         "removeDbLabel": "Удалить БД",
-        "clearAllDataLabel": "Очистить все данные (кроме учетных данных польз.)"
+        "clearAllDataLabel": "Очистить Все Данные (кроме учетных данных польз.)"
       },
-      "changeReportsFolderLabel": "Изменить папку отчетов",
-      "changeSyncFrequencyLabel": "Изменить частоту синхронизации"
+      "changeReportsFolderLabel": "Изменить Папку Отчетов",
+      "changeSyncFrequencyLabel": "Изменить Частоту Синхронизации"
     },
     "helpSubMenu": {
-      "openNewGitHubIssueLabel": "Открыть новую проблему на GitHub",
-      "checkForUpdatesLabel": "Проверить наличие обновлений",
-      "quitAndInstallUpdatesLabel": "Выйти и установить обновления",
-      "userManualLabel": "Руководство пользователя",
-      "changelogLabel": "Журнал изменений"
+      "label": "Помощь",
+      "openNewGitHubIssueLabel": "Открыть новую Проблему на GitHub",
+      "checkForUpdatesLabel": "Проверить наличие Обновлений",
+      "quitAndInstallUpdatesLabel": "Выйти и Установить обновления",
+      "userManualLabel": "Руководство Пользователя",
+      "changelogLabel": "Журнал Изменений",
+      "aboutLabel": "О {{appName}}"
     }
   }
 }

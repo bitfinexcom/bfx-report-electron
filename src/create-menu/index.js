@@ -83,24 +83,39 @@ module.exports = (params) => {
           submenu: [
             {
               label: i18next.t(
-                'menu.mainSubmenu.label',
+                'menu.helpSubMenu.aboutLabel',
                 { appName: app.name }
               ),
               click: showAboutModalDialog()
             },
             { type: 'separator' },
-            { role: 'services' },
+            {
+              role: 'services',
+              label: i18next.t('menu.macMainSubmenu.servicesLabel')
+            },
             { type: 'separator' },
-            { role: 'hide' },
-            { role: 'hideOthers' },
-            { role: 'unhide' },
+            {
+              role: 'hide',
+              label: i18next.t('menu.macMainSubmenu.hideLabel')
+            },
+            {
+              role: 'hideOthers',
+              label: i18next.t('menu.macMainSubmenu.hideOthersLabel')
+            },
+            {
+              role: 'unhide',
+              label: i18next.t('menu.macMainSubmenu.unhideLabel')
+            },
             { type: 'separator' },
-            { role: 'quit' }
+            {
+              role: 'quit',
+              label: i18next.t('menu.macMainSubmenu.quitLabel')
+            }
           ]
         }]
       : []),
-    { role: 'fileMenu' },
-    { role: 'editMenu' },
+    { role: 'fileMenu', label: i18next.t('menu.fileSubMenu.label') },
+    { role: 'editMenu', label: i18next.t('menu.editSubMenu.label') },
     {
       label: i18next.t('menu.viewSubMenu.label'),
       submenu: [
@@ -126,16 +141,31 @@ module.exports = (params) => {
             triggerElectronLoad()
           }
         },
-        { role: 'toggleDevTools' },
+        {
+          role: 'toggleDevTools',
+          label: i18next.t('menu.viewSubMenu.toggleDevToolsLabel')
+        },
         { type: 'separator' },
-        { role: 'resetZoom' },
-        { role: 'zoomIn' },
-        { role: 'zoomOut' },
+        {
+          role: 'resetZoom',
+          label: i18next.t('menu.viewSubMenu.resetZoomLabel')
+        },
+        {
+          role: 'zoomIn',
+          label: i18next.t('menu.viewSubMenu.zoomInLabel')
+        },
+        {
+          role: 'zoomOut',
+          label: i18next.t('menu.viewSubMenu.zoomOutLabel')
+        },
         { type: 'separator' },
-        { role: 'togglefullscreen' }
+        {
+          role: 'togglefullscreen',
+          label: i18next.t('menu.viewSubMenu.togglefullscreenLabel')
+        }
       ]
     },
-    { role: 'windowMenu' },
+    { role: 'windowMenu', label: i18next.t('menu.windowSubMenu.label') },
     {
       label: i18next.t('menu.toolsSubMenu.label'),
       submenu: [
@@ -184,6 +214,7 @@ module.exports = (params) => {
     },
     {
       role: 'help',
+      label: i18next.t('menu.helpSubMenu.label'),
       submenu: [
         {
           label: i18next.t('menu.helpSubMenu.openNewGitHubIssueLabel'),
@@ -234,7 +265,7 @@ module.exports = (params) => {
               { type: 'separator' },
               {
                 label: i18next.t(
-                  'menu.mainSubmenu.label',
+                  'menu.helpSubMenu.aboutLabel',
                   { appName: app.name }
                 ),
                 click: showAboutModalDialog()

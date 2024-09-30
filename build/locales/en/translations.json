@@ -3,13 +3,31 @@
     "title": "Report"
   },
   "menu": {
-    "mainSubmenu": {
-      "label": "About {{appName}}"
+    "macMainSubmenu": {
+      "servicesLabel": "Services",
+      "hideLabel": "Hide",
+      "hideOthersLabel": "Hide Others",
+      "unhideLabel": "Unhide",
+      "quitLabel": "Quit"
+    },
+    "fileSubMenu": {
+      "label": "File"
+    },
+    "editSubMenu": {
+      "label": "Edit"
     },
     "viewSubMenu": {
       "label": "View",
       "reloadLabel": "Reload",
-      "forceReloadLabel": "Force Reload"
+      "forceReloadLabel": "Force Reload",
+      "toggleDevToolsLabel": "Toggle Developer Tools",
+      "resetZoomLabel": "Actual Size",
+      "zoomInLabel": "Zoom In",
+      "zoomOutLabel": "Zoom Out",
+      "togglefullscreenLabel": "Toggle Full Screen"
+    },
+    "windowSubMenu": {
+      "label": "Window"
     },
     "toolsSubMenu": {
       "label": "Tools",
@@ -20,17 +38,19 @@
         "restoreDbLabel": "Restore DB",
         "backupDbLabel": "Backup DB",
         "removeDbLabel": "Remove DB",
-        "clearAllDataLabel": "Clear all data (except user creds)"
+        "clearAllDataLabel": "Clear All Data (except user creds)"
       },
-      "changeReportsFolderLabel": "Change reports folder",
-      "changeSyncFrequencyLabel": "Change sync frequency"
+      "changeReportsFolderLabel": "Change Reports Folder",
+      "changeSyncFrequencyLabel": "Change Sync Frequency"
     },
     "helpSubMenu": {
-      "openNewGitHubIssueLabel": "Open new GitHub issue",
-      "checkForUpdatesLabel": "Check for updates",
-      "quitAndInstallUpdatesLabel": "Quit and install updates",
-      "userManualLabel": "User manual",
-      "changelogLabel": "Changelog"
+      "label": "Help",
+      "openNewGitHubIssueLabel": "Open new GitHub Issue",
+      "checkForUpdatesLabel": "Check for Updates",
+      "quitAndInstallUpdatesLabel": "Quit and Install updates",
+      "userManualLabel": "User Manual",
+      "changelogLabel": "Changelog",
+      "aboutLabel": "About {{appName}}"
     }
   }
 }
