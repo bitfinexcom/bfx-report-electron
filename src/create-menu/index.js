@@ -1,6 +1,7 @@
 'use strict'
 
 const electron = require('electron')
+const i18next = require('i18next')
 
 const { app, Menu } = electron
 const isMac = process.platform === 'darwin'
@@ -27,17 +28,30 @@ const MENU_ITEM_IDS = require('./menu.item.ids')
 
 const isAutoUpdateDisabled = parseEnvValToBool(process.env.IS_AUTO_UPDATE_DISABLED)
 
-module.exports = ({
-  pathToUserData,
-  pathToUserDocuments
-}) => {
+let pathToUserData = null
+let pathToUserDocuments = null
+
+module.exports = (params) => {
+  pathToUserData = params?.pathToUserData ?? pathToUserData
+  pathToUserDocuments = params?.pathToUserDocuments ?? pathToUserDocuments
+
+  if (
+    !pathToUserData ||
+    !pathToUserDocuments
+  ) {
+    return
+  }
+
   const menuTemplate = [
     ...(isMac
       ? [{
           label: app.name,
           submenu: [
             {
-              label: `About ${app.name}`,
+              label: i18next.t(
+                'menu.mainSubmenu.label',
+                { appName: app.name }
+              ),
               click: showAboutModalDialog()
             },
             { type: 'separator' },
@@ -54,10 +68,10 @@ module.exports = ({
     { role: 'fileMenu' },
     { role: 'editMenu' },
     {
-      label: 'View',
+      label: i18next.t('menu.viewSubMenu.label'),
       submenu: [
         {
-          label: 'Reload',
+          label: i18next.t('menu.viewSubMenu.reloadLabel'),
           accelerator: 'CmdOrCtrl+R',
           click: (item, focusedWindow) => {
             if (focusedWindow) {
@@ -68,7 +82,7 @@ module.exports = ({
           }
         },
         {
-          label: 'Force Reload',
+          label: i18next.t('menu.viewSubMenu.forceReloadLabel'),
           accelerator: 'CmdOrCtrl+Shift+R',
           click: (item, focusedWindow) => {
             if (focusedWindow) {
@@ -89,33 +103,33 @@ module.exports = ({
     },
     { role: 'windowMenu' },
     {
-      label: 'Tools',
+      label: i18next.t('menu.toolsSubMenu.label'),
       submenu: [
         {
-          label: 'Data Management',
+          label: i18next.t('menu.toolsSubMenu.dataManagementSubMenu.label'),
           submenu: [
             {
-              label: 'Export DB',
+              label: i18next.t('menu.toolsSubMenu.dataManagementSubMenu.exportDbLabel'),
               click: exportDB({ pathToUserData, pathToUserDocuments })
             },
             {
-              label: 'Import DB',
+              label: i18next.t('menu.toolsSubMenu.dataManagementSubMenu.importDbLabel'),
               click: importDB({ pathToUserData, pathToUserDocuments })
             },
             {
-              label: 'Restore DB',
+              label: i18next.t('menu.toolsSubMenu.dataManagementSubMenu.restoreDbLabel'),
               click: restoreDB()
             },
             {
-              label: 'Backup DB',
+              label: i18next.t('menu.toolsSubMenu.dataManagementSubMenu.backupDbLabel'),
               click: backupDB()
             },
             {
-              label: 'Remove DB',
+              label: i18next.t('menu.toolsSubMenu.dataManagementSubMenu.removeDbLabel'),
               click: removeDB({ pathToUserData })
             },
             {
-              label: 'Clear all data',
+              label: i18next.t('menu.toolsSubMenu.dataManagementSubMenu.clearAllDataLabel'),
               click: removeDB({
                 pathToUserData,
                 shouldAllTablesBeCleared: true
@@ -125,11 +139,11 @@ module.exports = ({
         },
         { type: 'separator' },
         {
-          label: 'Change reports folder',
+          label: i18next.t('menu.toolsSubMenu.changeReportsFolderLabel'),
           click: changeReportsFolder({ pathToUserDocuments })
         },
         {
-          label: 'Change sync frequency',
+          label: i18next.t('menu.toolsSubMenu.changeSyncFrequencyLabel'),
           click: changeSyncFrequency()
         }
       ]
@@ -138,31 +152,31 @@ module.exports = ({
       role: 'help',
       submenu: [
         {
-          label: 'Open new GitHub issue',
+          label: i18next.t('menu.helpSubMenu.openNewGitHubIssueLabel'),
           id: MENU_ITEM_IDS.REPORT_BUG_MENU_ITEM,
           click: manageNewGithubIssue
         },
         { type: 'separator' },
         {
-          label: 'Check for updates',
+          label: i18next.t('menu.helpSubMenu.checkForUpdatesLabel'),
           enabled: !isAutoUpdateDisabled,
           id: MENU_ITEM_IDS.CHECK_UPDATE_MENU_ITEM,
           click: checkForUpdates()
         },
         {
-          label: 'Quit and install updates',
+          label: i18next.t('menu.helpSubMenu.quitAndInstallUpdatesLabel'),
           visible: false,
           id: MENU_ITEM_IDS.INSTALL_UPDATE_MENU_ITEM,
           click: quitAndInstall()
         },
         { type: 'separator' },
         {
-          label: 'User manual',
+          label: i18next.t('menu.helpSubMenu.userManualLabel'),
           accelerator: 'CmdOrCtrl+H',
           click: () => showDocs()
         },
         {
-          label: 'Changelog',
+          label: i18next.t('menu.helpSubMenu.changelogLabel'),
           id: MENU_ITEM_IDS.SHOW_CHANGE_LOG_MENU_ITEM,
           click: () => showChangelog()
         },
@@ -171,7 +185,10 @@ module.exports = ({
           : [
               { type: 'separator' },
               {
-                label: 'About',
+                label: i18next.t(
+                  'menu.mainSubmenu.label',
+                  { appName: app.name }
+                ),
                 click: showAboutModalDialog()
               }
             ])
