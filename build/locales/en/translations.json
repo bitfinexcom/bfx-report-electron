@@ -1,5 +1,36 @@
 {
   "common": {
     "title": "Report"
+  },
+  "menu": {
+    "mainSubmenu": {
+      "label": "About {{appName}}"
+    },
+    "viewSubMenu": {
+      "label": "View",
+      "reloadLabel": "Reload",
+      "forceReloadLabel": "Force Reload"
+    },
+    "toolsSubMenu": {
+      "label": "Tools",
+      "dataManagementSubMenu": {
+        "label": "Data Management",
+        "exportDbLabel": "Export DB",
+        "importDbLabel": "Import DB",
+        "restoreDbLabel": "Restore DB",
+        "backupDbLabel": "Backup DB",
+        "removeDbLabel": "Remove DB",
+        "clearAllDataLabel": "Clear all data (except user creds)"
+      },
+      "changeReportsFolderLabel": "Change reports folder",
+      "changeSyncFrequencyLabel": "Change sync frequency"
+    },
+    "helpSubMenu": {
+      "openNewGitHubIssueLabel": "Open new GitHub issue",
+      "checkForUpdatesLabel": "Check for updates",
+      "quitAndInstallUpdatesLabel": "Quit and install updates",
+      "userManualLabel": "User manual",
+      "changelogLabel": "Changelog"
+    }
   }
 }
