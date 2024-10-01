@@ -23,7 +23,16 @@ const {
   hideWindow,
   centerWindow
 } = require('../helpers/manage-window')
-const isBfxApiStaging = require('../helpers/is-bfx-api-staging')
+const {
+  isBfxApiStaging,
+  parseEnvValToBool,
+  waitPort
+} = require('../helpers')
+
+const shouldLocalhostBeUsedForLoadingUIInDevMode = parseEnvValToBool(
+  process.env.SHOULD_LOCALHOST_BE_USED_FOR_LOADING_UI_IN_DEV_MODE
+)
+const uiPort = process.env.UI_PORT ?? 3000
 
 const publicDir = path.join(__dirname, '../../bfx-report-ui/build')
 const loadURL = serve({ directory: publicDir })
@@ -45,6 +54,29 @@ const _getFileURL = (params) => {
   fileURL.pathname = pathname
 
   return fileURL.toString()
+}
+
+const _loadUI = async (params) => {
+  const {
+    winName,
+    pathname
+  } = params ?? {}
+
+  if (
+    !pathname &&
+    isDevEnv &&
+    shouldLocalhostBeUsedForLoadingUIInDevMode
+  ) {
+    const uiHost = 'localhost'
+    await waitPort({ host: uiHost, port: uiPort })
+
+    return wins[winName].loadURL(`http://${uiHost}:${uiPort}`)
+  }
+  if (pathname) {
+    return wins[winName].loadURL(_getFileURL({ pathname }))
+  }
+
+  return loadURL(wins[winName])
 }
 
 const _createWindow = async (
@@ -117,9 +149,7 @@ const _createWindow = async (
   const isReadyToShowPromise = new Promise((resolve) => {
     wins[winName].once('ready-to-show', resolve)
   })
-  const didFinishLoadPromise = pathname
-    ? wins[winName].loadURL(_getFileURL({ pathname }))
-    : loadURL(wins[winName])
+  const didFinishLoadPromise = _loadUI({ winName, pathname })
 
   await Promise.all([
     isReadyToShowPromise,
