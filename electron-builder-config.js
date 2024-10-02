@@ -185,6 +185,7 @@ module.exports = {
   files: [
     '**/*',
     'build/icons',
+    'build/locales',
     'build/icon.*',
     'build/loader.*',
     '!scripts${/*}',
