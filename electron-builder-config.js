@@ -1,6 +1,9 @@
 'use strict'
 
-require('dotenv').config()
+try {
+  require('dotenv').config()
+} catch (err) {}
+
 const fs = require('fs')
 const path = require('path')
 const zlib = require('zlib')
