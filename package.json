@@ -25,6 +25,8 @@
     "get-port": "7.0.0",
     "github-markdown-css": "5.1.0",
     "grenache-grape": "git+https://github.com/bitfinexcom/grenache-grape.git",
+    "i18next": "23.15.1",
+    "i18next-fs-backend": "2.3.2",
     "js-yaml": "4.1.0",
     "lib-js-util-base": "git+https://github.com/bitfinexcom/lib-js-util-base.git",
     "new-github-issue-url": "0.2.1",
@@ -40,6 +42,7 @@
     "@wdio/mocha-framework": "8.22.0",
     "@wdio/spec-reporter": "8.21.0",
     "app-builder-bin": "4.2.0",
+    "concurrently": "9.0.1",
     "cross-env": "7.0.3",
     "dotenv": "16.3.1",
     "electron": "27.3.5",
@@ -58,11 +61,13 @@
   },
   "scripts": {
     "start": "cross-env NODE_ENV=development DEBUG=* electron .",
+    "startWithUIOnPort": "concurrently -ki -c green,blue -n UI,ELECTRON \"npm run startUI\" \"cross-env NODE_ENV=development DEBUG=* SHOULD_LOCALHOST_BE_USED_FOR_LOADING_UI_IN_DEV_MODE=1 electron .\"",
     "test": "standard && npm run unit",
     "unit": "cross-env NODE_ENV=test mocha './src/**/__test__/*.spec.js' --config .mocharc.json",
     "setup": "./scripts/setup.sh",
     "launch": "./scripts/launch.sh",
     "sync-repo": "./scripts/sync-repo.sh",
-    "e2e": "cross-env NODE_ENV=test wdio run ./wdio.conf.js"
+    "e2e": "cross-env NODE_ENV=test wdio run ./wdio.conf.js",
+    "startUI": "cd bfx-report-ui && cross-env BROWSER=none npm start"
   }
 }

@@ -13,6 +13,8 @@ try {
 } catch (err) {}
 
 const { app } = require('electron')
+require('./src/i18next')
+  .initI18next()
 
 const isTestEnv = process.env.NODE_ENV === 'test'
 
