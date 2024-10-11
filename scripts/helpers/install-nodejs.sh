@@ -25,7 +25,7 @@ unlink /usr/local/CHANGELOG.md
 unlink /usr/local/LICENSE
 unlink /usr/local/README.md
 
-npm cache clear --force
+npm cache clear --force 2>/dev/null
 npm install --global node-gyp@9.4.0
 
 echo -e "\n${COLOR_GREEN}The NodeJS has been installed successful${COLOR_NORMAL}"
