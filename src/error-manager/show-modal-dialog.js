@@ -1,6 +1,6 @@
 'use strict'
 
-const { app, dialog, screen, remote } = require('electron')
+const { app, dialog, screen } = require('electron')
 const fs = require('fs')
 const path = require('path')
 const { Converter } = require('showdown')
@@ -53,19 +53,23 @@ const converter = new Converter({
 const _fireAlert = (params) => {
   const {
     title = 'Should a bug report be submitted?',
-    html
-  } = params
-  const win = wins.mainWindow
+    html = '',
+    parentWin,
+    hasNoParentWin
+  } = params ?? {}
+  const win = parentWin ?? wins.mainWindow
 
-  if (!isMainWinAvailable()) {
+  if (
+    !hasNoParentWin &&
+    !isMainWinAvailable(win)
+  ) {
     return { value: false }
   }
 
-  const _screen = screen || remote.screen
   const {
     getCursorScreenPoint,
     getDisplayNearestPoint
-  } = _screen
+  } = screen
   const {
     workArea
   } = getDisplayNearestPoint(getCursorScreenPoint())
@@ -76,7 +80,8 @@ const _fireAlert = (params) => {
 
   const eventHandlerCtx = addOnceProcEventHandler(
     WINDOW_EVENT_NAMES.CLOSED,
-    () => closeAlert(alert)
+    () => closeAlert(alert),
+    win
   )
 
   const bwOptions = {
@@ -103,14 +108,16 @@ const _fireAlert = (params) => {
     }),
 
     icon: 'question',
-    title,
-    html,
     focusConfirm: true,
     showConfirmButton: true,
     confirmButtonText: 'Report',
     showCancelButton: true,
     cancelButtonText: 'Cancel',
     timerProgressBar: false,
+
+    ...params,
+    title,
+    html,
 
     willOpen: () => {
       if (
@@ -164,18 +171,22 @@ module.exports = async (params) => {
   const {
     errBoxTitle = 'Bug report',
     errBoxDescription = 'A new Github issue will be opened',
-    mdIssue
+    mdIssue,
+    alertOpts = {}
   } = params
 
   if (
     app.isReady() &&
-    isMainWinAvailable()
+    (
+      alertOpts?.hasNoParentWin ||
+      isMainWinAvailable(alertOpts?.parentWin ?? wins.mainWindow)
+    )
   ) {
     const html = converter.makeHtml(mdIssue)
 
     const {
       value
-    } = await _fireAlert({ html })
+    } = await _fireAlert({ html, ...alertOpts })
 
     return {
       isExit: false,
