@@ -214,6 +214,29 @@ const initLogger = () => {
     if (message.level === 'error') {
       const error = message.data.join(os.EOL)
 
+      if (/Failed to get 'documents' path/gi.test(error)) {
+        const title = 'The OS Documents directory has been misconfigured'
+        const msg = `\
+This indicates that your OS \`Documents\` directory has been misconfigured.
+Please, set it to a valid location or reset it to the default`
+
+        showModalDialog({
+          errBoxTitle: title,
+          errBoxDescription: msg,
+          mdIssue: msg,
+          alertOpts: {
+            icon: 'error',
+            title,
+            showConfirmButton: false,
+            hasNoParentWin: true
+          }
+        })
+          .then(() => { app.quit() })
+          .catch((err) => { console.error(err) })
+
+        return
+      }
+
       /*
        * Don't open a new issue when:
        *   - It can't download differentially it would fallback to full download
