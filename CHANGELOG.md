@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.29.0] - 2024-10-16
+
+### Added
+
+- Implemented `Active Positions` section on the app `Summary` page. PR: [bfx-report-ui#873](https://github.com/bitfinexcom/bfx-report-ui/pull/873)
+- Added `Active Positions` section to the web `Account Summary` page. PR: [bfx-report-ui#874](https://github.com/bitfinexcom/bfx-report-ui/pull/874)
+- Improved `fallback` languages for i18next https://www.i18next.com/principles/fallback. PR: [bfx-report#406](https://github.com/bitfinexcom/bfx-report/pull/406)
+- Added translation flow to electronjs wrapper. PR: [bfx-report-electron#412](https://github.com/bitfinexcom/bfx-report-electron/pull/412)
+
+### Changed
+
+- Reworked `ColumnsSelectDialog` in a more performant way and improved props linting. PR: [bfx-report-ui#868](https://github.com/bitfinexcom/bfx-report-ui/pull/868)
+- Moved `Account Fees` below other sections on the app `Summary` page. PR: [bfx-report-ui#871](https://github.com/bitfinexcom/bfx-report-ui/pull/871)
+- Reworked and optimized the `Account Balance` section in a more performant way and reduced redundant code. PR: [bfx-report-ui#872](https://github.com/bitfinexcom/bfx-report-ui/pull/872)
+- Actualized assets section title/subtitle on the `Summary` page, improved currencies formatting. PR: [bfx-report-ui#875](https://github.com/bitfinexcom/bfx-report-ui/pull/875)
+- Improved fetching `opened positions` for the ending point of the `balance` report. PR: [bfx-reports-framework#421](https://github.com/bitfinexcom/bfx-reports-framework/pull/421)
+- Moved window modules into the common folder. This small refactoring is part of adding translation support into the electronjs wrapper. PR: [bfx-report-electron#410](https://github.com/bitfinexcom/bfx-report-electron/pull/410)
+
+### Fixed
+
+- Fixed `opened positions` consideration in `balances` and `win/loss` reports. PR: [bfx-reports-framework#420](https://github.com/bitfinexcom/bfx-reports-framework/pull/420)
+- Updated `macOS` on `GH Actions` from `12` to `15` due to caught warning on the last release: https://github.com/bitfinexcom/bfx-report-electron/actions/runs/11010191592. PR: [bfx-report-electron#413](https://github.com/bitfinexcom/bfx-report-electron/pull/413)
+- Fixed `dotenv` importing for `prod` env. PR: [bfx-report-electron#414](https://github.com/bitfinexcom/bfx-report-electron/pull/414)
+- Fixed `Docker` container preparation for release building. PR: [bfx-report-electron#417](https://github.com/bitfinexcom/bfx-report-electron/pull/417)
+
+### Security
+
+- Bumped `rollup` from `2.79.1` to `2.79.2`. PR: [bfx-report-ui#870](https://github.com/bitfinexcom/bfx-report-ui/pull/870)
+- Bumped `express` from `4.18.2` to `4.21.0`, `ws` from `8.2.3` to `8.18.0`, `grenache-nodejs-http` from `0.7.12` to `0.7.13`, `grenache-nodejs-link` from `0.7.12` to `1.0.0`. PR: [bfx-report-express#42](https://github.com/bitfinexcom/bfx-report-express/pull/42)
+
 ## [4.28.0] - 2024-09-25
 
 ### Added
