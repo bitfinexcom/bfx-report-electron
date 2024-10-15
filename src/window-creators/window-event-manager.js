@@ -1,6 +1,6 @@
 'use strict'
 
-const wins = require('../windows')
+const wins = require('./windows')
 
 const WINDOW_EVENT_NAMES = {
   CLOSED: 'closed'

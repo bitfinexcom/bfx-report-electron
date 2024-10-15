@@ -128,7 +128,7 @@ jobs:
 
   mac-builder:
     timeout-minutes: 150
-    runs-on: macos-12
+    runs-on: macos-15
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -292,7 +292,7 @@ jobs:
   mac-e2e-test-runner:
     name: Mac E2E Test Runner
     timeout-minutes: 30
-    runs-on: macos-12
+    runs-on: macos-15
     needs: [mac-builder]
     steps:
     - name: Checkout

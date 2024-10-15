@@ -6,7 +6,7 @@ const productName = require('./helpers/product-name')
 const {
   showLoadingWindow,
   hideLoadingWindow
-} = require('./change-loading-win-visibility-state')
+} = require('./window-creators/change-loading-win-visibility-state')
 
 module.exports = async () => {
   if (

@@ -2,12 +2,16 @@
 
 const { app } = require('electron')
 const path = require('path')
+const i18next = require('i18next')
 
 const { REPORT_FILES_PATH_VERSION } = require('./const')
 
+const TranslationIpcChannelHandlers = require(
+  './window-creators/main-renderer-ipc-bridge/translation-ipc-channel-handlers'
+)
 const triggerSyncAfterUpdates = require('./trigger-sync-after-updates')
 const triggerElectronLoad = require('./trigger-electron-load')
-const wins = require('./windows')
+const wins = require('./window-creators/windows')
 const runServer = require('./run-server')
 const appStates = require('./app-states')
 const {
@@ -16,7 +20,7 @@ const {
 } = require('./window-creators')
 const {
   hideLoadingWindow
-} = require('./change-loading-win-visibility-state')
+} = require('./window-creators/change-loading-win-visibility-state')
 const makeOrReadSecretKey = require('./make-or-read-secret-key')
 const {
   configsKeeperFactory
@@ -43,7 +47,7 @@ const manageWorkerMessages = require(
 )
 const printToPDF = require('./print-to-pdf')
 
-const pathToLayouts = path.join(__dirname, 'layouts')
+const pathToLayouts = path.join(__dirname, 'window-creators/layouts')
 const pathToLayoutAppInitErr = path
   .join(pathToLayouts, 'app-init-error.html')
 
@@ -136,6 +140,7 @@ const _manageConfigs = (params = {}) => {
   const configsKeeper = configsKeeperFactory(
     { pathToUserData },
     {
+      language: null,
       pathToUserReportFiles,
       schedulerRule,
       shownChangelogVer: '0.0.0',
@@ -146,6 +151,8 @@ const _manageConfigs = (params = {}) => {
     configsKeeper,
     { pathToUserReportFiles }
   )
+
+  return configsKeeper
 }
 
 module.exports = async () => {
@@ -165,10 +172,17 @@ module.exports = async () => {
     const pathToUserData = app.getPath('userData')
     const pathToUserDocuments = app.getPath('documents')
 
-    _manageConfigs({
+    const configsKeeper = _manageConfigs({
       pathToUserData,
       pathToUserDocuments
     })
+    const savedLanguage = configsKeeper.getConfigByName('language')
+
+    if (savedLanguage) {
+      await i18next.changeLanguage(savedLanguage)
+    }
+
+    TranslationIpcChannelHandlers.create()
 
     const secretKey = await makeOrReadSecretKey(
       { pathToUserData }

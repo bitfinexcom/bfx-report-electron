@@ -1,0 +1,56 @@
+{
+  "common": {
+    "title": "Report"
+  },
+  "menu": {
+    "macMainSubmenu": {
+      "servicesLabel": "Services",
+      "hideLabel": "Hide",
+      "hideOthersLabel": "Hide Others",
+      "unhideLabel": "Unhide",
+      "quitLabel": "Quit"
+    },
+    "fileSubMenu": {
+      "label": "File"
+    },
+    "editSubMenu": {
+      "label": "Edit"
+    },
+    "viewSubMenu": {
+      "label": "View",
+      "reloadLabel": "Reload",
+      "forceReloadLabel": "Force Reload",
+      "toggleDevToolsLabel": "Toggle Developer Tools",
+      "resetZoomLabel": "Actual Size",
+      "zoomInLabel": "Zoom In",
+      "zoomOutLabel": "Zoom Out",
+      "togglefullscreenLabel": "Toggle Full Screen"
+    },
+    "windowSubMenu": {
+      "label": "Window"
+    },
+    "toolsSubMenu": {
+      "label": "Tools",
+      "dataManagementSubMenu": {
+        "label": "Data Management",
+        "exportDbLabel": "Export DB",
+        "importDbLabel": "Import DB",
+        "restoreDbLabel": "Restore DB",
+        "backupDbLabel": "Backup DB",
+        "removeDbLabel": "Remove DB",
+        "clearAllDataLabel": "Clear All Data (except user creds)"
+      },
+      "changeReportsFolderLabel": "Change Reports Folder",
+      "changeSyncFrequencyLabel": "Change Sync Frequency"
+    },
+    "helpSubMenu": {
+      "label": "Help",
+      "openNewGitHubIssueLabel": "Open new GitHub Issue",
+      "checkForUpdatesLabel": "Check for Updates",
+      "quitAndInstallUpdatesLabel": "Quit and Install updates",
+      "userManualLabel": "User Manual",
+      "changelogLabel": "Changelog",
+      "aboutLabel": "About {{appName}}"
+    }
+  }
+}

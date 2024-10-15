@@ -1,6 +1,6 @@
 'use strict'
 
-const wins = require('../windows')
+const wins = require('../window-creators/windows')
 
 module.exports = (
   win = wins?.mainWindow,

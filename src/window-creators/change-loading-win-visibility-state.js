@@ -7,7 +7,7 @@ const {
   hideWindow,
   showWindow,
   centerWindow
-} = require('./helpers/manage-window')
+} = require('../helpers/manage-window')
 
 let intervalMarker
 
@@ -158,7 +158,7 @@ const showLoadingWindow = async (opts = {}) => {
     typeof wins.loadingWindow !== 'object' ||
     wins.loadingWindow.isDestroyed()
   ) {
-    await require('./window-creators')
+    await require('.')
       .createLoadingWindow()
   }
 

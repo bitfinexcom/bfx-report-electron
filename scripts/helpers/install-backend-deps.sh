@@ -56,7 +56,6 @@ function installBackendDeps {
 
   echo -e "\n${COLOR_BLUE}Installing the main prod deps...${COLOR_NORMAL}"
   npm i --production --include=dev --no-audit --progress=false --force
-  rm -rf "$ROOT/node_modules/ed25519-supercop/build"
   checkNodeModulesDir "$ROOT"
   depsErr=$(npm ls --depth=0 --only=prod 2>&1 >/dev/null | grep -E -v "missing: eslint|--omit=dev" || [[ $? == 1 ]])
   if [ -n "$depsErr" ]; then
