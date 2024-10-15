@@ -231,7 +231,7 @@ Please, set it to a valid location or reset it to the default`
             hasNoParentWin: true
           }
         })
-          .then(() => { app.quit() })
+          .then(() => { app.exit() })
           .catch((err) => { console.error(err) })
 
         return
