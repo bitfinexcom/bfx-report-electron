@@ -58,7 +58,38 @@
     </style>
   </head>
   <body class="body">
-    <div class="alert">Application initialization error</div>
-    <button type="button" class="btn-close" onclick="window.close()">Close</button>
+    <div id="description" class="alert">Application initialization error</div>
+    <button id="closeBtn" type="button" class="btn-close" onclick="window.close()">Close</button>
   </body>
+
+  <script>
+    window.addEventListener('load', async () => {
+      const descriptionElem = document.getElementById('description')
+      const closeBtnElem = document.getElementById('closeBtn')
+      const defaultDescription = 'Application initialization error'
+      const defaultCloseBtnText = 'Close'
+      let description = null
+      let closeBtnText = null
+
+      try {
+        description = await window.bfxReportElectronApi.translate({
+            key: 'common.appInitError.description',
+            opts: { defaultValue: defaultDescription }
+          }) ?? defaultDescription
+        closeBtnText = await window.bfxReportElectronApi.translate({
+            key: 'common.appInitError.closeBtnText',
+            opts: { defaultValue: defaultCloseBtnText }
+          }) ?? defaultCloseBtnText
+
+        descriptionElem.innerText = description
+        closeBtnElem.innerText = closeBtnText
+        
+      } catch (err) {
+        descriptionElem.innerText = description ??
+          `${defaultDescription}: translation service error`
+
+        console.error(err)
+      }
+    })
+  </script>
 </html>
