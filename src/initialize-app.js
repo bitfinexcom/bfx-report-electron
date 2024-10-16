@@ -31,7 +31,8 @@ const {
 } = require('./errors')
 const {
   deserializeError,
-  getFreePort
+  getFreePort,
+  getUserDataPath
 } = require('./helpers')
 const {
   checkForUpdatesAndNotify
@@ -157,6 +158,8 @@ const _manageConfigs = (params = {}) => {
 
 module.exports = async () => {
   try {
+    TranslationIpcChannelHandlers.create()
+
     app.on('window-all-closed', () => {
       app.quit()
     })
@@ -169,7 +172,7 @@ module.exports = async () => {
       app.setAppUserModelId(app.name)
     }
 
-    const pathToUserData = app.getPath('userData')
+    const pathToUserData = getUserDataPath()
     const pathToUserDocuments = app.getPath('documents')
 
     const configsKeeper = _manageConfigs({
@@ -181,8 +184,6 @@ module.exports = async () => {
     if (savedLanguage) {
       await i18next.changeLanguage(savedLanguage)
     }
-
-    TranslationIpcChannelHandlers.create()
 
     const secretKey = await makeOrReadSecretKey(
       { pathToUserData }
@@ -216,6 +217,7 @@ module.exports = async () => {
 
     printToPDF()
   } catch (err) {
+    await app.whenReady()
     await createErrorWindow(pathToLayoutAppInitErr)
 
     throw err
