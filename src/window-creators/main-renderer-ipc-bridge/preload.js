@@ -10,8 +10,13 @@ const CHANNEL_NAMES = {
 const INVOKE_METHOD_NAMES = {
   SET_LANGUAGE: 'setLanguage',
   GET_LANGUAGE: 'getLanguage',
-  GET_AVAILABLE_LANGUAGES: 'getAvailableLanguages'
+  GET_AVAILABLE_LANGUAGES: 'getAvailableLanguages',
+  TRANSLATE: 'translate'
 }
+
+const CHANNEL_MAP = new Map([
+  [CHANNEL_NAMES.TRANSLATIONS, INVOKE_METHOD_NAMES]
+])
 
 const getEventName = (channel, method) => {
   return `${channel}:${method}`
@@ -25,9 +30,11 @@ const invoke = (channel, method, args) => {
 
 const bfxReportElectronApi = {}
 
-for (const methodName of Object.values(INVOKE_METHOD_NAMES)) {
-  bfxReportElectronApi[methodName] = (args) => {
-    return invoke(CHANNEL_NAMES.TRANSLATIONS, methodName, args)
+for (const [channelName, invokeMethodNames] of CHANNEL_MAP) {
+  for (const methodName of Object.values(invokeMethodNames)) {
+    bfxReportElectronApi[methodName] = (args) => {
+      return invoke(channelName, methodName, args)
+    }
   }
 }
 
