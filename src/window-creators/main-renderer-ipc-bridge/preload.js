@@ -4,10 +4,14 @@ const { contextBridge, ipcRenderer } = require('electron')
 const isTestEnv = process.env.NODE_ENV === 'test'
 
 const CHANNEL_NAMES = {
+  GENERAL: 'general',
   TRANSLATIONS: 'translations'
 }
 
-const INVOKE_METHOD_NAMES = {
+const GENERAL_INVOKE_METHOD_NAMES = {
+  EXIT: 'exit'
+}
+const TRANSLATIONS_INVOKE_METHOD_NAMES = {
   SET_LANGUAGE: 'setLanguage',
   GET_LANGUAGE: 'getLanguage',
   GET_AVAILABLE_LANGUAGES: 'getAvailableLanguages',
@@ -15,7 +19,8 @@ const INVOKE_METHOD_NAMES = {
 }
 
 const CHANNEL_MAP = new Map([
-  [CHANNEL_NAMES.TRANSLATIONS, INVOKE_METHOD_NAMES]
+  [CHANNEL_NAMES.GENERAL, GENERAL_INVOKE_METHOD_NAMES],
+  [CHANNEL_NAMES.TRANSLATIONS, TRANSLATIONS_INVOKE_METHOD_NAMES]
 ])
 
 const getEventName = (channel, method) => {
