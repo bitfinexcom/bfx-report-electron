@@ -9,6 +9,9 @@ const { REPORT_FILES_PATH_VERSION } = require('./const')
 const TranslationIpcChannelHandlers = require(
   './window-creators/main-renderer-ipc-bridge/translation-ipc-channel-handlers'
 )
+const GeneralIpcChannelHandlers = require(
+  './window-creators/main-renderer-ipc-bridge/general-ipc-channel-handlers'
+)
 const triggerSyncAfterUpdates = require('./trigger-sync-after-updates')
 const triggerElectronLoad = require('./trigger-electron-load')
 const wins = require('./window-creators/windows')
@@ -158,6 +161,7 @@ const _manageConfigs = (params = {}) => {
 
 module.exports = async () => {
   try {
+    GeneralIpcChannelHandlers.create()
     TranslationIpcChannelHandlers.create()
 
     app.on('window-all-closed', () => {
