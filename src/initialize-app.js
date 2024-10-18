@@ -34,9 +34,9 @@ const {
 } = require('./errors')
 const {
   deserializeError,
-  getFreePort,
-  getUserDataPath
+  getFreePort
 } = require('./helpers')
+const getUserDataPath = require('./helpers/get-user-data-path')
 const {
   checkForUpdatesAndNotify
 } = require('./auto-updater')

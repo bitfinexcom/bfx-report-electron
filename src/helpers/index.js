@@ -13,7 +13,6 @@ const isMainWinAvailable = require(
   './is-main-win-available'
 )
 const productName = require('./product-name')
-const getUserDataPath = require('./get-user-data-path')
 const getAlertCustomClassObj = require('./get-alert-custom-class-obj')
 const parseEnvValToBool = require('./parse-env-val-to-bool')
 const isBfxApiStaging = require('./is-bfx-api-staging')
@@ -27,7 +26,6 @@ module.exports = {
   getServerPromise,
   isMainWinAvailable,
   productName,
-  getUserDataPath,
   getAlertCustomClassObj,
   parseEnvValToBool,
   isBfxApiStaging,
