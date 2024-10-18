@@ -1,6 +1,10 @@
 {
   "common": {
-    "title": "Отчет"
+    "title": "Отчет",
+    "appInitError": {
+      "description": "Ошибка инициализации приложения",
+      "closeBtnText": "Закрыть"
+    }
   },
   "menu": {
     "macMainSubmenu": {

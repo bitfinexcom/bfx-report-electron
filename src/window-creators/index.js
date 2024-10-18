@@ -307,8 +307,8 @@ const createErrorWindow = async (pathname) => {
     pathname,
     'errorWindow',
     {
-      height: 200,
-      frame: true
+      height: 300,
+      frame: false
     }
   )
 

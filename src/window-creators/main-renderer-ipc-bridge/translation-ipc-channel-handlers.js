@@ -10,8 +10,6 @@ const createMenu = require('../../create-menu')
 class TranslationIpcChannelHandlers extends IpcChannelHandlers {
   constructor () {
     super('translations')
-
-    this.configsKeeper = getConfigsKeeperByName('main')
   }
 
   async setLanguageHandler (event, args) {
@@ -32,8 +30,9 @@ class TranslationIpcChannelHandlers extends IpcChannelHandlers {
       createMenu()
     }
 
-    const isSaved = await this.configsKeeper
-      .saveConfigs({ language })
+    const configsKeeper = getConfigsKeeperByName('main')
+    const isSaved = await configsKeeper
+      ?.saveConfigs?.({ language })
 
     if (isSaved) {
       return language
@@ -48,6 +47,10 @@ class TranslationIpcChannelHandlers extends IpcChannelHandlers {
 
   async getAvailableLanguagesHandler (event, args) {
     return getAvailableLanguages()
+  }
+
+  async translateHandler (event, args) {
+    return i18next.t(args?.key, args?.opts)
   }
 }
 

@@ -212,14 +212,25 @@ module.exports = async (params) => {
   }
 
   // On Linux needs to spawn zenity gui tool to show error
-  await spawn('zenity', [
-    '--error',
-    `--title=${errBoxTitle}`,
-    `--text=${errBoxDescription}`,
-    '--width=800',
-    '--ok-label=Exit',
-    '--no-markup'
-  ])
+  // If push close btn in menu bar zenity will exit with 1
+  // which will cause an error
+  try {
+    await spawn('zenity', [
+      '--error',
+      `--title=${errBoxTitle}`,
+      `--text=${errBoxDescription}`,
+      '--width=800',
+      '--ok-label=Report and Exit',
+      '--no-markup'
+    ])
+  } catch (err) {
+    console.debug(err)
+
+    return {
+      isExit: true,
+      isReported: false
+    }
+  }
 
   return res
 }
