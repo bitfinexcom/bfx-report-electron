@@ -9,6 +9,9 @@ const { REPORT_FILES_PATH_VERSION } = require('./const')
 const TranslationIpcChannelHandlers = require(
   './window-creators/main-renderer-ipc-bridge/translation-ipc-channel-handlers'
 )
+const GeneralIpcChannelHandlers = require(
+  './window-creators/main-renderer-ipc-bridge/general-ipc-channel-handlers'
+)
 const triggerSyncAfterUpdates = require('./trigger-sync-after-updates')
 const triggerElectronLoad = require('./trigger-electron-load')
 const wins = require('./window-creators/windows')
@@ -33,6 +36,7 @@ const {
   deserializeError,
   getFreePort
 } = require('./helpers')
+const getUserDataPath = require('./helpers/get-user-data-path')
 const {
   checkForUpdatesAndNotify
 } = require('./auto-updater')
@@ -157,6 +161,9 @@ const _manageConfigs = (params = {}) => {
 
 module.exports = async () => {
   try {
+    GeneralIpcChannelHandlers.create()
+    TranslationIpcChannelHandlers.create()
+
     app.on('window-all-closed', () => {
       app.quit()
     })
@@ -169,7 +176,7 @@ module.exports = async () => {
       app.setAppUserModelId(app.name)
     }
 
-    const pathToUserData = app.getPath('userData')
+    const pathToUserData = getUserDataPath()
     const pathToUserDocuments = app.getPath('documents')
 
     const configsKeeper = _manageConfigs({
@@ -181,8 +188,6 @@ module.exports = async () => {
     if (savedLanguage) {
       await i18next.changeLanguage(savedLanguage)
     }
-
-    TranslationIpcChannelHandlers.create()
 
     const secretKey = await makeOrReadSecretKey(
       { pathToUserData }
@@ -216,6 +221,7 @@ module.exports = async () => {
 
     printToPDF()
   } catch (err) {
+    await app.whenReady()
     await createErrorWindow(pathToLayoutAppInitErr)
 
     throw err

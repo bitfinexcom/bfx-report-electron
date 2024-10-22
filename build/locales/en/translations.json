@@ -1,6 +1,10 @@
 {
   "common": {
-    "title": "Report"
+    "title": "Report",
+    "appInitError": {
+      "description": "Application initialization error",
+      "closeBtnText": "Close"
+    }
   },
   "menu": {
     "macMainSubmenu": {

@@ -1,10 +1,11 @@
 'use strict'
 
-const { app } = require('electron')
 const { promisify } = require('util')
 const path = require('path')
 const fs = require('fs')
 const log = require('electron-log')
+
+const getUserDataPath = require('../helpers/get-user-data-path')
 
 const readFile = promisify(fs.readFile)
 
@@ -35,7 +36,7 @@ const _readLogFile = async (logPath, byteLimit = 8000) => {
 module.exports = async () => {
   const { path: mainLogPath } = log.transports.file.getFile()
 
-  const pathToUserData = app.getPath('userData')
+  const pathToUserData = getUserDataPath()
   const logsFolder = path.join(pathToUserData, 'logs')
   const workerErrorsPath = path.join(
     logsFolder,
