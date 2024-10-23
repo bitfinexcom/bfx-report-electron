@@ -150,7 +150,7 @@ const _setLoadingDescription = async (win, description) => {
   }
 }
 
-const showLoadingWindow = async (opts = {}) => {
+const showLoadingWindow = async (opts) => {
   const {
     description = '',
     isRequiredToCloseAllWins = false,
@@ -191,7 +191,7 @@ const showLoadingWindow = async (opts = {}) => {
   await _closeAllWindows()
 }
 
-const hideLoadingWindow = async (opts = {}) => {
+const hideLoadingWindow = async (opts) => {
   const {
     isRequiredToShowMainWin = false
   } = opts ?? {}
