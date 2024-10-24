@@ -217,28 +217,27 @@
       }
     }, 2500)
 
-    const { ipcRenderer } = require('electron')
-    
-    ipcRenderer.on('loading:description', (event, description) => {
+    window.bfxReportElectronApi?.onLoadingDescription((args) => {
       try {
-        if (typeof description !== 'string') {
+        if (typeof args?.description !== 'string') {
+          window.bfxReportElectronApi?.sendLoadingDescriptionReady()
+
           return
         }
 
-        descriptionElem.innerHTML = description
+        descriptionElem.innerHTML = args.description
 
-        descriptionElem.style.display = description
+        descriptionElem.style.display = args.description
           ? 'block'
           : 'none'
 
-        ipcRenderer.send('loading:description-ready')
+        window.bfxReportElectronApi?.sendLoadingDescriptionReady()
       } catch (err) {
         console.error(err)
 
-        ipcRenderer.send('loading:description-ready', err)
+        window.bfxReportElectronApi?.sendLoadingDescriptionReady({ err })
       }
     })
   })
 </script>
-
 </html>

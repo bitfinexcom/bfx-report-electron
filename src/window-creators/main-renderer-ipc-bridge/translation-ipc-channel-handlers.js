@@ -8,9 +8,7 @@ const { getAvailableLanguages } = require('../../i18next')
 const createMenu = require('../../create-menu')
 
 class TranslationIpcChannelHandlers extends IpcChannelHandlers {
-  constructor () {
-    super('translations')
-  }
+  static channelName = 'translations'
 
   async setLanguageHandler (event, args) {
     const lng = args?.language

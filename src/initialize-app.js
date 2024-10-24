@@ -14,9 +14,7 @@ const GeneralIpcChannelHandlers = require(
 )
 const triggerSyncAfterUpdates = require('./trigger-sync-after-updates')
 const triggerElectronLoad = require('./trigger-electron-load')
-const wins = require('./window-creators/windows')
 const runServer = require('./run-server')
-const appStates = require('./app-states')
 const {
   createMainWindow,
   createErrorWindow
@@ -207,13 +205,6 @@ module.exports = async () => {
     manageWorkerMessages(ipc)
     await isServerReadyPromise
     await triggerSyncAfterUpdates()
-
-    // Legacy fix related to reprodducing the same behavior on all OS,
-    // waiting for checks that it was resolved in the last electron ver
-    if (appStates.isMainWinMaximized) {
-      wins.mainWindow.maximize()
-    }
-
     await hideLoadingWindow({ isRequiredToShowMainWin: true })
     await triggerElectronLoad(portsMap)
     await checkForUpdatesAndNotify()
