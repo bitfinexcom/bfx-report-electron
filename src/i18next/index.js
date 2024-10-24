@@ -72,9 +72,9 @@ const initI18next = () => {
   const configs = {
     initImmediate: false,
     fallbackLng: {
-      es: ['es-EM'],
-      pt: ['pt-BR'],
-      zh: ['zh-CN'],
+      es: ['es-EM', 'en'],
+      pt: ['pt-BR', 'en'],
+      zh: ['zh-CN', 'en'],
       default: ['en']
     },
     lng: _getDefaultLanguage(),
