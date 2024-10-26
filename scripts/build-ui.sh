@@ -93,34 +93,34 @@ echo -e "\n${COLOR_BLUE}Setting UI configs${COLOR_NORMAL}"
 
 escapedBfxHomeUrl=$(escapeString $bfxHomeUrl)
 escapedBfxKeyUrl=$(escapeString $bfxKeyUrl)
-sed -i -e \
+sed -i".bak" -E -e \
   "s/HOME_URL: .*,/HOME_URL: \'$escapedBfxHomeUrl\',/g" \
-  "$UI_CONFIGS_FILE"
-sed -i -e \
+  "$UI_CONFIGS_FILE"; rm -f "$UI_CONFIGS_FILE.bak"
+sed -i".bak" -E -e \
   "s/API_URL: .*,/API_URL: \'http:\/\/${BACKEND_ADDRESS}\/api\',/g" \
-  "$UI_CONFIGS_FILE"
-sed -i -e \
+  "$UI_CONFIGS_FILE"; rm -f "$UI_CONFIGS_FILE.bak"
+sed -i".bak" -E -e \
   "s/WS_ADDRESS: .*,/WS_ADDRESS: \'ws:\/\/${BACKEND_ADDRESS}\/ws\',/g" \
-  "$UI_CONFIGS_FILE"
-sed -i -e \
+  "$UI_CONFIGS_FILE"; rm -f "$UI_CONFIGS_FILE.bak"
+sed -i".bak" -E -e \
   "s/KEY_URL: .*,/KEY_URL: \'$escapedBfxKeyUrl\/api\',/g" \
-  "$UI_CONFIGS_FILE"
+  "$UI_CONFIGS_FILE"; rm -f "$UI_CONFIGS_FILE.bak"
 
-sed -i -e \
+sed -i".bak" -E -e \
   "s/localExport: false/localExport: true/g" \
-  "$UI_CONFIGS_FILE"
-sed -i -e \
+  "$UI_CONFIGS_FILE"; rm -f "$UI_CONFIGS_FILE.bak"
+sed -i".bak" -E -e \
   "s/showAuthPage: false/showAuthPage: true/g" \
-  "$UI_CONFIGS_FILE"
-sed -i -e \
+  "$UI_CONFIGS_FILE"; rm -f "$UI_CONFIGS_FILE.bak"
+sed -i".bak" -E -e \
   "s/showFrameworkMode: false/showFrameworkMode: true/g" \
-  "$UI_CONFIGS_FILE"
-sed -i -e \
+  "$UI_CONFIGS_FILE"; rm -f "$UI_CONFIGS_FILE.bak"
+sed -i".bak" -E -e \
   "s/hostedFrameworkMode: true/hostedFrameworkMode: false/g" \
-  "$UI_CONFIGS_FILE"
-sed -i -e \
+  "$UI_CONFIGS_FILE"; rm -f "$UI_CONFIGS_FILE.bak"
+sed -i".bak" -E -e \
   "s/isElectronApp: false/isElectronApp: true/g" \
-  "$UI_CONFIGS_FILE"
+  "$UI_CONFIGS_FILE"; rm -f "$UI_CONFIGS_FILE.bak"
 
 cd "$UI_FOLDER"
 echo -e "\n${COLOR_BLUE}Installing the UI deps...${COLOR_NORMAL}"

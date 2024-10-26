@@ -134,16 +134,12 @@ jobs:
       uses: actions/checkout@v4
       with:
         submodules: recursive
-    - name: Replace macOS’s sed with GNU’s sed
-      run: |
-        brew install gnu-sed
-        echo "$(brew --prefix)/opt/gnu-sed/libexec/gnubin" >> $GITHUB_PATH
     - if: github.event.inputs.version != ''
       name: Set release version
       run: |
-        sed -i -e \
+        sed -i".bak" -E -e \
           "s/\"version\": \".*\"/\"version\": \"${{ github.event.inputs.version }}\"/g" \
-          "./package.json"
+          "./package.json"; rm -f "./package.json.bak"
     - if: contains(fromJson('["true", "1", true, 1]'), github.event.inputs.isAutoUpdateDisabled)
       name: Turn off auto-update
       run: |
