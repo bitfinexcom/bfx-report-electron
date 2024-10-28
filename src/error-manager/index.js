@@ -3,6 +3,7 @@
 const { app, Menu } = require('electron')
 const os = require('os')
 const cleanStack = require('clean-stack')
+const i18next = require('i18next')
 
 const isDevEnv = process.env.NODE_ENV === 'development'
 
@@ -215,10 +216,8 @@ const initLogger = () => {
       const error = message.data.join(os.EOL)
 
       if (/Failed to get 'documents' path/gi.test(error)) {
-        const title = 'The OS Documents directory has been misconfigured'
-        const msg = `\
-This indicates that your OS \`Documents\` directory has been misconfigured.
-Please, set it to a valid location or reset it to the default`
+        const title = i18next.t('common.errorManager.failedToGetDocsPath.title')
+        const msg = i18next.t('common.errorManager.failedToGetDocsPath.message')
 
         showModalDialog({
           errBoxTitle: title,
