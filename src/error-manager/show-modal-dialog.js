@@ -6,6 +6,7 @@ const path = require('path')
 const { Converter } = require('showdown')
 const Alert = require('electron-alert')
 const { rootPath } = require('electron-root-path')
+const i18next = require('i18next')
 
 const wins = require('../window-creators/windows')
 const spawn = require('../helpers/spawn')
@@ -110,9 +111,9 @@ const _fireAlert = (params) => {
     icon: 'question',
     focusConfirm: true,
     showConfirmButton: true,
-    confirmButtonText: 'Report',
+    confirmButtonText: i18next.t('common.errorManager.errorModalDialog.confirmButtonText'),
     showCancelButton: true,
-    cancelButtonText: 'Cancel',
+    cancelButtonText: i18next.t('common.errorManager.errorModalDialog.cancelButtonText'),
     timerProgressBar: false,
 
     ...params,
@@ -169,11 +170,26 @@ const _fireAlert = (params) => {
 
 module.exports = async (params) => {
   const {
-    errBoxTitle = 'Bug report',
-    errBoxDescription = 'A new Github issue will be opened',
+    /*
+     * It's important to add default translation here
+     * to have a description if an error occurs
+     * before the translation init
+     */
+    errBoxTitle = i18next.t(
+      'common.errorManager.errorModalDialog.errBoxTitle',
+      'Bug report'
+    ),
+    errBoxDescription = i18next.t(
+      'common.errorManager.errorModalDialog.errBoxDescription',
+      'A new GitHub issue will be opened'
+    ),
     mdIssue,
     alertOpts = {}
-  } = params
+  } = params ?? {}
+  const zenityBtn = i18next.t(
+    'common.errorManager.errorModalDialog.zenityBtn',
+    'Report and Exit'
+  )
 
   if (
     app.isReady() &&
@@ -220,7 +236,7 @@ module.exports = async (params) => {
       `--title=${errBoxTitle}`,
       `--text=${errBoxDescription}`,
       '--width=800',
-      '--ok-label=Report and Exit',
+      `--ok-label=${zenityBtn}`,
       '--no-markup'
     ])
   } catch (err) {
