@@ -4,6 +4,12 @@
     "appInitError": {
       "description": "Application initialization error",
       "closeBtnText": "Close"
+    },
+    "errorManager": {
+      "failedToGetDocsPath": {
+        "title": "The OS Documents directory has been misconfigured",
+        "message": "This indicates that your OS `Documents` directory has been misconfigured.\nPlease, set it to a valid location or reset it to the default"
+      }
     }
   },
   "menu": {
