@@ -12,7 +12,10 @@
       },
       "errorModalDialog": {
         "errBoxTitle": "Отчет об ошибке",
-        "errBoxDescription": "Будет открыта новая проблема в GitHub"
+        "errBoxDescription": "Будет открыта новая проблема в GitHub",
+        "zenityBtn": "Отправить Отчет и Выйти",
+        "confirmButtonText": "Отправить Отчет",
+        "cancelButtonText": "Отменить"
       }
     }
   },
