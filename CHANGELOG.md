@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.30.0] - 2024-10-30
+
+### Added
+
+- Implemented `Your Assets` section for the web `Account Summary` page. Improved sections titles styling. PR: [bfx-report-ui#880](https://github.com/bitfinexcom/bfx-report-ui/pull/880)
+- Implemented `UI` language selection binding with `ElectronJS` wrapper. PR: [bfx-report-ui#882](https://github.com/bitfinexcom/bfx-report-ui/pull/882)
+- Extended ElectronJS app wrapper translations. Improved the app-init-error layout. Fixed logs collection for bug report. PR: [bfx-report-electron#422](https://github.com/bitfinexcom/bfx-report-electron/pull/422)
+
+### Changed
+
+- Improved the loading window workflow to bring more consistency in the sequence of showing windows. Added ability to send/listen events for the app-init layout via the context bridge between the main and renderer ipc to be secure. Fixed issue with focusing the main window on the launch. PR: [bfx-report-electron#424](https://github.com/bitfinexcom/bfx-report-electron/pull/424)
+- Prevented returning the translation key `key.nestedKey.etc` if a value is missing for a certain language and added the ability to try to take one from the default `en` translation file. PR: [bfx-report-electron#426](https://github.com/bitfinexcom/bfx-report-electron/pull/426)
+- Reworked `sed` commands to be able to run the build `bash` scripts on both OSs `Ubuntu` and `MacOS` as they have slightly different implementation. PR: [bfx-report-electron#427](https://github.com/bitfinexcom/bfx-report-electron/pull/427)
+
+### Fixed
+
+- Fixed `2FA` login flow to prevent the token request duplication possibility noted in some user scenarios. PR: [bfx-report-ui#881](https://github.com/bitfinexcom/bfx-report-ui/pull/881)
+- Fixed issue with `Wine` to build `Windows` release under container. PR: [bfx-report-electron#425](https://github.com/bitfinexcom/bfx-report-electron/pull/425)
+
+### Security
+
+- Bumped `cookie` from `0.6.0` to `0.7.1`, `express` from `4.21.0` to `4.21.1`. PR: [bfx-report-ui#879](https://github.com/bitfinexcom/bfx-report-ui/pull/879)
+- Bumped `electron` from `27.3.11` to `27.3.5`. PR: [bfx-report-electron#424](https://github.com/bitfinexcom/bfx-report-electron/pull/424)
+
 ## [4.29.0] - 2024-10-16
 
 ### Added
