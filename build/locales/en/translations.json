@@ -12,7 +12,10 @@
       },
       "errorModalDialog": {
         "errBoxTitle": "Bug report",
-        "errBoxDescription": "A new GitHub issue will be opened"
+        "errBoxDescription": "A new GitHub issue will be opened",
+        "zenityBtn": "Report and Exit",
+        "confirmButtonText": "Report",
+        "cancelButtonText": "Cancel"
       }
     }
   },
