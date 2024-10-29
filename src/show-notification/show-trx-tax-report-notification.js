@@ -1,5 +1,7 @@
 'use strict'
 
+const i18next = require('i18next')
+
 const PROCESS_MESSAGES = require(
   '../../bfx-reports-framework/workers/loc.api/process.message.manager/process.messages'
 )
@@ -18,8 +20,8 @@ module.exports = (mess) => {
 
   const isError = state === PROCESS_MESSAGES.ERROR_TRX_TAX_REPORT
   const body = isError
-    ? 'An unexpected error occurred while generating the tax report!'
-    : 'Your tax report is ready!'
+    ? i18next.t('common.nativeNotification.trxTaxReport.errorBody')
+    : i18next.t('common.nativeNotification.trxTaxReport.completedBody')
   const urgency = isError ? 'critical' : 'normal'
 
   showNotification({ body, urgency })
