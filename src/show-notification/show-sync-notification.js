@@ -1,5 +1,7 @@
 'use strict'
 
+const i18next = require('i18next')
+
 const PROCESS_MESSAGES = require(
   '../../bfx-reports-framework/workers/loc.api/process.message.manager/process.messages'
 )
@@ -14,13 +16,13 @@ const getBody = (params) => {
   } = params ?? {}
 
   if (isError) {
-    return 'Data sync completed with an error!'
+    return i18next.t('common.nativeNotification.sync.errorBody')
   }
   if (isInterrupted) {
-    return 'Data sync interrupted!'
+    return i18next.t('common.nativeNotification.sync.interruptedBody')
   }
 
-  return 'Data sync completed successfully!'
+  return i18next.t('common.nativeNotification.sync.completedBody')
 }
 
 module.exports = (mess) => {
