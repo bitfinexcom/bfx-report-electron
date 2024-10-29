@@ -8,7 +8,7 @@
     "errorManager": {
       "failedToGetDocsPath": {
         "title": "The OS Documents directory has been misconfigured",
-        "message": "This indicates that your OS `Documents` directory has been misconfigured.\nPlease, set it to a valid location or reset it to the default"
+        "message": "This indicates that your OS `Documents` directory has been misconfigured.\n\rPlease, set it to a valid location or reset it to the default"
       },
       "errorModalDialog": {
         "errBoxTitle": "Bug report",
