@@ -15,7 +15,8 @@
         "errBoxDescription": "Будет открыта новая проблема в GitHub",
         "zenityBtn": "Отправить Отчет и Выйти",
         "confirmButtonText": "Отправить Отчет",
-        "cancelButtonText": "Отменить"
+        "cancelButtonText": "Отменить",
+        "title": "Должен ли быть отправлен отчет об ошибке?"
       }
     }
   },

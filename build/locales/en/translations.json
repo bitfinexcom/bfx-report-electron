@@ -15,7 +15,8 @@
         "errBoxDescription": "A new GitHub issue will be opened",
         "zenityBtn": "Report and Exit",
         "confirmButtonText": "Report",
-        "cancelButtonText": "Cancel"
+        "cancelButtonText": "Cancel",
+        "title": "Should a bug report be submitted?"
       }
     }
   },

@@ -53,7 +53,7 @@ const converter = new Converter({
 
 const _fireAlert = (params) => {
   const {
-    title = 'Should a bug report be submitted?',
+    title = i18next.t('common.errorManager.errorModalDialog.title'),
     html = '',
     parentWin,
     hasNoParentWin
