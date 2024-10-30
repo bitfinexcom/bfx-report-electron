@@ -18,6 +18,19 @@
         "cancelButtonText": "Отменить",
         "title": "Должен ли быть отправлен отчет об ошибке?"
       }
+    },
+    "nativeNotification": {
+      "defaulTitle": "Bitfinex Report",
+      "defaultBody": "Уведомление",
+      "sync": {
+        "completedBody": "Синхронизация данных успешно завершена!",
+        "interruptedBody": "Синхронизация данных прервана!",
+        "errorBody": "Синхронизация данных завершена с ошибкой!"
+      },
+      "trxTaxReport": {
+        "completedBody": "Ваш налоговый отчет готов!",
+        "errorBody": "При формировании налогового отчета произошла непредвиденная ошибка!"
+      }
     }
   },
   "menu": {

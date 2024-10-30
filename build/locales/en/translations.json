@@ -18,6 +18,19 @@
         "cancelButtonText": "Cancel",
         "title": "Should a bug report be submitted?"
       }
+    },
+    "nativeNotification": {
+      "defaulTitle": "Bitfinex Report",
+      "defaultBody": "Notification",
+      "sync": {
+        "completedBody": "Data sync completed successfully!",
+        "interruptedBody": "Data sync interrupted!",
+        "errorBody": "Data sync completed with an error!"
+      },
+      "trxTaxReport": {
+        "completedBody": "Your tax report is ready!",
+        "errorBody": "An unexpected error occurred while generating the tax report!"
+      }
     }
   },
   "menu": {
