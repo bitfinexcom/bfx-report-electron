@@ -2,14 +2,15 @@
 
 const os = require('os')
 const cleanStack = require('clean-stack')
+const i18next = require('i18next')
 
 module.exports = (params) => {
   const { error } = { ...params }
 
   const title = '[BUG REPORT]'
   const description = 'Bug report'
-  const errBoxTitle = 'Bug report'
-  const errBoxDescription = 'A new Github issue will be opened'
+  const errBoxTitle = i18next.t('common.errorManager.errorModalDialog.errBoxTitle')
+  const errBoxDescription = i18next.t('common.errorManager.errorModalDialog.errBoxDescription')
 
   if (
     error &&
