@@ -5,6 +5,7 @@ const fs = require('fs')
 const path = require('path')
 const Alert = require('electron-alert')
 const { rootPath } = require('electron-root-path')
+const i18next = require('i18next')
 
 const ipcs = require('../ipcs')
 const wins = require('../window-creators/windows')
@@ -55,7 +56,7 @@ const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
 
 const _fireAlert = (params) => {
   const {
-    title = 'Select DB backup file',
+    title = i18next.t('common.restoreDB.modalDialog.title'),
     backupFilesMetadata
   } = params
   const win = wins.mainWindow
@@ -121,7 +122,8 @@ const _fireAlert = (params) => {
     showConfirmButton: true,
     focusCancel: true,
     showCancelButton: true,
-    cancelButtonText: 'Cancel',
+    confirmButtonText: i18next.t('common.restoreDB.modalDialog.confirmButtonText'),
+    cancelButtonText: i18next.t('common.restoreDB.modalDialog.cancelButtonText'),
     timerProgressBar: false,
 
     input: 'radio',
@@ -238,9 +240,9 @@ module.exports = () => {
       ) {
         await showMessageModalDialog(wins.mainWindow, {
           type: 'warning',
-          title: 'DB restoring',
-          message: 'Suitable DB backup file has not been found',
-          buttons: ['OK'],
+          title: i18next.t('common.restoreDB.messageModalDialog.title'),
+          message: i18next.t('common.restoreDB.messageModalDialog.message'),
+          buttons: [i18next.t('common.restoreDB.messageModalDialog.confirmButtonText')],
           defaultId: 0,
           cancelId: 0
         })
