@@ -57,6 +57,20 @@
         "title": "Update v{{version}} downloaded",
         "description": "Should the app be updated right now?"
       }
+    },
+    "restoreDB": {
+      "modalDialog": {
+        "title": "Select DB backup file",
+        "confirmButtonText": "OK",
+        "cancelButtonText": "Cancel"
+      },
+      "messageModalDialog": {
+        "title": "DB restoring",
+        "message": "Suitable DB backup file has not been found",
+        "dbRestoredMessage": "DB has been restored",
+        "dbNotRestoredMessage": "DB has not been restored",
+        "confirmButtonText": "OK"
+      }
     }
   },
   "menu": {
