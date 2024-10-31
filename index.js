@@ -11,6 +11,10 @@ try {
     process.env[key] = val
   }
 } catch (err) {}
+try {
+  // Uses only in dev mode as dotenv is added into dev deps
+  require('dotenv').config({ override: true })
+} catch (err) {}
 
 const { app } = require('electron')
 require('./src/i18next')

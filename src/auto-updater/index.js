@@ -11,6 +11,7 @@ const {
 } = require('electron-updater')
 const Alert = require('electron-alert')
 const yaml = require('js-yaml')
+const i18next = require('i18next')
 
 const log = require('../error-manager/log')
 const BfxMacUpdater = require('./bfx.mac.updater')
@@ -264,7 +265,7 @@ const _autoUpdaterFactory = () => {
 
     autoUpdater.addInstallingUpdateEventHandler(() => {
       return showLoadingWindow({
-        description: 'Updating...',
+        description: i18next.t('common.autoUpdater.loadingWindow.description'),
         isRequiredToCloseAllWins: true
       })
     })
@@ -314,7 +315,7 @@ const _autoUpdaterFactory = () => {
         /ERR_INTERNET_DISCONNECTED/gi.test(err.toString())
       ) {
         await _fireToast({
-          title: 'Internet disconnected',
+          title: i18next.t('common.autoUpdater.errorToast.inetIssueTitle'),
           icon: 'error',
           timer: 60000
         })
@@ -323,7 +324,7 @@ const _autoUpdaterFactory = () => {
       }
 
       await _fireToast({
-        title: 'Application update failed',
+        title: i18next.t('common.autoUpdater.errorToast.title'),
         icon: 'error',
         timer: 60000
       })
@@ -339,7 +340,7 @@ const _autoUpdaterFactory = () => {
 
       await _fireToast(
         {
-          title: 'Checking for update',
+          title: i18next.t('common.autoUpdater.checkingForUpdateToast.title'),
           type: 'warning',
           timer: 10000
         },
@@ -359,8 +360,11 @@ const _autoUpdaterFactory = () => {
 
       const { value, dismiss } = await _fireToast(
         {
-          title: `An update to v${version} is available`,
-          text: 'Starting download...',
+          title: i18next.t(
+            'common.autoUpdater.updateAvailableToast.title',
+            { version }
+          ),
+          text: i18next.t('common.autoUpdater.updateAvailableToast.description'),
           icon: 'info',
           timer: 10000
         }
@@ -395,7 +399,7 @@ const _autoUpdaterFactory = () => {
 
       await _fireToast(
         {
-          title: 'No updates available',
+          title: i18next.t('common.autoUpdater.updateNotAvailableToast.title'),
           icon: 'success',
           timer: 10000
         }
@@ -418,7 +422,7 @@ const _autoUpdaterFactory = () => {
 
       await _fireToast(
         {
-          title: 'Downloading...',
+          title: i18next.t('common.autoUpdater.downloadProgressToast.title'),
           icon: 'info'
         },
         {
@@ -450,8 +454,11 @@ const _autoUpdaterFactory = () => {
 
       const { value } = await _fireToast(
         {
-          title: `Update v${version} downloaded`,
-          text: 'Should the app be updated right now?',
+          title: i18next.t(
+            'common.autoUpdater.updateDownloadedToast.title',
+            { version }
+          ),
+          text: i18next.t('common.autoUpdater.updateDownloadedToast.description'),
           icon: 'question',
           timer: 60000,
           showCancelButton: true

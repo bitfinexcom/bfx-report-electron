@@ -31,6 +31,32 @@
         "completedBody": "Ваш налоговый отчет готов!",
         "errorBody": "При формировании налогового отчета произошла непредвиденная ошибка!"
       }
+    },
+    "autoUpdater": {
+      "loadingWindow": {
+        "description": "Обновление..."
+      },
+      "errorToast": {
+        "title": "Обновление приложения не удалось",
+        "inetIssueTitle": "Интернет отключен"
+      },
+      "checkingForUpdateToast": {
+        "title": "Проверка обновления"
+      },
+      "updateAvailableToast": {
+        "title": "Доступно обновление до версии v{{version}}",
+        "description": "Начинаем загрузку..."
+      },
+      "updateNotAvailableToast": {
+        "title": "Нет доступных обновлений"
+      },
+      "downloadProgressToast": {
+        "title": "Загрузка..."
+      },
+      "updateDownloadedToast": {
+        "title": "Обновление v{{version}} загружено",
+        "description": "Стоит ли обновить приложение прямо сейчас?"
+      }
     }
   },
   "menu": {

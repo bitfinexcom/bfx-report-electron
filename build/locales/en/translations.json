@@ -31,6 +31,32 @@
         "completedBody": "Your tax report is ready!",
         "errorBody": "An unexpected error occurred while generating the tax report!"
       }
+    },
+    "autoUpdater": {
+      "loadingWindow": {
+        "description": "Updating..."
+      },
+      "errorToast": {
+        "title": "Application update failed",
+        "inetIssueTitle": "Internet disconnected"
+      },
+      "checkingForUpdateToast": {
+        "title": "Checking for update"
+      },
+      "updateAvailableToast": {
+        "title": "An update to v{{version}} is available",
+        "description": "Starting download..."
+      },
+      "updateNotAvailableToast": {
+        "title": "No updates available"
+      },
+      "downloadProgressToast": {
+        "title": "Downloading..."
+      },
+      "updateDownloadedToast": {
+        "title": "Update v{{version}} downloaded",
+        "description": "Should the app be updated right now?"
+      }
     }
   },
   "menu": {
