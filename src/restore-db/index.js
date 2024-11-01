@@ -4,7 +4,6 @@ const { app, screen, remote } = require('electron')
 const fs = require('fs')
 const path = require('path')
 const Alert = require('electron-alert')
-const { rootPath } = require('electron-root-path')
 const i18next = require('i18next')
 
 const ipcs = require('../ipcs')
@@ -17,6 +16,9 @@ const isMainWinAvailable = require(
 )
 const getAlertCustomClassObj = require(
   '../helpers/get-alert-custom-class-obj'
+)
+const getUIFontsAsCSSString = require(
+  '../helpers/get-ui-fonts-as-css-string'
 )
 const showMessageModalDialog = require(
   '../show-message-modal-dialog'
@@ -32,9 +34,7 @@ const {
   addOnceProcEventHandler
 } = require('../window-creators/window-event-manager')
 
-const fontsStyle = fs.readFileSync(path.join(
-  rootPath, 'bfx-report-ui/build/fonts/roboto.css'
-))
+const fontsStyle = getUIFontsAsCSSString()
 const alertStyle = fs.readFileSync(path.join(
   __dirname, '../modal-dialog-src/modal-dialog.css'
 ))
@@ -101,10 +101,7 @@ const _fireAlert = (params) => {
     darkTheme: false,
     parent: win,
     modal: true,
-    width: 1000,
-    webPreferences: {
-      contextIsolation: false
-    }
+    width: 1000
   }
   const swalOptions = {
     position: 'center',
