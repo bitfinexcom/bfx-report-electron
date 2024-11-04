@@ -1,6 +1,7 @@
 'use strict'
 
 const { app, BrowserWindow } = require('electron')
+const i18next = require('i18next')
 
 const wins = require('./window-creators/windows')
 const relaunch = require('./relaunch')
@@ -27,10 +28,7 @@ const PROCESS_STATES = require(
 )
 
 module.exports = (ipc) => {
-  const win = isMainWinAvailable(
-    wins.mainWindow,
-    { shouldCheckVisibility: true }
-  )
+  const win = isMainWinAvailable(wins.mainWindow)
     ? wins.mainWindow
     : BrowserWindow.getFocusedWindow()
 
@@ -66,18 +64,17 @@ module.exports = (ipc) => {
         await showWindow(win)
 
         const hasNotDbBeenRestored = state === PROCESS_MESSAGES.DB_HAS_NOT_BEEN_RESTORED
-        const messChunk = hasNotDbBeenRestored
-          ? ' not'
-          : ''
         const type = hasNotDbBeenRestored
           ? 'error'
           : 'info'
 
         await showMessageModalDialog(win, {
           type,
-          title: 'DB restoring',
-          message: `DB has${messChunk} been restored`,
-          buttons: ['OK'],
+          title: i18next.t('common.restoreDB.messageModalDialog.title'),
+          message: hasNotDbBeenRestored
+            ? i18next.t('common.restoreDB.messageModalDialog.dbNotRestoredMessage')
+            : i18next.t('common.restoreDB.messageModalDialog.dbRestoredMessage'),
+          buttons: [i18next.t('common.restoreDB.messageModalDialog.confirmButtonText')],
           defaultId: 0,
           cancelId: 0
         })

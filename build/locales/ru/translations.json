@@ -57,6 +57,20 @@
         "title": "Обновление v{{version}} загружено",
         "description": "Стоит ли обновить приложение прямо сейчас?"
       }
+    },
+    "restoreDB": {
+      "modalDialog": {
+        "title": "Выберите файл резервной копии БД",
+        "confirmButtonText": "OK",
+        "cancelButtonText": "Отменить"
+      },
+      "messageModalDialog": {
+        "title": "Восстановление БД",
+        "message": "Подходящий файл резервной копии БД не найден",
+        "dbRestoredMessage": "БД была восстановлена",
+        "dbNotRestoredMessage": "БД не была восстановлена",
+        "confirmButtonText": "OK"
+      }
     }
   },
   "menu": {
