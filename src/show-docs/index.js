@@ -18,6 +18,9 @@ const {
   closeAlert
 } = require('../modal-dialog-src/utils')
 const { UserManualShowingError } = require('../errors')
+const getUIFontsAsCSSString = require(
+  '../helpers/get-ui-fonts-as-css-string'
+)
 
 const mdUserManual = fs.readFileSync(
   path.join(rootPath, 'docs/user-manual.md'),
@@ -31,9 +34,7 @@ const {
 const mdStyle = fs.readFileSync(path.join(
   rootPath, 'node_modules', 'github-markdown-css/github-markdown.css'
 ))
-const fontsStyle = fs.readFileSync(path.join(
-  rootPath, 'bfx-report-ui/build/fonts/roboto.css'
-))
+const fontsStyle = getUIFontsAsCSSString()
 const alertStyle = fs.readFileSync(path.join(
   __dirname, '../modal-dialog-src/modal-dialog.css'
 ))
