@@ -23,13 +23,14 @@ const {
   WINDOW_EVENT_NAMES,
   addOnceProcEventHandler
 } = require('../window-creators/window-event-manager')
+const getUIFontsAsCSSString = require(
+  '../helpers/get-ui-fonts-as-css-string'
+)
 
 const mdStyle = fs.readFileSync(path.join(
   rootPath, 'node_modules', 'github-markdown-css/github-markdown.css'
 ))
-const fontsStyle = fs.readFileSync(path.join(
-  __dirname, '../../bfx-report-ui/build/fonts/roboto.css'
-))
+const fontsStyle = getUIFontsAsCSSString()
 const alertStyle = fs.readFileSync(path.join(
   __dirname, '../modal-dialog-src/modal-dialog.css'
 ))

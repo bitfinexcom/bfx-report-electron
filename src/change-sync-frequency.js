@@ -6,9 +6,11 @@ const cronValidate = require('cron-validate')
 const path = require('path')
 const fs = require('fs')
 
-const fontsStyle = fs.readFileSync(path.join(
-  __dirname, '../bfx-report-ui/build/fonts/roboto.css'
-))
+const getUIFontsAsCSSString = require(
+  './helpers/get-ui-fonts-as-css-string'
+)
+
+const fontsStyle = getUIFontsAsCSSString()
 const modalDialogStyle = fs.readFileSync(path.join(
   __dirname, 'modal-dialog-src/modal-dialog.css'
 ))

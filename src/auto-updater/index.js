@@ -28,14 +28,15 @@ const {
   WINDOW_EVENT_NAMES,
   addOnceProcEventHandler
 } = require('../window-creators/window-event-manager')
+const getUIFontsAsCSSString = require(
+  '../helpers/get-ui-fonts-as-css-string'
+)
 
 const MENU_ITEM_IDS = require('../create-menu/menu.item.ids')
 
 const isAutoUpdateDisabled = parseEnvValToBool(process.env.IS_AUTO_UPDATE_DISABLED)
 
-const fontsStyle = fs.readFileSync(path.join(
-  __dirname, '../../bfx-report-ui/build/fonts/roboto.css'
-))
+const fontsStyle = getUIFontsAsCSSString()
 const toastStyle = fs.readFileSync(path.join(
   __dirname, 'toast-src/toast.css'
 ))
