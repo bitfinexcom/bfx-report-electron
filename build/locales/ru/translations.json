@@ -71,6 +71,12 @@
         "dbNotRestoredMessage": "БД не была восстановлена",
         "confirmButtonText": "OK"
       }
+    },
+    "showDocs": {
+      "modalDialog": {
+        "title": "Руководство пользователя",
+        "cancelButtonText": "Закрыть"
+      }
     }
   },
   "menu": {
