@@ -6,6 +6,7 @@ const path = require('path')
 const { Converter } = require('showdown')
 const Alert = require('electron-alert')
 const { rootPath } = require('electron-root-path')
+const i18next = require('i18next')
 
 const wins = require('../window-creators/windows')
 const isMainWinAvailable = require(
@@ -59,7 +60,7 @@ const converter = new Converter({
 const _fireAlert = (params) => {
   const {
     type = 'info',
-    title = 'User manual',
+    title = i18next.t('common.showDocs.modalDialog.title'),
     html
   } = params
   const win = wins.mainWindow
@@ -96,10 +97,7 @@ const _fireAlert = (params) => {
     darkTheme: false,
     parent: win,
     modal: true,
-    width: 1000,
-    webPreferences: {
-      contextIsolation: false
-    }
+    width: 1000
   }
   const swalOptions = {
     position: 'center',
@@ -115,7 +113,7 @@ const _fireAlert = (params) => {
     showConfirmButton: false,
     focusCancel: true,
     showCancelButton: true,
-    cancelButtonText: 'Cancel',
+    cancelButtonText: i18next.t('common.showDocs.modalDialog.cancelButtonText'),
     timerProgressBar: false,
 
     willOpen: () => {
