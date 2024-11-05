@@ -23,10 +23,6 @@ const getUIFontsAsCSSString = require(
   '../helpers/get-ui-fonts-as-css-string'
 )
 
-const mdUserManual = fs.readFileSync(
-  path.join(rootPath, 'docs/user-manual.md'),
-  'utf8'
-)
 const {
   WINDOW_EVENT_NAMES,
   addOnceProcEventHandler
@@ -169,7 +165,7 @@ module.exports = async (params = {}) => {
     const {
       type,
       title,
-      mdDoc = mdUserManual
+      mdDoc = i18next.t('mdDocs:userManual')
     } = params
 
     if (
