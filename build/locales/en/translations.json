@@ -71,6 +71,12 @@
         "dbNotRestoredMessage": "DB has not been restored",
         "confirmButtonText": "OK"
       }
+    },
+    "showDocs": {
+      "modalDialog": {
+        "title": "User manual",
+        "cancelButtonText": "Close"
+      }
     }
   },
   "menu": {
