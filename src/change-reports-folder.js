@@ -1,6 +1,7 @@
 'use strict'
 
 const { dialog, BrowserWindow } = require('electron')
+const i18next = require('i18next')
 
 const { REPORT_FILES_PATH_VERSION } = require('./const')
 
@@ -24,9 +25,9 @@ module.exports = ({ pathToUserDocuments }) => {
       } = await dialog.showOpenDialog(
         win,
         {
-          title: 'Change reports folder',
+          title: i18next.t('common.changeReportsFolder.modalDialog.title'),
           defaultPath: pathToUserDocuments,
-          buttonLabel: 'Select',
+          buttonLabel: i18next.t('common.changeReportsFolder.modalDialog.buttonLabel'),
           properties: [
             'openDirectory',
             'createDirectory',
@@ -63,7 +64,11 @@ module.exports = ({ pathToUserDocuments }) => {
       relaunch()
     } catch (err) {
       try {
-        await showErrorModalDialog(win, 'Change reports folder', err)
+        await showErrorModalDialog(
+          win,
+          i18next.t('common.changeReportsFolder.modalDialog.title'),
+          err
+        )
       } catch (err) {
         console.error(err)
       }
