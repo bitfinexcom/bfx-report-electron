@@ -13,10 +13,14 @@ const showErrorModalDialog = require('./show-error-modal-dialog')
 const pauseApp = require('./pause-app')
 const relaunch = require('./relaunch')
 const { getConfigsKeeperByName } = require('./configs-keeper')
+const wins = require('./window-creators/windows')
+const isMainWinAvailable = require('./helpers/is-main-win-available')
 
 module.exports = ({ pathToUserDocuments }) => {
   return async () => {
-    const win = BrowserWindow.getFocusedWindow()
+    const win = isMainWinAvailable(wins.mainWindow)
+      ? wins.mainWindow
+      : BrowserWindow.getFocusedWindow()
 
     try {
       const {
