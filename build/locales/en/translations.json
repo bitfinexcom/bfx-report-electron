@@ -84,6 +84,12 @@
         "page": "Page",
         "from": "from"
       }
+    },
+    "changeReportsFolder": {
+      "modalDialog": {
+        "title": "Change reports folder",
+        "buttonLabel": "Select"
+      }
     }
   },
   "menu": {
