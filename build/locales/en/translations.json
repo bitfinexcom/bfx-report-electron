@@ -77,6 +77,13 @@
         "title": "User manual",
         "cancelButtonText": "Close"
       }
+    },
+    "printToPDF": {
+      "defaultTemplate": "No data",
+      "pagination": {
+        "page": "Page",
+        "from": "from"
+      }
     }
   },
   "menu": {
