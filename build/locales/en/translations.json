@@ -90,6 +90,24 @@
         "title": "Change reports folder",
         "buttonLabel": "Select"
       }
+    },
+    "changeSyncFrequency": {
+      "title": "Change sync frequency",
+      "timeFormatModalDialog": {
+        "title": "Set time format",
+        "confirmButtonText": "OK",
+        "cancelButtonText": "Cancel",
+        "inputOptions": {
+          "mins": "Mins",
+          "hours": "Hours",
+          "days": "Days"
+        }
+      },
+      "timeModalDialog": {
+        "title": "Set sync frequency",
+        "confirmButtonText": "OK",
+        "cancelButtonText": "Cancel"
+      }
     }
   },
   "menu": {
