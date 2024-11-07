@@ -127,7 +127,7 @@ const _fireToast = (
     backgroundColor: '#172d3e',
     darkTheme: false,
     height,
-    width: opts?.width ?? 800,
+    width: opts?.width ?? 1000,
     parent: win,
     modal: false,
     webPreferences: {
@@ -141,9 +141,11 @@ const _fireToast = (
     backdrop: 'rgba(0,0,0,0.0)',
 
     icon: 'info',
-    title: 'Update',
+    title: i18next.t('common.autoUpdater.title'),
     showConfirmButton: true,
     showCancelButton: false,
+    confirmButtonText: i18next.t('common.autoUpdater.confirmButtonText'),
+    cancelButtonText: i18next.t('common.autoUpdater.cancelButtonText'),
     timerProgressBar: false,
 
     ...opts,
