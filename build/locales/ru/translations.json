@@ -111,6 +111,21 @@
         "confirmButtonText": "OK",
         "cancelButtonText": "Отмена"
       }
+    },
+    "enforceMacOSAppLocation": {
+      "appLocationModalDialog": {
+        "message": "Переместить в папку Приложения?",
+        "detail": "{{productName}} должен находиться в папке Приложения для корректной работы",
+        "confirmButtonText": "Переместить в папку Приложения",
+        "cancelButtonText": "Выйти из {{productName}}"
+      },
+      "loadingWindow": {
+        "description": "Перемещение приложения..."
+      },
+      "appRunningModalDialog": {
+        "message": "В настоящее время запущена другая версия {{productName}}. Закройте ее, затем снова запустите эту версию приложения",
+        "confirmButtonText": "OK"
+      }
     }
   },
   "menu": {
