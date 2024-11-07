@@ -111,6 +111,21 @@
         "confirmButtonText": "OK",
         "cancelButtonText": "Cancel"
       }
+    },
+    "enforceMacOSAppLocation": {
+      "appLocationModalDialog": {
+        "message": "Move to Applications folder?",
+        "detail": "{{productName}} must live in the Applications folder to be able to run correctly",
+        "confirmButtonText": "Move to Applications folder",
+        "cancelButtonText": "Quit {{productName}}"
+      },
+      "loadingWindow": {
+        "description": "Moving the app..."
+      },
+      "appRunningModalDialog": {
+        "message": "Another version of {{productName}} is currently running. Quit it, then launch this version of the app again",
+        "confirmButtonText": "OK"
+      }
     }
   },
   "menu": {
