@@ -77,6 +77,19 @@
         "title": "Руководство пользователя",
         "cancelButtonText": "Закрыть"
       }
+    },
+    "printToPDF": {
+      "defaultTemplate": "Нет данных",
+      "pagination": {
+        "page": "Страница",
+        "from": "из"
+      }
+    },
+    "changeReportsFolder": {
+      "modalDialog": {
+        "title": "Изменить папку отчетов",
+        "buttonLabel": "Выбрать"
+      }
     }
   },
   "menu": {

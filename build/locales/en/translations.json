@@ -77,6 +77,19 @@
         "title": "User manual",
         "cancelButtonText": "Close"
       }
+    },
+    "printToPDF": {
+      "defaultTemplate": "No data",
+      "pagination": {
+        "page": "Page",
+        "from": "from"
+      }
+    },
+    "changeReportsFolder": {
+      "modalDialog": {
+        "title": "Change reports folder",
+        "buttonLabel": "Select"
+      }
     }
   },
   "menu": {
