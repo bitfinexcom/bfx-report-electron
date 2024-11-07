@@ -90,6 +90,24 @@
         "title": "Изменить папку отчетов",
         "buttonLabel": "Выбрать"
       }
+    },
+    "changeSyncFrequency": {
+      "title": "Изменить частоту синхронизации",
+      "timeFormatModalDialog": {
+        "title": "Установить формат времени",
+        "confirmButtonText": "OK",
+        "cancelButtonText": "Отмена",
+        "inputOptions": {
+          "mins": "Мин.",
+          "hours": "Часы",
+          "days": "Дни"
+        }
+      },
+      "timeModalDialog": {
+        "title": "Установить частоту синхронизации",
+        "confirmButtonText": "OK",
+        "cancelButtonText": "Отмена"
+      }
     }
   },
   "menu": {
