@@ -127,7 +127,7 @@ const _fireToast = (
     backgroundColor: '#172d3e',
     darkTheme: false,
     height,
-    width: opts?.width ?? 800,
+    width: opts?.width ?? 1000,
     parent: win,
     modal: false,
     webPreferences: {
