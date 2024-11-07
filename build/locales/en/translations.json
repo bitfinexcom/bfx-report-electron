@@ -33,6 +33,9 @@
       }
     },
     "autoUpdater": {
+      "title": "Update",
+      "confirmButtonText": "OK",
+      "cancelButtonText": "Cancel",
       "loadingWindow": {
         "description": "Updating..."
       },
