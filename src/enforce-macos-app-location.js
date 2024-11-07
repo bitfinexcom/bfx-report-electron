@@ -1,6 +1,7 @@
 'use strict'
 
 const { app, dialog } = require('electron')
+const i18next = require('i18next')
 
 const productName = require('./helpers/product-name')
 const {
@@ -22,11 +23,18 @@ module.exports = async () => {
 
   const clickedButtonIndex = dialog.showMessageBoxSync({
     type: 'error',
-    message: 'Move to Applications folder?',
-    detail: `${productName} must live in the Applications folder to be able to run correctly.`,
+    message: i18next
+      .t('common.enforceMacOSAppLocation.appLocationModalDialog.message'),
+    detail: i18next.t(
+      'common.enforceMacOSAppLocation.appLocationModalDialog.detail',
+      { productName }
+    ),
     buttons: [
-      'Move to Applications folder',
-      `Quit ${productName}`
+      i18next.t('common.enforceMacOSAppLocation.appLocationModalDialog.confirmButtonText'),
+      i18next.t(
+        'common.enforceMacOSAppLocation.appLocationModalDialog.cancelButtonText',
+        { productName }
+      )
     ],
     defaultId: 0,
     cancelId: 1
@@ -39,7 +47,8 @@ module.exports = async () => {
   }
 
   await showLoadingWindow({
-    description: 'Moving the app...',
+    description: i18next
+      .t('common.enforceMacOSAppLocation.loadingWindow.description'),
     isRequiredToCloseAllWins: true,
     isIndeterminateMode: true
   })
@@ -49,9 +58,12 @@ module.exports = async () => {
       if (conflict === 'existsAndRunning') {
         dialog.showMessageBoxSync({
           type: 'error',
-          message: `Another version of ${productName} is currently running. Quit it, then launch this version of the app again.`,
+          message: i18next.t(
+            'common.enforceMacOSAppLocation.appRunningModalDialog.message',
+            { productName }
+          ),
           buttons: [
-            'OK'
+            i18next.t('common.enforceMacOSAppLocation.appRunningModalDialog.confirmButtonText')
           ]
         })
 
