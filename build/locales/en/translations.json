@@ -126,6 +126,10 @@
         "message": "Another version of {{productName}} is currently running. Quit it, then launch this version of the app again",
         "confirmButtonText": "OK"
       }
+    },
+    "showMessageModalDialog": {
+      "confirmButtonText": "OK",
+      "cancelButtonText": "Cancel"
     }
   },
   "menu": {
