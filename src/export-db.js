@@ -11,6 +11,8 @@ const {
   showLoadingWindow,
   hideLoadingWindow
 } = require('./window-creators/change-loading-win-visibility-state')
+const wins = require('./window-creators/windows')
+const isMainWinAvailable = require('./helpers/is-main-win-available')
 const {
   DEFAULT_ARCHIVE_DB_FILE_NAME,
   DB_FILE_NAME,
@@ -35,7 +37,9 @@ module.exports = ({
   const secretKeyPath = path.join(pathToUserData, SECRET_KEY_FILE_NAME)
 
   return async () => {
-    const win = BrowserWindow.getFocusedWindow()
+    const win = isMainWinAvailable(wins.mainWindow)
+      ? wins.mainWindow
+      : BrowserWindow.getFocusedWindow()
 
     try {
       const {
