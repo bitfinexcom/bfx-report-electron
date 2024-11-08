@@ -126,6 +126,10 @@
         "message": "В настоящее время запущена другая версия {{productName}}. Закройте ее, затем снова запустите эту версию приложения",
         "confirmButtonText": "OK"
       }
+    },
+    "showMessageModalDialog": {
+      "confirmButtonText": "OK",
+      "cancelButtonText": "Отмена"
     }
   },
   "menu": {
