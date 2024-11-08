@@ -1,6 +1,7 @@
 'use strict'
 
 const { dialog, BrowserWindow } = require('electron')
+const i18next = require('i18next')
 
 const wins = require('./window-creators/windows')
 const isMainWinAvailable = require('./helpers/is-main-win-available')
@@ -18,7 +19,10 @@ module.exports = async (win, opts = {}) => {
     checkboxChecked
   } = await dialog.showMessageBox(parentWin, {
     type: 'info',
-    buttons: ['Cancel', 'OK'],
+    buttons: [
+      i18next.t('common.showMessageModalDialog.cancelButtonText'),
+      i18next.t('common.showMessageModalDialog.confirmButtonText')
+    ],
     defaultId: 1,
     cancelId: 0,
     title: '',
