@@ -142,6 +142,17 @@
       "reportsFolderChangingErrorMessage": "The reports folder has not been changed",
       "syncFrequencyChangingErrorMessage": "The sync frequency has not been changed",
       "unexpectedExceptionMessage": "An unexpected exception occurred"
+    },
+    "exportDB": {
+      "saveDialog": {
+        "title": "Database export",
+        "buttonLabel": "Export"
+      },
+      "modalDialog": {
+        "confirmButtonText": "OK",
+        "title": "Database export",
+        "message": "Exported successfully"
+      }
     }
   },
   "menu": {
