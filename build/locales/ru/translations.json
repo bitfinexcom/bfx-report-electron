@@ -142,6 +142,17 @@
       "reportsFolderChangingErrorMessage": "Папка отчетов не была изменена",
       "syncFrequencyChangingErrorMessage": "Частота синхронизации не была изменена",
       "unexpectedExceptionMessage": "Произошло неожиданное исключение"
+    },
+    "exportDB": {
+      "saveDialog": {
+        "title": "Экспорт базы данных",
+        "buttonLabel": "Экспортировать"
+      },
+      "modalDialog": {
+        "confirmButtonText": "OK",
+        "title": "Экспорт базы данных",
+        "message": "Экспортирована успешно"
+      }
     }
   },
   "menu": {
