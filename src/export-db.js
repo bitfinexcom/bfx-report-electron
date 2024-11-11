@@ -2,6 +2,7 @@
 
 const path = require('path')
 const { dialog, BrowserWindow } = require('electron')
+const i18next = require('i18next')
 
 const { InvalidFilePathError } = require('./errors')
 const { zip } = require('./archiver')
@@ -48,9 +49,10 @@ module.exports = ({
       } = await dialog.showSaveDialog(
         win,
         {
-          title: 'Database export',
+          title: i18next.t('common.exportDB.saveDialog.title'),
           defaultPath,
-          buttonLabel: 'Export',
+          buttonLabel: i18next
+            .t('common.exportDB.saveDialog.buttonLabel'),
           filters: [{ name: 'ZIP', extensions: ['zip'] }]
         }
       )
@@ -75,15 +77,21 @@ module.exports = ({
       await hideLoadingWindow()
 
       await showMessageModalDialog(win, {
-        buttons: ['OK'],
+        buttons: [
+          i18next.t('common.exportDB.modalDialog.confirmButtonText')
+        ],
         defaultId: 0,
-        title: 'Database export',
-        message: 'Exported successfully'
+        title: i18next.t('common.exportDB.modalDialog.title'),
+        message: i18next.t('common.exportDB.modalDialog.message')
       })
     } catch (err) {
       try {
         await hideLoadingWindow()
-        await showErrorModalDialog(win, 'Database export', err)
+        await showErrorModalDialog(
+          win,
+          i18next.t('common.exportDB.modalDialog.title'),
+          err
+        )
       } catch (err) {
         console.error(err)
       }
