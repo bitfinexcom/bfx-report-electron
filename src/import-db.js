@@ -1,6 +1,7 @@
 'use strict'
 
 const { dialog, BrowserWindow } = require('electron')
+const i18next = require('i18next')
 
 const {
   InvalidFilePathError,
@@ -51,9 +52,10 @@ module.exports = ({
       } = await dialog.showOpenDialog(
         win,
         {
-          title: 'Database import',
+          title: i18next.t('common.importDB.openDialog.title'),
           defaultPath: pathToUserDocuments,
-          buttonLabel: 'Import',
+          buttonLabel: i18next
+            .t('common.importDB.openDialog.buttonLabel'),
           properties: [
             'openFile',
             'createDirectory',
@@ -98,7 +100,11 @@ module.exports = ({
       relaunch()
     } catch (err) {
       try {
-        await showErrorModalDialog(win, 'Database import', err)
+        await showErrorModalDialog(
+          win,
+          i18next.t('common.importDB.modalDialog.title'),
+          err
+        )
       } catch (err) {
         console.error(err)
       }
