@@ -153,6 +153,15 @@
         "title": "Database export",
         "message": "Exported successfully"
       }
+    },
+    "importDB": {
+      "openDialog": {
+        "title": "Database import",
+        "buttonLabel": "Import"
+      },
+      "modalDialog": {
+        "title": "Database import"
+      }
     }
   },
   "menu": {
