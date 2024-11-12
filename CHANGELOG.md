@@ -7,13 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [4.30.0] - 2024-10-30
+## [4.30.0] - 2024-11-13
 
 ### Added
 
 - Implemented `Your Assets` section for the web `Account Summary` page. Improved sections titles styling. PR: [bfx-report-ui#880](https://github.com/bitfinexcom/bfx-report-ui/pull/880)
 - Implemented `UI` language selection binding with `ElectronJS` wrapper. PR: [bfx-report-ui#882](https://github.com/bitfinexcom/bfx-report-ui/pull/882)
 - Extended ElectronJS app wrapper translations. Improved the app-init-error layout. Fixed logs collection for bug report. PR: [bfx-report-electron#422](https://github.com/bitfinexcom/bfx-report-electron/pull/422)
+- Added translation support to the `error manager` module. PR: [bfx-report-electron#428](https://github.com/bitfinexcom/bfx-report-electron/pull/428)
+- Added translation support to the `native notifications` module. PR: [bfx-report-electron#429](https://github.com/bitfinexcom/bfx-report-electron/pull/429)
+- Added translation support to the `auto-updater` module. PRs: [bfx-report-electron#430](https://github.com/bitfinexcom/bfx-report-electron/pull/430), [bfx-report-electron#438](https://github.com/bitfinexcom/bfx-report-electron/pull/438)
+- Added translation support to the `restore DB` module. PR: [bfx-report-electron#431](https://github.com/bitfinexcom/bfx-report-electron/pull/431)
+- Added translation support to the `show-docs` module, and added the ability to set the `markdown` user manual with different languages into `i18next` (if doc for the corresponding lang does not exist takes `en` by default). PR: [bfx-report-electron#434](https://github.com/bitfinexcom/bfx-report-electron/pull/434)
+- Added translation support to the `print-to-pdf` module. PR: [bfx-report-electron#435](https://github.com/bitfinexcom/bfx-report-electron/pull/435)
+- Added translation support to the `change-reports-folder` module. PR: [bfx-report-electron#436](https://github.com/bitfinexcom/bfx-report-electron/pull/436)
+- Added translation support to the `change-sync-frequency` module. PR: [bfx-report-electron#437](https://github.com/bitfinexcom/bfx-report-electron/pull/437)
+- Added translation support to the `enforce-macos-app-location` module. PR: [bfx-report-electron#439](https://github.com/bitfinexcom/bfx-report-electron/pull/439)
 
 ### Changed
 
@@ -25,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed `2FA` login flow to prevent the token request duplication possibility noted in some user scenarios. PR: [bfx-report-ui#881](https://github.com/bitfinexcom/bfx-report-ui/pull/881)
 - Fixed issue with `Wine` to build `Windows` release under container. PR: [bfx-report-electron#425](https://github.com/bitfinexcom/bfx-report-electron/pull/425)
+- Fixed loading UI fonts to all modal windows. PR: [bfx-report-electron#432](https://github.com/bitfinexcom/bfx-report-electron/pull/432)
 
 ### Security
 
