@@ -96,7 +96,6 @@ const _createWindow = async (
     height: defaultHeight
   } = workAreaSize
   const isMainWindow = winName === 'mainWindow'
-  const isLoadingWindow = winName === 'loadingWindow'
   const {
     width = defaultWidth,
     height = defaultHeight,
@@ -173,10 +172,7 @@ const _createWindow = async (
     centerWindow(wins[winName])
   }
 
-  await showWindow(
-    wins[winName],
-    { shouldWinBeShownInactive: isLoadingWindow }
-  )
+  await showWindow(wins[winName])
 
   return res
 }
@@ -278,12 +274,11 @@ const createLoadingWindow = async () => {
   if (
     wins.loadingWindow &&
     typeof wins.loadingWindow === 'object' &&
-    !wins.loadingWindow.isDestroyed() &&
-    !wins.loadingWindow.isVisible()
+    !wins.loadingWindow.isDestroyed()
   ) {
     await showLoadingWindow()
 
-    return {}
+    return { win: wins.loadingWindow }
   }
 
   const winProps = await _createChildWindow(
@@ -291,11 +286,7 @@ const createLoadingWindow = async () => {
     'loadingWindow',
     {
       width: 350,
-      height: 350,
-      webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false
-      }
+      height: 350
     }
   )
 
@@ -307,8 +298,8 @@ const createErrorWindow = async (pathname) => {
     pathname,
     'errorWindow',
     {
-      height: 200,
-      frame: true
+      height: 300,
+      frame: false
     }
   )
 

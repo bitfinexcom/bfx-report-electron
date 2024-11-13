@@ -3,6 +3,7 @@
 const { BrowserWindow } = require('electron')
 const fs = require('fs/promises')
 const path = require('path')
+const i18next = require('i18next')
 
 const ipcs = require('../ipcs')
 const wins = require('../window-creators/windows')
@@ -25,7 +26,7 @@ module.exports = () => {
 
       const {
         templateFilePath,
-        template = 'No data',
+        template = i18next.t('common.printToPDF.defaultTemplate'),
         format = 'portrait',
         orientation = 'Letter',
         uid = null
@@ -73,7 +74,7 @@ module.exports = () => {
     font-weight: 400;
     font-size: 8px;
   ">
-  Page <span class=pageNumber></span> from <span class=totalPages></span>
+  ${i18next.t('common.printToPDF.pagination.page')} <span class=pageNumber></span> ${i18next.t('common.printToPDF.pagination.from')} <span class=totalPages></span>
 </span>`
       })
 

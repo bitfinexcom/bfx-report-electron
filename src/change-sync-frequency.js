@@ -5,10 +5,13 @@ const Alert = require('electron-alert')
 const cronValidate = require('cron-validate')
 const path = require('path')
 const fs = require('fs')
+const i18next = require('i18next')
 
-const fontsStyle = fs.readFileSync(path.join(
-  __dirname, '../bfx-report-ui/build/fonts/roboto.css'
-))
+const getUIFontsAsCSSString = require(
+  './helpers/get-ui-fonts-as-css-string'
+)
+
+const fontsStyle = getUIFontsAsCSSString()
 const modalDialogStyle = fs.readFileSync(path.join(
   __dirname, 'modal-dialog-src/modal-dialog.css'
 ))
@@ -86,10 +89,7 @@ const _fireFrameless = (alert, opts) => {
     thickFrame: false,
     closable: false,
     backgroundColor: '#172d3e',
-    hasShadow: false,
-    webPreferences: {
-      contextIsolation: false
-    }
+    hasShadow: false
   }
   const swalOptions = {
     background: '#172d3e',
@@ -130,7 +130,7 @@ module.exports = () => {
   }
 
   const timeFormatAlertOptions = {
-    title: 'Set time format',
+    title: i18next.t('common.changeSyncFrequency.timeFormatModalDialog.title'),
     icon: 'question',
     customClass: getAlertCustomClassObj({
       title: 'titleColor',
@@ -139,14 +139,21 @@ module.exports = () => {
     }),
     focusConfirm: true,
     showCancelButton: true,
+    confirmButtonText: i18next
+      .t('common.changeSyncFrequency.timeFormatModalDialog.confirmButtonText'),
+    cancelButtonText: i18next
+      .t('common.changeSyncFrequency.timeFormatModalDialog.cancelButtonText'),
     progressSteps: [1, 2],
     currentProgressStep: 0,
     input: 'radio',
     inputValue: 'hours',
     inputOptions: {
-      mins: 'Mins',
-      hours: 'Hours',
-      days: 'Days'
+      mins: i18next
+        .t('common.changeSyncFrequency.timeFormatModalDialog.inputOptions.mins'),
+      hours: i18next
+        .t('common.changeSyncFrequency.timeFormatModalDialog.inputOptions.hours'),
+      days: i18next
+        .t('common.changeSyncFrequency.timeFormatModalDialog.inputOptions.days')
     },
     willOpen: () => {
       if (!timeFormatAlert.browserWindow) return
@@ -155,7 +162,7 @@ module.exports = () => {
     }
   }
   const alertOptions = {
-    title: 'Set sync frequency',
+    title: i18next.t('common.changeSyncFrequency.timeModalDialog.title'),
     icon: 'question',
     customClass: getAlertCustomClassObj({
       title: 'titleColor',
@@ -164,6 +171,10 @@ module.exports = () => {
     }),
     focusConfirm: true,
     showCancelButton: true,
+    confirmButtonText: i18next
+      .t('common.changeSyncFrequency.timeModalDialog.confirmButtonText'),
+    cancelButtonText: i18next
+      .t('common.changeSyncFrequency.timeModalDialog.cancelButtonText'),
     progressSteps: [1, 2],
     currentProgressStep: 1,
     input: 'range',
@@ -282,7 +293,11 @@ module.exports = () => {
       relaunch()
     } catch (err) {
       try {
-        await showErrorModalDialog(win, 'Change sync frequency', err)
+        await showErrorModalDialog(
+          win,
+          i18next.t('common.changeSyncFrequency.title'),
+          err
+        )
       } catch (err) {
         console.error(err)
       }

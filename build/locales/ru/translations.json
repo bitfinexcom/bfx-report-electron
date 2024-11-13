@@ -1,6 +1,132 @@
 {
   "common": {
-    "title": "Отчет"
+    "title": "Отчет",
+    "appInitError": {
+      "description": "Ошибка инициализации приложения",
+      "closeBtnText": "Закрыть"
+    },
+    "errorManager": {
+      "failedToGetDocsPath": {
+        "title": "Каталог Документы ОС был неправильно настроен",
+        "message": "Это означает, что каталог `Документы` вашей ОС был неправильно настроен.\n\rПожалуйста, укажите правильное расположение или сбросьте его до значений по умолчанию"
+      },
+      "errorModalDialog": {
+        "errBoxTitle": "Отчет об ошибке",
+        "errBoxDescription": "Будет открыта новая проблема в GitHub",
+        "zenityBtn": "Отправить Отчет и Выйти",
+        "confirmButtonText": "Отправить Отчет",
+        "cancelButtonText": "Отменить",
+        "title": "Должен ли быть отправлен отчет об ошибке?"
+      }
+    },
+    "nativeNotification": {
+      "defaulTitle": "Bitfinex Report",
+      "defaultBody": "Уведомление",
+      "sync": {
+        "completedBody": "Синхронизация данных успешно завершена!",
+        "interruptedBody": "Синхронизация данных прервана!",
+        "errorBody": "Синхронизация данных завершена с ошибкой!"
+      },
+      "trxTaxReport": {
+        "completedBody": "Ваш налоговый отчет готов!",
+        "errorBody": "При формировании налогового отчета произошла непредвиденная ошибка!"
+      }
+    },
+    "autoUpdater": {
+      "title": "Обновление",
+      "confirmButtonText": "OK",
+      "cancelButtonText": "Отменить",
+      "loadingWindow": {
+        "description": "Обновление..."
+      },
+      "errorToast": {
+        "title": "Обновление приложения не удалось",
+        "inetIssueTitle": "Интернет отключен"
+      },
+      "checkingForUpdateToast": {
+        "title": "Проверка обновления"
+      },
+      "updateAvailableToast": {
+        "title": "Доступно обновление до версии v{{version}}",
+        "description": "Начинаем загрузку..."
+      },
+      "updateNotAvailableToast": {
+        "title": "Нет доступных обновлений"
+      },
+      "downloadProgressToast": {
+        "title": "Загрузка..."
+      },
+      "updateDownloadedToast": {
+        "title": "Обновление v{{version}} загружено",
+        "description": "Стоит ли обновить приложение прямо сейчас?"
+      }
+    },
+    "restoreDB": {
+      "modalDialog": {
+        "title": "Выберите файл резервной копии БД",
+        "confirmButtonText": "OK",
+        "cancelButtonText": "Отменить"
+      },
+      "messageModalDialog": {
+        "title": "Восстановление БД",
+        "message": "Подходящий файл резервной копии БД не найден",
+        "dbRestoredMessage": "БД была восстановлена",
+        "dbNotRestoredMessage": "БД не была восстановлена",
+        "confirmButtonText": "OK"
+      }
+    },
+    "showDocs": {
+      "modalDialog": {
+        "title": "Руководство пользователя",
+        "cancelButtonText": "Закрыть"
+      }
+    },
+    "printToPDF": {
+      "defaultTemplate": "Нет данных",
+      "pagination": {
+        "page": "Страница",
+        "from": "из"
+      }
+    },
+    "changeReportsFolder": {
+      "modalDialog": {
+        "title": "Изменить папку отчетов",
+        "buttonLabel": "Выбрать"
+      }
+    },
+    "changeSyncFrequency": {
+      "title": "Изменить частоту синхронизации",
+      "timeFormatModalDialog": {
+        "title": "Установить формат времени",
+        "confirmButtonText": "OK",
+        "cancelButtonText": "Отмена",
+        "inputOptions": {
+          "mins": "Мин.",
+          "hours": "Часы",
+          "days": "Дни"
+        }
+      },
+      "timeModalDialog": {
+        "title": "Установить частоту синхронизации",
+        "confirmButtonText": "OK",
+        "cancelButtonText": "Отмена"
+      }
+    },
+    "enforceMacOSAppLocation": {
+      "appLocationModalDialog": {
+        "message": "Переместить в папку Приложения?",
+        "detail": "{{productName}} должен находиться в папке Приложения для корректной работы",
+        "confirmButtonText": "Переместить в папку Приложения",
+        "cancelButtonText": "Выйти из {{productName}}"
+      },
+      "loadingWindow": {
+        "description": "Перемещение приложения..."
+      },
+      "appRunningModalDialog": {
+        "message": "В настоящее время запущена другая версия {{productName}}. Закройте ее, затем снова запустите эту версию приложения",
+        "confirmButtonText": "OK"
+      }
+    }
   },
   "menu": {
     "macMainSubmenu": {

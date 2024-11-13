@@ -3,9 +3,9 @@
 const { ipcMain } = require('electron')
 
 class IpcChannelHandlers {
-  constructor (channelName) {
-    this.channelName = channelName ?? 'general'
+  static channelName = 'general'
 
+  constructor () {
     this.#setup()
   }
 
@@ -25,7 +25,7 @@ class IpcChannelHandlers {
       }
 
       const methodName = this.#getMethodName(handlerName)
-      const eventName = this.#getEventName(methodName)
+      const eventName = this.constructor.getEventName(methodName)
 
       ipcMain.handle(eventName, (event, args) => {
         return this[handlerName](event, args)
@@ -37,8 +37,32 @@ class IpcChannelHandlers {
     return handlerName.replace(/Handler$/, '')
   }
 
-  #getEventName (method) {
+  static getEventName (method) {
     return `${this.channelName}:${method}`
+  }
+
+  static handleListener (method, cb) {
+    const methodName = typeof method === 'function'
+      ? method.name.replace(/^on/, 'send')
+      : method
+    const eventName = this.getEventName(methodName)
+
+    if (typeof cb === 'function') {
+      return ipcMain.on(eventName, (e, args) => cb(e, args))
+    }
+
+    return new Promise((resolve) => {
+      ipcMain.once(eventName, (e, args) => resolve({ ...args, event: e }))
+    })
+  }
+
+  static sendToRenderer (method, win, args) {
+    const methodName = typeof method === 'function'
+      ? method.name.replace(/^send/, 'on')
+      : method
+    const eventName = this.getEventName(methodName)
+
+    return win.webContents.send(eventName, args)
   }
 }
 

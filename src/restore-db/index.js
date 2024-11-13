@@ -4,7 +4,7 @@ const { app, screen, remote } = require('electron')
 const fs = require('fs')
 const path = require('path')
 const Alert = require('electron-alert')
-const { rootPath } = require('electron-root-path')
+const i18next = require('i18next')
 
 const ipcs = require('../ipcs')
 const wins = require('../window-creators/windows')
@@ -16,6 +16,9 @@ const isMainWinAvailable = require(
 )
 const getAlertCustomClassObj = require(
   '../helpers/get-alert-custom-class-obj'
+)
+const getUIFontsAsCSSString = require(
+  '../helpers/get-ui-fonts-as-css-string'
 )
 const showMessageModalDialog = require(
   '../show-message-modal-dialog'
@@ -31,9 +34,7 @@ const {
   addOnceProcEventHandler
 } = require('../window-creators/window-event-manager')
 
-const fontsStyle = fs.readFileSync(path.join(
-  rootPath, 'bfx-report-ui/build/fonts/roboto.css'
-))
+const fontsStyle = getUIFontsAsCSSString()
 const alertStyle = fs.readFileSync(path.join(
   __dirname, '../modal-dialog-src/modal-dialog.css'
 ))
@@ -55,7 +56,7 @@ const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
 
 const _fireAlert = (params) => {
   const {
-    title = 'Select DB backup file',
+    title = i18next.t('common.restoreDB.modalDialog.title'),
     backupFilesMetadata
   } = params
   const win = wins.mainWindow
@@ -100,10 +101,7 @@ const _fireAlert = (params) => {
     darkTheme: false,
     parent: win,
     modal: true,
-    width: 1000,
-    webPreferences: {
-      contextIsolation: false
-    }
+    minWidth: 1000
   }
   const swalOptions = {
     position: 'center',
@@ -121,7 +119,8 @@ const _fireAlert = (params) => {
     showConfirmButton: true,
     focusCancel: true,
     showCancelButton: true,
-    cancelButtonText: 'Cancel',
+    confirmButtonText: i18next.t('common.restoreDB.modalDialog.confirmButtonText'),
+    cancelButtonText: i18next.t('common.restoreDB.modalDialog.cancelButtonText'),
     timerProgressBar: false,
 
     input: 'radio',
@@ -238,9 +237,9 @@ module.exports = () => {
       ) {
         await showMessageModalDialog(wins.mainWindow, {
           type: 'warning',
-          title: 'DB restoring',
-          message: 'Suitable DB backup file has not been found',
-          buttons: ['OK'],
+          title: i18next.t('common.restoreDB.messageModalDialog.title'),
+          message: i18next.t('common.restoreDB.messageModalDialog.message'),
+          buttons: [i18next.t('common.restoreDB.messageModalDialog.confirmButtonText')],
           defaultId: 0,
           cancelId: 0
         })

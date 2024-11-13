@@ -1,11 +1,12 @@
 'use strict'
 
-const { app, dialog, screen, remote } = require('electron')
+const { app, dialog, screen } = require('electron')
 const fs = require('fs')
 const path = require('path')
 const { Converter } = require('showdown')
 const Alert = require('electron-alert')
 const { rootPath } = require('electron-root-path')
+const i18next = require('i18next')
 
 const wins = require('../window-creators/windows')
 const spawn = require('../helpers/spawn')
@@ -22,13 +23,14 @@ const {
   WINDOW_EVENT_NAMES,
   addOnceProcEventHandler
 } = require('../window-creators/window-event-manager')
+const getUIFontsAsCSSString = require(
+  '../helpers/get-ui-fonts-as-css-string'
+)
 
 const mdStyle = fs.readFileSync(path.join(
   rootPath, 'node_modules', 'github-markdown-css/github-markdown.css'
 ))
-const fontsStyle = fs.readFileSync(path.join(
-  __dirname, '../../bfx-report-ui/build/fonts/roboto.css'
-))
+const fontsStyle = getUIFontsAsCSSString()
 const alertStyle = fs.readFileSync(path.join(
   __dirname, '../modal-dialog-src/modal-dialog.css'
 ))
@@ -52,20 +54,24 @@ const converter = new Converter({
 
 const _fireAlert = (params) => {
   const {
-    title = 'Should a bug report be submitted?',
-    html
-  } = params
-  const win = wins.mainWindow
+    title = i18next.t('common.errorManager.errorModalDialog.title'),
+    html = '',
+    parentWin,
+    hasNoParentWin
+  } = params ?? {}
+  const win = parentWin ?? wins.mainWindow
 
-  if (!isMainWinAvailable()) {
+  if (
+    !hasNoParentWin &&
+    !isMainWinAvailable(win)
+  ) {
     return { value: false }
   }
 
-  const _screen = screen || remote.screen
   const {
     getCursorScreenPoint,
     getDisplayNearestPoint
-  } = _screen
+  } = screen
   const {
     workArea
   } = getDisplayNearestPoint(getCursorScreenPoint())
@@ -76,7 +82,8 @@ const _fireAlert = (params) => {
 
   const eventHandlerCtx = addOnceProcEventHandler(
     WINDOW_EVENT_NAMES.CLOSED,
-    () => closeAlert(alert)
+    () => closeAlert(alert),
+    win
   )
 
   const bwOptions = {
@@ -103,14 +110,16 @@ const _fireAlert = (params) => {
     }),
 
     icon: 'question',
-    title,
-    html,
     focusConfirm: true,
     showConfirmButton: true,
-    confirmButtonText: 'Report',
+    confirmButtonText: i18next.t('common.errorManager.errorModalDialog.confirmButtonText'),
     showCancelButton: true,
-    cancelButtonText: 'Cancel',
+    cancelButtonText: i18next.t('common.errorManager.errorModalDialog.cancelButtonText'),
     timerProgressBar: false,
+
+    ...params,
+    title,
+    html,
 
     willOpen: () => {
       if (
@@ -162,20 +171,39 @@ const _fireAlert = (params) => {
 
 module.exports = async (params) => {
   const {
-    errBoxTitle = 'Bug report',
-    errBoxDescription = 'A new Github issue will be opened',
-    mdIssue
-  } = params
+    /*
+     * It's important to add default translation here
+     * to have a description if an error occurs
+     * before the translation init
+     */
+    errBoxTitle = i18next.t(
+      'common.errorManager.errorModalDialog.errBoxTitle',
+      'Bug report'
+    ),
+    errBoxDescription = i18next.t(
+      'common.errorManager.errorModalDialog.errBoxDescription',
+      'A new GitHub issue will be opened'
+    ),
+    mdIssue,
+    alertOpts = {}
+  } = params ?? {}
+  const zenityBtn = i18next.t(
+    'common.errorManager.errorModalDialog.zenityBtn',
+    'Report and Exit'
+  )
 
   if (
     app.isReady() &&
-    isMainWinAvailable()
+    (
+      alertOpts?.hasNoParentWin ||
+      isMainWinAvailable(alertOpts?.parentWin ?? wins.mainWindow)
+    )
   ) {
     const html = converter.makeHtml(mdIssue)
 
     const {
       value
-    } = await _fireAlert({ html })
+    } = await _fireAlert({ html, ...alertOpts })
 
     return {
       isExit: false,
@@ -201,14 +229,25 @@ module.exports = async (params) => {
   }
 
   // On Linux needs to spawn zenity gui tool to show error
-  await spawn('zenity', [
-    '--error',
-    `--title=${errBoxTitle}`,
-    `--text=${errBoxDescription}`,
-    '--width=800',
-    '--ok-label=Exit',
-    '--no-markup'
-  ])
+  // If push close btn in menu bar zenity will exit with 1
+  // which will cause an error
+  try {
+    await spawn('zenity', [
+      '--error',
+      `--title=${errBoxTitle}`,
+      `--text=${errBoxDescription}`,
+      '--width=800',
+      `--ok-label=${zenityBtn}`,
+      '--no-markup'
+    ])
+  } catch (err) {
+    console.debug(err)
+
+    return {
+      isExit: true,
+      isReported: false
+    }
+  }
 
   return res
 }

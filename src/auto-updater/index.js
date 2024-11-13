@@ -11,6 +11,7 @@ const {
 } = require('electron-updater')
 const Alert = require('electron-alert')
 const yaml = require('js-yaml')
+const i18next = require('i18next')
 
 const log = require('../error-manager/log')
 const BfxMacUpdater = require('./bfx.mac.updater')
@@ -27,14 +28,15 @@ const {
   WINDOW_EVENT_NAMES,
   addOnceProcEventHandler
 } = require('../window-creators/window-event-manager')
+const getUIFontsAsCSSString = require(
+  '../helpers/get-ui-fonts-as-css-string'
+)
 
 const MENU_ITEM_IDS = require('../create-menu/menu.item.ids')
 
 const isAutoUpdateDisabled = parseEnvValToBool(process.env.IS_AUTO_UPDATE_DISABLED)
 
-const fontsStyle = fs.readFileSync(path.join(
-  __dirname, '../../bfx-report-ui/build/fonts/roboto.css'
-))
+const fontsStyle = getUIFontsAsCSSString()
 const toastStyle = fs.readFileSync(path.join(
   __dirname, 'toast-src/toast.css'
 ))
@@ -125,7 +127,7 @@ const _fireToast = (
     backgroundColor: '#172d3e',
     darkTheme: false,
     height,
-    width: opts?.width ?? 800,
+    width: opts?.width ?? 1000,
     parent: win,
     modal: false,
     webPreferences: {
@@ -139,9 +141,11 @@ const _fireToast = (
     backdrop: 'rgba(0,0,0,0.0)',
 
     icon: 'info',
-    title: 'Update',
+    title: i18next.t('common.autoUpdater.title'),
     showConfirmButton: true,
     showCancelButton: false,
+    confirmButtonText: i18next.t('common.autoUpdater.confirmButtonText'),
+    cancelButtonText: i18next.t('common.autoUpdater.cancelButtonText'),
     timerProgressBar: false,
 
     ...opts,
@@ -264,7 +268,7 @@ const _autoUpdaterFactory = () => {
 
     autoUpdater.addInstallingUpdateEventHandler(() => {
       return showLoadingWindow({
-        description: 'Updating...',
+        description: i18next.t('common.autoUpdater.loadingWindow.description'),
         isRequiredToCloseAllWins: true
       })
     })
@@ -314,7 +318,7 @@ const _autoUpdaterFactory = () => {
         /ERR_INTERNET_DISCONNECTED/gi.test(err.toString())
       ) {
         await _fireToast({
-          title: 'Internet disconnected',
+          title: i18next.t('common.autoUpdater.errorToast.inetIssueTitle'),
           icon: 'error',
           timer: 60000
         })
@@ -323,7 +327,7 @@ const _autoUpdaterFactory = () => {
       }
 
       await _fireToast({
-        title: 'Application update failed',
+        title: i18next.t('common.autoUpdater.errorToast.title'),
         icon: 'error',
         timer: 60000
       })
@@ -339,7 +343,7 @@ const _autoUpdaterFactory = () => {
 
       await _fireToast(
         {
-          title: 'Checking for update',
+          title: i18next.t('common.autoUpdater.checkingForUpdateToast.title'),
           type: 'warning',
           timer: 10000
         },
@@ -359,8 +363,11 @@ const _autoUpdaterFactory = () => {
 
       const { value, dismiss } = await _fireToast(
         {
-          title: `An update to v${version} is available`,
-          text: 'Starting download...',
+          title: i18next.t(
+            'common.autoUpdater.updateAvailableToast.title',
+            { version }
+          ),
+          text: i18next.t('common.autoUpdater.updateAvailableToast.description'),
           icon: 'info',
           timer: 10000
         }
@@ -395,7 +402,7 @@ const _autoUpdaterFactory = () => {
 
       await _fireToast(
         {
-          title: 'No updates available',
+          title: i18next.t('common.autoUpdater.updateNotAvailableToast.title'),
           icon: 'success',
           timer: 10000
         }
@@ -418,7 +425,7 @@ const _autoUpdaterFactory = () => {
 
       await _fireToast(
         {
-          title: 'Downloading...',
+          title: i18next.t('common.autoUpdater.downloadProgressToast.title'),
           icon: 'info'
         },
         {
@@ -450,8 +457,11 @@ const _autoUpdaterFactory = () => {
 
       const { value } = await _fireToast(
         {
-          title: `Update v${version} downloaded`,
-          text: 'Should the app be updated right now?',
+          title: i18next.t(
+            'common.autoUpdater.updateDownloadedToast.title',
+            { version }
+          ),
+          text: i18next.t('common.autoUpdater.updateDownloadedToast.description'),
           icon: 'question',
           timer: 60000,
           showCancelButton: true

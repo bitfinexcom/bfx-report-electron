@@ -2,6 +2,7 @@
 
 const { Notification } = require('electron')
 const path = require('path')
+const i18next = require('i18next')
 
 const icon = path.join(__dirname, '../../build/icons/64x64.png')
 
@@ -11,8 +12,8 @@ module.exports = (params) => {
   }
 
   const notification = new Notification({
-    title: 'Bitfinex Report',
-    body: 'Notification',
+    title: i18next.t('common.nativeNotification.defaulTitle'),
+    body: i18next.t('common.nativeNotification.defaultBody'),
     silent: false,
     timeoutType: 'never',
     urgency: 'normal',

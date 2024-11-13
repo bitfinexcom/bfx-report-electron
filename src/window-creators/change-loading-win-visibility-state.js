@@ -1,13 +1,17 @@
 'use strict'
 
-const { BrowserWindow, ipcMain } = require('electron')
+const { BrowserWindow } = require('electron')
 
 const wins = require('./windows')
+const appStates = require('../app-states')
 const {
   hideWindow,
   showWindow,
   centerWindow
 } = require('../helpers/manage-window')
+const GeneralIpcChannelHandlers = require(
+  './main-renderer-ipc-bridge/general-ipc-channel-handlers'
+)
 
 let intervalMarker
 
@@ -34,11 +38,20 @@ const _setParentWindow = (noParent) => {
 
   const win = BrowserWindow.getFocusedWindow()
 
-  if (
-    noParent ||
-    Object.values(wins).every((w) => w !== win)
-  ) {
+  if (noParent) {
     wins.loadingWindow.setParentWindow(null)
+
+    return
+  }
+  if (
+    Object.values(wins).every((w) => w !== win) ||
+    win === wins.loadingWindow
+  ) {
+    const mainWindow = !wins.mainWindow?.isDestroyed()
+      ? wins.mainWindow
+      : null
+
+    wins.loadingWindow.setParentWindow(mainWindow)
 
     return
   }
@@ -110,48 +123,41 @@ const _stopProgressLoader = (
   win.setProgressBar(-0.1)
 }
 
-const _setLoadingDescription = (win, description) => {
-  return new Promise((resolve) => {
-    try {
-      if (
-        !win ||
-        typeof win !== 'object' ||
-        win.isDestroyed() ||
-        typeof description !== 'string'
-      ) {
-        resolve()
-
-        return
-      }
-
-      ipcMain.once('loading:description-ready', (event, err) => {
-        if (err) {
-          console.error(err)
-        }
-
-        resolve()
-      })
-
-      win.webContents.send(
-        'loading:description',
-        description
-      )
-    } catch (err) {
-      console.error(err)
-
-      resolve()
+const _setLoadingDescription = async (win, description) => {
+  try {
+    if (
+      !win ||
+      typeof win !== 'object' ||
+      win.isDestroyed() ||
+      typeof description !== 'string'
+    ) {
+      return
     }
-  })
+
+    const loadingDescReadyPromise = GeneralIpcChannelHandlers
+      .onLoadingDescriptionReady()
+
+    GeneralIpcChannelHandlers
+      .sendLoadingDescription(win, { description })
+
+    const loadingRes = await loadingDescReadyPromise
+
+    if (loadingRes?.err) {
+      console.error(loadingRes?.err)
+    }
+  } catch (err) {
+    console.error(err)
+  }
 }
 
-const showLoadingWindow = async (opts = {}) => {
+const showLoadingWindow = async (opts) => {
   const {
     description = '',
     isRequiredToCloseAllWins = false,
     isNotRunProgressLoaderRequired = false,
     isIndeterminateMode = false,
     noParent = false
-  } = { ...opts }
+  } = opts ?? {}
 
   if (
     !wins.loadingWindow ||
@@ -185,17 +191,10 @@ const showLoadingWindow = async (opts = {}) => {
   await _closeAllWindows()
 }
 
-const hideLoadingWindow = async (opts = {}) => {
+const hideLoadingWindow = async (opts) => {
   const {
     isRequiredToShowMainWin = false
-  } = { ...opts }
-
-  if (isRequiredToShowMainWin) {
-    await showWindow(
-      wins.mainWindow,
-      { shouldWinBeFocused: true }
-    )
-  }
+  } = opts ?? {}
 
   // need to empty description
   await _setLoadingDescription(
@@ -203,6 +202,19 @@ const hideLoadingWindow = async (opts = {}) => {
     ''
   )
   _stopProgressLoader()
+
+  if (isRequiredToShowMainWin) {
+    await showWindow(
+      wins.mainWindow,
+      { shouldWinBeFocused: true }
+    )
+
+    // Legacy fix related to reprodducing the same behavior on all OS,
+    // waiting for checks that it was resolved in the last electron ver
+    if (appStates.isMainWinMaximized) {
+      wins.mainWindow.maximize()
+    }
+  }
 
   return hideWindow(
     wins.loadingWindow,

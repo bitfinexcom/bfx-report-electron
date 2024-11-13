@@ -1,6 +1,7 @@
 'use strict'
 
 const { dialog, BrowserWindow } = require('electron')
+const i18next = require('i18next')
 
 const { REPORT_FILES_PATH_VERSION } = require('./const')
 
@@ -12,10 +13,14 @@ const showErrorModalDialog = require('./show-error-modal-dialog')
 const pauseApp = require('./pause-app')
 const relaunch = require('./relaunch')
 const { getConfigsKeeperByName } = require('./configs-keeper')
+const wins = require('./window-creators/windows')
+const isMainWinAvailable = require('./helpers/is-main-win-available')
 
 module.exports = ({ pathToUserDocuments }) => {
   return async () => {
-    const win = BrowserWindow.getFocusedWindow()
+    const win = isMainWinAvailable(wins.mainWindow)
+      ? wins.mainWindow
+      : BrowserWindow.getFocusedWindow()
 
     try {
       const {
@@ -24,9 +29,9 @@ module.exports = ({ pathToUserDocuments }) => {
       } = await dialog.showOpenDialog(
         win,
         {
-          title: 'Change reports folder',
+          title: i18next.t('common.changeReportsFolder.modalDialog.title'),
           defaultPath: pathToUserDocuments,
-          buttonLabel: 'Select',
+          buttonLabel: i18next.t('common.changeReportsFolder.modalDialog.buttonLabel'),
           properties: [
             'openDirectory',
             'createDirectory',
@@ -63,7 +68,11 @@ module.exports = ({ pathToUserDocuments }) => {
       relaunch()
     } catch (err) {
       try {
-        await showErrorModalDialog(win, 'Change reports folder', err)
+        await showErrorModalDialog(
+          win,
+          i18next.t('common.changeReportsFolder.modalDialog.title'),
+          err
+        )
       } catch (err) {
         console.error(err)
       }

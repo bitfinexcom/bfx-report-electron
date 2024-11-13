@@ -1,6 +1,132 @@
 {
   "common": {
-    "title": "Report"
+    "title": "Report",
+    "appInitError": {
+      "description": "Application initialization error",
+      "closeBtnText": "Close"
+    },
+    "errorManager": {
+      "failedToGetDocsPath": {
+        "title": "The OS Documents directory has been misconfigured",
+        "message": "This indicates that your OS `Documents` directory has been misconfigured.\n\rPlease, set it to a valid location or reset it to the default"
+      },
+      "errorModalDialog": {
+        "errBoxTitle": "Bug report",
+        "errBoxDescription": "A new GitHub issue will be opened",
+        "zenityBtn": "Report and Exit",
+        "confirmButtonText": "Report",
+        "cancelButtonText": "Cancel",
+        "title": "Should a bug report be submitted?"
+      }
+    },
+    "nativeNotification": {
+      "defaulTitle": "Bitfinex Report",
+      "defaultBody": "Notification",
+      "sync": {
+        "completedBody": "Data sync completed successfully!",
+        "interruptedBody": "Data sync interrupted!",
+        "errorBody": "Data sync completed with an error!"
+      },
+      "trxTaxReport": {
+        "completedBody": "Your tax report is ready!",
+        "errorBody": "An unexpected error occurred while generating the tax report!"
+      }
+    },
+    "autoUpdater": {
+      "title": "Update",
+      "confirmButtonText": "OK",
+      "cancelButtonText": "Cancel",
+      "loadingWindow": {
+        "description": "Updating..."
+      },
+      "errorToast": {
+        "title": "Application update failed",
+        "inetIssueTitle": "Internet disconnected"
+      },
+      "checkingForUpdateToast": {
+        "title": "Checking for update"
+      },
+      "updateAvailableToast": {
+        "title": "An update to v{{version}} is available",
+        "description": "Starting download..."
+      },
+      "updateNotAvailableToast": {
+        "title": "No updates available"
+      },
+      "downloadProgressToast": {
+        "title": "Downloading..."
+      },
+      "updateDownloadedToast": {
+        "title": "Update v{{version}} downloaded",
+        "description": "Should the app be updated right now?"
+      }
+    },
+    "restoreDB": {
+      "modalDialog": {
+        "title": "Select DB backup file",
+        "confirmButtonText": "OK",
+        "cancelButtonText": "Cancel"
+      },
+      "messageModalDialog": {
+        "title": "DB restoring",
+        "message": "Suitable DB backup file has not been found",
+        "dbRestoredMessage": "DB has been restored",
+        "dbNotRestoredMessage": "DB has not been restored",
+        "confirmButtonText": "OK"
+      }
+    },
+    "showDocs": {
+      "modalDialog": {
+        "title": "User manual",
+        "cancelButtonText": "Close"
+      }
+    },
+    "printToPDF": {
+      "defaultTemplate": "No data",
+      "pagination": {
+        "page": "Page",
+        "from": "from"
+      }
+    },
+    "changeReportsFolder": {
+      "modalDialog": {
+        "title": "Change reports folder",
+        "buttonLabel": "Select"
+      }
+    },
+    "changeSyncFrequency": {
+      "title": "Change sync frequency",
+      "timeFormatModalDialog": {
+        "title": "Set time format",
+        "confirmButtonText": "OK",
+        "cancelButtonText": "Cancel",
+        "inputOptions": {
+          "mins": "Mins",
+          "hours": "Hours",
+          "days": "Days"
+        }
+      },
+      "timeModalDialog": {
+        "title": "Set sync frequency",
+        "confirmButtonText": "OK",
+        "cancelButtonText": "Cancel"
+      }
+    },
+    "enforceMacOSAppLocation": {
+      "appLocationModalDialog": {
+        "message": "Move to Applications folder?",
+        "detail": "{{productName}} must live in the Applications folder to be able to run correctly",
+        "confirmButtonText": "Move to Applications folder",
+        "cancelButtonText": "Quit {{productName}}"
+      },
+      "loadingWindow": {
+        "description": "Moving the app..."
+      },
+      "appRunningModalDialog": {
+        "message": "Another version of {{productName}} is currently running. Quit it, then launch this version of the app again",
+        "confirmButtonText": "OK"
+      }
+    }
   },
   "menu": {
     "macMainSubmenu": {

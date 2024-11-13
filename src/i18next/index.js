@@ -20,6 +20,31 @@ const availableLanguages = [...allFileNames.reduce((accum, fileName) => {
   return accum
 }, new Set())]
 
+const docPath = path.join(rootPath, 'docs')
+const docFileName = 'user-manual.md'
+const allDocFileNames = fs.readdirSync(docPath)
+const lngDocMap = allDocFileNames.reduce((accum, dirName) => {
+  const dirPath = path.join(docPath, dirName)
+  const dirStats = fs.lstatSync(dirPath)
+
+  if (!dirStats.isDirectory()) {
+    return accum
+  }
+
+  const filePath = path.join(dirPath, docFileName)
+  const fileStats = fs.lstatSync(filePath)
+
+  if (!fileStats.isFile()) {
+    return accum
+  }
+
+  const mdUserManual = fs.readFileSync(filePath, 'utf8')
+
+  accum.set(dirName, mdUserManual)
+
+  return accum
+}, new Map())
+
 let i18nextInstance = null
 
 const _getLanguageFromAvailableOnes = (language) => {
@@ -72,9 +97,9 @@ const initI18next = () => {
   const configs = {
     initImmediate: false,
     fallbackLng: {
-      es: ['es-EM'],
-      pt: ['pt-BR'],
-      zh: ['zh-CN'],
+      es: ['es-EM', 'en'],
+      pt: ['pt-BR', 'en'],
+      zh: ['zh-CN', 'en'],
       default: ['en']
     },
     lng: _getDefaultLanguage(),
@@ -89,6 +114,13 @@ const initI18next = () => {
   i18next
     .use(Backend)
     .init(configs)
+
+  for (const [lng, mdUserManual] of lngDocMap) {
+    i18next.addResourceBundle(lng, 'mdDocs', {
+      userManual: mdUserManual
+    })
+  }
+
   i18nextInstance = i18next
 
   return i18next
