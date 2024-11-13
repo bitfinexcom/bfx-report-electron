@@ -7,6 +7,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.30.0] - 2024-11-13
+
+### Added
+
+- Implemented `Your Assets` section for the web `Account Summary` page. Improved sections titles styling. PR: [bfx-report-ui#880](https://github.com/bitfinexcom/bfx-report-ui/pull/880)
+- Implemented `UI` language selection binding with `ElectronJS` wrapper. PR: [bfx-report-ui#882](https://github.com/bitfinexcom/bfx-report-ui/pull/882)
+- Extended ElectronJS app wrapper translations. Improved the app-init-error layout. Fixed logs collection for bug report. PR: [bfx-report-electron#422](https://github.com/bitfinexcom/bfx-report-electron/pull/422)
+- Added translation support to the `error manager` module. PR: [bfx-report-electron#428](https://github.com/bitfinexcom/bfx-report-electron/pull/428)
+- Added translation support to the `native notifications` module. PR: [bfx-report-electron#429](https://github.com/bitfinexcom/bfx-report-electron/pull/429)
+- Added translation support to the `auto-updater` module. PRs: [bfx-report-electron#430](https://github.com/bitfinexcom/bfx-report-electron/pull/430), [bfx-report-electron#438](https://github.com/bitfinexcom/bfx-report-electron/pull/438)
+- Added translation support to the `restore DB` module. PR: [bfx-report-electron#431](https://github.com/bitfinexcom/bfx-report-electron/pull/431)
+- Added translation support to the `show-docs` module, and added the ability to set the `markdown` user manual with different languages into `i18next` (if doc for the corresponding lang does not exist takes `en` by default). PR: [bfx-report-electron#434](https://github.com/bitfinexcom/bfx-report-electron/pull/434)
+- Added translation support to the `print-to-pdf` module. PR: [bfx-report-electron#435](https://github.com/bitfinexcom/bfx-report-electron/pull/435)
+- Added translation support to the `change-reports-folder` module. PR: [bfx-report-electron#436](https://github.com/bitfinexcom/bfx-report-electron/pull/436)
+- Added translation support to the `change-sync-frequency` module. PR: [bfx-report-electron#437](https://github.com/bitfinexcom/bfx-report-electron/pull/437)
+- Added translation support to the `enforce-macos-app-location` module. PR: [bfx-report-electron#439](https://github.com/bitfinexcom/bfx-report-electron/pull/439)
+
+### Changed
+
+- Improved the loading window workflow to bring more consistency in the sequence of showing windows. Added ability to send/listen events for the app-init layout via the context bridge between the main and renderer ipc to be secure. Fixed issue with focusing the main window on the launch. PR: [bfx-report-electron#424](https://github.com/bitfinexcom/bfx-report-electron/pull/424)
+- Prevented returning the translation key `key.nestedKey.etc` if a value is missing for a certain language and added the ability to try to take one from the default `en` translation file. PR: [bfx-report-electron#426](https://github.com/bitfinexcom/bfx-report-electron/pull/426)
+- Reworked `sed` commands to be able to run the build `bash` scripts on both OSs `Ubuntu` and `MacOS` as they have slightly different implementation. PR: [bfx-report-electron#427](https://github.com/bitfinexcom/bfx-report-electron/pull/427)
+
+### Fixed
+
+- Fixed `2FA` login flow to prevent the token request duplication possibility noted in some user scenarios. PR: [bfx-report-ui#881](https://github.com/bitfinexcom/bfx-report-ui/pull/881)
+- Fixed issue with `Wine` to build `Windows` release under container. PR: [bfx-report-electron#425](https://github.com/bitfinexcom/bfx-report-electron/pull/425)
+- Fixed loading UI fonts to all modal windows. PR: [bfx-report-electron#432](https://github.com/bitfinexcom/bfx-report-electron/pull/432)
+
+### Security
+
+- Bumped `cookie` from `0.6.0` to `0.7.1`, `express` from `4.21.0` to `4.21.1`. PR: [bfx-report-ui#879](https://github.com/bitfinexcom/bfx-report-ui/pull/879)
+- Bumped `electron` from `27.3.11` to `27.3.5`. PR: [bfx-report-electron#424](https://github.com/bitfinexcom/bfx-report-electron/pull/424)
+
 ## [4.29.0] - 2024-10-16
 
 ### Added
