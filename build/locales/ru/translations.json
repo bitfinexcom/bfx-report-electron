@@ -152,6 +152,10 @@
         "confirmButtonText": "OK",
         "title": "Экспорт базы данных",
         "message": "Экспортирована успешно"
+      },
+      "loadingWindow": {
+        "description": "Экспортирование БД ...",
+        "archiveSize": "размер архива {{prettyArchiveSize}}"
       }
     },
     "importDB": {
