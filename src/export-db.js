@@ -10,7 +10,8 @@ const showErrorModalDialog = require('./show-error-modal-dialog')
 const showMessageModalDialog = require('./show-message-modal-dialog')
 const {
   showLoadingWindow,
-  hideLoadingWindow
+  hideLoadingWindow,
+  setLoadingDescription
 } = require('./window-creators/change-loading-win-visibility-state')
 const wins = require('./window-creators/windows')
 const isMainWinAvailable = require('./helpers/is-main-win-available')
@@ -67,13 +68,37 @@ module.exports = ({
         throw new InvalidFilePathError()
       }
 
-      await showLoadingWindow()
+      await showLoadingWindow({
+        description: i18next
+          .t('common.exportDB.loadingWindow.description')
+      })
+
+      const progressHandler = async (args) => {
+        const {
+          progress,
+          prettyArchiveSize
+        } = args ?? {}
+
+        const _description = i18next.t('common.exportDB.loadingWindow.description')
+        const _archived = i18next.t(
+          'common.exportDB.loadingWindow.archiveSize',
+          { prettyArchiveSize }
+        )
+
+        const archived = prettyArchiveSize
+          ? `<br><small style="color:#808b93">${_archived}</small>`
+          : ''
+        const description = `${_description}${archived}`
+
+        await setLoadingDescription({ progress, description })
+      }
+
       await zip(filePath, [
         dbPath,
         dbShmPath,
         dbWalPath,
         secretKeyPath
-      ])
+      ], { progressHandler })
       await hideLoadingWindow()
 
       await showMessageModalDialog(win, {
