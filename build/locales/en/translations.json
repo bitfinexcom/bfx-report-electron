@@ -126,6 +126,33 @@
         "message": "Another version of {{productName}} is currently running. Quit it, then launch this version of the app again",
         "confirmButtonText": "OK"
       }
+    },
+    "showMessageModalDialog": {
+      "confirmButtonText": "OK",
+      "cancelButtonText": "Cancel"
+    },
+    "showErrorModalDialog": {
+      "confirmButtonText": "OK",
+      "enoentErrorMessage": "No such file or directory",
+      "eaccesErrorMessage": "Permission denied",
+      "invalidFilePathErrorMessage": "Invalid file path",
+      "invalidFileNameInArchErrorMessage": "Invalid file name in archive",
+      "dbImportingErrorMessage": "The database has not been imported",
+      "dbRemovingErrorMessage": "The database has not been removed",
+      "reportsFolderChangingErrorMessage": "The reports folder has not been changed",
+      "syncFrequencyChangingErrorMessage": "The sync frequency has not been changed",
+      "unexpectedExceptionMessage": "An unexpected exception occurred"
+    },
+    "exportDB": {
+      "saveDialog": {
+        "title": "Database export",
+        "buttonLabel": "Export"
+      },
+      "modalDialog": {
+        "confirmButtonText": "OK",
+        "title": "Database export",
+        "message": "Exported successfully"
+      }
     }
   },
   "menu": {

@@ -1,5 +1,7 @@
 'use strict'
 
+const i18next = require('i18next')
+
 const {
   InvalidFilePathError,
   InvalidFileNameInArchiveError,
@@ -14,7 +16,9 @@ const showMessageModalDialog = require('./show-message-modal-dialog')
 const _showErrorBox = (win, title = '', message = '') => {
   return showMessageModalDialog(win, {
     type: 'error',
-    buttons: ['OK'],
+    buttons: [
+      i18next.t('common.showErrorModalDialog.confirmButtonText')
+    ],
     defaultId: 0,
     cancelId: 0,
     title,
@@ -24,7 +28,7 @@ const _showErrorBox = (win, title = '', message = '') => {
 
 module.exports = async (win, title = 'Error', err) => {
   if (err.code === 'ENOENT') {
-    const message = 'No such file or directory'
+    const message = i18next.t('common.showErrorModalDialog.enoentErrorMessage')
     const content = (err.syscall && err.path)
       ? `${message}, ${err.syscall}: '${err.path}'`
       : message
@@ -32,7 +36,7 @@ module.exports = async (win, title = 'Error', err) => {
     return _showErrorBox(win, title, content)
   }
   if (err.code === 'EACCES') {
-    const message = 'Permission denied'
+    const message = i18next.t('common.showErrorModalDialog.eaccesErrorMessage')
     const content = (err.syscall && err.path)
       ? `${message}, ${err.syscall}: '${err.path}'`
       : message
@@ -40,12 +44,12 @@ module.exports = async (win, title = 'Error', err) => {
     return _showErrorBox(win, title, content)
   }
   if (err instanceof InvalidFilePathError) {
-    const message = 'Invalid file path'
+    const message = i18next.t('common.showErrorModalDialog.invalidFilePathErrorMessage')
 
     return _showErrorBox(win, title, message)
   }
   if (err instanceof InvalidFileNameInArchiveError) {
-    const message = 'Invalid file name in archive'
+    const message = i18next.t('common.showErrorModalDialog.invalidFileNameInArchErrorMessage')
 
     return _showErrorBox(win, title, message)
   }
@@ -53,27 +57,27 @@ module.exports = async (win, title = 'Error', err) => {
     err instanceof DbImportingError ||
     err instanceof InvalidFolderPathError
   ) {
-    const message = 'The database has not been imported'
+    const message = i18next.t('common.showErrorModalDialog.dbImportingErrorMessage')
 
     return _showErrorBox(win, title, message)
   }
   if (err instanceof DbRemovingError) {
-    const message = 'The database has not been removed'
+    const message = i18next.t('common.showErrorModalDialog.dbRemovingErrorMessage')
 
     return _showErrorBox(win, title, message)
   }
   if (err instanceof ReportsFolderChangingError) {
-    const message = 'The reports folder has not been changed'
+    const message = i18next.t('common.showErrorModalDialog.reportsFolderChangingErrorMessage')
 
     return _showErrorBox(win, title, message)
   }
   if (err instanceof SyncFrequencyChangingError) {
-    const message = 'The sync frequency has not been changed'
+    const message = i18next.t('common.showErrorModalDialog.syncFrequencyChangingErrorMessage')
 
     return _showErrorBox(win, title, message)
   }
 
-  const message = 'An unexpected exception occurred'
+  const message = i18next.t('common.showErrorModalDialog.syncFrequencyChangingErrorMessage')
 
   return _showErrorBox(win, title, message)
 }

@@ -126,6 +126,33 @@
         "message": "В настоящее время запущена другая версия {{productName}}. Закройте ее, затем снова запустите эту версию приложения",
         "confirmButtonText": "OK"
       }
+    },
+    "showMessageModalDialog": {
+      "confirmButtonText": "OK",
+      "cancelButtonText": "Отмена"
+    },
+    "showErrorModalDialog": {
+      "confirmButtonText": "OK",
+      "enoentErrorMessage": "Данный файл или каталог отсутствует",
+      "eaccesErrorMessage": "Доступ запрещен",
+      "invalidFilePathErrorMessage": "Неверный путь к файлу",
+      "invalidFileNameInArchErrorMessage": "Неверное имя файла в архиве",
+      "dbImportingErrorMessage": "База данных не была импортирована",
+      "dbRemovingErrorMessage": "База данных не была удалена",
+      "reportsFolderChangingErrorMessage": "Папка отчетов не была изменена",
+      "syncFrequencyChangingErrorMessage": "Частота синхронизации не была изменена",
+      "unexpectedExceptionMessage": "Произошло неожиданное исключение"
+    },
+    "exportDB": {
+      "saveDialog": {
+        "title": "Экспорт базы данных",
+        "buttonLabel": "Экспортировать"
+      },
+      "modalDialog": {
+        "confirmButtonText": "OK",
+        "title": "Экспорт базы данных",
+        "message": "Экспортирована успешно"
+      }
     }
   },
   "menu": {
