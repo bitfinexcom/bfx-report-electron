@@ -152,6 +152,10 @@
         "confirmButtonText": "OK",
         "title": "Database export",
         "message": "Exported successfully"
+      },
+      "loadingWindow": {
+        "description": "Exporting DB ...",
+        "archiveSize": "archive size {{prettyArchiveSize}}"
       }
     },
     "importDB": {
