@@ -1,6 +1,7 @@
 'use strict'
 
 const { dialog, BrowserWindow } = require('electron')
+const i18next = require('i18next')
 
 const {
   InvalidFilePathError,
@@ -10,7 +11,8 @@ const { unzip } = require('./archiver')
 const showErrorModalDialog = require('./show-error-modal-dialog')
 const pauseApp = require('./pause-app')
 const relaunch = require('./relaunch')
-const { rm } = require('./helpers')
+const { rm, isMainWinAvailable } = require('./helpers')
+const wins = require('./window-creators/windows')
 const {
   DB_FILE_NAME,
   DB_SHM_FILE_NAME,
@@ -39,7 +41,9 @@ module.exports = ({
   pathToUserDocuments
 }) => {
   return async () => {
-    const win = BrowserWindow.getFocusedWindow()
+    const win = isMainWinAvailable(wins.mainWindow)
+      ? wins.mainWindow
+      : BrowserWindow.getFocusedWindow()
 
     try {
       const {
@@ -48,9 +52,10 @@ module.exports = ({
       } = await dialog.showOpenDialog(
         win,
         {
-          title: 'Database import',
+          title: i18next.t('common.importDB.openDialog.title'),
           defaultPath: pathToUserDocuments,
-          buttonLabel: 'Import',
+          buttonLabel: i18next
+            .t('common.importDB.openDialog.buttonLabel'),
           properties: [
             'openFile',
             'createDirectory',
@@ -95,7 +100,11 @@ module.exports = ({
       relaunch()
     } catch (err) {
       try {
-        await showErrorModalDialog(win, 'Database import', err)
+        await showErrorModalDialog(
+          win,
+          i18next.t('common.importDB.modalDialog.title'),
+          err
+        )
       } catch (err) {
         console.error(err)
       }
