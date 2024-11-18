@@ -77,7 +77,7 @@ module.exports = async (win, title = 'Error', err) => {
     return _showErrorBox(win, title, message)
   }
 
-  const message = i18next.t('common.showErrorModalDialog.syncFrequencyChangingErrorMessage')
+  const message = i18next.t('common.showErrorModalDialog.unexpectedExceptionMessage')
 
   return _showErrorBox(win, title, message)
 }
