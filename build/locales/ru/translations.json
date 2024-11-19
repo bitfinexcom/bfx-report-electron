@@ -170,6 +170,17 @@
         "description": "Импортирование БД ...",
         "unzippedBytes": "размер БД {{prettyUnzippedBytes}}"
       }
+    },
+    "removeDB": {
+      "modalDialog": {
+        "clearDataTitle": "Очистить все данные",
+        "removeDBTitle": "Удалить базу данных",
+        "clearDataMessage": "Вы уверены, что хотите удалить все данные?",
+        "removeDBMessage": "Вы уверены, что хотите удалить базу данных?"
+      },
+      "loadingWindow": {
+        "description": "Удаление БД ..."
+      }
     }
   },
   "menu": {
