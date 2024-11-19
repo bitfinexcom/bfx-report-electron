@@ -170,6 +170,17 @@
         "description": "Importing DB ...",
         "unzippedBytes": "DB size {{prettyUnzippedBytes}}"
       }
+    },
+    "removeDB": {
+      "modalDialog": {
+        "clearDataTitle": "Clear all data",
+        "removeDBTitle": "Remove database",
+        "clearDataMessage": "Are you sure you want to clear all data?",
+        "removeDBMessage": "Are you sure you want to remove the database?"
+      },
+      "loadingWindow": {
+        "description": "Removing DB ..."
+      }
     }
   },
   "menu": {
