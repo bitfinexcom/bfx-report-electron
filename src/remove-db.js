@@ -92,11 +92,11 @@ module.exports = ({
       ? wins.mainWindow
       : BrowserWindow.getFocusedWindow()
     const title = shouldAllTablesBeCleared
-      ? 'Clear all data'
-      : 'Remove database'
+      ? i18next.t('common.removeDB.modalDialog.clearDataTitle')
+      : i18next.t('common.removeDB.modalDialog.removeDBTitle')
     const message = shouldAllTablesBeCleared
-      ? 'Are you sure you want to clear all data?'
-      : 'Are you sure you want to remove the database?'
+      ? i18next.t('common.removeDB.modalDialog.clearDataMessage')
+      : i18next.t('common.removeDB.modalDialog.removeDBMessage')
 
     try {
       const {
