@@ -1,6 +1,7 @@
 'use strict'
 
 const { BrowserWindow } = require('electron')
+const i18next = require('i18next')
 
 const ipcs = require('./ipcs')
 const showErrorModalDialog = require('./show-error-modal-dialog')
@@ -118,6 +119,10 @@ module.exports = ({
           }
 
           await _clearAllTables()
+        },
+        loadingWinParams: {
+          description: i18next
+            .t('common.removeDB.loadingWindow.description')
         }
       })
 
