@@ -14,6 +14,9 @@ const relaunch = require('./relaunch')
 const { rm, isMainWinAvailable } = require('./helpers')
 const wins = require('./window-creators/windows')
 const {
+  setLoadingDescription
+} = require('./window-creators/change-loading-win-visibility-state')
+const {
   DB_FILE_NAME,
   DB_SHM_FILE_NAME,
   DB_WAL_FILE_NAME,
@@ -78,7 +81,33 @@ module.exports = ({
         throw new InvalidFilePathError()
       }
 
-      await pauseApp()
+      const progressHandler = async (args) => {
+        const {
+          progress,
+          prettyUnzippedBytes
+        } = args ?? {}
+
+        const _description = i18next
+          .t('common.importDB.loadingWindow.description')
+        const _unzipped = i18next.t(
+          'common.importDB.loadingWindow.unzippedBytes',
+          { prettyUnzippedBytes }
+        )
+
+        const unzipped = prettyUnzippedBytes
+          ? `<br><small style="color:#808b93">${_unzipped}</small>`
+          : ''
+        const description = `${_description}${unzipped}`
+
+        await setLoadingDescription({ progress, description })
+      }
+
+      await pauseApp({
+        loadingWinParams: {
+          description: i18next
+            .t('common.importDB.loadingWindow.description')
+        }
+      })
       await _rmDbExcludeMain(pathToUserData, DB_FILE_NAME)
       const extractedfileNames = await unzip(
         filePaths[0],
@@ -89,7 +118,8 @@ module.exports = ({
             DB_SHM_FILE_NAME,
             DB_WAL_FILE_NAME,
             SECRET_KEY_FILE_NAME
-          ]
+          ],
+          progressHandler
         }
       )
 
@@ -100,8 +130,11 @@ module.exports = ({
       relaunch()
     } catch (err) {
       try {
+        const _win = isMainWinAvailable(wins.loadingWindow)
+          ? wins.loadingWindow
+          : win
         await showErrorModalDialog(
-          win,
+          _win,
           i18next.t('common.importDB.modalDialog.title'),
           err
         )

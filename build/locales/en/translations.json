@@ -165,6 +165,10 @@
       },
       "modalDialog": {
         "title": "Database import"
+      },
+      "loadingWindow": {
+        "description": "Importing DB ...",
+        "unzippedBytes": "DB size {{prettyUnzippedBytes}}"
       }
     }
   },

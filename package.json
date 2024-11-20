@@ -32,7 +32,7 @@
     "new-github-issue-url": "0.2.1",
     "showdown": "2.0.3",
     "truncate-utf8-bytes": "1.0.2",
-    "yauzl": "2.10.0"
+    "yauzl": "3.2.0"
   },
   "devDependencies": {
     "@mapbox/node-pre-gyp": "1.0.11",

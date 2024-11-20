@@ -140,15 +140,72 @@ const zip = async (
 const unzip = (
   zipPath,
   folderPath,
-  params = {}
+  params
 ) => {
-  const { extractFiles } = { ...params }
-  const extractedfileNames = []
-  let isClosedByError = false
+  const {
+    extractFiles,
+    progressHandler
+  } = params ?? {}
+  return new Promise((_resolve, _reject) => {
+    const entryStates = []
+    let totalUncompressedSize = 0
+    let unzippedBytes = 0
+    let lastProgressEventMts = Date.now()
 
-  return new Promise((resolve, reject) => {
+    const asyncProgressHandler = async () => {
+      try {
+        if (typeof progressHandler !== 'function') {
+          return
+        }
+
+        if (
+          !Number.isFinite(totalUncompressedSize) ||
+          totalUncompressedSize === 0 ||
+          !Number.isFinite(unzippedBytes)
+        ) {
+          return
+        }
+
+        const progress = unzippedBytes / totalUncompressedSize
+        const prettyUnzippedBytes = bytesToSize(unzippedBytes)
+
+        await progressHandler({
+          progress,
+          unzippedBytes,
+          prettyUnzippedBytes
+        })
+      } catch (err) {
+        console.debug(err)
+      }
+    }
+    const resolve = (entryState) => {
+      if (entryState) {
+        entryState.isClosedSuccessfully = true
+      }
+      if (
+        entryStates.some((state) => state?.isClosedWithError) ||
+        entryStates.some((state) => !state?.isClosedSuccessfully)
+      ) {
+        return
+      }
+
+      asyncProgressHandler()
+
+      return _resolve(entryStates.map((state) => state?.entry?.fileName))
+    }
+    const reject = (err, zipfile, entryState) => {
+      if (entryState) {
+        entryState.isClosedWithError = true
+      }
+      if (zipfile) {
+        zipfile.close()
+      }
+
+      return _reject(err)
+    }
+
     try {
-      yauzl.open(zipPath, { lazyEntries: true }, (err, zipfile) => {
+      yauzl.open(zipPath, { lazyEntries: false }, (err, zipfile) => {
         if (err) {
           reject(err)
 
@@ -156,67 +213,67 @@ const unzip = (
         }
 
         zipfile.on('error', reject)
-        zipfile.on('end', () => {
-          if (isClosedByError) {
-            return
-          }
-
-          resolve(extractedfileNames)
-        })
-        zipfile.readEntry()
-
+        zipfile.on('end', () => resolve())
         zipfile.on('entry', (entry) => {
           const { fileName } = entry
           const filePath = path.join(folderPath, fileName)
           const errorMessage = yauzl.validateFileName(fileName)
 
           if (/\/$/.test(fileName)) {
-            zipfile.readEntry()
-
             return
           }
           if (
             Array.isArray(extractFiles) &&
             extractFiles.every(file => file !== fileName)
           ) {
-            zipfile.readEntry()
-
             return
           }
+
+          const entryState = {
+            isClosedWithError: false,
+            isClosedSuccessfully: false,
+            entry
+          }
+          totalUncompressedSize += entry?.uncompressedSize ?? 0
+          entryStates.push(entryState)
+
           if (errorMessage) {
-            isClosedByError = true
-            zipfile.close()
-            reject(new InvalidFileNameInArchiveError(errorMessage))
+            reject(
+              new InvalidFileNameInArchiveError(errorMessage),
+              zipfile,
+              entryState
+            )
 
             return
           }
 
           zipfile.openReadStream(entry, (err, readStream) => {
             if (err) {
-              isClosedByError = true
-              zipfile.close()
-              reject(err)
+              reject(err, zipfile, entryState)
 
               return
             }
 
             const output = fs.createWriteStream(filePath)
 
-            output.on('close', () => {
-              extractedfileNames.push(fileName)
-
-              zipfile.readEntry()
-            })
+            output.on('close', () => resolve(entryState))
             output.on('error', (err) => {
-              isClosedByError = true
-              zipfile.close()
-              reject(err)
+              reject(err, zipfile, entryState)
             })
 
             readStream.on('error', (err) => {
-              isClosedByError = true
-              zipfile.close()
-              reject(err)
+              reject(err, zipfile, entryState)
+            })
+            readStream.on('data', (chunk) => {
+              unzippedBytes += chunk.length
+              const currMts = Date.now()
+
+              if (currMts - lastProgressEventMts < 500) {
+                return
+              }
+
+              lastProgressEventMts = currMts
+              asyncProgressHandler()
             })
 
             readStream.pipe(output)

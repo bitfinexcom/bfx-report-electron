@@ -165,6 +165,10 @@
       },
       "modalDialog": {
         "title": "Импорт базы данных"
+      },
+      "loadingWindow": {
+        "description": "Импортирование БД ...",
+        "unzippedBytes": "размер БД {{prettyUnzippedBytes}}"
       }
     }
   },
