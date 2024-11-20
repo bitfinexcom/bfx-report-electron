@@ -189,7 +189,8 @@
         "cancelButtonText": "Cancel"
       },
       "loadingWindow": {
-        "description": "Removing DB ..."
+        "removingDBDescription": "Removing DB ...",
+        "clearingAllDataDescription": "Clearing all data ..."
       }
     }
   },

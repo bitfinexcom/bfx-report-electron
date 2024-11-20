@@ -121,8 +121,9 @@ module.exports = ({
           await _clearAllTables()
         },
         loadingWinParams: {
-          description: i18next
-            .t('common.removeDB.loadingWindow.description')
+          description: shouldAllTablesBeCleared
+            ? i18next.t('common.removeDB.loadingWindow.clearingAllDataDescription')
+            : i18next.t('common.removeDB.loadingWindow.removingDBDescription')
         }
       })
 

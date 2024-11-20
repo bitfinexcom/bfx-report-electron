@@ -189,7 +189,8 @@
         "cancelButtonText": "Отмена"
       },
       "loadingWindow": {
-        "description": "Удаление БД ..."
+        "removingDBDescription": "Удаление БД ...",
+        "clearingAllDataDescription": "Очистка всех данные ..."
       }
     }
   },
