@@ -178,6 +178,16 @@
         "clearDataMessage": "Вы уверены, что хотите удалить все данные?",
         "removeDBMessage": "Вы уверены, что хотите удалить базу данных?"
       },
+      "messageModalDialog": {
+        "dbRemovingTitle": "Удаление БД",
+        "dbDataHasBeenRemovedMessage": "Данные БД были удалены",
+        "dbDataHasNotBeenRemovedMessage": "Данные БД не были удалены",
+        "dbHasNotBeenRestoredTitle": "БД не восстановлена",
+        "removeDBTitle": "Удалить базу данных",
+        "removeDBMessage": "Следует ли удалить все таблицы?",
+        "confirmButtonText": "OK",
+        "cancelButtonText": "Отмена"
+      },
       "loadingWindow": {
         "description": "Удаление БД ..."
       }
