@@ -1,10 +1,13 @@
 'use strict'
 
-const electron = require('electron')
+const { BrowserWindow } = require('electron')
+const i18next = require('i18next')
 
 const ipcs = require('./ipcs')
 const showErrorModalDialog = require('./show-error-modal-dialog')
 const showMessageModalDialog = require('./show-message-modal-dialog')
+const wins = require('./window-creators/windows')
+const isMainWinAvailable = require('./helpers/is-main-win-available')
 const pauseApp = require('./pause-app')
 const relaunch = require('./relaunch')
 const { rm } = require('./helpers')
@@ -85,13 +88,15 @@ module.exports = ({
   shouldAllTablesBeCleared
 }) => {
   return async () => {
-    const win = electron.BrowserWindow.getFocusedWindow()
+    const win = isMainWinAvailable(wins.mainWindow)
+      ? wins.mainWindow
+      : BrowserWindow.getFocusedWindow()
     const title = shouldAllTablesBeCleared
-      ? 'Clear all data'
-      : 'Remove database'
+      ? i18next.t('common.removeDB.modalDialog.clearDataTitle')
+      : i18next.t('common.removeDB.modalDialog.removeDBTitle')
     const message = shouldAllTablesBeCleared
-      ? 'Are you sure you want to clear all data?'
-      : 'Are you sure you want to remove the database?'
+      ? i18next.t('common.removeDB.modalDialog.clearDataMessage')
+      : i18next.t('common.removeDB.modalDialog.removeDBMessage')
 
     try {
       const {
@@ -114,6 +119,11 @@ module.exports = ({
           }
 
           await _clearAllTables()
+        },
+        loadingWinParams: {
+          description: shouldAllTablesBeCleared
+            ? i18next.t('common.removeDB.loadingWindow.clearingAllDataDescription')
+            : i18next.t('common.removeDB.loadingWindow.removingDBDescription')
         }
       })
 
@@ -124,7 +134,10 @@ module.exports = ({
       relaunch()
     } catch (err) {
       try {
-        await showErrorModalDialog(win, title, err)
+        const _win = isMainWinAvailable(wins.loadingWindow)
+          ? wins.loadingWindow
+          : win
+        await showErrorModalDialog(_win, title, err)
       } catch (err) {
         console.error(err)
       }

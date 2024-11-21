@@ -93,18 +93,20 @@ module.exports = (ipc) => {
         await showWindow(win)
 
         const haveNotAllDbDataBeenRemoved = state === PROCESS_MESSAGES.ALL_TABLE_HAVE_NOT_BEEN_REMOVED
-        const messChunk = haveNotAllDbDataBeenRemoved
-          ? ' not'
-          : ''
+        const message = haveNotAllDbDataBeenRemoved
+          ? i18next.t('common.removeDB.messageModalDialog.dbDataHasNotBeenRemovedMessage')
+          : i18next.t('common.removeDB.messageModalDialog.dbDataHasBeenRemovedMessage')
         const type = haveNotAllDbDataBeenRemoved
           ? 'error'
           : 'info'
 
         await showMessageModalDialog(win, {
           type,
-          title: 'DB removing',
-          message: `DB data have${messChunk} been removed`,
-          buttons: ['OK'],
+          title: i18next.t('common.removeDB.messageModalDialog.dbRemovingTitle'),
+          message,
+          buttons: [
+            i18next.t('common.removeDB.messageModalDialog.confirmButtonText')
+          ],
           defaultId: 0,
           cancelId: 0
         })
@@ -219,16 +221,19 @@ module.exports = (ipc) => {
       }
       if (state === PROCESS_MESSAGES.REQUEST_SHOULD_ALL_TABLES_BE_REMOVED) {
         const title = data.isNotDbRestored
-          ? 'DB has not been restored'
-          : 'Remove database'
+          ? i18next.t('common.removeDB.messageModalDialog.dbHasNotBeenRestoredTitle')
+          : i18next.t('common.removeDB.messageModalDialog.removeDBTitle')
 
         const {
           btnId
         } = await showMessageModalDialog(win, {
           type: 'question',
           title,
-          message: 'Should all tables be removed?',
-          buttons: ['Cancel', 'OK']
+          message: i18next.t('common.removeDB.messageModalDialog.removeDBMessage'),
+          buttons: [
+            i18next.t('common.removeDB.messageModalDialog.cancelButtonText'),
+            i18next.t('common.removeDB.messageModalDialog.confirmButtonText')
+          ]
         })
 
         if (btnId === 0) {

@@ -170,6 +170,28 @@
         "description": "Importing DB ...",
         "unzippedBytes": "DB size {{prettyUnzippedBytes}}"
       }
+    },
+    "removeDB": {
+      "modalDialog": {
+        "clearDataTitle": "Clear all data",
+        "removeDBTitle": "Remove database",
+        "clearDataMessage": "Are you sure you want to clear all data?",
+        "removeDBMessage": "Are you sure you want to remove the database?"
+      },
+      "messageModalDialog": {
+        "dbRemovingTitle": "DB removing",
+        "dbDataHasBeenRemovedMessage": "DB data has been removed",
+        "dbDataHasNotBeenRemovedMessage": "DB data has not been removed",
+        "dbHasNotBeenRestoredTitle": "DB has not been restored",
+        "removeDBTitle": "Remove database",
+        "removeDBMessage": "Should all tables be removed?",
+        "confirmButtonText": "OK",
+        "cancelButtonText": "Cancel"
+      },
+      "loadingWindow": {
+        "removingDBDescription": "Removing DB ...",
+        "clearingAllDataDescription": "Clearing all data ..."
+      }
     }
   },
   "menu": {
