@@ -201,7 +201,7 @@
     },
     "migrationDB": {
       "messageModalDialog": {
-        "dbMigrationHasFailedMessage": "Миграция БД не удалась, все данные удалены,\nсинхронизация начнется с нуля",
+        "dbMigrationHasFailedMessage": "Миграция БД не удалась",
         "dbMigrationHasCompletedMessage": "Миграция БД успешно завершена",
         "confirmButtonText": "OK",
         "cancelButtonText": "Отмена"

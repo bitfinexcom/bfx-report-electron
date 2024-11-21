@@ -201,7 +201,7 @@
     },
     "migrationDB": {
       "messageModalDialog": {
-        "dbMigrationHasFailedMessage": "DВ migration has failed, all data has been deleted,\nsynchronization will start from scratch",
+        "dbMigrationHasFailedMessage": "DВ migration has failed",
         "dbMigrationHasCompletedMessage": "DB migration has completed successfully",
         "confirmButtonText": "OK",
         "cancelButtonText": "Cancel"
