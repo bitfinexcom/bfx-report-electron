@@ -192,6 +192,12 @@
         "removingDBDescription": "Удаление БД ...",
         "clearingAllDataDescription": "Очистка всех данные ..."
       }
+    },
+    "backupDB": {
+      "backupDBTitle": "Резервное копирование БД",
+      "dbBackupHasBeenDone": "Резервное копирование БД успешно завершено",
+      "dbBackupHasNotBeenDone": "Резервное копирование БД не было успешно выполнено",
+      "confirmButtonText": "OK"
     }
   },
   "menu": {
