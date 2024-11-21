@@ -192,6 +192,12 @@
         "removingDBDescription": "Removing DB ...",
         "clearingAllDataDescription": "Clearing all data ..."
       }
+    },
+    "backupDB": {
+      "backupDBTitle": "DB backup",
+      "dbBackupHasBeenDone": "DB backup has been successfully",
+      "dbBackupHasNotBeenDone": "DB backup has not been successfully",
+      "confirmButtonText": "OK"
     }
   },
   "menu": {
