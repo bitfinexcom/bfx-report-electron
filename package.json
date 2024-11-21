@@ -48,7 +48,7 @@
     "electron": "27.3.11",
     "electron-builder": "24.10.0",
     "mocha": "10.2.0",
-    "standard": "17.1.0",
+    "standard": "17.1.2",
     "wdio-electron-service": "5.4.0"
   },
   "standard": {
