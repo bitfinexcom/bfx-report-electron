@@ -195,9 +195,24 @@
     },
     "backupDB": {
       "backupDBTitle": "Резервное копирование БД",
-      "dbBackupHasBeenDone": "Резервное копирование БД успешно завершено",
-      "dbBackupHasNotBeenDone": "Резервное копирование БД не было успешно выполнено",
+      "dbBackupHasCompletedMessage": "Резервное копирование БД успешно завершено",
+      "dbBackupHasFailedMessage": "Резервное копирование БД не удалось",
       "confirmButtonText": "OK"
+    },
+    "migrationDB": {
+      "messageModalDialog": {
+        "dbMigrationHasFailedMessage": "Миграция БД не удалась, все данные удалены,\nсинхронизация начнется с нуля",
+        "dbMigrationHasCompletedMessage": "Миграция БД успешно завершена",
+        "confirmButtonText": "OK",
+        "cancelButtonText": "Отмена"
+      },
+      "actionRequestModalDialog": {
+        "title": "Миграция не удалась",
+        "message": "Что следует сделать?",
+        "exitButtonText": "Выход",
+        "restoreDBButtonText": "Попробовать восстановить БД",
+        "removeDBButtonText": "Удалить БД"
+      }
     }
   },
   "menu": {
