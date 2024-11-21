@@ -11,9 +11,6 @@ const showMessageModalDialog = require(
 const isMainWinAvailable = require(
   './helpers/is-main-win-available'
 )
-const {
-  showWindow
-} = require('./helpers/manage-window')
 const showTrxTaxReportNotification = require(
   './show-notification/show-trx-tax-report-notification'
 )
@@ -27,17 +24,46 @@ const PROCESS_STATES = require(
   '../bfx-reports-framework/workers/loc.api/process.message.manager/process.states'
 )
 
-module.exports = (ipc) => {
-  const win = isMainWinAvailable(wins.mainWindow)
-    ? wins.mainWindow
-    : BrowserWindow.getFocusedWindow()
+const modalDialogPromiseSet = new Set()
 
+const resolveModalDialogInSequence = async (asyncHandler) => {
+  let resolve = () => {}
+  const promise = new Promise((_resolve) => {
+    resolve = _resolve
+  })
+
+  const promisesForAwaiting = [...modalDialogPromiseSet]
+  modalDialogPromiseSet.add(promise)
+  await Promise.all(promisesForAwaiting)
+  const res = await asyncHandler()
+  resolve()
+  modalDialogPromiseSet.delete(promise)
+  return res
+}
+
+const getParentWindow = () => {
+  if (isMainWinAvailable(
+    wins.mainWindow,
+    { shouldCheckVisibility: true }
+  )) {
+    return wins.mainWindow
+  }
+  if (isMainWinAvailable(wins.loadingWindow)) {
+    return wins.loadingWindow
+  }
+
+  return BrowserWindow.getFocusedWindow()
+}
+
+module.exports = (ipc) => {
   if (!ipc) {
     return
   }
 
   ipc.on('message', async (mess) => {
     try {
+      const win = getParentWindow()
+
       if (
         !mess ||
         typeof mess !== 'object' ||
@@ -61,14 +87,12 @@ module.exports = (ipc) => {
         state === PROCESS_MESSAGES.DB_HAS_BEEN_RESTORED ||
         state === PROCESS_MESSAGES.DB_HAS_NOT_BEEN_RESTORED
       ) {
-        await showWindow(win)
-
         const hasNotDbBeenRestored = state === PROCESS_MESSAGES.DB_HAS_NOT_BEEN_RESTORED
         const type = hasNotDbBeenRestored
           ? 'error'
           : 'info'
 
-        await showMessageModalDialog(win, {
+        await resolveModalDialogInSequence(() => showMessageModalDialog(win, {
           type,
           title: i18next.t('common.restoreDB.messageModalDialog.title'),
           message: hasNotDbBeenRestored
@@ -76,8 +100,9 @@ module.exports = (ipc) => {
             : i18next.t('common.restoreDB.messageModalDialog.dbRestoredMessage'),
           buttons: [i18next.t('common.restoreDB.messageModalDialog.confirmButtonText')],
           defaultId: 0,
-          cancelId: 0
-        })
+          cancelId: 0,
+          shouldParentWindowBeShown: true
+        }))
 
         // To enforce migration launch if restores prev db schema version
         if (data?.isNotVerSupported) {
@@ -90,8 +115,6 @@ module.exports = (ipc) => {
         state === PROCESS_MESSAGES.ALL_TABLE_HAVE_BEEN_REMOVED ||
         state === PROCESS_MESSAGES.ALL_TABLE_HAVE_NOT_BEEN_REMOVED
       ) {
-        await showWindow(win)
-
         const haveNotAllDbDataBeenRemoved = state === PROCESS_MESSAGES.ALL_TABLE_HAVE_NOT_BEEN_REMOVED
         const message = haveNotAllDbDataBeenRemoved
           ? i18next.t('common.removeDB.messageModalDialog.dbDataHasNotBeenRemovedMessage')
@@ -100,7 +123,7 @@ module.exports = (ipc) => {
           ? 'error'
           : 'info'
 
-        await showMessageModalDialog(win, {
+        await resolveModalDialogInSequence(() => showMessageModalDialog(win, {
           type,
           title: i18next.t('common.removeDB.messageModalDialog.dbRemovingTitle'),
           message,
@@ -108,8 +131,9 @@ module.exports = (ipc) => {
             i18next.t('common.removeDB.messageModalDialog.confirmButtonText')
           ],
           defaultId: 0,
-          cancelId: 0
-        })
+          cancelId: 0,
+          shouldParentWindowBeShown: true
+        }))
 
         return
       }
@@ -117,8 +141,6 @@ module.exports = (ipc) => {
         state === PROCESS_MESSAGES.BACKUP_FINISHED ||
         state === PROCESS_MESSAGES.ERROR_BACKUP
       ) {
-        await showWindow(win)
-
         const isBackupError = state === PROCESS_MESSAGES.ERROR_BACKUP
         const message = isBackupError
           ? i18next.t('common.backupDB.dbBackupHasFailedMessage')
@@ -127,7 +149,7 @@ module.exports = (ipc) => {
           ? 'error'
           : 'info'
 
-        await showMessageModalDialog(win, {
+        await resolveModalDialogInSequence(() => showMessageModalDialog(win, {
           type,
           title: i18next.t('common.backupDB.backupDBTitle'),
           message,
@@ -135,8 +157,9 @@ module.exports = (ipc) => {
             i18next.t('common.backupDB.confirmButtonText')
           ],
           defaultId: 0,
-          cancelId: 0
-        })
+          cancelId: 0,
+          shouldParentWindowBeShown: true
+        }))
 
         if (isBackupError) {
           return
@@ -172,8 +195,6 @@ module.exports = (ipc) => {
         state === PROCESS_MESSAGES.ERROR_MIGRATIONS ||
         state === PROCESS_MESSAGES.READY_MIGRATIONS
       ) {
-        await showWindow(win)
-
         const isMigrationsError = state === PROCESS_MESSAGES.ERROR_MIGRATIONS
         const type = isMigrationsError
           ? 'error'
@@ -185,20 +206,21 @@ module.exports = (ipc) => {
           ? [i18next.t('common.migrationDB.messageModalDialog.cancelButtonText')]
           : [i18next.t('common.migrationDB.messageModalDialog.confirmButtonText')]
 
-        await showMessageModalDialog(win, {
+        await resolveModalDialogInSequence(() => showMessageModalDialog(win, {
           type,
           message,
           buttons,
           defaultId: 0,
-          cancelId: 0
-        })
+          cancelId: 0,
+          shouldParentWindowBeShown: true
+        }))
 
         return
       }
       if (state === PROCESS_MESSAGES.REQUEST_MIGRATION_HAS_FAILED_WHAT_SHOULD_BE_DONE) {
         const {
           btnId
-        } = await showMessageModalDialog(win, {
+        } = await resolveModalDialogInSequence(() => showMessageModalDialog(win, {
           type: 'question',
           title: i18next
             .t('common.migrationDB.actionRequestModalDialog.title'),
@@ -208,8 +230,9 @@ module.exports = (ipc) => {
             i18next.t('common.migrationDB.actionRequestModalDialog.exitButtonText'),
             i18next.t('common.migrationDB.actionRequestModalDialog.restoreDBButtonText'),
             i18next.t('common.migrationDB.actionRequestModalDialog.removeDBButtonText')
-          ]
-        })
+          ],
+          shouldParentWindowBeShown: true
+        }))
 
         if (btnId === 0) {
           app.quit()
@@ -234,15 +257,16 @@ module.exports = (ipc) => {
 
         const {
           btnId
-        } = await showMessageModalDialog(win, {
+        } = await resolveModalDialogInSequence(() => showMessageModalDialog(win, {
           type: 'question',
           title,
           message: i18next.t('common.removeDB.messageModalDialog.removeDBMessage'),
           buttons: [
             i18next.t('common.removeDB.messageModalDialog.cancelButtonText'),
             i18next.t('common.removeDB.messageModalDialog.confirmButtonText')
-          ]
-        })
+          ],
+          shouldParentWindowBeShown: true
+        }))
 
         if (btnId === 0) {
           if (data.isNotDbRestored) {
