@@ -120,18 +120,20 @@ module.exports = (ipc) => {
         await showWindow(win)
 
         const isBackupError = state === PROCESS_MESSAGES.ERROR_BACKUP
-        const messChunk = isBackupError
-          ? ' not'
-          : ''
+        const message = isBackupError
+          ? i18next.t('common.backupDB.dbBackupHasNotBeenDone')
+          : i18next.t('common.backupDB.dbBackupHasBeenDone')
         const type = isBackupError
           ? 'error'
           : 'info'
 
         await showMessageModalDialog(win, {
           type,
-          title: 'DB backup',
-          message: `DB backup has${messChunk} been successfully`,
-          buttons: ['OK'],
+          title: i18next.t('common.backupDB.backupDBTitle'),
+          message,
+          buttons: [
+            i18next.t('common.backupDB.confirmButtonText')
+          ],
           defaultId: 0,
           cancelId: 0
         })
@@ -176,12 +178,12 @@ module.exports = (ipc) => {
         const type = isMigrationsError
           ? 'error'
           : 'info'
-        const message = isMigrationsError
+        const message = isMigrationsError // TODO:
           ? 'DВ migration failed, all data has been deleted,\nsynchronization will start from scratch'
           : 'DB migration completed successfully'
         const buttons = isMigrationsError
-          ? ['Cancel']
-          : ['OK']
+          ? ['Cancel'] // TODO:
+          : ['OK'] // TODO:
 
         await showMessageModalDialog(win, {
           type,
@@ -198,9 +200,9 @@ module.exports = (ipc) => {
           btnId
         } = await showMessageModalDialog(win, {
           type: 'question',
-          title: 'The migration has failed',
-          message: 'What should be done?',
-          buttons: ['Exit', 'Try to restore DB', 'Remove DB']
+          title: 'The migration has failed', // TODO:
+          message: 'What should be done?', // TODO:
+          buttons: ['Exit', 'Try to restore DB', 'Remove DB'] // TODO:
         })
 
         if (btnId === 0) {
