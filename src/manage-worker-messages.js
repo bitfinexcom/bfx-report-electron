@@ -121,8 +121,8 @@ module.exports = (ipc) => {
 
         const isBackupError = state === PROCESS_MESSAGES.ERROR_BACKUP
         const message = isBackupError
-          ? i18next.t('common.backupDB.dbBackupHasNotBeenDone')
-          : i18next.t('common.backupDB.dbBackupHasBeenDone')
+          ? i18next.t('common.backupDB.dbBackupHasFailedMessage')
+          : i18next.t('common.backupDB.dbBackupHasCompletedMessage')
         const type = isBackupError
           ? 'error'
           : 'info'
@@ -178,12 +178,12 @@ module.exports = (ipc) => {
         const type = isMigrationsError
           ? 'error'
           : 'info'
-        const message = isMigrationsError // TODO:
-          ? 'DВ migration failed, all data has been deleted,\nsynchronization will start from scratch'
-          : 'DB migration completed successfully'
+        const message = isMigrationsError
+          ? i18next.t('common.migrationDB.messageModalDialog.dbMigrationHasFailedMessage')
+          : i18next.t('common.migrationDB.messageModalDialog.dbMigrationHasCompletedMessage')
         const buttons = isMigrationsError
-          ? ['Cancel'] // TODO:
-          : ['OK'] // TODO:
+          ? [i18next.t('common.migrationDB.messageModalDialog.cancelButtonText')]
+          : [i18next.t('common.migrationDB.messageModalDialog.confirmButtonText')]
 
         await showMessageModalDialog(win, {
           type,
@@ -200,9 +200,15 @@ module.exports = (ipc) => {
           btnId
         } = await showMessageModalDialog(win, {
           type: 'question',
-          title: 'The migration has failed', // TODO:
-          message: 'What should be done?', // TODO:
-          buttons: ['Exit', 'Try to restore DB', 'Remove DB'] // TODO:
+          title: i18next
+            .t('common.migrationDB.actionRequestModalDialog.title'),
+          message: i18next
+            .t('common.migrationDB.actionRequestModalDialog.message'),
+          buttons: [
+            i18next.t('common.migrationDB.actionRequestModalDialog.exitButtonText'),
+            i18next.t('common.migrationDB.actionRequestModalDialog.restoreDBButtonText'),
+            i18next.t('common.migrationDB.actionRequestModalDialog.removeDBButtonText')
+          ]
         })
 
         if (btnId === 0) {
