@@ -127,6 +127,11 @@
         "confirmButtonText": "OK"
       }
     },
+    "showAboutModalDialog": {
+      "confirmButtonText": "OK",
+      "copyButtonText": "Копировать",
+      "gitHubButtonText": "Открыть GitHub"
+    },
     "showMessageModalDialog": {
       "confirmButtonText": "OK",
       "cancelButtonText": "Отмена"
