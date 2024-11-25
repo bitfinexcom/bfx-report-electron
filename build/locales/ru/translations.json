@@ -192,6 +192,27 @@
         "removingDBDescription": "Удаление БД ...",
         "clearingAllDataDescription": "Очистка всех данные ..."
       }
+    },
+    "backupDB": {
+      "backupDBTitle": "Резервное копирование БД",
+      "dbBackupHasCompletedMessage": "Резервное копирование БД успешно завершено",
+      "dbBackupHasFailedMessage": "Резервное копирование БД не удалось",
+      "confirmButtonText": "OK"
+    },
+    "migrationDB": {
+      "messageModalDialog": {
+        "dbMigrationHasFailedMessage": "Миграция БД не удалась",
+        "dbMigrationHasCompletedMessage": "Миграция БД успешно завершена",
+        "confirmButtonText": "OK",
+        "cancelButtonText": "Отмена"
+      },
+      "actionRequestModalDialog": {
+        "title": "Миграция не удалась",
+        "message": "Что следует сделать?",
+        "exitButtonText": "Выход",
+        "restoreDBButtonText": "Попробовать восстановить БД",
+        "removeDBButtonText": "Удалить БД"
+      }
     }
   },
   "menu": {

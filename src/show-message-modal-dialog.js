@@ -5,6 +5,9 @@ const i18next = require('i18next')
 
 const wins = require('./window-creators/windows')
 const isMainWinAvailable = require('./helpers/is-main-win-available')
+const {
+  showWindow
+} = require('./helpers/manage-window')
 
 module.exports = async (win, opts = {}) => {
   const defaultWin = isMainWinAvailable(wins.mainWindow)
@@ -13,6 +16,10 @@ module.exports = async (win, opts = {}) => {
   const parentWin = win && typeof win === 'object'
     ? win
     : defaultWin
+
+  if (opts?.shouldParentWindowBeShown) {
+    await showWindow(win)
+  }
 
   const {
     response: btnId,

@@ -192,6 +192,27 @@
         "removingDBDescription": "Removing DB ...",
         "clearingAllDataDescription": "Clearing all data ..."
       }
+    },
+    "backupDB": {
+      "backupDBTitle": "DB backup",
+      "dbBackupHasCompletedMessage": "DB backup has completed successfully",
+      "dbBackupHasFailedMessage": "DB backup has failed",
+      "confirmButtonText": "OK"
+    },
+    "migrationDB": {
+      "messageModalDialog": {
+        "dbMigrationHasFailedMessage": "DВ migration has failed",
+        "dbMigrationHasCompletedMessage": "DB migration has completed successfully",
+        "confirmButtonText": "OK",
+        "cancelButtonText": "Cancel"
+      },
+      "actionRequestModalDialog": {
+        "title": "The migration has failed",
+        "message": "What should be done?",
+        "exitButtonText": "Exit",
+        "restoreDBButtonText": "Try to restore DB",
+        "removeDBButtonText": "Remove DB"
+      }
     }
   },
   "menu": {
