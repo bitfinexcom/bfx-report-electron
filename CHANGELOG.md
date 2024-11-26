@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.31.0] - 2024-11-27
+
+### Added
+
+- Added translation support to the `export-db` module. PR: [bfx-report-electron#441](https://github.com/bitfinexcom/bfx-report-electron/pull/441)
+- Added translation support to the `import-db` module. PR: [bfx-report-electron#442](https://github.com/bitfinexcom/bfx-report-electron/pull/442)
+- Added `progress` perc to the `loading window` for the `export-db` module as it can take significant time for large DB. PR: [bfx-report-electron#445](https://github.com/bitfinexcom/bfx-report-electron/pull/445)
+- Added `progress` perc to the `loading window` for the `import-db` module as it can take significant time for large DB. [bfx-report-electron#449](https://github.com/bitfinexcom/bfx-report-electron/pull/449)
+- Added translation support to the `remove-db` module. PR: [bfx-report-electron#450](https://github.com/bitfinexcom/bfx-report-electron/pull/450)
+- Added translation support to the `manage-worker-messages` module. Add translation support to the `backup-db` and `migration-db` modules. Fixed showing modal dialogs in sequence. PR: [bfx-report-electron#456](https://github.com/bitfinexcom/bfx-report-electron/pull/456)
+- Added translation support to the `show-about-modal-dialog` module. PR: [bfx-report-electron#457](https://github.com/bitfinexcom/bfx-report-electron/pull/457)
+
+### Fixed
+
+- Fixed docker desktop container user permissions breaks. Fixed `chown`: `changing ownership of 'path-to-file': Operation not permitted` when using it in `dockerfile`. PR: [bfx-report-electron#460](https://github.com/bitfinexcom/bfx-report-electron/pull/460)
+
 ## [4.30.0] - 2024-11-13
 
 ### Added
