@@ -8,7 +8,6 @@ ENV IS_DEV_ENV=${IS_DEV_ENV:-0}
 COPY ./scripts/helpers/install-nodejs.sh ./scripts/helpers/install-nodejs.sh
 
 RUN ./scripts/helpers/install-nodejs.sh ${NODE_VERSION}
-RUN chown root:root .
 
 COPY . .
 
