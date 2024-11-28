@@ -16,13 +16,13 @@ const getBody = (params) => {
   } = params ?? {}
 
   if (isError) {
-    return i18next.t('common.nativeNotification.sync.errorBody')
+    return i18next.t('nativeNotification.sync.errorBody')
   }
   if (isInterrupted) {
-    return i18next.t('common.nativeNotification.sync.interruptedBody')
+    return i18next.t('nativeNotification.sync.interruptedBody')
   }
 
-  return i18next.t('common.nativeNotification.sync.completedBody')
+  return i18next.t('nativeNotification.sync.completedBody')
 }
 
 module.exports = (mess) => {

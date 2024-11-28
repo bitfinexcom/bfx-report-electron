@@ -141,11 +141,11 @@ const _fireToast = (
     backdrop: 'rgba(0,0,0,0.0)',
 
     icon: 'info',
-    title: i18next.t('common.autoUpdater.title'),
+    title: i18next.t('autoUpdater.title'),
     showConfirmButton: true,
     showCancelButton: false,
-    confirmButtonText: i18next.t('common.autoUpdater.confirmButtonText'),
-    cancelButtonText: i18next.t('common.autoUpdater.cancelButtonText'),
+    confirmButtonText: i18next.t('common.confirmButtonText'),
+    cancelButtonText: i18next.t('common.cancelButtonText'),
     timerProgressBar: false,
 
     ...opts,
@@ -268,7 +268,7 @@ const _autoUpdaterFactory = () => {
 
     autoUpdater.addInstallingUpdateEventHandler(() => {
       return showLoadingWindow({
-        description: i18next.t('common.autoUpdater.loadingWindow.description'),
+        description: i18next.t('autoUpdater.loadingWindow.description'),
         isRequiredToCloseAllWins: true
       })
     })
@@ -318,7 +318,7 @@ const _autoUpdaterFactory = () => {
         /ERR_INTERNET_DISCONNECTED/gi.test(err.toString())
       ) {
         await _fireToast({
-          title: i18next.t('common.autoUpdater.errorToast.inetIssueTitle'),
+          title: i18next.t('autoUpdater.errorToast.inetIssueTitle'),
           icon: 'error',
           timer: 60000
         })
@@ -327,7 +327,7 @@ const _autoUpdaterFactory = () => {
       }
 
       await _fireToast({
-        title: i18next.t('common.autoUpdater.errorToast.title'),
+        title: i18next.t('autoUpdater.errorToast.title'),
         icon: 'error',
         timer: 60000
       })
@@ -343,7 +343,7 @@ const _autoUpdaterFactory = () => {
 
       await _fireToast(
         {
-          title: i18next.t('common.autoUpdater.checkingForUpdateToast.title'),
+          title: i18next.t('autoUpdater.checkingForUpdateToast.title'),
           type: 'warning',
           timer: 10000
         },
@@ -364,10 +364,10 @@ const _autoUpdaterFactory = () => {
       const { value, dismiss } = await _fireToast(
         {
           title: i18next.t(
-            'common.autoUpdater.updateAvailableToast.title',
+            'autoUpdater.updateAvailableToast.title',
             { version }
           ),
-          text: i18next.t('common.autoUpdater.updateAvailableToast.description'),
+          text: i18next.t('autoUpdater.updateAvailableToast.description'),
           icon: 'info',
           timer: 10000
         }
@@ -402,7 +402,7 @@ const _autoUpdaterFactory = () => {
 
       await _fireToast(
         {
-          title: i18next.t('common.autoUpdater.updateNotAvailableToast.title'),
+          title: i18next.t('autoUpdater.updateNotAvailableToast.title'),
           icon: 'success',
           timer: 10000
         }
@@ -425,7 +425,7 @@ const _autoUpdaterFactory = () => {
 
       await _fireToast(
         {
-          title: i18next.t('common.autoUpdater.downloadProgressToast.title'),
+          title: i18next.t('autoUpdater.downloadProgressToast.title'),
           icon: 'info'
         },
         {
@@ -458,10 +458,10 @@ const _autoUpdaterFactory = () => {
       const { value } = await _fireToast(
         {
           title: i18next.t(
-            'common.autoUpdater.updateDownloadedToast.title',
+            'autoUpdater.updateDownloadedToast.title',
             { version }
           ),
-          text: i18next.t('common.autoUpdater.updateDownloadedToast.description'),
+          text: i18next.t('autoUpdater.updateDownloadedToast.description'),
           icon: 'question',
           timer: 60000,
           showCancelButton: true

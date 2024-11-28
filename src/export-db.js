@@ -50,10 +50,10 @@ module.exports = ({
       } = await dialog.showSaveDialog(
         win,
         {
-          title: i18next.t('common.exportDB.saveDialog.title'),
+          title: i18next.t('exportDB.saveDialog.title'),
           defaultPath,
           buttonLabel: i18next
-            .t('common.exportDB.saveDialog.buttonLabel'),
+            .t('exportDB.saveDialog.buttonLabel'),
           filters: [{ name: 'ZIP', extensions: ['zip'] }]
         }
       )
@@ -70,7 +70,7 @@ module.exports = ({
 
       await showLoadingWindow({
         description: i18next
-          .t('common.exportDB.loadingWindow.description')
+          .t('exportDB.loadingWindow.description')
       })
 
       const progressHandler = async (args) => {
@@ -79,9 +79,9 @@ module.exports = ({
           prettyArchiveSize
         } = args ?? {}
 
-        const _description = i18next.t('common.exportDB.loadingWindow.description')
+        const _description = i18next.t('exportDB.loadingWindow.description')
         const _archived = i18next.t(
-          'common.exportDB.loadingWindow.archiveSize',
+          'exportDB.loadingWindow.archiveSize',
           { prettyArchiveSize }
         )
 
@@ -103,18 +103,18 @@ module.exports = ({
 
       await showMessageModalDialog(win, {
         buttons: [
-          i18next.t('common.exportDB.modalDialog.confirmButtonText')
+          i18next.t('common.confirmButtonText')
         ],
         defaultId: 0,
-        title: i18next.t('common.exportDB.modalDialog.title'),
-        message: i18next.t('common.exportDB.modalDialog.message')
+        title: i18next.t('exportDB.modalDialog.title'),
+        message: i18next.t('exportDB.modalDialog.message')
       })
     } catch (err) {
       try {
         await hideLoadingWindow()
         await showErrorModalDialog(
           win,
-          i18next.t('common.exportDB.modalDialog.title'),
+          i18next.t('exportDB.modalDialog.title'),
           err
         )
       } catch (err) {

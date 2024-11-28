@@ -27,8 +27,8 @@ module.exports = async (win, opts = {}) => {
   } = await dialog.showMessageBox(parentWin, {
     type: 'info',
     buttons: [
-      i18next.t('common.showMessageModalDialog.cancelButtonText'),
-      i18next.t('common.showMessageModalDialog.confirmButtonText')
+      i18next.t('common.cancelButtonText'),
+      i18next.t('common.confirmButtonText')
     ],
     defaultId: 1,
     cancelId: 0,

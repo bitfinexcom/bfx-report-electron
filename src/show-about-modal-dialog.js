@@ -34,9 +34,9 @@ module.exports = () => {
           message: productName,
           detail,
           buttons: [
-            i18next.t('common.showAboutModalDialog.copyButtonText'),
-            i18next.t('common.showAboutModalDialog.gitHubButtonText'),
-            i18next.t('common.showAboutModalDialog.confirmButtonText')
+            i18next.t('showAboutModalDialog.copyButtonText'),
+            i18next.t('showAboutModalDialog.gitHubButtonText'),
+            i18next.t('common.confirmButtonText')
           ],
           defaultId: 2,
           cancelId: 2,

@@ -120,11 +120,11 @@
 
       try {
         description = await window.bfxReportElectronApi?.translate({
-            key: 'common.appInitError.description',
+            key: 'appInitError.description',
             opts: { defaultValue: defaultDescription }
           }) ?? defaultDescription
         closeBtnText = await window.bfxReportElectronApi?.translate({
-            key: 'common.appInitError.closeBtnText',
+            key: 'appInitError.closeBtnText',
             opts: { defaultValue: defaultCloseBtnText }
           }) ?? defaultCloseBtnText
 

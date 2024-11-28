@@ -94,11 +94,11 @@ module.exports = (ipc) => {
 
         await resolveModalDialogInSequence(() => showMessageModalDialog(win, {
           type,
-          title: i18next.t('common.restoreDB.messageModalDialog.title'),
+          title: i18next.t('restoreDB.messageModalDialog.title'),
           message: hasNotDbBeenRestored
-            ? i18next.t('common.restoreDB.messageModalDialog.dbNotRestoredMessage')
-            : i18next.t('common.restoreDB.messageModalDialog.dbRestoredMessage'),
-          buttons: [i18next.t('common.restoreDB.messageModalDialog.confirmButtonText')],
+            ? i18next.t('restoreDB.messageModalDialog.dbNotRestoredMessage')
+            : i18next.t('restoreDB.messageModalDialog.dbRestoredMessage'),
+          buttons: [i18next.t('common.confirmButtonText')],
           defaultId: 0,
           cancelId: 0,
           shouldParentWindowBeShown: true
@@ -117,18 +117,18 @@ module.exports = (ipc) => {
       ) {
         const haveNotAllDbDataBeenRemoved = state === PROCESS_MESSAGES.ALL_TABLE_HAVE_NOT_BEEN_REMOVED
         const message = haveNotAllDbDataBeenRemoved
-          ? i18next.t('common.removeDB.messageModalDialog.dbDataHasNotBeenRemovedMessage')
-          : i18next.t('common.removeDB.messageModalDialog.dbDataHasBeenRemovedMessage')
+          ? i18next.t('removeDB.messageModalDialog.dbDataHasNotBeenRemovedMessage')
+          : i18next.t('removeDB.messageModalDialog.dbDataHasBeenRemovedMessage')
         const type = haveNotAllDbDataBeenRemoved
           ? 'error'
           : 'info'
 
         await resolveModalDialogInSequence(() => showMessageModalDialog(win, {
           type,
-          title: i18next.t('common.removeDB.messageModalDialog.dbRemovingTitle'),
+          title: i18next.t('removeDB.messageModalDialog.dbRemovingTitle'),
           message,
           buttons: [
-            i18next.t('common.removeDB.messageModalDialog.confirmButtonText')
+            i18next.t('common.confirmButtonText')
           ],
           defaultId: 0,
           cancelId: 0,
@@ -143,18 +143,18 @@ module.exports = (ipc) => {
       ) {
         const isBackupError = state === PROCESS_MESSAGES.ERROR_BACKUP
         const message = isBackupError
-          ? i18next.t('common.backupDB.dbBackupHasFailedMessage')
-          : i18next.t('common.backupDB.dbBackupHasCompletedMessage')
+          ? i18next.t('backupDB.dbBackupHasFailedMessage')
+          : i18next.t('backupDB.dbBackupHasCompletedMessage')
         const type = isBackupError
           ? 'error'
           : 'info'
 
         await resolveModalDialogInSequence(() => showMessageModalDialog(win, {
           type,
-          title: i18next.t('common.backupDB.backupDBTitle'),
+          title: i18next.t('backupDB.backupDBTitle'),
           message,
           buttons: [
-            i18next.t('common.backupDB.confirmButtonText')
+            i18next.t('common.confirmButtonText')
           ],
           defaultId: 0,
           cancelId: 0,
@@ -200,11 +200,11 @@ module.exports = (ipc) => {
           ? 'error'
           : 'info'
         const message = isMigrationsError
-          ? i18next.t('common.migrationDB.messageModalDialog.dbMigrationHasFailedMessage')
-          : i18next.t('common.migrationDB.messageModalDialog.dbMigrationHasCompletedMessage')
+          ? i18next.t('migrationDB.messageModalDialog.dbMigrationHasFailedMessage')
+          : i18next.t('migrationDB.messageModalDialog.dbMigrationHasCompletedMessage')
         const buttons = isMigrationsError
-          ? [i18next.t('common.migrationDB.messageModalDialog.cancelButtonText')]
-          : [i18next.t('common.migrationDB.messageModalDialog.confirmButtonText')]
+          ? [i18next.t('common.cancelButtonText')]
+          : [i18next.t('common.confirmButtonText')]
 
         await resolveModalDialogInSequence(() => showMessageModalDialog(win, {
           type,
@@ -223,13 +223,13 @@ module.exports = (ipc) => {
         } = await resolveModalDialogInSequence(() => showMessageModalDialog(win, {
           type: 'question',
           title: i18next
-            .t('common.migrationDB.actionRequestModalDialog.title'),
+            .t('migrationDB.actionRequestModalDialog.title'),
           message: i18next
-            .t('common.migrationDB.actionRequestModalDialog.message'),
+            .t('migrationDB.actionRequestModalDialog.message'),
           buttons: [
-            i18next.t('common.migrationDB.actionRequestModalDialog.exitButtonText'),
-            i18next.t('common.migrationDB.actionRequestModalDialog.restoreDBButtonText'),
-            i18next.t('common.migrationDB.actionRequestModalDialog.removeDBButtonText')
+            i18next.t('migrationDB.actionRequestModalDialog.exitButtonText'),
+            i18next.t('migrationDB.actionRequestModalDialog.restoreDBButtonText'),
+            i18next.t('migrationDB.actionRequestModalDialog.removeDBButtonText')
           ],
           shouldParentWindowBeShown: true
         }))
@@ -252,18 +252,18 @@ module.exports = (ipc) => {
       }
       if (state === PROCESS_MESSAGES.REQUEST_SHOULD_ALL_TABLES_BE_REMOVED) {
         const title = data.isNotDbRestored
-          ? i18next.t('common.removeDB.messageModalDialog.dbHasNotBeenRestoredTitle')
-          : i18next.t('common.removeDB.messageModalDialog.removeDBTitle')
+          ? i18next.t('removeDB.messageModalDialog.dbHasNotBeenRestoredTitle')
+          : i18next.t('removeDB.messageModalDialog.removeDBTitle')
 
         const {
           btnId
         } = await resolveModalDialogInSequence(() => showMessageModalDialog(win, {
           type: 'question',
           title,
-          message: i18next.t('common.removeDB.messageModalDialog.removeDBMessage'),
+          message: i18next.t('removeDB.messageModalDialog.removeDBMessage'),
           buttons: [
-            i18next.t('common.removeDB.messageModalDialog.cancelButtonText'),
-            i18next.t('common.removeDB.messageModalDialog.confirmButtonText')
+            i18next.t('common.cancelButtonText'),
+            i18next.t('common.confirmButtonText')
           ],
           shouldParentWindowBeShown: true
         }))
