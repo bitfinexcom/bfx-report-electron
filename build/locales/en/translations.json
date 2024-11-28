@@ -1,224 +1,7 @@
 {
   "common": {
-    "title": "Report",
-    "appInitError": {
-      "description": "Application initialization error",
-      "closeBtnText": "Close"
-    },
-    "errorManager": {
-      "failedToGetDocsPath": {
-        "title": "The OS Documents directory has been misconfigured",
-        "message": "This indicates that your OS `Documents` directory has been misconfigured.\n\rPlease, set it to a valid location or reset it to the default"
-      },
-      "errorModalDialog": {
-        "errBoxTitle": "Bug report",
-        "errBoxDescription": "A new GitHub issue will be opened",
-        "zenityBtn": "Report and Exit",
-        "confirmButtonText": "Report",
-        "cancelButtonText": "Cancel",
-        "title": "Should a bug report be submitted?"
-      }
-    },
-    "nativeNotification": {
-      "defaulTitle": "Bitfinex Report",
-      "defaultBody": "Notification",
-      "sync": {
-        "completedBody": "Data sync completed successfully!",
-        "interruptedBody": "Data sync interrupted!",
-        "errorBody": "Data sync completed with an error!"
-      },
-      "trxTaxReport": {
-        "completedBody": "Your tax report is ready!",
-        "errorBody": "An unexpected error occurred while generating the tax report!"
-      }
-    },
-    "autoUpdater": {
-      "title": "Update",
-      "confirmButtonText": "OK",
-      "cancelButtonText": "Cancel",
-      "loadingWindow": {
-        "description": "Updating..."
-      },
-      "errorToast": {
-        "title": "Application update failed",
-        "inetIssueTitle": "Internet disconnected"
-      },
-      "checkingForUpdateToast": {
-        "title": "Checking for update"
-      },
-      "updateAvailableToast": {
-        "title": "An update to v{{version}} is available",
-        "description": "Starting download..."
-      },
-      "updateNotAvailableToast": {
-        "title": "No updates available"
-      },
-      "downloadProgressToast": {
-        "title": "Downloading..."
-      },
-      "updateDownloadedToast": {
-        "title": "Update v{{version}} downloaded",
-        "description": "Should the app be updated right now?"
-      }
-    },
-    "restoreDB": {
-      "modalDialog": {
-        "title": "Select DB backup file",
-        "confirmButtonText": "OK",
-        "cancelButtonText": "Cancel"
-      },
-      "messageModalDialog": {
-        "title": "DB restoring",
-        "message": "Suitable DB backup file has not been found",
-        "dbRestoredMessage": "DB has been restored",
-        "dbNotRestoredMessage": "DB has not been restored",
-        "confirmButtonText": "OK"
-      }
-    },
-    "showDocs": {
-      "modalDialog": {
-        "title": "User manual",
-        "cancelButtonText": "Close"
-      }
-    },
-    "printToPDF": {
-      "defaultTemplate": "No data",
-      "pagination": {
-        "page": "Page",
-        "from": "from"
-      }
-    },
-    "changeReportsFolder": {
-      "modalDialog": {
-        "title": "Change reports folder",
-        "buttonLabel": "Select"
-      }
-    },
-    "changeSyncFrequency": {
-      "title": "Change sync frequency",
-      "timeFormatModalDialog": {
-        "title": "Set time format",
-        "confirmButtonText": "OK",
-        "cancelButtonText": "Cancel",
-        "inputOptions": {
-          "mins": "Mins",
-          "hours": "Hours",
-          "days": "Days"
-        }
-      },
-      "timeModalDialog": {
-        "title": "Set sync frequency",
-        "confirmButtonText": "OK",
-        "cancelButtonText": "Cancel"
-      }
-    },
-    "enforceMacOSAppLocation": {
-      "appLocationModalDialog": {
-        "message": "Move to Applications folder?",
-        "detail": "{{productName}} must live in the Applications folder to be able to run correctly",
-        "confirmButtonText": "Move to Applications folder",
-        "cancelButtonText": "Quit {{productName}}"
-      },
-      "loadingWindow": {
-        "description": "Moving the app..."
-      },
-      "appRunningModalDialog": {
-        "message": "Another version of {{productName}} is currently running. Quit it, then launch this version of the app again",
-        "confirmButtonText": "OK"
-      }
-    },
-    "showAboutModalDialog": {
-      "confirmButtonText": "OK",
-      "copyButtonText": "Copy",
-      "gitHubButtonText": "Open GitHub"
-    },
-    "showMessageModalDialog": {
-      "confirmButtonText": "OK",
-      "cancelButtonText": "Cancel"
-    },
-    "showErrorModalDialog": {
-      "confirmButtonText": "OK",
-      "enoentErrorMessage": "No such file or directory",
-      "eaccesErrorMessage": "Permission denied",
-      "invalidFilePathErrorMessage": "Invalid file path",
-      "invalidFileNameInArchErrorMessage": "Invalid file name in archive",
-      "dbImportingErrorMessage": "The database has not been imported",
-      "dbRemovingErrorMessage": "The database has not been removed",
-      "reportsFolderChangingErrorMessage": "The reports folder has not been changed",
-      "syncFrequencyChangingErrorMessage": "The sync frequency has not been changed",
-      "unexpectedExceptionMessage": "An unexpected exception occurred"
-    },
-    "exportDB": {
-      "saveDialog": {
-        "title": "Database export",
-        "buttonLabel": "Export"
-      },
-      "modalDialog": {
-        "confirmButtonText": "OK",
-        "title": "Database export",
-        "message": "Exported successfully"
-      },
-      "loadingWindow": {
-        "description": "Exporting DB ...",
-        "archiveSize": "archive size {{prettyArchiveSize}}"
-      }
-    },
-    "importDB": {
-      "openDialog": {
-        "title": "Database import",
-        "buttonLabel": "Import"
-      },
-      "modalDialog": {
-        "title": "Database import"
-      },
-      "loadingWindow": {
-        "description": "Importing DB ...",
-        "unzippedBytes": "DB size {{prettyUnzippedBytes}}"
-      }
-    },
-    "removeDB": {
-      "modalDialog": {
-        "clearDataTitle": "Clear all data",
-        "removeDBTitle": "Remove database",
-        "clearDataMessage": "Are you sure you want to clear all data?",
-        "removeDBMessage": "Are you sure you want to remove the database?"
-      },
-      "messageModalDialog": {
-        "dbRemovingTitle": "DB removing",
-        "dbDataHasBeenRemovedMessage": "DB data has been removed",
-        "dbDataHasNotBeenRemovedMessage": "DB data has not been removed",
-        "dbHasNotBeenRestoredTitle": "DB has not been restored",
-        "removeDBTitle": "Remove database",
-        "removeDBMessage": "Should all tables be removed?",
-        "confirmButtonText": "OK",
-        "cancelButtonText": "Cancel"
-      },
-      "loadingWindow": {
-        "removingDBDescription": "Removing DB ...",
-        "clearingAllDataDescription": "Clearing all data ..."
-      }
-    },
-    "backupDB": {
-      "backupDBTitle": "DB backup",
-      "dbBackupHasCompletedMessage": "DB backup has completed successfully",
-      "dbBackupHasFailedMessage": "DB backup has failed",
-      "confirmButtonText": "OK"
-    },
-    "migrationDB": {
-      "messageModalDialog": {
-        "dbMigrationHasFailedMessage": "DВ migration has failed",
-        "dbMigrationHasCompletedMessage": "DB migration has completed successfully",
-        "confirmButtonText": "OK",
-        "cancelButtonText": "Cancel"
-      },
-      "actionRequestModalDialog": {
-        "title": "The migration has failed",
-        "message": "What should be done?",
-        "exitButtonText": "Exit",
-        "restoreDBButtonText": "Try to restore DB",
-        "removeDBButtonText": "Remove DB"
-      }
-    }
+    "confirmButtonText": "OK",
+    "cancelButtonText": "Cancel"
   },
   "menu": {
     "macMainSubmenu": {
@@ -269,6 +52,201 @@
       "userManualLabel": "User Manual",
       "changelogLabel": "Changelog",
       "aboutLabel": "About {{appName}}"
+    }
+  },
+  "appInitError": {
+    "description": "Application initialization error",
+    "closeBtnText": "Close"
+  },
+  "errorManager": {
+    "failedToGetDocsPath": {
+      "title": "The OS Documents directory has been misconfigured",
+      "message": "This indicates that your OS `Documents` directory has been misconfigured.\n\rPlease, set it to a valid location or reset it to the default"
+    },
+    "errorModalDialog": {
+      "errBoxTitle": "Bug report",
+      "errBoxDescription": "A new GitHub issue will be opened",
+      "zenityBtn": "Report and Exit",
+      "confirmButtonText": "Report",
+      "title": "Should a bug report be submitted?"
+    }
+  },
+  "nativeNotification": {
+    "defaulTitle": "Bitfinex Report",
+    "defaultBody": "Notification",
+    "sync": {
+      "completedBody": "Data sync completed successfully!",
+      "interruptedBody": "Data sync interrupted!",
+      "errorBody": "Data sync completed with an error!"
+    },
+    "trxTaxReport": {
+      "completedBody": "Your tax report is ready!",
+      "errorBody": "An unexpected error occurred while generating the tax report!"
+    }
+  },
+  "autoUpdater": {
+    "title": "Update",
+    "loadingWindow": {
+      "description": "Updating..."
+    },
+    "errorToast": {
+      "title": "Application update failed",
+      "inetIssueTitle": "Internet disconnected"
+    },
+    "checkingForUpdateToast": {
+      "title": "Checking for update"
+    },
+    "updateAvailableToast": {
+      "title": "An update to v{{version}} is available",
+      "description": "Starting download..."
+    },
+    "updateNotAvailableToast": {
+      "title": "No updates available"
+    },
+    "downloadProgressToast": {
+      "title": "Downloading..."
+    },
+    "updateDownloadedToast": {
+      "title": "Update v{{version}} downloaded",
+      "description": "Should the app be updated right now?"
+    }
+  },
+  "restoreDB": {
+    "modalDialog": {
+      "title": "Select DB backup file"
+    },
+    "messageModalDialog": {
+      "title": "DB restoring",
+      "message": "Suitable DB backup file has not been found",
+      "dbRestoredMessage": "DB has been restored",
+      "dbNotRestoredMessage": "DB has not been restored"
+    }
+  },
+  "showDocs": {
+    "modalDialog": {
+      "title": "User manual",
+      "cancelButtonText": "Close"
+    }
+  },
+  "printToPDF": {
+    "defaultTemplate": "No data",
+    "pagination": {
+      "page": "Page",
+      "from": "from"
+    }
+  },
+  "changeReportsFolder": {
+    "modalDialog": {
+      "title": "Change reports folder",
+      "buttonLabel": "Select"
+    }
+  },
+  "changeSyncFrequency": {
+    "title": "Change sync frequency",
+    "timeFormatModalDialog": {
+      "title": "Set time format",
+      "inputOptions": {
+        "mins": "Mins",
+        "hours": "Hours",
+        "days": "Days"
+      }
+    },
+    "timeModalDialog": {
+      "title": "Set sync frequency"
+    }
+  },
+  "enforceMacOSAppLocation": {
+    "appLocationModalDialog": {
+      "message": "Move to Applications folder?",
+      "detail": "{{productName}} must live in the Applications folder to be able to run correctly",
+      "confirmButtonText": "Move to Applications folder",
+      "cancelButtonText": "Quit {{productName}}"
+    },
+    "loadingWindow": {
+      "description": "Moving the app..."
+    },
+    "appRunningModalDialog": {
+      "message": "Another version of {{productName}} is currently running. Quit it, then launch this version of the app again"
+    }
+  },
+  "showAboutModalDialog": {
+    "copyButtonText": "Copy",
+    "gitHubButtonText": "Open GitHub"
+  },
+  "showErrorModalDialog": {
+    "enoentErrorMessage": "No such file or directory",
+    "eaccesErrorMessage": "Permission denied",
+    "invalidFilePathErrorMessage": "Invalid file path",
+    "invalidFileNameInArchErrorMessage": "Invalid file name in archive",
+    "dbImportingErrorMessage": "The database has not been imported",
+    "dbRemovingErrorMessage": "The database has not been removed",
+    "reportsFolderChangingErrorMessage": "The reports folder has not been changed",
+    "syncFrequencyChangingErrorMessage": "The sync frequency has not been changed",
+    "unexpectedExceptionMessage": "An unexpected exception occurred"
+  },
+  "exportDB": {
+    "saveDialog": {
+      "title": "Database export",
+      "buttonLabel": "Export"
+    },
+    "modalDialog": {
+      "title": "Database export",
+      "message": "Exported successfully"
+    },
+    "loadingWindow": {
+      "description": "Exporting DB ...",
+      "archiveSize": "archive size {{prettyArchiveSize}}"
+    }
+  },
+  "importDB": {
+    "openDialog": {
+      "title": "Database import",
+      "buttonLabel": "Import"
+    },
+    "modalDialog": {
+      "title": "Database import"
+    },
+    "loadingWindow": {
+      "description": "Importing DB ...",
+      "unzippedBytes": "DB size {{prettyUnzippedBytes}}"
+    }
+  },
+  "removeDB": {
+    "modalDialog": {
+      "clearDataTitle": "Clear all data",
+      "removeDBTitle": "Remove database",
+      "clearDataMessage": "Are you sure you want to clear all data?",
+      "removeDBMessage": "Are you sure you want to remove the database?"
+    },
+    "messageModalDialog": {
+      "dbRemovingTitle": "DB removing",
+      "dbDataHasBeenRemovedMessage": "DB data has been removed",
+      "dbDataHasNotBeenRemovedMessage": "DB data has not been removed",
+      "dbHasNotBeenRestoredTitle": "DB has not been restored",
+      "removeDBTitle": "Remove database",
+      "removeDBMessage": "Should all tables be removed?"
+    },
+    "loadingWindow": {
+      "removingDBDescription": "Removing DB ...",
+      "clearingAllDataDescription": "Clearing all data ..."
+    }
+  },
+  "backupDB": {
+    "backupDBTitle": "DB backup",
+    "dbBackupHasCompletedMessage": "DB backup has completed successfully",
+    "dbBackupHasFailedMessage": "DB backup has failed"
+  },
+  "migrationDB": {
+    "messageModalDialog": {
+      "dbMigrationHasFailedMessage": "DВ migration has failed",
+      "dbMigrationHasCompletedMessage": "DB migration has completed successfully"
+    },
+    "actionRequestModalDialog": {
+      "title": "The migration has failed",
+      "message": "What should be done?",
+      "exitButtonText": "Exit",
+      "restoreDBButtonText": "Try to restore DB",
+      "removeDBButtonText": "Remove DB"
     }
   }
 }
