@@ -55,10 +55,10 @@ module.exports = ({
       } = await dialog.showOpenDialog(
         win,
         {
-          title: i18next.t('common.importDB.openDialog.title'),
+          title: i18next.t('importDB.openDialog.title'),
           defaultPath: pathToUserDocuments,
           buttonLabel: i18next
-            .t('common.importDB.openDialog.buttonLabel'),
+            .t('importDB.openDialog.buttonLabel'),
           properties: [
             'openFile',
             'createDirectory',
@@ -88,9 +88,9 @@ module.exports = ({
         } = args ?? {}
 
         const _description = i18next
-          .t('common.importDB.loadingWindow.description')
+          .t('importDB.loadingWindow.description')
         const _unzipped = i18next.t(
-          'common.importDB.loadingWindow.unzippedBytes',
+          'importDB.loadingWindow.unzippedBytes',
           { prettyUnzippedBytes }
         )
 
@@ -105,7 +105,7 @@ module.exports = ({
       await pauseApp({
         loadingWinParams: {
           description: i18next
-            .t('common.importDB.loadingWindow.description')
+            .t('importDB.loadingWindow.description')
         }
       })
       await _rmDbExcludeMain(pathToUserData, DB_FILE_NAME)
@@ -135,7 +135,7 @@ module.exports = ({
           : win
         await showErrorModalDialog(
           _win,
-          i18next.t('common.importDB.modalDialog.title'),
+          i18next.t('importDB.modalDialog.title'),
           err
         )
       } catch (err) {

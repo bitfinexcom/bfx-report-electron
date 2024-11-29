@@ -92,11 +92,11 @@ module.exports = ({
       ? wins.mainWindow
       : BrowserWindow.getFocusedWindow()
     const title = shouldAllTablesBeCleared
-      ? i18next.t('common.removeDB.modalDialog.clearDataTitle')
-      : i18next.t('common.removeDB.modalDialog.removeDBTitle')
+      ? i18next.t('removeDB.modalDialog.clearDataTitle')
+      : i18next.t('removeDB.modalDialog.removeDBTitle')
     const message = shouldAllTablesBeCleared
-      ? i18next.t('common.removeDB.modalDialog.clearDataMessage')
-      : i18next.t('common.removeDB.modalDialog.removeDBMessage')
+      ? i18next.t('removeDB.modalDialog.clearDataMessage')
+      : i18next.t('removeDB.modalDialog.removeDBMessage')
 
     try {
       const {
@@ -122,8 +122,8 @@ module.exports = ({
         },
         loadingWinParams: {
           description: shouldAllTablesBeCleared
-            ? i18next.t('common.removeDB.loadingWindow.clearingAllDataDescription')
-            : i18next.t('common.removeDB.loadingWindow.removingDBDescription')
+            ? i18next.t('removeDB.loadingWindow.clearingAllDataDescription')
+            : i18next.t('removeDB.loadingWindow.removingDBDescription')
         }
       })
 

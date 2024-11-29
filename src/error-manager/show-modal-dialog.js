@@ -54,7 +54,7 @@ const converter = new Converter({
 
 const _fireAlert = (params) => {
   const {
-    title = i18next.t('common.errorManager.errorModalDialog.title'),
+    title = i18next.t('errorManager.errorModalDialog.title'),
     html = '',
     parentWin,
     hasNoParentWin
@@ -112,9 +112,9 @@ const _fireAlert = (params) => {
     icon: 'question',
     focusConfirm: true,
     showConfirmButton: true,
-    confirmButtonText: i18next.t('common.errorManager.errorModalDialog.confirmButtonText'),
+    confirmButtonText: i18next.t('errorManager.errorModalDialog.confirmButtonText'),
     showCancelButton: true,
-    cancelButtonText: i18next.t('common.errorManager.errorModalDialog.cancelButtonText'),
+    cancelButtonText: i18next.t('common.cancelButtonText'),
     timerProgressBar: false,
 
     ...params,
@@ -177,18 +177,18 @@ module.exports = async (params) => {
      * before the translation init
      */
     errBoxTitle = i18next.t(
-      'common.errorManager.errorModalDialog.errBoxTitle',
+      'errorManager.errorModalDialog.errBoxTitle',
       'Bug report'
     ),
     errBoxDescription = i18next.t(
-      'common.errorManager.errorModalDialog.errBoxDescription',
+      'errorManager.errorModalDialog.errBoxDescription',
       'A new GitHub issue will be opened'
     ),
     mdIssue,
     alertOpts = {}
   } = params ?? {}
   const zenityBtn = i18next.t(
-    'common.errorManager.errorModalDialog.zenityBtn',
+    'errorManager.errorModalDialog.zenityBtn',
     'Report and Exit'
   )
 

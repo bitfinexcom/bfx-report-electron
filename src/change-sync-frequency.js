@@ -130,7 +130,7 @@ module.exports = () => {
   }
 
   const timeFormatAlertOptions = {
-    title: i18next.t('common.changeSyncFrequency.timeFormatModalDialog.title'),
+    title: i18next.t('changeSyncFrequency.timeFormatModalDialog.title'),
     icon: 'question',
     customClass: getAlertCustomClassObj({
       title: 'titleColor',
@@ -140,20 +140,20 @@ module.exports = () => {
     focusConfirm: true,
     showCancelButton: true,
     confirmButtonText: i18next
-      .t('common.changeSyncFrequency.timeFormatModalDialog.confirmButtonText'),
+      .t('common.confirmButtonText'),
     cancelButtonText: i18next
-      .t('common.changeSyncFrequency.timeFormatModalDialog.cancelButtonText'),
+      .t('common.cancelButtonText'),
     progressSteps: [1, 2],
     currentProgressStep: 0,
     input: 'radio',
     inputValue: 'hours',
     inputOptions: {
       mins: i18next
-        .t('common.changeSyncFrequency.timeFormatModalDialog.inputOptions.mins'),
+        .t('changeSyncFrequency.timeFormatModalDialog.inputOptions.mins'),
       hours: i18next
-        .t('common.changeSyncFrequency.timeFormatModalDialog.inputOptions.hours'),
+        .t('changeSyncFrequency.timeFormatModalDialog.inputOptions.hours'),
       days: i18next
-        .t('common.changeSyncFrequency.timeFormatModalDialog.inputOptions.days')
+        .t('changeSyncFrequency.timeFormatModalDialog.inputOptions.days')
     },
     willOpen: () => {
       if (!timeFormatAlert.browserWindow) return
@@ -162,7 +162,7 @@ module.exports = () => {
     }
   }
   const alertOptions = {
-    title: i18next.t('common.changeSyncFrequency.timeModalDialog.title'),
+    title: i18next.t('changeSyncFrequency.timeModalDialog.title'),
     icon: 'question',
     customClass: getAlertCustomClassObj({
       title: 'titleColor',
@@ -172,9 +172,9 @@ module.exports = () => {
     focusConfirm: true,
     showCancelButton: true,
     confirmButtonText: i18next
-      .t('common.changeSyncFrequency.timeModalDialog.confirmButtonText'),
+      .t('common.confirmButtonText'),
     cancelButtonText: i18next
-      .t('common.changeSyncFrequency.timeModalDialog.cancelButtonText'),
+      .t('common.cancelButtonText'),
     progressSteps: [1, 2],
     currentProgressStep: 1,
     input: 'range',
@@ -295,7 +295,7 @@ module.exports = () => {
       try {
         await showErrorModalDialog(
           win,
-          i18next.t('common.changeSyncFrequency.title'),
+          i18next.t('changeSyncFrequency.title'),
           err
         )
       } catch (err) {

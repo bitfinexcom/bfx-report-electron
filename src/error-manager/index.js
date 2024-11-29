@@ -216,8 +216,8 @@ const initLogger = () => {
       const error = message.data.join(os.EOL)
 
       if (/Failed to get 'documents' path/gi.test(error)) {
-        const title = i18next.t('common.errorManager.failedToGetDocsPath.title')
-        const msg = i18next.t('common.errorManager.failedToGetDocsPath.message')
+        const title = i18next.t('errorManager.failedToGetDocsPath.title')
+        const msg = i18next.t('errorManager.failedToGetDocsPath.message')
 
         showModalDialog({
           errBoxTitle: title,

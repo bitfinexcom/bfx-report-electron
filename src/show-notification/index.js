@@ -12,8 +12,8 @@ module.exports = (params) => {
   }
 
   const notification = new Notification({
-    title: i18next.t('common.nativeNotification.defaulTitle'),
-    body: i18next.t('common.nativeNotification.defaultBody'),
+    title: i18next.t('nativeNotification.defaulTitle'),
+    body: i18next.t('nativeNotification.defaultBody'),
     silent: false,
     timeoutType: 'never',
     urgency: 'normal',

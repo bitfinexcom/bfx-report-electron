@@ -9,8 +9,8 @@ module.exports = (params) => {
 
   const title = '[BUG REPORT]'
   const description = 'Bug report'
-  const errBoxTitle = i18next.t('common.errorManager.errorModalDialog.errBoxTitle')
-  const errBoxDescription = i18next.t('common.errorManager.errorModalDialog.errBoxDescription')
+  const errBoxTitle = i18next.t('errorManager.errorModalDialog.errBoxTitle')
+  const errBoxDescription = i18next.t('errorManager.errorModalDialog.errBoxDescription')
 
   if (
     error &&

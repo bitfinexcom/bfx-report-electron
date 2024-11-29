@@ -26,7 +26,7 @@ module.exports = () => {
 
       const {
         templateFilePath,
-        template = i18next.t('common.printToPDF.defaultTemplate'),
+        template = i18next.t('printToPDF.defaultTemplate'),
         format = 'portrait',
         orientation = 'Letter',
         uid = null
@@ -74,7 +74,7 @@ module.exports = () => {
     font-weight: 400;
     font-size: 8px;
   ">
-  ${i18next.t('common.printToPDF.pagination.page')} <span class=pageNumber></span> ${i18next.t('common.printToPDF.pagination.from')} <span class=totalPages></span>
+  ${i18next.t('printToPDF.pagination.page')} <span class=pageNumber></span> ${i18next.t('printToPDF.pagination.from')} <span class=totalPages></span>
 </span>`
       })
 

@@ -17,7 +17,7 @@ const _showErrorBox = (win, title = '', message = '') => {
   return showMessageModalDialog(win, {
     type: 'error',
     buttons: [
-      i18next.t('common.showErrorModalDialog.confirmButtonText')
+      i18next.t('common.confirmButtonText')
     ],
     defaultId: 0,
     cancelId: 0,
@@ -28,7 +28,7 @@ const _showErrorBox = (win, title = '', message = '') => {
 
 module.exports = async (win, title = 'Error', err) => {
   if (err.code === 'ENOENT') {
-    const message = i18next.t('common.showErrorModalDialog.enoentErrorMessage')
+    const message = i18next.t('showErrorModalDialog.enoentErrorMessage')
     const content = (err.syscall && err.path)
       ? `${message}, ${err.syscall}: '${err.path}'`
       : message
@@ -36,7 +36,7 @@ module.exports = async (win, title = 'Error', err) => {
     return _showErrorBox(win, title, content)
   }
   if (err.code === 'EACCES') {
-    const message = i18next.t('common.showErrorModalDialog.eaccesErrorMessage')
+    const message = i18next.t('showErrorModalDialog.eaccesErrorMessage')
     const content = (err.syscall && err.path)
       ? `${message}, ${err.syscall}: '${err.path}'`
       : message
@@ -44,12 +44,12 @@ module.exports = async (win, title = 'Error', err) => {
     return _showErrorBox(win, title, content)
   }
   if (err instanceof InvalidFilePathError) {
-    const message = i18next.t('common.showErrorModalDialog.invalidFilePathErrorMessage')
+    const message = i18next.t('showErrorModalDialog.invalidFilePathErrorMessage')
 
     return _showErrorBox(win, title, message)
   }
   if (err instanceof InvalidFileNameInArchiveError) {
-    const message = i18next.t('common.showErrorModalDialog.invalidFileNameInArchErrorMessage')
+    const message = i18next.t('showErrorModalDialog.invalidFileNameInArchErrorMessage')
 
     return _showErrorBox(win, title, message)
   }
@@ -57,27 +57,27 @@ module.exports = async (win, title = 'Error', err) => {
     err instanceof DbImportingError ||
     err instanceof InvalidFolderPathError
   ) {
-    const message = i18next.t('common.showErrorModalDialog.dbImportingErrorMessage')
+    const message = i18next.t('showErrorModalDialog.dbImportingErrorMessage')
 
     return _showErrorBox(win, title, message)
   }
   if (err instanceof DbRemovingError) {
-    const message = i18next.t('common.showErrorModalDialog.dbRemovingErrorMessage')
+    const message = i18next.t('showErrorModalDialog.dbRemovingErrorMessage')
 
     return _showErrorBox(win, title, message)
   }
   if (err instanceof ReportsFolderChangingError) {
-    const message = i18next.t('common.showErrorModalDialog.reportsFolderChangingErrorMessage')
+    const message = i18next.t('showErrorModalDialog.reportsFolderChangingErrorMessage')
 
     return _showErrorBox(win, title, message)
   }
   if (err instanceof SyncFrequencyChangingError) {
-    const message = i18next.t('common.showErrorModalDialog.syncFrequencyChangingErrorMessage')
+    const message = i18next.t('showErrorModalDialog.syncFrequencyChangingErrorMessage')
 
     return _showErrorBox(win, title, message)
   }
 
-  const message = i18next.t('common.showErrorModalDialog.unexpectedExceptionMessage')
+  const message = i18next.t('showErrorModalDialog.unexpectedExceptionMessage')
 
   return _showErrorBox(win, title, message)
 }

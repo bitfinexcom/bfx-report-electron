@@ -56,7 +56,7 @@ const converter = new Converter({
 const _fireAlert = (params) => {
   const {
     type = 'info',
-    title = i18next.t('common.showDocs.modalDialog.title'),
+    title = i18next.t('showDocs.modalDialog.title'),
     html
   } = params
   const win = wins.mainWindow
@@ -109,7 +109,7 @@ const _fireAlert = (params) => {
     showConfirmButton: false,
     focusCancel: true,
     showCancelButton: true,
-    cancelButtonText: i18next.t('common.showDocs.modalDialog.cancelButtonText'),
+    cancelButtonText: i18next.t('showDocs.modalDialog.cancelButtonText'),
     timerProgressBar: false,
 
     willOpen: () => {

@@ -1,224 +1,7 @@
 {
   "common": {
-    "title": "Отчет",
-    "appInitError": {
-      "description": "Ошибка инициализации приложения",
-      "closeBtnText": "Закрыть"
-    },
-    "errorManager": {
-      "failedToGetDocsPath": {
-        "title": "Каталог Документы ОС был неправильно настроен",
-        "message": "Это означает, что каталог `Документы` вашей ОС был неправильно настроен.\n\rПожалуйста, укажите правильное расположение или сбросьте его до значений по умолчанию"
-      },
-      "errorModalDialog": {
-        "errBoxTitle": "Отчет об ошибке",
-        "errBoxDescription": "Будет открыта новая проблема в GitHub",
-        "zenityBtn": "Отправить Отчет и Выйти",
-        "confirmButtonText": "Отправить Отчет",
-        "cancelButtonText": "Отменить",
-        "title": "Должен ли быть отправлен отчет об ошибке?"
-      }
-    },
-    "nativeNotification": {
-      "defaulTitle": "Bitfinex Report",
-      "defaultBody": "Уведомление",
-      "sync": {
-        "completedBody": "Синхронизация данных успешно завершена!",
-        "interruptedBody": "Синхронизация данных прервана!",
-        "errorBody": "Синхронизация данных завершена с ошибкой!"
-      },
-      "trxTaxReport": {
-        "completedBody": "Ваш налоговый отчет готов!",
-        "errorBody": "При формировании налогового отчета произошла непредвиденная ошибка!"
-      }
-    },
-    "autoUpdater": {
-      "title": "Обновление",
-      "confirmButtonText": "OK",
-      "cancelButtonText": "Отменить",
-      "loadingWindow": {
-        "description": "Обновление..."
-      },
-      "errorToast": {
-        "title": "Обновление приложения не удалось",
-        "inetIssueTitle": "Интернет отключен"
-      },
-      "checkingForUpdateToast": {
-        "title": "Проверка обновления"
-      },
-      "updateAvailableToast": {
-        "title": "Доступно обновление до версии v{{version}}",
-        "description": "Начинаем загрузку..."
-      },
-      "updateNotAvailableToast": {
-        "title": "Нет доступных обновлений"
-      },
-      "downloadProgressToast": {
-        "title": "Загрузка..."
-      },
-      "updateDownloadedToast": {
-        "title": "Обновление v{{version}} загружено",
-        "description": "Стоит ли обновить приложение прямо сейчас?"
-      }
-    },
-    "restoreDB": {
-      "modalDialog": {
-        "title": "Выберите файл резервной копии БД",
-        "confirmButtonText": "OK",
-        "cancelButtonText": "Отменить"
-      },
-      "messageModalDialog": {
-        "title": "Восстановление БД",
-        "message": "Подходящий файл резервной копии БД не найден",
-        "dbRestoredMessage": "БД была восстановлена",
-        "dbNotRestoredMessage": "БД не была восстановлена",
-        "confirmButtonText": "OK"
-      }
-    },
-    "showDocs": {
-      "modalDialog": {
-        "title": "Руководство пользователя",
-        "cancelButtonText": "Закрыть"
-      }
-    },
-    "printToPDF": {
-      "defaultTemplate": "Нет данных",
-      "pagination": {
-        "page": "Страница",
-        "from": "из"
-      }
-    },
-    "changeReportsFolder": {
-      "modalDialog": {
-        "title": "Изменить папку отчетов",
-        "buttonLabel": "Выбрать"
-      }
-    },
-    "changeSyncFrequency": {
-      "title": "Изменить частоту синхронизации",
-      "timeFormatModalDialog": {
-        "title": "Установить формат времени",
-        "confirmButtonText": "OK",
-        "cancelButtonText": "Отмена",
-        "inputOptions": {
-          "mins": "Мин.",
-          "hours": "Часы",
-          "days": "Дни"
-        }
-      },
-      "timeModalDialog": {
-        "title": "Установить частоту синхронизации",
-        "confirmButtonText": "OK",
-        "cancelButtonText": "Отмена"
-      }
-    },
-    "enforceMacOSAppLocation": {
-      "appLocationModalDialog": {
-        "message": "Переместить в папку Приложения?",
-        "detail": "{{productName}} должен находиться в папке Приложения для корректной работы",
-        "confirmButtonText": "Переместить в папку Приложения",
-        "cancelButtonText": "Выйти из {{productName}}"
-      },
-      "loadingWindow": {
-        "description": "Перемещение приложения..."
-      },
-      "appRunningModalDialog": {
-        "message": "В настоящее время запущена другая версия {{productName}}. Закройте ее, затем снова запустите эту версию приложения",
-        "confirmButtonText": "OK"
-      }
-    },
-    "showAboutModalDialog": {
-      "confirmButtonText": "OK",
-      "copyButtonText": "Копировать",
-      "gitHubButtonText": "Открыть GitHub"
-    },
-    "showMessageModalDialog": {
-      "confirmButtonText": "OK",
-      "cancelButtonText": "Отмена"
-    },
-    "showErrorModalDialog": {
-      "confirmButtonText": "OK",
-      "enoentErrorMessage": "Данный файл или каталог отсутствует",
-      "eaccesErrorMessage": "Доступ запрещен",
-      "invalidFilePathErrorMessage": "Неверный путь к файлу",
-      "invalidFileNameInArchErrorMessage": "Неверное имя файла в архиве",
-      "dbImportingErrorMessage": "База данных не была импортирована",
-      "dbRemovingErrorMessage": "База данных не была удалена",
-      "reportsFolderChangingErrorMessage": "Папка отчетов не была изменена",
-      "syncFrequencyChangingErrorMessage": "Частота синхронизации не была изменена",
-      "unexpectedExceptionMessage": "Произошло неожиданное исключение"
-    },
-    "exportDB": {
-      "saveDialog": {
-        "title": "Экспорт базы данных",
-        "buttonLabel": "Экспортировать"
-      },
-      "modalDialog": {
-        "confirmButtonText": "OK",
-        "title": "Экспорт базы данных",
-        "message": "Экспортирована успешно"
-      },
-      "loadingWindow": {
-        "description": "Экспортирование БД ...",
-        "archiveSize": "размер архива {{prettyArchiveSize}}"
-      }
-    },
-    "importDB": {
-      "openDialog": {
-        "title": "Импорт базы данных",
-        "buttonLabel": "Импортировать"
-      },
-      "modalDialog": {
-        "title": "Импорт базы данных"
-      },
-      "loadingWindow": {
-        "description": "Импортирование БД ...",
-        "unzippedBytes": "размер БД {{prettyUnzippedBytes}}"
-      }
-    },
-    "removeDB": {
-      "modalDialog": {
-        "clearDataTitle": "Очистить все данные",
-        "removeDBTitle": "Удалить базу данных",
-        "clearDataMessage": "Вы уверены, что хотите удалить все данные?",
-        "removeDBMessage": "Вы уверены, что хотите удалить базу данных?"
-      },
-      "messageModalDialog": {
-        "dbRemovingTitle": "Удаление БД",
-        "dbDataHasBeenRemovedMessage": "Данные БД были удалены",
-        "dbDataHasNotBeenRemovedMessage": "Данные БД не были удалены",
-        "dbHasNotBeenRestoredTitle": "БД не восстановлена",
-        "removeDBTitle": "Удалить базу данных",
-        "removeDBMessage": "Следует ли удалить все таблицы?",
-        "confirmButtonText": "OK",
-        "cancelButtonText": "Отмена"
-      },
-      "loadingWindow": {
-        "removingDBDescription": "Удаление БД ...",
-        "clearingAllDataDescription": "Очистка всех данные ..."
-      }
-    },
-    "backupDB": {
-      "backupDBTitle": "Резервное копирование БД",
-      "dbBackupHasCompletedMessage": "Резервное копирование БД успешно завершено",
-      "dbBackupHasFailedMessage": "Резервное копирование БД не удалось",
-      "confirmButtonText": "OK"
-    },
-    "migrationDB": {
-      "messageModalDialog": {
-        "dbMigrationHasFailedMessage": "Миграция БД не удалась",
-        "dbMigrationHasCompletedMessage": "Миграция БД успешно завершена",
-        "confirmButtonText": "OK",
-        "cancelButtonText": "Отмена"
-      },
-      "actionRequestModalDialog": {
-        "title": "Миграция не удалась",
-        "message": "Что следует сделать?",
-        "exitButtonText": "Выход",
-        "restoreDBButtonText": "Попробовать восстановить БД",
-        "removeDBButtonText": "Удалить БД"
-      }
-    }
+    "confirmButtonText": "OK",
+    "cancelButtonText": "Отмена"
   },
   "menu": {
     "macMainSubmenu": {
@@ -269,6 +52,201 @@
       "userManualLabel": "Руководство Пользователя",
       "changelogLabel": "Журнал Изменений",
       "aboutLabel": "О {{appName}}"
+    }
+  },
+  "appInitError": {
+    "description": "Ошибка инициализации приложения",
+    "closeBtnText": "Закрыть"
+  },
+  "errorManager": {
+    "failedToGetDocsPath": {
+      "title": "Каталог Документы ОС был неправильно настроен",
+      "message": "Это означает, что каталог `Документы` вашей ОС был неправильно настроен.\n\rПожалуйста, укажите правильное расположение или сбросьте его до значений по умолчанию"
+    },
+    "errorModalDialog": {
+      "errBoxTitle": "Отчет об ошибке",
+      "errBoxDescription": "Будет открыта новая проблема в GitHub",
+      "zenityBtn": "Отправить Отчет и Выйти",
+      "confirmButtonText": "Отправить Отчет",
+      "title": "Должен ли быть отправлен отчет об ошибке?"
+    }
+  },
+  "nativeNotification": {
+    "defaulTitle": "Bitfinex Report",
+    "defaultBody": "Уведомление",
+    "sync": {
+      "completedBody": "Синхронизация данных успешно завершена!",
+      "interruptedBody": "Синхронизация данных прервана!",
+      "errorBody": "Синхронизация данных завершена с ошибкой!"
+    },
+    "trxTaxReport": {
+      "completedBody": "Ваш налоговый отчет готов!",
+      "errorBody": "При формировании налогового отчета произошла непредвиденная ошибка!"
+    }
+  },
+  "autoUpdater": {
+    "title": "Обновление",
+    "loadingWindow": {
+      "description": "Обновление..."
+    },
+    "errorToast": {
+      "title": "Обновление приложения не удалось",
+      "inetIssueTitle": "Интернет отключен"
+    },
+    "checkingForUpdateToast": {
+      "title": "Проверка обновления"
+    },
+    "updateAvailableToast": {
+      "title": "Доступно обновление до версии v{{version}}",
+      "description": "Начинаем загрузку..."
+    },
+    "updateNotAvailableToast": {
+      "title": "Нет доступных обновлений"
+    },
+    "downloadProgressToast": {
+      "title": "Загрузка..."
+    },
+    "updateDownloadedToast": {
+      "title": "Обновление v{{version}} загружено",
+      "description": "Стоит ли обновить приложение прямо сейчас?"
+    }
+  },
+  "restoreDB": {
+    "modalDialog": {
+      "title": "Выберите файл резервной копии БД"
+    },
+    "messageModalDialog": {
+      "title": "Восстановление БД",
+      "message": "Подходящий файл резервной копии БД не найден",
+      "dbRestoredMessage": "БД была восстановлена",
+      "dbNotRestoredMessage": "БД не была восстановлена"
+    }
+  },
+  "showDocs": {
+    "modalDialog": {
+      "title": "Руководство пользователя",
+      "cancelButtonText": "Закрыть"
+    }
+  },
+  "printToPDF": {
+    "defaultTemplate": "Нет данных",
+    "pagination": {
+      "page": "Страница",
+      "from": "из"
+    }
+  },
+  "changeReportsFolder": {
+    "modalDialog": {
+      "title": "Изменить папку отчетов",
+      "buttonLabel": "Выбрать"
+    }
+  },
+  "changeSyncFrequency": {
+    "title": "Изменить частоту синхронизации",
+    "timeFormatModalDialog": {
+      "title": "Установить формат времени",
+      "inputOptions": {
+        "mins": "Мин.",
+        "hours": "Часы",
+        "days": "Дни"
+      }
+    },
+    "timeModalDialog": {
+      "title": "Установить частоту синхронизации"
+    }
+  },
+  "enforceMacOSAppLocation": {
+    "appLocationModalDialog": {
+      "message": "Переместить в папку Приложения?",
+      "detail": "{{productName}} должен находиться в папке Приложения для корректной работы",
+      "confirmButtonText": "Переместить в папку Приложения",
+      "cancelButtonText": "Выйти из {{productName}}"
+    },
+    "loadingWindow": {
+      "description": "Перемещение приложения..."
+    },
+    "appRunningModalDialog": {
+      "message": "В настоящее время запущена другая версия {{productName}}. Закройте ее, затем снова запустите эту версию приложения"
+    }
+  },
+  "showAboutModalDialog": {
+    "copyButtonText": "Копировать",
+    "gitHubButtonText": "Открыть GitHub"
+  },
+  "showErrorModalDialog": {
+    "enoentErrorMessage": "Данный файл или каталог отсутствует",
+    "eaccesErrorMessage": "Доступ запрещен",
+    "invalidFilePathErrorMessage": "Неверный путь к файлу",
+    "invalidFileNameInArchErrorMessage": "Неверное имя файла в архиве",
+    "dbImportingErrorMessage": "База данных не была импортирована",
+    "dbRemovingErrorMessage": "База данных не была удалена",
+    "reportsFolderChangingErrorMessage": "Папка отчетов не была изменена",
+    "syncFrequencyChangingErrorMessage": "Частота синхронизации не была изменена",
+    "unexpectedExceptionMessage": "Произошло неожиданное исключение"
+  },
+  "exportDB": {
+    "saveDialog": {
+      "title": "Экспорт базы данных",
+      "buttonLabel": "Экспортировать"
+    },
+    "modalDialog": {
+      "title": "Экспорт базы данных",
+      "message": "Экспортирована успешно"
+    },
+    "loadingWindow": {
+      "description": "Экспортирование БД ...",
+      "archiveSize": "размер архива {{prettyArchiveSize}}"
+    }
+  },
+  "importDB": {
+    "openDialog": {
+      "title": "Импорт базы данных",
+      "buttonLabel": "Импортировать"
+    },
+    "modalDialog": {
+      "title": "Импорт базы данных"
+    },
+    "loadingWindow": {
+      "description": "Импортирование БД ...",
+      "unzippedBytes": "размер БД {{prettyUnzippedBytes}}"
+    }
+  },
+  "removeDB": {
+    "modalDialog": {
+      "clearDataTitle": "Очистить все данные",
+      "removeDBTitle": "Удалить базу данных",
+      "clearDataMessage": "Вы уверены, что хотите удалить все данные?",
+      "removeDBMessage": "Вы уверены, что хотите удалить базу данных?"
+    },
+    "messageModalDialog": {
+      "dbRemovingTitle": "Удаление БД",
+      "dbDataHasBeenRemovedMessage": "Данные БД были удалены",
+      "dbDataHasNotBeenRemovedMessage": "Данные БД не были удалены",
+      "dbHasNotBeenRestoredTitle": "БД не восстановлена",
+      "removeDBTitle": "Удалить базу данных",
+      "removeDBMessage": "Следует ли удалить все таблицы?"
+    },
+    "loadingWindow": {
+      "removingDBDescription": "Удаление БД ...",
+      "clearingAllDataDescription": "Очистка всех данные ..."
+    }
+  },
+  "backupDB": {
+    "backupDBTitle": "Резервное копирование БД",
+    "dbBackupHasCompletedMessage": "Резервное копирование БД успешно завершено",
+    "dbBackupHasFailedMessage": "Резервное копирование БД не удалось"
+  },
+  "migrationDB": {
+    "messageModalDialog": {
+      "dbMigrationHasFailedMessage": "Миграция БД не удалась",
+      "dbMigrationHasCompletedMessage": "Миграция БД успешно завершена"
+    },
+    "actionRequestModalDialog": {
+      "title": "Миграция не удалась",
+      "message": "Что следует сделать?",
+      "exitButtonText": "Выход",
+      "restoreDBButtonText": "Попробовать восстановить БД",
+      "removeDBButtonText": "Удалить БД"
     }
   }
 }
