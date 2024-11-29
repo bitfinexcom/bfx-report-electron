@@ -275,6 +275,10 @@ module.exports = (params) => {
     }
   ]
 
+  if (params?.shouldMenuTemplateBeReturned) {
+    return menuTemplate
+  }
+
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate))
   isMenuInitialized = true
 }
