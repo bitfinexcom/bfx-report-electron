@@ -80,12 +80,14 @@ const _loadUI = async (params) => {
 }
 
 const _createWindow = async (
-  {
+  params,
+  winProps
+) => {
+  const {
     pathname = null,
     winName = 'mainWindow'
-  } = {},
-  props = {}
-) => {
+  } = params ?? {}
+
   const point = electron.screen.getCursorScreenPoint()
   const {
     bounds,
@@ -109,7 +111,7 @@ const _createWindow = async (
       defaultHeight
     })
     : {}
-  const _props = {
+  const props = {
     autoHideMenuBar: true,
     width,
     height,
@@ -124,15 +126,15 @@ const _createWindow = async (
     icon: path.join(__dirname, '../../build/icons/512x512.png'),
     backgroundColor: '#172d3e',
     show: false,
-    ...props,
+    ...winProps,
 
     webPreferences: {
       preload: path.join(__dirname, 'main-renderer-ipc-bridge/preload.js'),
-      ...props?.webPreferences
+      ...winProps?.webPreferences
     }
   }
 
-  wins[winName] = new BrowserWindow(_props)
+  wins[winName] = new BrowserWindow(props)
 
   wins[winName].on('closed', () => {
     wins[winName] = null
@@ -168,7 +170,7 @@ const _createWindow = async (
 
     return res
   }
-  if (_props.center) {
+  if (props.center) {
     centerWindow(wins[winName])
   }
 
@@ -233,7 +235,13 @@ const createMainWindow = async ({
   pathToUserData,
   pathToUserDocuments
 }) => {
-  const winProps = await _createWindow()
+  const winProps = await _createWindow(null, {
+    // TODO: Expose this opts after UI implementation of the menu bar
+    // Remove the default title bar
+    // titleBarStyle: 'hidden',
+    // Expose window controlls in Windows/Linux
+    // ...(isMac ? {} : { titleBarOverlay: true })
+  })
   const {
     win,
     manage,
