@@ -23,7 +23,8 @@ const TRANSLATIONS_INVOKE_METHOD_NAMES = {
   TRANSLATE: 'translate'
 }
 const MENU_INVOKE_METHOD_NAMES = {
-  GET_MENU_TEMPLATE: 'getMenuTemplate'
+  GET_MENU_TEMPLATE: 'getMenuTemplate',
+  EXEC_MENU_CMD: 'execMenuCmd'
 }
 
 const INVOKE_CHANNEL_MAP = new Map([
