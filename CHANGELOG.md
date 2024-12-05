@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [4.31.0] - 2024-11-27
+## [4.31.0] - 2024-12-04
 
 ### Added
 
@@ -19,9 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added translation support to the `manage-worker-messages` module. Add translation support to the `backup-db` and `migration-db` modules. Fixed showing modal dialogs in sequence. PR: [bfx-report-electron#456](https://github.com/bitfinexcom/bfx-report-electron/pull/456)
 - Added translation support to the `show-about-modal-dialog` module. PR: [bfx-report-electron#457](https://github.com/bitfinexcom/bfx-report-electron/pull/457)
 
+### Changed
+
+- Optimized electron translation file data structure to prevent some common duplication and redundant nesting for easier support. PR: [bfx-report-electron#468](https://github.com/bitfinexcom/bfx-report-electron/pull/468)
+- Reworked and optimized the `TimeRangePreservePref` component in a more performant way and reduced redundant code. PR: [bfx-report-ui#885](https://github.com/bitfinexcom/bfx-report-ui/pull/885)
+- Extended data logging by showing public request params to simplify debugging BFX API issues. PR: [bfx-report#414](https://github.com/bitfinexcom/bfx-report/pull/414)
+- Removed `language` schema param check and added `en` fallback language to prevent returning the translation key `key.nestedKey.etc` if a value is missing for a certain language and added the ability to try to take one from the default `en` translation file. PR: [bfx-report#415](https://github.com/bitfinexcom/bfx-report/pull/415)
+
 ### Fixed
 
 - Fixed docker desktop container user permissions breaks. Fixed `chown`: `changing ownership of 'path-to-file': Operation not permitted` when using it in `dockerfile`. PR: [bfx-report-electron#460](https://github.com/bitfinexcom/bfx-report-electron/pull/460)
+- Fixed error metadata processing for logging. PRs: [bfx-report#418](https://github.com/bitfinexcom/bfx-report/pull/418), [bfx-reports-framework#428](https://github.com/bitfinexcom/bfx-reports-framework/pull/428)
 
 ## [4.30.0] - 2024-11-13
 
