@@ -1,6 +1,6 @@
 'use strict'
 
-const { Menu } = require('electron')
+const { BaseWindow, webContents, Menu } = require('electron')
 
 const IpcChannelHandlers = require('./ipc.channel.handlers')
 
@@ -77,6 +77,20 @@ class MenuIpcChannelHandlers extends IpcChannelHandlers {
     const serializedMenu = this.#serializeMenu(menu)
 
     return serializedMenu
+  }
+
+  async execMenuCmdHandler (event, args) {
+    if (!args?.id) {
+      return
+    }
+
+    const menu = Menu.getApplicationMenu()
+    const menuItem = menu.getMenuItemById(args.id)
+
+    const focusedWindow = BaseWindow.getFocusedWindow()
+    const focusedWebContents = webContents.getFocusedWebContents()
+
+    return menuItem.click({}, focusedWindow, focusedWebContents)
   }
 }
 
