@@ -59,17 +59,32 @@ const _setParentWindow = (noParent) => {
   wins.loadingWindow.setParentWindow(win)
 }
 
-const _runProgressLoader = (opts = {}) => {
+const _runProgressLoader = (opts) => {
   const {
     win = wins.loadingWindow,
-    isIndeterminateMode = false
-  } = { ...opts }
+    isIndeterminateMode = false,
+    progress
+  } = opts ?? {}
 
   if (
     !win ||
     typeof win !== 'object' ||
     win.isDestroyed()
   ) {
+    return
+  }
+  if (Number.isFinite(progress)) {
+    if (
+      progress >= 1 &&
+      !isIndeterminateMode
+    ) {
+      win.setProgressBar(-0.1)
+
+      return
+    }
+
+    win.setProgressBar(progress)
+
     return
   }
   if (isIndeterminateMode) {
@@ -83,14 +98,14 @@ const _runProgressLoader = (opts = {}) => {
   const duration = 3000 // ms
   const interval = duration / fps // ms
   const step = 1 / (duration / interval)
-  let progress = 0
+  let _progress = 0
 
   intervalMarker = setInterval(() => {
-    if (progress >= 1) {
-      progress = 0
+    if (_progress >= 1) {
+      _progress = 0
     }
 
-    progress += step
+    _progress += step
 
     if (
       !win ||
@@ -102,7 +117,7 @@ const _runProgressLoader = (opts = {}) => {
       return
     }
 
-    win.setProgressBar(progress)
+    win.setProgressBar(_progress)
   }, interval).unref()
 }
 
@@ -123,8 +138,14 @@ const _stopProgressLoader = (
   win.setProgressBar(-0.1)
 }
 
-const _setLoadingDescription = async (win, description) => {
+const setLoadingDescription = async (params) => {
   try {
+    const {
+      win = wins.loadingWindow,
+      progress,
+      description = ''
+    } = params ?? {}
+
     if (
       !win ||
       typeof win !== 'object' ||
@@ -134,11 +155,31 @@ const _setLoadingDescription = async (win, description) => {
       return
     }
 
+    const _progressPerc = (
+      Number.isFinite(progress) &&
+      progress > 0
+    )
+      ? Math.floor(progress * 100)
+      : null
+    const progressPerc = (
+      Number.isFinite(_progressPerc) &&
+      _progressPerc > 100
+    )
+      ? 100
+      : _progressPerc
+    const descriptionChunk = description
+      ? `<p>${description}</p>`
+      : '<p></p>'
+    const progressChunk = Number.isFinite(progressPerc)
+      ? `<p>${progressPerc} %</p>`
+      : '<p></p>'
+    const _description = `${progressChunk}${descriptionChunk}`
+
     const loadingDescReadyPromise = GeneralIpcChannelHandlers
       .onLoadingDescriptionReady()
 
     GeneralIpcChannelHandlers
-      .sendLoadingDescription(win, { description })
+      .sendLoadingDescription(win, { description: _description })
 
     const loadingRes = await loadingDescReadyPromise
 
@@ -152,6 +193,7 @@ const _setLoadingDescription = async (win, description) => {
 
 const showLoadingWindow = async (opts) => {
   const {
+    progress,
     description = '',
     isRequiredToCloseAllWins = false,
     isNotRunProgressLoaderRequired = false,
@@ -170,14 +212,18 @@ const showLoadingWindow = async (opts) => {
 
   _setParentWindow(isRequiredToCloseAllWins || noParent)
 
-  if (!isNotRunProgressLoaderRequired) {
-    _runProgressLoader({ isIndeterminateMode })
+  const _progress = Number.isFinite(progress)
+    ? Math.floor(progress * 100) / 100
+    : progress
+
+  if (
+    !isNotRunProgressLoaderRequired ||
+    Number.isFinite(progress)
+  ) {
+    _runProgressLoader({ progress: _progress, isIndeterminateMode })
   }
 
-  await _setLoadingDescription(
-    wins.loadingWindow,
-    description
-  )
+  await setLoadingDescription({ progress: _progress, description })
 
   if (!wins.loadingWindow.isVisible()) {
     centerWindow(wins.loadingWindow)
@@ -197,10 +243,7 @@ const hideLoadingWindow = async (opts) => {
   } = opts ?? {}
 
   // need to empty description
-  await _setLoadingDescription(
-    wins.loadingWindow,
-    ''
-  )
+  await setLoadingDescription({ description: '' })
   _stopProgressLoader()
 
   if (isRequiredToShowMainWin) {
@@ -224,5 +267,6 @@ const hideLoadingWindow = async (opts) => {
 
 module.exports = {
   showLoadingWindow,
-  hideLoadingWindow
+  hideLoadingWindow,
+  setLoadingDescription
 }

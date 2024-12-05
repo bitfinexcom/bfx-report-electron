@@ -56,7 +56,7 @@ const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
 
 const _fireAlert = (params) => {
   const {
-    title = i18next.t('common.restoreDB.modalDialog.title'),
+    title = i18next.t('restoreDB.modalDialog.title'),
     backupFilesMetadata
   } = params
   const win = wins.mainWindow
@@ -119,8 +119,8 @@ const _fireAlert = (params) => {
     showConfirmButton: true,
     focusCancel: true,
     showCancelButton: true,
-    confirmButtonText: i18next.t('common.restoreDB.modalDialog.confirmButtonText'),
-    cancelButtonText: i18next.t('common.restoreDB.modalDialog.cancelButtonText'),
+    confirmButtonText: i18next.t('common.confirmButtonText'),
+    cancelButtonText: i18next.t('common.cancelButtonText'),
     timerProgressBar: false,
 
     input: 'radio',
@@ -237,9 +237,9 @@ module.exports = () => {
       ) {
         await showMessageModalDialog(wins.mainWindow, {
           type: 'warning',
-          title: i18next.t('common.restoreDB.messageModalDialog.title'),
-          message: i18next.t('common.restoreDB.messageModalDialog.message'),
-          buttons: [i18next.t('common.restoreDB.messageModalDialog.confirmButtonText')],
+          title: i18next.t('restoreDB.messageModalDialog.title'),
+          message: i18next.t('restoreDB.messageModalDialog.message'),
+          buttons: [i18next.t('common.confirmButtonText')],
           defaultId: 0,
           cancelId: 0
         })

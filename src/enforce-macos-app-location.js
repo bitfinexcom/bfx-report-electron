@@ -24,15 +24,15 @@ module.exports = async () => {
   const clickedButtonIndex = dialog.showMessageBoxSync({
     type: 'error',
     message: i18next
-      .t('common.enforceMacOSAppLocation.appLocationModalDialog.message'),
+      .t('enforceMacOSAppLocation.appLocationModalDialog.message'),
     detail: i18next.t(
-      'common.enforceMacOSAppLocation.appLocationModalDialog.detail',
+      'enforceMacOSAppLocation.appLocationModalDialog.detail',
       { productName }
     ),
     buttons: [
-      i18next.t('common.enforceMacOSAppLocation.appLocationModalDialog.confirmButtonText'),
+      i18next.t('enforceMacOSAppLocation.appLocationModalDialog.confirmButtonText'),
       i18next.t(
-        'common.enforceMacOSAppLocation.appLocationModalDialog.cancelButtonText',
+        'enforceMacOSAppLocation.appLocationModalDialog.cancelButtonText',
         { productName }
       )
     ],
@@ -48,7 +48,7 @@ module.exports = async () => {
 
   await showLoadingWindow({
     description: i18next
-      .t('common.enforceMacOSAppLocation.loadingWindow.description'),
+      .t('enforceMacOSAppLocation.loadingWindow.description'),
     isRequiredToCloseAllWins: true,
     isIndeterminateMode: true
   })
@@ -59,11 +59,11 @@ module.exports = async () => {
         dialog.showMessageBoxSync({
           type: 'error',
           message: i18next.t(
-            'common.enforceMacOSAppLocation.appRunningModalDialog.message',
+            'enforceMacOSAppLocation.appRunningModalDialog.message',
             { productName }
           ),
           buttons: [
-            i18next.t('common.enforceMacOSAppLocation.appRunningModalDialog.confirmButtonText')
+            i18next.t('common.confirmButtonText')
           ]
         })
 

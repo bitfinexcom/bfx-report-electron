@@ -28,12 +28,16 @@ const _closeServer = () => {
   })
 }
 
-module.exports = async (opts = {}) => {
+module.exports = async (opts) => {
   const {
-    beforeClosingServHook = () => {}
-  } = opts
+    beforeClosingServHook = () => {},
+    loadingWinParams
+  } = opts ?? {}
 
-  await showLoadingWindow({ isRequiredToCloseAllWins: true })
+  await showLoadingWindow({
+    isRequiredToCloseAllWins: true,
+    ...loadingWinParams
+  })
 
   await beforeClosingServHook()
 

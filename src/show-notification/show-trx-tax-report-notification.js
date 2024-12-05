@@ -20,8 +20,8 @@ module.exports = (mess) => {
 
   const isError = state === PROCESS_MESSAGES.ERROR_TRX_TAX_REPORT
   const body = isError
-    ? i18next.t('common.nativeNotification.trxTaxReport.errorBody')
-    : i18next.t('common.nativeNotification.trxTaxReport.completedBody')
+    ? i18next.t('nativeNotification.trxTaxReport.errorBody')
+    : i18next.t('nativeNotification.trxTaxReport.completedBody')
   const urgency = isError ? 'critical' : 'normal'
 
   showNotification({ body, urgency })

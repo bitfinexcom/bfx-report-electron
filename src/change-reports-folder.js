@@ -29,9 +29,9 @@ module.exports = ({ pathToUserDocuments }) => {
       } = await dialog.showOpenDialog(
         win,
         {
-          title: i18next.t('common.changeReportsFolder.modalDialog.title'),
+          title: i18next.t('changeReportsFolder.modalDialog.title'),
           defaultPath: pathToUserDocuments,
-          buttonLabel: i18next.t('common.changeReportsFolder.modalDialog.buttonLabel'),
+          buttonLabel: i18next.t('changeReportsFolder.modalDialog.buttonLabel'),
           properties: [
             'openDirectory',
             'createDirectory',
@@ -70,7 +70,7 @@ module.exports = ({ pathToUserDocuments }) => {
       try {
         await showErrorModalDialog(
           win,
-          i18next.t('common.changeReportsFolder.modalDialog.title'),
+          i18next.t('changeReportsFolder.modalDialog.title'),
           err
         )
       } catch (err) {

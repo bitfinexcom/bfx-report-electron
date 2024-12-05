@@ -8,6 +8,7 @@ const {
   BrowserWindow
 } = require('electron')
 const path = require('path')
+const i18next = require('i18next')
 
 const getDebugInfo = require('./helpers/get-debug-info')
 
@@ -32,7 +33,11 @@ module.exports = () => {
           title: productName,
           message: productName,
           detail,
-          buttons: ['Copy', 'GitHub', 'OK'],
+          buttons: [
+            i18next.t('showAboutModalDialog.copyButtonText'),
+            i18next.t('showAboutModalDialog.gitHubButtonText'),
+            i18next.t('common.confirmButtonText')
+          ],
           defaultId: 2,
           cancelId: 2,
           icon: path.join(__dirname, '../build/icons/64x64.png')

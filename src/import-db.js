@@ -1,6 +1,7 @@
 'use strict'
 
 const { dialog, BrowserWindow } = require('electron')
+const i18next = require('i18next')
 
 const {
   InvalidFilePathError,
@@ -10,7 +11,11 @@ const { unzip } = require('./archiver')
 const showErrorModalDialog = require('./show-error-modal-dialog')
 const pauseApp = require('./pause-app')
 const relaunch = require('./relaunch')
-const { rm } = require('./helpers')
+const { rm, isMainWinAvailable } = require('./helpers')
+const wins = require('./window-creators/windows')
+const {
+  setLoadingDescription
+} = require('./window-creators/change-loading-win-visibility-state')
 const {
   DB_FILE_NAME,
   DB_SHM_FILE_NAME,
@@ -39,7 +44,9 @@ module.exports = ({
   pathToUserDocuments
 }) => {
   return async () => {
-    const win = BrowserWindow.getFocusedWindow()
+    const win = isMainWinAvailable(wins.mainWindow)
+      ? wins.mainWindow
+      : BrowserWindow.getFocusedWindow()
 
     try {
       const {
@@ -48,9 +55,10 @@ module.exports = ({
       } = await dialog.showOpenDialog(
         win,
         {
-          title: 'Database import',
+          title: i18next.t('importDB.openDialog.title'),
           defaultPath: pathToUserDocuments,
-          buttonLabel: 'Import',
+          buttonLabel: i18next
+            .t('importDB.openDialog.buttonLabel'),
           properties: [
             'openFile',
             'createDirectory',
@@ -73,7 +81,33 @@ module.exports = ({
         throw new InvalidFilePathError()
       }
 
-      await pauseApp()
+      const progressHandler = async (args) => {
+        const {
+          progress,
+          prettyUnzippedBytes
+        } = args ?? {}
+
+        const _description = i18next
+          .t('importDB.loadingWindow.description')
+        const _unzipped = i18next.t(
+          'importDB.loadingWindow.unzippedBytes',
+          { prettyUnzippedBytes }
+        )
+
+        const unzipped = prettyUnzippedBytes
+          ? `<br><small style="color:#808b93">${_unzipped}</small>`
+          : ''
+        const description = `${_description}${unzipped}`
+
+        await setLoadingDescription({ progress, description })
+      }
+
+      await pauseApp({
+        loadingWinParams: {
+          description: i18next
+            .t('importDB.loadingWindow.description')
+        }
+      })
       await _rmDbExcludeMain(pathToUserData, DB_FILE_NAME)
       const extractedfileNames = await unzip(
         filePaths[0],
@@ -84,7 +118,8 @@ module.exports = ({
             DB_SHM_FILE_NAME,
             DB_WAL_FILE_NAME,
             SECRET_KEY_FILE_NAME
-          ]
+          ],
+          progressHandler
         }
       )
 
@@ -95,7 +130,14 @@ module.exports = ({
       relaunch()
     } catch (err) {
       try {
-        await showErrorModalDialog(win, 'Database import', err)
+        const _win = isMainWinAvailable(wins.loadingWindow)
+          ? wins.loadingWindow
+          : win
+        await showErrorModalDialog(
+          _win,
+          i18next.t('importDB.modalDialog.title'),
+          err
+        )
       } catch (err) {
         console.error(err)
       }
