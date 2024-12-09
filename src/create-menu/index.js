@@ -23,6 +23,8 @@ const { manageNewGithubIssue } = require('../error-manager')
 const showDocs = require('../show-docs')
 const { showChangelog } = require('../changelog-manager')
 const parseEnvValToBool = require('../helpers/parse-env-val-to-bool')
+const isMainWinAvailable = require('../helpers/is-main-win-available')
+const wins = require('../window-creators/windows')
 
 const MENU_ITEM_IDS = require('./menu.item.ids')
 
@@ -222,28 +224,36 @@ module.exports = (params) => {
       label: i18next.t('menu.viewSubMenu.label'),
       submenu: [
         {
-          role: 'reload',
           label: i18next.t('menu.viewSubMenu.reloadLabel'),
           id: MENU_ITEM_IDS.RELOAD_MENU_ITEM,
           accelerator: 'CmdOrCtrl+R',
           click: (item, focusedWindow) => {
-            if (focusedWindow) {
-              focusedWindow.reload()
+            const win = isMainWinAvailable(wins.mainWindow)
+              ? wins.mainWindow
+              : focusedWindow
+
+            if (!win) {
+              return
             }
 
+            win.reload()
             triggerElectronLoad()
           }
         },
         {
-          role: 'forceReload',
           label: i18next.t('menu.viewSubMenu.forceReloadLabel'),
           id: MENU_ITEM_IDS.FORCE_RELOAD_MENU_ITEM,
           accelerator: 'CmdOrCtrl+Shift+R',
           click: (item, focusedWindow) => {
-            if (focusedWindow) {
-              focusedWindow.webContents.reloadIgnoringCache()
+            const win = isMainWinAvailable(wins.mainWindow)
+              ? wins.mainWindow
+              : focusedWindow
+
+            if (!win) {
+              return
             }
 
+            win.webContents.reloadIgnoringCache()
             triggerElectronLoad()
           }
         },
