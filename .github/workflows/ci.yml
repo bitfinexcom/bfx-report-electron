@@ -20,7 +20,7 @@ jobs:
         submodules: recursive
     - uses: actions/setup-node@v4
       with:
-        node-version: 18.17.1
+        node-version: 20.18.1
     - name: Setup configs and install deps
       run: ./scripts/setup.sh -u
     - name: Run tests
