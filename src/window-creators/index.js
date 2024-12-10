@@ -33,6 +33,8 @@ const shouldLocalhostBeUsedForLoadingUIInDevMode = parseEnvValToBool(
   process.env.SHOULD_LOCALHOST_BE_USED_FOR_LOADING_UI_IN_DEV_MODE
 )
 const uiPort = process.env.UI_PORT ?? 3000
+// TODO: Set false by default after UI implementation of the menu bar
+const showNativeTitleBar = process.env.SHOW_NATIVE_TITLE_BAR ?? false
 
 const publicDir = path.join(__dirname, '../../bfx-report-ui/build')
 const loadURL = serve({ directory: publicDir })
@@ -235,13 +237,22 @@ const createMainWindow = async ({
   pathToUserData,
   pathToUserDocuments
 }) => {
-  const winProps = await _createWindow(null, {
-    // TODO: Expose this opts after UI implementation of the menu bar
-    // Remove the default title bar
-    // titleBarStyle: 'hidden',
-    // Expose window controlls in Windows/Linux
-    // ...(isMac ? {} : { titleBarOverlay: true })
-  })
+  const titleBarOverlayOpt = isMac
+    ? {}
+    : {
+        titleBarOverlay: {
+          height: 40,
+          color: '#0b1923ff',
+          symbolColor: '#fff'
+        }
+      }
+  const titleBarOpts = showNativeTitleBar
+    ? {}
+    : {
+        titleBarStyle: 'hidden',
+        ...titleBarOverlayOpt
+      }
+  const winProps = await _createWindow(null, titleBarOpts)
   const {
     win,
     manage,
@@ -261,7 +272,7 @@ const createMainWindow = async ({
   })
 
   if (isDevEnv) {
-    wins.mainWindow.webContents.openDevTools()
+    wins.mainWindow.webContents.openDevTools({ mode: 'right' })
   }
   if (isBfxApiStaging()) {
     const title = wins.mainWindow.getTitle()
