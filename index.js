@@ -27,6 +27,7 @@ app.setName(productName)
 
 process.traceProcessWarnings = true
 app.allowRendererProcessReuse = true
+process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 
 require('./src/error-manager')
   .initLogger()
