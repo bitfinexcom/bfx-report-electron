@@ -6,7 +6,7 @@
   "author": "bitfinex.com",
   "main": "index.js",
   "engine": {
-    "node": ">=18.17.1"
+    "node": ">=20.18.1"
   },
   "license": "Apache-2.0",
   "dependencies": {
@@ -35,18 +35,16 @@
     "yauzl": "3.2.0"
   },
   "devDependencies": {
-    "@mapbox/node-pre-gyp": "1.0.11",
     "@wdio/cli": "8.22.1",
     "@wdio/junit-reporter": "8.21.0",
     "@wdio/local-runner": "8.22.1",
     "@wdio/mocha-framework": "8.22.0",
     "@wdio/spec-reporter": "8.21.0",
-    "app-builder-bin": "4.2.0",
     "concurrently": "9.0.1",
     "cross-env": "7.0.3",
     "dotenv": "16.3.1",
-    "electron": "27.3.11",
-    "electron-builder": "24.10.0",
+    "electron": "33.3.0",
+    "electron-builder": "24.13.3",
     "mocha": "10.2.0",
     "standard": "17.1.0",
     "wdio-electron-service": "5.4.0"
