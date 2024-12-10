@@ -169,6 +169,7 @@ module.exports = async () => {
       MenuIpcChannelHandlers
     )
 
+    app.disableHardwareAcceleration()
     app.on('window-all-closed', () => {
       app.quit()
     })
