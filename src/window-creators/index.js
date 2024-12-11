@@ -34,7 +34,7 @@ const shouldLocalhostBeUsedForLoadingUIInDevMode = parseEnvValToBool(
 )
 const uiPort = process.env.UI_PORT ?? 3000
 // TODO: Set false by default after UI implementation of the menu bar
-const showNativeTitleBar = process.env.SHOW_NATIVE_TITLE_BAR ?? false
+const showNativeTitleBar = process.env.SHOW_NATIVE_TITLE_BAR ?? true
 
 const publicDir = path.join(__dirname, '../../bfx-report-ui/build')
 const loadURL = serve({ directory: publicDir })
