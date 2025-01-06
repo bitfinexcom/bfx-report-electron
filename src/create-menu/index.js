@@ -130,12 +130,12 @@ module.exports = (params) => {
         isMac
           ? {
               role: 'close',
-              label: 'Close', // TODO:
+              label: i18next.t('menu.fileSubMenu.closeLabel'),
               id: MENU_ITEM_IDS.MAC_CLOSE_MENU_ITEM
             }
           : {
               role: 'quit',
-              label: 'Quit', // TODO:
+              label: i18next.t('menu.fileSubMenu.quitLabel'),
               id: MENU_ITEM_IDS.QUIT_MENU_ITEM
             }
       ]
@@ -146,59 +146,59 @@ module.exports = (params) => {
       submenu: [
         {
           role: 'undo',
-          label: 'Undo', // TODO:
+          label: i18next.t('menu.editSubMenu.undoLabel'),
           id: MENU_ITEM_IDS.UNDO_MENU_ITEM
         },
         {
           role: 'redo',
-          label: 'Redo', // TODO:
+          label: i18next.t('menu.editSubMenu.redoLabel'),
           id: MENU_ITEM_IDS.REDO_MENU_ITEM
         },
         { type: 'separator' },
         {
           role: 'cut',
-          label: 'Cut', // TODO:
+          label: i18next.t('menu.editSubMenu.cutLabel'),
           id: MENU_ITEM_IDS.CUT_MENU_ITEM
         },
         {
           role: 'copy',
-          label: 'Copy', // TODO:
+          label: i18next.t('menu.editSubMenu.copyLabel'),
           id: MENU_ITEM_IDS.COPY_MENU_ITEM
         },
         {
           role: 'paste',
-          label: 'Paste', // TODO:
+          label: i18next.t('menu.editSubMenu.pasteLabel'),
           id: MENU_ITEM_IDS.PASTE_MENU_ITEM
         },
         ...(isMac
           ? [
               {
                 role: 'pasteAndMatchStyle',
-                label: 'Paste And Match Style', // TODO:
+                label: i18next.t('menu.editSubMenu.pasteAndMatchStyleLabel'),
                 id: MENU_ITEM_IDS.MAC_PASTE_AND_MATCH_STYLE_MENU_ITEM
               },
               {
                 role: 'delete',
-                label: 'Delete', // TODO:
+                label: i18next.t('menu.editSubMenu.deleteLabel'),
                 id: MENU_ITEM_IDS.DELETE_MENU_ITEM
               },
               {
                 role: 'selectAll',
-                label: 'Select All', // TODO:
+                label: i18next.t('menu.editSubMenu.selectAllLabel'),
                 id: MENU_ITEM_IDS.SELECT_ALL_MENU_ITEM
               },
               { type: 'separator' },
               {
-                label: 'Speech',
+                label: i18next.t('menu.editSubMenu.speechSubMenu.label'),
                 submenu: [
                   {
                     role: 'startSpeaking',
-                    label: 'Start Speaking', // TODO:
+                    label: i18next.t('menu.editSubMenu.speechSubMenu.startSpeakingLabel'),
                     id: MENU_ITEM_IDS.MAC_START_SPEAKING_MENU_ITEM
                   },
                   {
                     role: 'stopSpeaking',
-                    label: 'Stop Speaking', // TODO:
+                    label: i18next.t('menu.editSubMenu.speechSubMenu.stopSpeakingLabel'),
                     id: MENU_ITEM_IDS.MAC_STOP_SPEAKING_MENU_ITEM
                   }
                 ]
@@ -207,13 +207,13 @@ module.exports = (params) => {
           : [
               {
                 role: 'delete',
-                label: 'Delete', // TODO:
+                label: i18next.t('menu.editSubMenu.deleteLabel'),
                 id: MENU_ITEM_IDS.DELETE_MENU_ITEM
               },
               { type: 'separator' },
               {
                 role: 'selectAll',
-                label: 'Select All', // TODO:
+                label: i18next.t('menu.editSubMenu.selectAllLabel'),
                 id: MENU_ITEM_IDS.SELECT_ALL_MENU_ITEM
               }
             ])
@@ -292,12 +292,12 @@ module.exports = (params) => {
       submenu: [
         {
           role: 'minimize',
-          label: 'Minimize', // TODO:
+          label: i18next.t('menu.windowSubMenu.minimizeLabel'),
           id: MENU_ITEM_IDS.MINIMIZE_MENU_ITEM
         },
         {
           role: 'zoom',
-          label: 'Zoom', // TODO:
+          label: i18next.t('menu.windowSubMenu.zoomLabel'),
           id: MENU_ITEM_IDS.ZOOM_MENU_ITEM
         },
         ...(isMac
@@ -305,20 +305,20 @@ module.exports = (params) => {
               { type: 'separator' },
               {
                 role: 'front',
-                label: 'Front', // TODO:
+                label: i18next.t('menu.windowSubMenu.frontLabel'),
                 id: MENU_ITEM_IDS.MAC_FRONT_MENU_ITEM
               },
               { type: 'separator' },
               {
                 role: 'window',
-                label: 'Window', // TODO:
+                label: i18next.t('menu.windowSubMenu.windowLabel'),
                 id: MENU_ITEM_IDS.MAC_WINDOW_MENU_ITEM
               }
             ]
           : [
               {
                 role: 'close',
-                label: 'Close', // TODO:
+                label: i18next.t('menu.fileSubMenu.closeLabel'),
                 id: MENU_ITEM_IDS.CLOSE_MENU_ITEM
               }
             ])
