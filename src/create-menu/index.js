@@ -90,6 +90,7 @@ module.exports = (params) => {
                 { appName: app.name }
               ),
               id: MENU_ITEM_IDS.MAC_ABOUT_MENU_ITEM,
+              accelerator: 'CmdOrCtrl+O',
               click: showAboutModalDialog()
             },
             { type: 'separator' },
@@ -118,7 +119,8 @@ module.exports = (params) => {
             {
               role: 'quit',
               label: i18next.t('menu.macMainSubmenu.quitLabel'),
-              id: MENU_ITEM_IDS.MAC_QUIT_MENU_ITEM
+              id: MENU_ITEM_IDS.MAC_QUIT_MENU_ITEM,
+              accelerator: 'CmdOrCtrl+Q'
             }
           ]
         }]
@@ -136,7 +138,8 @@ module.exports = (params) => {
           : {
               role: 'quit',
               label: i18next.t('menu.fileSubMenu.quitLabel'),
-              id: MENU_ITEM_IDS.QUIT_MENU_ITEM
+              id: MENU_ITEM_IDS.QUIT_MENU_ITEM,
+              accelerator: 'CmdOrCtrl+Q'
             }
       ]
     },
@@ -147,28 +150,33 @@ module.exports = (params) => {
         {
           role: 'undo',
           label: i18next.t('menu.editSubMenu.undoLabel'),
-          id: MENU_ITEM_IDS.UNDO_MENU_ITEM
+          id: MENU_ITEM_IDS.UNDO_MENU_ITEM,
+          accelerator: 'CmdOrCtrl+Z'
         },
         {
           role: 'redo',
           label: i18next.t('menu.editSubMenu.redoLabel'),
-          id: MENU_ITEM_IDS.REDO_MENU_ITEM
+          id: MENU_ITEM_IDS.REDO_MENU_ITEM,
+          accelerator: 'CmdOrCtrl+Shift+Z'
         },
         { type: 'separator' },
         {
           role: 'cut',
           label: i18next.t('menu.editSubMenu.cutLabel'),
-          id: MENU_ITEM_IDS.CUT_MENU_ITEM
+          id: MENU_ITEM_IDS.CUT_MENU_ITEM,
+          accelerator: 'CmdOrCtrl+X'
         },
         {
           role: 'copy',
           label: i18next.t('menu.editSubMenu.copyLabel'),
-          id: MENU_ITEM_IDS.COPY_MENU_ITEM
+          id: MENU_ITEM_IDS.COPY_MENU_ITEM,
+          accelerator: 'CmdOrCtrl+C'
         },
         {
           role: 'paste',
           label: i18next.t('menu.editSubMenu.pasteLabel'),
-          id: MENU_ITEM_IDS.PASTE_MENU_ITEM
+          id: MENU_ITEM_IDS.PASTE_MENU_ITEM,
+          accelerator: 'CmdOrCtrl+V'
         },
         ...(isMac
           ? [
@@ -180,12 +188,14 @@ module.exports = (params) => {
               {
                 role: 'delete',
                 label: i18next.t('menu.editSubMenu.deleteLabel'),
-                id: MENU_ITEM_IDS.DELETE_MENU_ITEM
+                id: MENU_ITEM_IDS.DELETE_MENU_ITEM,
+                accelerator: 'Delete'
               },
               {
                 role: 'selectAll',
                 label: i18next.t('menu.editSubMenu.selectAllLabel'),
-                id: MENU_ITEM_IDS.SELECT_ALL_MENU_ITEM
+                id: MENU_ITEM_IDS.SELECT_ALL_MENU_ITEM,
+                accelerator: 'CmdOrCtrl+A'
               },
               { type: 'separator' },
               {
@@ -208,13 +218,15 @@ module.exports = (params) => {
               {
                 role: 'delete',
                 label: i18next.t('menu.editSubMenu.deleteLabel'),
-                id: MENU_ITEM_IDS.DELETE_MENU_ITEM
+                id: MENU_ITEM_IDS.DELETE_MENU_ITEM,
+                accelerator: 'Delete'
               },
               { type: 'separator' },
               {
                 role: 'selectAll',
                 label: i18next.t('menu.editSubMenu.selectAllLabel'),
-                id: MENU_ITEM_IDS.SELECT_ALL_MENU_ITEM
+                id: MENU_ITEM_IDS.SELECT_ALL_MENU_ITEM,
+                accelerator: 'CmdOrCtrl+A'
               }
             ])
       ]
@@ -260,29 +272,34 @@ module.exports = (params) => {
         {
           role: 'toggleDevTools',
           label: i18next.t('menu.viewSubMenu.toggleDevToolsLabel'),
-          id: MENU_ITEM_IDS.TOGGLE_DEV_TOOLS_MENU_ITEM
+          id: MENU_ITEM_IDS.TOGGLE_DEV_TOOLS_MENU_ITEM,
+          accelerator: 'CmdOrCtrl+Shift+I'
         },
         { type: 'separator' },
         {
           role: 'resetZoom',
           label: i18next.t('menu.viewSubMenu.resetZoomLabel'),
-          id: MENU_ITEM_IDS.RESET_ZOOM_MENU_ITEM
+          id: MENU_ITEM_IDS.RESET_ZOOM_MENU_ITEM,
+          accelerator: 'CmdOrCtrl+0'
         },
         {
           role: 'zoomIn',
           label: i18next.t('menu.viewSubMenu.zoomInLabel'),
-          id: MENU_ITEM_IDS.ZOOM_IN_MENU_ITEM
+          id: MENU_ITEM_IDS.ZOOM_IN_MENU_ITEM,
+          accelerator: 'CmdOrCtrl++'
         },
         {
           role: 'zoomOut',
           label: i18next.t('menu.viewSubMenu.zoomOutLabel'),
-          id: MENU_ITEM_IDS.ZOOM_OUT_MENU_ITEM
+          id: MENU_ITEM_IDS.ZOOM_OUT_MENU_ITEM,
+          accelerator: 'CmdOrCtrl+-'
         },
         { type: 'separator' },
         {
           role: 'togglefullscreen',
           label: i18next.t('menu.viewSubMenu.togglefullscreenLabel'),
-          id: MENU_ITEM_IDS.TOGGLE_FULL_SCREEN_MENU_ITEM
+          id: MENU_ITEM_IDS.TOGGLE_FULL_SCREEN_MENU_ITEM,
+          accelerator: 'F11'
         }
       ]
     },
@@ -293,7 +310,8 @@ module.exports = (params) => {
         {
           role: 'minimize',
           label: i18next.t('menu.windowSubMenu.minimizeLabel'),
-          id: MENU_ITEM_IDS.MINIMIZE_MENU_ITEM
+          id: MENU_ITEM_IDS.MINIMIZE_MENU_ITEM,
+          accelerator: 'CmdOrCtrl+M'
         },
         {
           role: 'zoom',
@@ -319,7 +337,8 @@ module.exports = (params) => {
               {
                 role: 'close',
                 label: i18next.t('menu.fileSubMenu.closeLabel'),
-                id: MENU_ITEM_IDS.CLOSE_MENU_ITEM
+                id: MENU_ITEM_IDS.CLOSE_MENU_ITEM,
+                accelerator: 'CmdOrCtrl+W'
               }
             ])
       ]
@@ -333,31 +352,37 @@ module.exports = (params) => {
             {
               label: i18next.t('menu.toolsSubMenu.dataManagementSubMenu.exportDbLabel'),
               id: MENU_ITEM_IDS.EXPORT_DB_MENU_ITEM,
+              accelerator: 'CmdOrCtrl+Alt+E',
               click: exportDB({ pathToUserData, pathToUserDocuments })
             },
             {
               label: i18next.t('menu.toolsSubMenu.dataManagementSubMenu.importDbLabel'),
               id: MENU_ITEM_IDS.IMPORT_DB_MENU_ITEM,
+              accelerator: 'CmdOrCtrl+Alt+I',
               click: importDB({ pathToUserData, pathToUserDocuments })
             },
             {
               label: i18next.t('menu.toolsSubMenu.dataManagementSubMenu.restoreDbLabel'),
               id: MENU_ITEM_IDS.RESTORE_DB_MENU_ITEM,
+              accelerator: 'CmdOrCtrl+Alt+R',
               click: restoreDB()
             },
             {
               label: i18next.t('menu.toolsSubMenu.dataManagementSubMenu.backupDbLabel'),
               id: MENU_ITEM_IDS.BACKUP_DB_MENU_ITEM,
+              accelerator: 'CmdOrCtrl+Alt+B',
               click: backupDB()
             },
             {
               label: i18next.t('menu.toolsSubMenu.dataManagementSubMenu.removeDbLabel'),
               id: MENU_ITEM_IDS.REMOVE_DB_MENU_ITEM,
+              accelerator: 'CmdOrCtrl+Alt+D',
               click: removeDB({ pathToUserData })
             },
             {
               label: i18next.t('menu.toolsSubMenu.dataManagementSubMenu.clearAllDataLabel'),
               id: MENU_ITEM_IDS.CLEAR_ALL_DATA_MENU_ITEM,
+              accelerator: 'CmdOrCtrl+Alt+C',
               click: removeDB({
                 pathToUserData,
                 shouldAllTablesBeCleared: true
@@ -385,6 +410,7 @@ module.exports = (params) => {
         {
           label: i18next.t('menu.helpSubMenu.openNewGitHubIssueLabel'),
           id: MENU_ITEM_IDS.REPORT_BUG_MENU_ITEM,
+          accelerator: 'CmdOrCtrl+B',
           click: manageNewGithubIssue,
           ..._getPrevMenuItemPropsById(MENU_ITEM_IDS.REPORT_BUG_MENU_ITEM, [
             { propName: 'visible', defaultVal: true },
@@ -420,6 +446,7 @@ module.exports = (params) => {
         {
           label: i18next.t('menu.helpSubMenu.changelogLabel'),
           id: MENU_ITEM_IDS.SHOW_CHANGE_LOG_MENU_ITEM,
+          acceleratorWorksWhenHidden: false,
           click: () => showChangelog(),
           ..._getPrevMenuItemPropsById(MENU_ITEM_IDS.SHOW_CHANGE_LOG_MENU_ITEM, [
             { propName: 'visible', defaultVal: true },
@@ -436,6 +463,7 @@ module.exports = (params) => {
                   { appName: app.name }
                 ),
                 id: MENU_ITEM_IDS.ABOUT_MENU_ITEM,
+                accelerator: 'CmdOrCtrl+O',
                 click: showAboutModalDialog()
               }
             ])
