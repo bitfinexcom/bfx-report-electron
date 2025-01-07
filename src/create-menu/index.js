@@ -27,6 +27,7 @@ const isMainWinAvailable = require('../helpers/is-main-win-available')
 const wins = require('../window-creators/windows')
 
 const MENU_ITEM_IDS = require('./menu.item.ids')
+const MENU_ITEM_ACCELERATORS = require('./menu.item.accelerators')
 
 const isAutoUpdateDisabled = parseEnvValToBool(process.env.IS_AUTO_UPDATE_DISABLED)
 
@@ -90,7 +91,7 @@ module.exports = (params) => {
                 { appName: app.name }
               ),
               id: MENU_ITEM_IDS.MAC_ABOUT_MENU_ITEM,
-              accelerator: 'CmdOrCtrl+O',
+              accelerator: MENU_ITEM_ACCELERATORS.ABOUT_MENU_ITEM,
               click: showAboutModalDialog()
             },
             { type: 'separator' },
@@ -120,7 +121,7 @@ module.exports = (params) => {
               role: 'quit',
               label: i18next.t('menu.macMainSubmenu.quitLabel'),
               id: MENU_ITEM_IDS.MAC_QUIT_MENU_ITEM,
-              accelerator: 'CmdOrCtrl+Q'
+              accelerator: MENU_ITEM_ACCELERATORS.QUIT_MENU_ITEM
             }
           ]
         }]
@@ -139,7 +140,7 @@ module.exports = (params) => {
               role: 'quit',
               label: i18next.t('menu.fileSubMenu.quitLabel'),
               id: MENU_ITEM_IDS.QUIT_MENU_ITEM,
-              accelerator: 'CmdOrCtrl+Q'
+              accelerator: MENU_ITEM_ACCELERATORS.QUIT_MENU_ITEM
             }
       ]
     },
@@ -151,32 +152,32 @@ module.exports = (params) => {
           role: 'undo',
           label: i18next.t('menu.editSubMenu.undoLabel'),
           id: MENU_ITEM_IDS.UNDO_MENU_ITEM,
-          accelerator: 'CmdOrCtrl+Z'
+          accelerator: MENU_ITEM_ACCELERATORS.UNDO_MENU_ITEM
         },
         {
           role: 'redo',
           label: i18next.t('menu.editSubMenu.redoLabel'),
           id: MENU_ITEM_IDS.REDO_MENU_ITEM,
-          accelerator: 'CmdOrCtrl+Shift+Z'
+          accelerator: MENU_ITEM_ACCELERATORS.REDO_MENU_ITEM
         },
         { type: 'separator' },
         {
           role: 'cut',
           label: i18next.t('menu.editSubMenu.cutLabel'),
           id: MENU_ITEM_IDS.CUT_MENU_ITEM,
-          accelerator: 'CmdOrCtrl+X'
+          accelerator: MENU_ITEM_ACCELERATORS.CUT_MENU_ITEM
         },
         {
           role: 'copy',
           label: i18next.t('menu.editSubMenu.copyLabel'),
           id: MENU_ITEM_IDS.COPY_MENU_ITEM,
-          accelerator: 'CmdOrCtrl+C'
+          accelerator: MENU_ITEM_ACCELERATORS.COPY_MENU_ITEM
         },
         {
           role: 'paste',
           label: i18next.t('menu.editSubMenu.pasteLabel'),
           id: MENU_ITEM_IDS.PASTE_MENU_ITEM,
-          accelerator: 'CmdOrCtrl+V'
+          accelerator: MENU_ITEM_ACCELERATORS.PASTE_MENU_ITEM
         },
         ...(isMac
           ? [
@@ -189,13 +190,13 @@ module.exports = (params) => {
                 role: 'delete',
                 label: i18next.t('menu.editSubMenu.deleteLabel'),
                 id: MENU_ITEM_IDS.DELETE_MENU_ITEM,
-                accelerator: 'Delete'
+                accelerator: MENU_ITEM_ACCELERATORS.DELETE_MENU_ITEM
               },
               {
                 role: 'selectAll',
                 label: i18next.t('menu.editSubMenu.selectAllLabel'),
                 id: MENU_ITEM_IDS.SELECT_ALL_MENU_ITEM,
-                accelerator: 'CmdOrCtrl+A'
+                accelerator: MENU_ITEM_ACCELERATORS.SELECT_ALL_MENU_ITEM
               },
               { type: 'separator' },
               {
@@ -219,14 +220,14 @@ module.exports = (params) => {
                 role: 'delete',
                 label: i18next.t('menu.editSubMenu.deleteLabel'),
                 id: MENU_ITEM_IDS.DELETE_MENU_ITEM,
-                accelerator: 'Delete'
+                accelerator: MENU_ITEM_ACCELERATORS.DELETE_MENU_ITEM
               },
               { type: 'separator' },
               {
                 role: 'selectAll',
                 label: i18next.t('menu.editSubMenu.selectAllLabel'),
                 id: MENU_ITEM_IDS.SELECT_ALL_MENU_ITEM,
-                accelerator: 'CmdOrCtrl+A'
+                accelerator: MENU_ITEM_ACCELERATORS.SELECT_ALL_MENU_ITEM
               }
             ])
       ]
@@ -238,7 +239,7 @@ module.exports = (params) => {
         {
           label: i18next.t('menu.viewSubMenu.reloadLabel'),
           id: MENU_ITEM_IDS.RELOAD_MENU_ITEM,
-          accelerator: 'CmdOrCtrl+R',
+          accelerator: MENU_ITEM_ACCELERATORS.RELOAD_MENU_ITEM,
           click: (item, focusedWindow) => {
             const win = isMainWinAvailable(wins.mainWindow)
               ? wins.mainWindow
@@ -255,7 +256,7 @@ module.exports = (params) => {
         {
           label: i18next.t('menu.viewSubMenu.forceReloadLabel'),
           id: MENU_ITEM_IDS.FORCE_RELOAD_MENU_ITEM,
-          accelerator: 'CmdOrCtrl+Shift+R',
+          accelerator: MENU_ITEM_ACCELERATORS.FORCE_RELOAD_MENU_ITEM,
           click: (item, focusedWindow) => {
             const win = isMainWinAvailable(wins.mainWindow)
               ? wins.mainWindow
@@ -273,33 +274,33 @@ module.exports = (params) => {
           role: 'toggleDevTools',
           label: i18next.t('menu.viewSubMenu.toggleDevToolsLabel'),
           id: MENU_ITEM_IDS.TOGGLE_DEV_TOOLS_MENU_ITEM,
-          accelerator: 'CmdOrCtrl+Shift+I'
+          accelerator: MENU_ITEM_ACCELERATORS.TOGGLE_DEV_TOOLS_MENU_ITEM
         },
         { type: 'separator' },
         {
           role: 'resetZoom',
           label: i18next.t('menu.viewSubMenu.resetZoomLabel'),
           id: MENU_ITEM_IDS.RESET_ZOOM_MENU_ITEM,
-          accelerator: 'CmdOrCtrl+0'
+          accelerator: MENU_ITEM_ACCELERATORS.RESET_ZOOM_MENU_ITEM
         },
         {
           role: 'zoomIn',
           label: i18next.t('menu.viewSubMenu.zoomInLabel'),
           id: MENU_ITEM_IDS.ZOOM_IN_MENU_ITEM,
-          accelerator: 'CmdOrCtrl++'
+          accelerator: MENU_ITEM_ACCELERATORS.ZOOM_IN_MENU_ITEM
         },
         {
           role: 'zoomOut',
           label: i18next.t('menu.viewSubMenu.zoomOutLabel'),
           id: MENU_ITEM_IDS.ZOOM_OUT_MENU_ITEM,
-          accelerator: 'CmdOrCtrl+-'
+          accelerator: MENU_ITEM_ACCELERATORS.ZOOM_OUT_MENU_ITEM
         },
         { type: 'separator' },
         {
           role: 'togglefullscreen',
           label: i18next.t('menu.viewSubMenu.togglefullscreenLabel'),
           id: MENU_ITEM_IDS.TOGGLE_FULL_SCREEN_MENU_ITEM,
-          accelerator: 'F11'
+          accelerator: MENU_ITEM_ACCELERATORS.TOGGLE_FULL_SCREEN_MENU_ITEM
         }
       ]
     },
@@ -311,7 +312,7 @@ module.exports = (params) => {
           role: 'minimize',
           label: i18next.t('menu.windowSubMenu.minimizeLabel'),
           id: MENU_ITEM_IDS.MINIMIZE_MENU_ITEM,
-          accelerator: 'CmdOrCtrl+M'
+          accelerator: MENU_ITEM_ACCELERATORS.MINIMIZE_MENU_ITEM
         },
         {
           role: 'zoom',
@@ -338,7 +339,7 @@ module.exports = (params) => {
                 role: 'close',
                 label: i18next.t('menu.fileSubMenu.closeLabel'),
                 id: MENU_ITEM_IDS.CLOSE_MENU_ITEM,
-                accelerator: 'CmdOrCtrl+W'
+                accelerator: MENU_ITEM_ACCELERATORS.CLOSE_MENU_ITEM
               }
             ])
       ]
@@ -352,37 +353,37 @@ module.exports = (params) => {
             {
               label: i18next.t('menu.toolsSubMenu.dataManagementSubMenu.exportDbLabel'),
               id: MENU_ITEM_IDS.EXPORT_DB_MENU_ITEM,
-              accelerator: 'CmdOrCtrl+Alt+E',
+              accelerator: MENU_ITEM_ACCELERATORS.EXPORT_DB_MENU_ITEM,
               click: exportDB({ pathToUserData, pathToUserDocuments })
             },
             {
               label: i18next.t('menu.toolsSubMenu.dataManagementSubMenu.importDbLabel'),
               id: MENU_ITEM_IDS.IMPORT_DB_MENU_ITEM,
-              accelerator: 'CmdOrCtrl+Alt+I',
+              accelerator: MENU_ITEM_ACCELERATORS.IMPORT_DB_MENU_ITEM,
               click: importDB({ pathToUserData, pathToUserDocuments })
             },
             {
               label: i18next.t('menu.toolsSubMenu.dataManagementSubMenu.restoreDbLabel'),
               id: MENU_ITEM_IDS.RESTORE_DB_MENU_ITEM,
-              accelerator: 'CmdOrCtrl+Alt+R',
+              accelerator: MENU_ITEM_ACCELERATORS.RESTORE_DB_MENU_ITEM,
               click: restoreDB()
             },
             {
               label: i18next.t('menu.toolsSubMenu.dataManagementSubMenu.backupDbLabel'),
               id: MENU_ITEM_IDS.BACKUP_DB_MENU_ITEM,
-              accelerator: 'CmdOrCtrl+Alt+B',
+              accelerator: MENU_ITEM_ACCELERATORS.BACKUP_DB_MENU_ITEM,
               click: backupDB()
             },
             {
               label: i18next.t('menu.toolsSubMenu.dataManagementSubMenu.removeDbLabel'),
               id: MENU_ITEM_IDS.REMOVE_DB_MENU_ITEM,
-              accelerator: 'CmdOrCtrl+Alt+D',
+              accelerator: MENU_ITEM_ACCELERATORS.REMOVE_DB_MENU_ITEM,
               click: removeDB({ pathToUserData })
             },
             {
               label: i18next.t('menu.toolsSubMenu.dataManagementSubMenu.clearAllDataLabel'),
               id: MENU_ITEM_IDS.CLEAR_ALL_DATA_MENU_ITEM,
-              accelerator: 'CmdOrCtrl+Alt+C',
+              accelerator: MENU_ITEM_ACCELERATORS.CLEAR_ALL_DATA_MENU_ITEM,
               click: removeDB({
                 pathToUserData,
                 shouldAllTablesBeCleared: true
@@ -410,7 +411,8 @@ module.exports = (params) => {
         {
           label: i18next.t('menu.helpSubMenu.openNewGitHubIssueLabel'),
           id: MENU_ITEM_IDS.REPORT_BUG_MENU_ITEM,
-          accelerator: 'CmdOrCtrl+B',
+          accelerator: MENU_ITEM_ACCELERATORS.REPORT_BUG_MENU_ITEM,
+          acceleratorWorksWhenHidden: false,
           click: manageNewGithubIssue,
           ..._getPrevMenuItemPropsById(MENU_ITEM_IDS.REPORT_BUG_MENU_ITEM, [
             { propName: 'visible', defaultVal: true },
@@ -440,13 +442,12 @@ module.exports = (params) => {
         {
           label: i18next.t('menu.helpSubMenu.userManualLabel'),
           id: MENU_ITEM_IDS.USER_MANUAL_MENU_ITEM,
-          accelerator: 'CmdOrCtrl+H',
+          accelerator: MENU_ITEM_ACCELERATORS.USER_MANUAL_MENU_ITEM,
           click: () => showDocs()
         },
         {
           label: i18next.t('menu.helpSubMenu.changelogLabel'),
           id: MENU_ITEM_IDS.SHOW_CHANGE_LOG_MENU_ITEM,
-          acceleratorWorksWhenHidden: false,
           click: () => showChangelog(),
           ..._getPrevMenuItemPropsById(MENU_ITEM_IDS.SHOW_CHANGE_LOG_MENU_ITEM, [
             { propName: 'visible', defaultVal: true },
@@ -463,7 +464,7 @@ module.exports = (params) => {
                   { appName: app.name }
                 ),
                 id: MENU_ITEM_IDS.ABOUT_MENU_ITEM,
-                accelerator: 'CmdOrCtrl+O',
+                accelerator: MENU_ITEM_ACCELERATORS.ABOUT_MENU_ITEM,
                 click: showAboutModalDialog()
               }
             ])
