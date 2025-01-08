@@ -5,7 +5,7 @@
   },
   "menu": {
     "macMainSubmenu": {
-      "servicesLabel": "Услуги",
+      "servicesLabel": "Службы",
       "hideLabel": "Скрыть",
       "hideOthersLabel": "Скрыть Другие",
       "unhideLabel": "Показать",
@@ -26,6 +26,13 @@
       "pasteAndMatchStyleLabel": "Вставить и Сопоставить Стиль",
       "deleteLabel": "Удалить",
       "selectAllLabel": "Выбрать Все",
+      "substitutionsSubMenu": {
+        "label": "Подстановки",
+        "showSubstitutions": "Показать Подстановки",
+        "toggleSmartQuotes": "Умные Цитаты",
+        "toggleSmartDashes": "Умные Тире",
+        "toggleTextReplacement": "Замена текста"
+      },
       "speechSubMenu": {
         "label": "Речь",
         "startSpeakingLabel": "Начать Говорить",
