@@ -26,6 +26,13 @@
       "pasteAndMatchStyleLabel": "Paste And Match Style",
       "deleteLabel": "Delete",
       "selectAllLabel": "Select All",
+      "substitutionsSubMenu": {
+        "label": "Substitutions",
+        "showSubstitutions": "Show Substitutions",
+        "toggleSmartQuotes": "Smart Quotes",
+        "toggleSmartDashes": "Smart Dashes",
+        "toggleTextReplacement": "Text Replacement"
+      },
       "speechSubMenu": {
         "label": "Speech",
         "startSpeakingLabel": "Start Speaking",
@@ -46,7 +53,7 @@
       "label": "Window",
       "minimizeLabel": "Minimize",
       "zoomLabel": "Zoom",
-      "frontLabel": "Front",
+      "frontLabel": "Bring All to Front",
       "windowLabel": "Window"
     },
     "toolsSubMenu": {
