@@ -97,19 +97,20 @@ module.exports = (params) => {
             { type: 'separator' },
             {
               role: 'services',
-              label: i18next.t('menu.macMainSubmenu.servicesLabel'),
-              id: MENU_ITEM_IDS.MAC_SERVICES_MENU_ITEM
+              label: i18next.t('menu.macMainSubmenu.servicesLabel')
             },
             { type: 'separator' },
             {
               role: 'hide',
               label: i18next.t('menu.macMainSubmenu.hideLabel'),
-              id: MENU_ITEM_IDS.MAC_HIDE_MENU_ITEM
+              id: MENU_ITEM_IDS.MAC_HIDE_MENU_ITEM,
+              accelerator: MENU_ITEM_ACCELERATORS.MAC_HIDE_MENU_ITEM
             },
             {
               role: 'hideOthers',
               label: i18next.t('menu.macMainSubmenu.hideOthersLabel'),
-              id: MENU_ITEM_IDS.MAC_HIDE_OTHERS_MENU_ITEM
+              id: MENU_ITEM_IDS.MAC_HIDE_OTHERS_MENU_ITEM,
+              accelerator: MENU_ITEM_ACCELERATORS.MAC_HIDE_OTHERS_MENU_ITEM
             },
             {
               role: 'unhide',
@@ -134,7 +135,8 @@ module.exports = (params) => {
           ? {
               role: 'close',
               label: i18next.t('menu.fileSubMenu.closeLabel'),
-              id: MENU_ITEM_IDS.MAC_CLOSE_MENU_ITEM
+              id: MENU_ITEM_IDS.MAC_CLOSE_MENU_ITEM,
+              accelerator: MENU_ITEM_ACCELERATORS.CLOSE_MENU_ITEM
             }
           : {
               role: 'quit',
@@ -184,13 +186,13 @@ module.exports = (params) => {
               {
                 role: 'pasteAndMatchStyle',
                 label: i18next.t('menu.editSubMenu.pasteAndMatchStyleLabel'),
-                id: MENU_ITEM_IDS.MAC_PASTE_AND_MATCH_STYLE_MENU_ITEM
+                id: MENU_ITEM_IDS.MAC_PASTE_AND_MATCH_STYLE_MENU_ITEM,
+                accelerator: MENU_ITEM_ACCELERATORS.MAC_PASTE_AND_MATCH_STYLE_MENU_ITEM
               },
               {
                 role: 'delete',
                 label: i18next.t('menu.editSubMenu.deleteLabel'),
-                id: MENU_ITEM_IDS.DELETE_MENU_ITEM,
-                accelerator: MENU_ITEM_ACCELERATORS.DELETE_MENU_ITEM
+                id: MENU_ITEM_IDS.DELETE_MENU_ITEM
               },
               {
                 role: 'selectAll',
@@ -199,6 +201,31 @@ module.exports = (params) => {
                 accelerator: MENU_ITEM_ACCELERATORS.SELECT_ALL_MENU_ITEM
               },
               { type: 'separator' },
+              {
+                label: i18next.t('menu.editSubMenu.substitutionsSubMenu.label'),
+                submenu: [
+                  {
+                    role: 'showSubstitutions',
+                    label: i18next.t('menu.editSubMenu.substitutionsSubMenu.showSubstitutions'),
+                    id: MENU_ITEM_IDS.MAC_SHOW_SUBSTITUTIONS
+                  },
+                  {
+                    role: 'toggleSmartQuotes',
+                    label: i18next.t('menu.editSubMenu.substitutionsSubMenu.toggleSmartQuotes'),
+                    id: MENU_ITEM_IDS.MAC_TOGGLE_SMART_QUOTES
+                  },
+                  {
+                    role: 'toggleSmartDashes',
+                    label: i18next.t('menu.editSubMenu.substitutionsSubMenu.toggleSmartDashes'),
+                    id: MENU_ITEM_IDS.MAC_TOGGLE_SMART_DASHES
+                  },
+                  {
+                    role: 'toggleTextReplacement',
+                    label: i18next.t('menu.editSubMenu.substitutionsSubMenu.toggleTextReplacement'),
+                    id: MENU_ITEM_IDS.MAC_TOGGLE_TEXT_REPLACEMENT
+                  }
+                ]
+              },
               {
                 label: i18next.t('menu.editSubMenu.speechSubMenu.label'),
                 submenu: [
@@ -219,8 +246,7 @@ module.exports = (params) => {
               {
                 role: 'delete',
                 label: i18next.t('menu.editSubMenu.deleteLabel'),
-                id: MENU_ITEM_IDS.DELETE_MENU_ITEM,
-                accelerator: MENU_ITEM_ACCELERATORS.DELETE_MENU_ITEM
+                id: MENU_ITEM_IDS.DELETE_MENU_ITEM
               },
               { type: 'separator' },
               {
@@ -274,7 +300,9 @@ module.exports = (params) => {
           role: 'toggleDevTools',
           label: i18next.t('menu.viewSubMenu.toggleDevToolsLabel'),
           id: MENU_ITEM_IDS.TOGGLE_DEV_TOOLS_MENU_ITEM,
-          accelerator: MENU_ITEM_ACCELERATORS.TOGGLE_DEV_TOOLS_MENU_ITEM
+          accelerator: isMac
+            ? MENU_ITEM_ACCELERATORS.MAC_TOGGLE_DEV_TOOLS_MENU_ITEM
+            : MENU_ITEM_ACCELERATORS.TOGGLE_DEV_TOOLS_MENU_ITEM
         },
         { type: 'separator' },
         {
@@ -300,7 +328,9 @@ module.exports = (params) => {
           role: 'togglefullscreen',
           label: i18next.t('menu.viewSubMenu.togglefullscreenLabel'),
           id: MENU_ITEM_IDS.TOGGLE_FULL_SCREEN_MENU_ITEM,
-          accelerator: MENU_ITEM_ACCELERATORS.TOGGLE_FULL_SCREEN_MENU_ITEM
+          accelerator: isMac
+            ? MENU_ITEM_ACCELERATORS.MAC_TOGGLE_FULL_SCREEN_MENU_ITEM
+            : MENU_ITEM_ACCELERATORS.TOGGLE_FULL_SCREEN_MENU_ITEM
         }
       ]
     },
@@ -330,8 +360,7 @@ module.exports = (params) => {
               { type: 'separator' },
               {
                 role: 'window',
-                label: i18next.t('menu.windowSubMenu.windowLabel'),
-                id: MENU_ITEM_IDS.MAC_WINDOW_MENU_ITEM
+                label: i18next.t('menu.windowSubMenu.windowLabel')
               }
             ]
           : [
