@@ -471,7 +471,9 @@ module.exports = (params) => {
         {
           label: i18next.t('menu.helpSubMenu.userManualLabel'),
           id: MENU_ITEM_IDS.USER_MANUAL_MENU_ITEM,
-          accelerator: MENU_ITEM_ACCELERATORS.USER_MANUAL_MENU_ITEM,
+          accelerator: isMac
+            ? MENU_ITEM_ACCELERATORS.MAC_USER_MANUAL_MENU_ITEM
+            : MENU_ITEM_ACCELERATORS.USER_MANUAL_MENU_ITEM,
           click: () => showDocs()
         },
         {
