@@ -9,8 +9,7 @@ const KEY_MODIFIERS = {
   CMD: 'Cmd',
   CTRL: 'Ctrl',
   ALT: 'Alt',
-  SHIFT: 'Shift',
-  OPTION: 'Option'
+  SHIFT: 'Shift'
 }
 const KEY_CODES = {
   H: 'H',
@@ -65,7 +64,7 @@ const MENU_ITEM_ACCELERATORS = {
     KEY_CODES.I
   ),
   MAC_TOGGLE_FULL_SCREEN_MENU_ITEM: constructAccelerator(
-    KEY_MODIFIERS.OPTION,
+    KEY_MODIFIERS.CMD_OR_CTRL,
     KEY_CODES.F
   ),
   MAC_USER_MANUAL_MENU_ITEM: constructAccelerator(
