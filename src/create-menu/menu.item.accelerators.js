@@ -151,6 +151,7 @@ const MENU_ITEM_ACCELERATORS = {
   IMPORT_DB_MENU_ITEM: constructAccelerator(
     KEY_MODIFIERS.CMD_OR_CTRL,
     KEY_MODIFIERS.ALT,
+    KEY_MODIFIERS.SHIFT,
     KEY_CODES.I
   ),
   RESTORE_DB_MENU_ITEM: constructAccelerator(
