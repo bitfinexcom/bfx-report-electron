@@ -238,7 +238,7 @@ const createMainWindow = async ({
   pathToUserDocuments
 }) => {
   const titleBarOverlayOpt = isMac
-    ? {}
+    ? { titleBarOverlay: { height: 26 } }
     : {
         titleBarOverlay: {
           height: 40,
