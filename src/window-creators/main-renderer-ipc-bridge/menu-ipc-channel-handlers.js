@@ -4,11 +4,14 @@ const { BaseWindow, webContents, Menu } = require('electron')
 
 const IpcChannelHandlers = require('./ipc.channel.handlers')
 
+const isMac = process.platform === 'darwin'
+
 class MenuIpcChannelHandlers extends IpcChannelHandlers {
   static channelName = 'menu'
 
   #serializeMenu (menu) {
     if (
+      isMac ||
       !Array.isArray(menu?.items) ||
       menu.items.length === 0
     ) {
