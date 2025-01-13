@@ -4,6 +4,7 @@ const { BaseWindow, webContents, Menu } = require('electron')
 
 const IpcChannelHandlers = require('./ipc.channel.handlers')
 
+const wins = require('../windows')
 const isMac = process.platform === 'darwin'
 
 class MenuIpcChannelHandlers extends IpcChannelHandlers {
@@ -77,9 +78,16 @@ class MenuIpcChannelHandlers extends IpcChannelHandlers {
 
   async getMenuTemplateHandler (event, args) {
     const menu = Menu.getApplicationMenu()
-    const serializedMenu = this.#serializeMenu(menu)
+    const menuTemplate = this.#serializeMenu(menu)
+    const shouldMenuBeHidden = (
+      isMac &&
+      wins.mainWindow?.isFullScreen()
+    )
 
-    return serializedMenu
+    return {
+      menuTemplate,
+      shouldMenuBeHidden
+    }
   }
 
   async execMenuCmdHandler (event, args) {
@@ -94,6 +102,10 @@ class MenuIpcChannelHandlers extends IpcChannelHandlers {
     const focusedWebContents = webContents.getFocusedWebContents()
 
     return menuItem.click({}, focusedWindow, focusedWebContents)
+  }
+
+  static sendHideMenuEvent (win, args) {
+    return this.sendToRenderer(this.sendHideMenuEvent, win, args)
   }
 }
 
