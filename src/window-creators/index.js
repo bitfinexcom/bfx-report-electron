@@ -28,6 +28,9 @@ const {
   parseEnvValToBool,
   waitPort
 } = require('../helpers')
+const MenuIpcChannelHandlers = require(
+  './main-renderer-ipc-bridge/menu-ipc-channel-handlers'
+)
 
 const shouldLocalhostBeUsedForLoadingUIInDevMode = parseEnvValToBool(
   process.env.SHOULD_LOCALHOST_BE_USED_FOR_LOADING_UI_IN_DEV_MODE
@@ -270,6 +273,17 @@ const createMainWindow = async ({
 
     wins.loadingWindow = null
   })
+
+  if (isMac) {
+    win.on('enter-full-screen', () => {
+      MenuIpcChannelHandlers
+        .sendHideMenuEvent(win, { state: true })
+    })
+    win.on('leave-full-screen', () => {
+      MenuIpcChannelHandlers
+        .sendHideMenuEvent(win, { state: false })
+    })
+  }
 
   if (isDevEnv) {
     wins.mainWindow.webContents.openDevTools({ mode: 'right' })
