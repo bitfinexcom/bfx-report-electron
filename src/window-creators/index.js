@@ -36,8 +36,9 @@ const shouldLocalhostBeUsedForLoadingUIInDevMode = parseEnvValToBool(
   process.env.SHOULD_LOCALHOST_BE_USED_FOR_LOADING_UI_IN_DEV_MODE
 )
 const uiPort = process.env.UI_PORT ?? 3000
-// TODO: Set false by default after UI implementation of the menu bar
-const showNativeTitleBar = process.env.SHOW_NATIVE_TITLE_BAR ?? true
+const showNativeTitleBar = parseEnvValToBool(
+  process.env.SHOW_NATIVE_TITLE_BAR
+)
 
 const publicDir = path.join(__dirname, '../../bfx-report-ui/build')
 const loadURL = serve({ directory: publicDir })
@@ -109,6 +110,7 @@ const _createWindow = async (
     x,
     y,
     isMaximized,
+    isFullScreen,
     manage
   } = isMainWindow
     ? windowStateKeeper({
@@ -164,6 +166,7 @@ const _createWindow = async (
 
   const res = {
     isMaximized,
+    isFullScreen,
     isMainWindow,
     manage,
     win: wins[winName]
@@ -259,7 +262,8 @@ const createMainWindow = async ({
   const {
     win,
     manage,
-    isMaximized
+    isMaximized,
+    isFullScreen
   } = winProps
 
   win.on('closed', () => {
@@ -274,7 +278,10 @@ const createMainWindow = async ({
     wins.loadingWindow = null
   })
 
-  if (isMac) {
+  if (
+    !showNativeTitleBar &&
+    isMac
+  ) {
     win.on('enter-full-screen', () => {
       MenuIpcChannelHandlers
         .sendHideMenuEvent(win, { state: true })
@@ -297,6 +304,7 @@ const createMainWindow = async ({
   createMenu({ pathToUserData, pathToUserDocuments })
 
   appStates.isMainWinMaximized = isMaximized
+  appStates.isMainWinFullScreen = isFullScreen
 
   manage(win)
 
