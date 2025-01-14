@@ -3,9 +3,15 @@
 const { BaseWindow, webContents, Menu } = require('electron')
 
 const IpcChannelHandlers = require('./ipc.channel.handlers')
+const parseEnvValToBool = require(
+  '../../helpers/parse-env-val-to-bool'
+)
 
 const wins = require('../windows')
 const isMac = process.platform === 'darwin'
+const showNativeTitleBar = parseEnvValToBool(
+  process.env.SHOW_NATIVE_TITLE_BAR
+)
 
 class MenuIpcChannelHandlers extends IpcChannelHandlers {
   static channelName = 'menu'
@@ -80,8 +86,11 @@ class MenuIpcChannelHandlers extends IpcChannelHandlers {
     const menu = Menu.getApplicationMenu()
     const menuTemplate = this.#serializeMenu(menu)
     const shouldMenuBeHidden = (
-      isMac &&
-      wins.mainWindow?.isFullScreen()
+      showNativeTitleBar ||
+      (
+        isMac &&
+        wins.mainWindow?.isFullScreen()
+      )
     )
 
     return {
