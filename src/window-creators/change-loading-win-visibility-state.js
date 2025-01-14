@@ -252,10 +252,11 @@ const hideLoadingWindow = async (opts) => {
       { shouldWinBeFocused: true }
     )
 
-    // Legacy fix related to reprodducing the same behavior on all OS,
-    // waiting for checks that it was resolved in the last electron ver
     if (appStates.isMainWinMaximized) {
       wins.mainWindow.maximize()
+    }
+    if (appStates.isMainWinFullScreen) {
+      wins.mainWindow.setFullScreen(true)
     }
   }
 
