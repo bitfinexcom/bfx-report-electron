@@ -7,7 +7,8 @@ const {
   serializeError,
   deserializeError,
   rm,
-  getServerPromise
+  getServerPromise,
+  initIpcChannelHandlers
 } = require('./utils')
 const isMainWinAvailable = require(
   './is-main-win-available'
@@ -25,6 +26,7 @@ module.exports = {
   deserializeError,
   rm,
   getServerPromise,
+  initIpcChannelHandlers,
   isMainWinAvailable,
   productName,
   getAlertCustomClassObj,

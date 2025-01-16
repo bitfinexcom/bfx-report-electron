@@ -161,11 +161,6 @@ else
     "$ROOT/$ELECTRON_ENV_FILE_NAME"; rm -f "$ROOT/$ELECTRON_ENV_FILE_NAME.bak"
 fi
 
-changeDirOwnershipToCurrUser "$ELECTRON_CACHE" "$(id -u):$(id -g)"
-changeDirOwnershipToCurrUser "$ELECTRON_BUILDER_CACHE" "$(id -u):$(id -g)"
-changeDirOwnershipToCurrUser "$COMMON_UI_BUILD_FOLDER"
-changeDirOwnershipToCurrUser "$COMMON_DIST_FOLDER"
-
 makeLastCommitJson "$ROOT/$LAST_COMMIT_FILE_NAME"
 
 echo -e "\n${COLOR_BLUE}Making backend config files${COLOR_NORMAL}"

@@ -28,11 +28,17 @@ const {
   parseEnvValToBool,
   waitPort
 } = require('../helpers')
+const MenuIpcChannelHandlers = require(
+  './main-renderer-ipc-bridge/menu-ipc-channel-handlers'
+)
 
 const shouldLocalhostBeUsedForLoadingUIInDevMode = parseEnvValToBool(
   process.env.SHOULD_LOCALHOST_BE_USED_FOR_LOADING_UI_IN_DEV_MODE
 )
 const uiPort = process.env.UI_PORT ?? 3000
+const showNativeTitleBar = parseEnvValToBool(
+  process.env.SHOW_NATIVE_TITLE_BAR
+)
 
 const publicDir = path.join(__dirname, '../../bfx-report-ui/build')
 const loadURL = serve({ directory: publicDir })
@@ -80,12 +86,14 @@ const _loadUI = async (params) => {
 }
 
 const _createWindow = async (
-  {
+  params,
+  winProps
+) => {
+  const {
     pathname = null,
     winName = 'mainWindow'
-  } = {},
-  props = {}
-) => {
+  } = params ?? {}
+
   const point = electron.screen.getCursorScreenPoint()
   const {
     bounds,
@@ -102,6 +110,7 @@ const _createWindow = async (
     x,
     y,
     isMaximized,
+    isFullScreen,
     manage
   } = isMainWindow
     ? windowStateKeeper({
@@ -109,7 +118,7 @@ const _createWindow = async (
       defaultHeight
     })
     : {}
-  const _props = {
+  const props = {
     autoHideMenuBar: true,
     width,
     height,
@@ -124,15 +133,15 @@ const _createWindow = async (
     icon: path.join(__dirname, '../../build/icons/512x512.png'),
     backgroundColor: '#172d3e',
     show: false,
-    ...props,
+    ...winProps,
 
     webPreferences: {
       preload: path.join(__dirname, 'main-renderer-ipc-bridge/preload.js'),
-      ...props?.webPreferences
+      ...winProps?.webPreferences
     }
   }
 
-  wins[winName] = new BrowserWindow(_props)
+  wins[winName] = new BrowserWindow(props)
 
   wins[winName].on('closed', () => {
     wins[winName] = null
@@ -157,6 +166,7 @@ const _createWindow = async (
 
   const res = {
     isMaximized,
+    isFullScreen,
     isMainWindow,
     manage,
     win: wins[winName]
@@ -168,7 +178,7 @@ const _createWindow = async (
 
     return res
   }
-  if (_props.center) {
+  if (props.center) {
     centerWindow(wins[winName])
   }
 
@@ -233,11 +243,27 @@ const createMainWindow = async ({
   pathToUserData,
   pathToUserDocuments
 }) => {
-  const winProps = await _createWindow()
+  const titleBarOverlayOpt = isMac
+    ? { titleBarOverlay: { height: 26 } }
+    : {
+        titleBarOverlay: {
+          height: 40,
+          color: '#0b1923ff',
+          symbolColor: '#fff'
+        }
+      }
+  const titleBarOpts = showNativeTitleBar
+    ? {}
+    : {
+        titleBarStyle: 'hidden',
+        ...titleBarOverlayOpt
+      }
+  const winProps = await _createWindow(null, titleBarOpts)
   const {
     win,
     manage,
-    isMaximized
+    isMaximized,
+    isFullScreen
   } = winProps
 
   win.on('closed', () => {
@@ -252,8 +278,22 @@ const createMainWindow = async ({
     wins.loadingWindow = null
   })
 
+  if (
+    !showNativeTitleBar &&
+    isMac
+  ) {
+    win.on('enter-full-screen', () => {
+      MenuIpcChannelHandlers
+        .sendHideMenuEvent(win, { state: true })
+    })
+    win.on('leave-full-screen', () => {
+      MenuIpcChannelHandlers
+        .sendHideMenuEvent(win, { state: false })
+    })
+  }
+
   if (isDevEnv) {
-    wins.mainWindow.webContents.openDevTools()
+    wins.mainWindow.webContents.openDevTools({ mode: 'right' })
   }
   if (isBfxApiStaging()) {
     const title = wins.mainWindow.getTitle()
@@ -264,6 +304,7 @@ const createMainWindow = async ({
   createMenu({ pathToUserData, pathToUserDocuments })
 
   appStates.isMainWinMaximized = isMaximized
+  appStates.isMainWinFullScreen = isFullScreen
 
   manage(win)
 

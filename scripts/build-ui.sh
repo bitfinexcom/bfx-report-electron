@@ -81,8 +81,6 @@ if [ $isDevEnv == 1 ]; then
   export CI_ENVIRONMENT_NAME="development"
 fi
 
-changeDirOwnershipToCurrUser "$COMMON_UI_BUILD_FOLDER"
-
 rm -rf "$UI_BUILD_FOLDER/"*
 
 if [ -d "$COMMON_UI_BUILD_FOLDER" ]; then

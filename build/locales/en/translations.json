@@ -12,10 +12,32 @@
       "quitLabel": "Quit"
     },
     "fileSubMenu": {
-      "label": "File"
+      "label": "File",
+      "closeLabel": "Close",
+      "quitLabel": "Quit"
     },
     "editSubMenu": {
-      "label": "Edit"
+      "label": "Edit",
+      "undoLabel": "Undo",
+      "redoLabel": "Redo",
+      "cutLabel": "Cut",
+      "copyLabel": "Copy",
+      "pasteLabel": "Paste",
+      "pasteAndMatchStyleLabel": "Paste And Match Style",
+      "deleteLabel": "Delete",
+      "selectAllLabel": "Select All",
+      "substitutionsSubMenu": {
+        "label": "Substitutions",
+        "showSubstitutions": "Show Substitutions",
+        "toggleSmartQuotes": "Smart Quotes",
+        "toggleSmartDashes": "Smart Dashes",
+        "toggleTextReplacement": "Text Replacement"
+      },
+      "speechSubMenu": {
+        "label": "Speech",
+        "startSpeakingLabel": "Start Speaking",
+        "stopSpeakingLabel": "Stop Speaking"
+      }
     },
     "viewSubMenu": {
       "label": "View",
@@ -28,7 +50,11 @@
       "togglefullscreenLabel": "Toggle Full Screen"
     },
     "windowSubMenu": {
-      "label": "Window"
+      "label": "Window",
+      "minimizeLabel": "Minimize",
+      "zoomLabel": "Zoom",
+      "frontLabel": "Bring All to Front",
+      "windowLabel": "Window"
     },
     "toolsSubMenu": {
       "label": "Tools",

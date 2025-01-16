@@ -12,6 +12,9 @@ const TranslationIpcChannelHandlers = require(
 const GeneralIpcChannelHandlers = require(
   './window-creators/main-renderer-ipc-bridge/general-ipc-channel-handlers'
 )
+const MenuIpcChannelHandlers = require(
+  './window-creators/main-renderer-ipc-bridge/menu-ipc-channel-handlers'
+)
 const triggerSyncAfterUpdates = require('./trigger-sync-after-updates')
 const triggerElectronLoad = require('./trigger-electron-load')
 const runServer = require('./run-server')
@@ -32,7 +35,8 @@ const {
 } = require('./errors')
 const {
   deserializeError,
-  getFreePort
+  getFreePort,
+  initIpcChannelHandlers
 } = require('./helpers')
 const getUserDataPath = require('./helpers/get-user-data-path')
 const {
@@ -159,9 +163,13 @@ const _manageConfigs = (params = {}) => {
 
 module.exports = async () => {
   try {
-    GeneralIpcChannelHandlers.create()
-    TranslationIpcChannelHandlers.create()
+    initIpcChannelHandlers(
+      GeneralIpcChannelHandlers,
+      TranslationIpcChannelHandlers,
+      MenuIpcChannelHandlers
+    )
 
+    app.disableHardwareAcceleration()
     app.on('window-all-closed', () => {
       app.quit()
     })
