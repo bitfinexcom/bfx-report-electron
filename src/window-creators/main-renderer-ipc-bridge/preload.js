@@ -11,6 +11,7 @@ const CHANNEL_NAMES = {
 
 const GENERAL_INVOKE_METHOD_NAMES = {
   EXIT: 'exit',
+  MINIMIZE_LOADING_WIN: 'minimizeLoadingWin',
   GET_TITLE: 'getTitle'
 }
 const GENERAL_EVENT_METHOD_NAMES = {
