@@ -10,6 +10,10 @@ class GeneralIpcChannelHandlers extends IpcChannelHandlers {
     return app.exit(args?.code ?? 0)
   }
 
+  async minimizeLoadingWinHandler (event, args) {
+    return wins.loadingWindow?.minimize()
+  }
+
   async getTitleHandler (event, args) {
     return wins.mainWindow.getTitle()
   }
