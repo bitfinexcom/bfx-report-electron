@@ -253,6 +253,14 @@
     const descriptionElem = document.getElementById('description')
     const minBtnElem = document.getElementById('minBtn')
 
+    minBtnElem.onclick = async () => {
+      try {
+        await window.bfxReportElectronApi?.minimizeLoadingWin()
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
     setTimeout(() => {
       for (const roller of rollers) {
         roller.classList.add("show-roller")
