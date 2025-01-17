@@ -255,7 +255,7 @@
 
     minBtnElem.onclick = async () => {
       try {
-        await window.bfxReportElectronApi?.minimizeLoadingWin()
+        await window.bfxReportElectronApi?.hideLoadingWindow()
       } catch (err) {
         console.error(err)
       }
