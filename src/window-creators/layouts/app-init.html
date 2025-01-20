@@ -22,6 +22,44 @@
         font-family: "Roboto", sans-serif;
     }
 
+    .win-control-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: block;
+      min-height: 30px;
+      margin: 0;
+      padding: 5px;
+    }
+
+    .minimize-btn {
+      position: relative;
+      display: block;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #172d3e;
+      transition: background-color .3s;
+      cursor: pointer;
+    }
+
+    .minimize-btn::after {
+      content: "";
+      display: block;
+      position: absolute;
+      width: 12px;
+      height: 1px;
+      background: #9b9a9a;
+      bottom: 9px;
+      left: calc((30px - 12px) / 2);
+    }
+
+    .minimize-btn:hover,
+    .minimize-btn:active,
+    .minimize-btn:focus {
+      background-color: #1c3649;
+    }
+
     .lds-roller {
       display: inline-block;
       position: absolute;
@@ -190,6 +228,9 @@
 </head>
 
 <body class="body">
+  <div class="win-control-btn">
+    <div id="minBtn" class="minimize-btn"></div>
+  </div>
   <div class="lds-roller">
     <div></div>
     <div></div>
@@ -210,6 +251,15 @@
   window.addEventListener('load', () => {
     const rollers = document.getElementsByClassName('lds-roller')
     const descriptionElem = document.getElementById('description')
+    const minBtnElem = document.getElementById('minBtn')
+
+    minBtnElem.onclick = async () => {
+      try {
+        await window.bfxReportElectronApi?.hideLoadingWindow()
+      } catch (err) {
+        console.error(err)
+      }
+    }
 
     setTimeout(() => {
       for (const roller of rollers) {

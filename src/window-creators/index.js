@@ -327,7 +327,9 @@ const createLoadingWindow = async () => {
     'loadingWindow',
     {
       width: 350,
-      height: 350
+      height: 350,
+      maximizable: false,
+      fullscreenable: false
     }
   )
 
