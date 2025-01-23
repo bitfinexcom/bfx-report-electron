@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.32.0] - 2025-01-22
+
+### Added
+
+- Added the backend logic to move the electron app menu bar to the UI title instead of the electron one so that we can customize the electron menu, as the native electron menu API doesn't provide that. It allows us to build the menu in the UI in one small line with the main app title and typical window buttons (minimize, maximize, and close in the top corner). This is very useful as it saves overall space and at the same time constantly displays the menu and does not require the user to press the `Alt` key to display it (as practice has shown, because of the last one, many inexperienced users do not even know about the existence of menu functions). PRs: [bfx-report-electron#478](https://github.com/bitfinexcom/bfx-report-electron/pull/478), [bfx-facs-db-better-sqlite#11](https://github.com/bitfinexcom/bfx-facs-db-better-sqlite/pull/11)
+- Added a small typical `_` button (in the top right corner) to minimize the loading window. PR: [bfx-report-electron#479](https://github.com/bitfinexcom/bfx-report-electron/pull/479)
+- Added the logout flow for web users and prevented the issue when logged-out users are still logged in after the page refreshing. PR: [bfx-report-ui#889](https://github.com/bitfinexcom/bfx-report-ui/pull/889)
+
+### Changed
+
+- Renamed `Filter` button to `Generate` and also disabled it during the initial synchronization to prevent `Tax Report` generation errors. Implemented corresponding notice for the users during the initial sync. PR: [bfx-report-ui#888](https://github.com/bitfinexcom/bfx-report-ui/pull/888)
+- Actualized app download link generation flow. PR: [bfx-report-ui#890](https://github.com/bitfinexcom/bfx-report-ui/pull/890)
+- Actualized `Reports` translations and extended coverage for newly added elements/features. PR: [bfx-report-ui#891](https://github.com/bitfinexcom/bfx-report-ui/pull/891)
+- Improved theme setting flow and fixed issues noted after the latest `Electron` version update. PR: [bfx-report-ui#893](https://github.com/bitfinexcom/bfx-report-ui/pull/893)
+
+### Fixed
+
+- Fixed `isAuthTokenGenerationError` flag processing in query response for the 2FA re-login after token expiration. PR: [bfx-report-ui#892](https://github.com/bitfinexcom/bfx-report-ui/pull/892)
+
 ## [4.31.0] - 2024-12-04
 
 ### Added
