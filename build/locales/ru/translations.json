@@ -5,17 +5,39 @@
   },
   "menu": {
     "macMainSubmenu": {
-      "servicesLabel": "Услуги",
+      "servicesLabel": "Службы",
       "hideLabel": "Скрыть",
       "hideOthersLabel": "Скрыть Другие",
       "unhideLabel": "Показать",
       "quitLabel": "Выйти"
     },
     "fileSubMenu": {
-      "label": "Файл"
+      "label": "Файл",
+      "closeLabel": "Закрыть",
+      "quitLabel": "Выйти"
     },
     "editSubMenu": {
-      "label": "Редактировать"
+      "label": "Редактировать",
+      "undoLabel": "Отменить",
+      "redoLabel": "Повторить",
+      "cutLabel": "Вырезать",
+      "copyLabel": "Копировать",
+      "pasteLabel": "Вставить",
+      "pasteAndMatchStyleLabel": "Вставить и Сопоставить Стиль",
+      "deleteLabel": "Удалить",
+      "selectAllLabel": "Выбрать Все",
+      "substitutionsSubMenu": {
+        "label": "Подстановки",
+        "showSubstitutions": "Показать Подстановки",
+        "toggleSmartQuotes": "Умные Цитаты",
+        "toggleSmartDashes": "Умные Тире",
+        "toggleTextReplacement": "Замена текста"
+      },
+      "speechSubMenu": {
+        "label": "Речь",
+        "startSpeakingLabel": "Начать Говорить",
+        "stopSpeakingLabel": "Перестать Говорить"
+      }
     },
     "viewSubMenu": {
       "label": "Вид",
@@ -28,7 +50,11 @@
       "togglefullscreenLabel": "Переключить на Полный Экран"
     },
     "windowSubMenu": {
-      "label": "Окно"
+      "label": "Окно",
+      "minimizeLabel": "Свернуть",
+      "zoomLabel": "Увеличить",
+      "frontLabel": "На Передний План",
+      "windowLabel": "Окно"
     },
     "toolsSubMenu": {
       "label": "Инструменты",

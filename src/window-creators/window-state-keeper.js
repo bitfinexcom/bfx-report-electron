@@ -12,7 +12,6 @@ module.exports = (options) => {
   const eventHandlingDelay = 100
   const config = {
     maximize: true,
-    fullScreen: true,
     ...options
   }
 
@@ -132,10 +131,6 @@ module.exports = (options) => {
   }
 
   const manage = (win) => {
-    if (config.fullScreen && state.isFullScreen) {
-      win.setFullScreen(true)
-    }
-
     win.on('resize', stateChangeHandler)
     win.on('move', stateChangeHandler)
     win.on('close', closeHandler)
