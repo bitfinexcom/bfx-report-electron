@@ -153,11 +153,11 @@ if [ $isAutoUpdateDisabled == 1 ]; then
   echo -e "\n${COLOR_YELLOW}Auto-update is turned off!${COLOR_NORMAL}"
 
   sed -i".bak" -E -e \
-    "s/\"IS_AUTO_UPDATE_DISABLED\": (false)|(true)/\"IS_AUTO_UPDATE_DISABLED\": true/g" \
+    "s/\"IS_AUTO_UPDATE_DISABLED\": ((false)|(true))/\"IS_AUTO_UPDATE_DISABLED\": true/g" \
     "$ROOT/$ELECTRON_ENV_FILE_NAME"; rm -f "$ROOT/$ELECTRON_ENV_FILE_NAME.bak"
 else
   sed -i".bak" -E -e \
-    "s/\"IS_AUTO_UPDATE_DISABLED\": (false)|(true)/\"IS_AUTO_UPDATE_DISABLED\": false/g" \
+    "s/\"IS_AUTO_UPDATE_DISABLED\": ((false)|(true))/\"IS_AUTO_UPDATE_DISABLED\": false/g" \
     "$ROOT/$ELECTRON_ENV_FILE_NAME"; rm -f "$ROOT/$ELECTRON_ENV_FILE_NAME.bak"
 fi
 
