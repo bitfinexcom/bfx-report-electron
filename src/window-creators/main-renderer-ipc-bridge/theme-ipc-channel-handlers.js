@@ -7,9 +7,35 @@ const IpcChannelHandlers = require('./ipc.channel.handlers')
 class ThemeIpcChannelHandlers extends IpcChannelHandlers {
   static channelName = 'theme'
 
+  static THEME_SOURCES = {
+    LIGHT: 'light',
+    DARK: 'dark',
+    SYSTEM: 'system'
+  }
+
+  async setThemeHandler (event, args) {
+    if (args?.isSystemTheme) {
+      nativeTheme.themeSource = this.constructor.THEME_SOURCES.SYSTEM
+
+      return this.getThemeHandler()
+    }
+    if (args?.isDarkTheme) {
+      nativeTheme.themeSource = this.constructor.THEME_SOURCES.DARK
+
+      return this.getThemeHandler()
+    }
+    if (args?.isLightTheme) {
+      nativeTheme.themeSource = this.constructor.THEME_SOURCES.LIGHT
+
+      return this.getThemeHandler()
+    }
+
+    return this.getThemeHandler()
+  }
+
   async getThemeHandler (event, args) {
     return {
-      isSystemTheme: nativeTheme.themeSource === 'system',
+      isSystemTheme: nativeTheme.themeSource === this.constructor.THEME_SOURCES.SYSTEM,
       isDarkTheme: nativeTheme.shouldUseDarkColors,
       isLightTheme: !nativeTheme.shouldUseDarkColors
     }
