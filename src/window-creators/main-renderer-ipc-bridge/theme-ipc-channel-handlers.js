@@ -13,6 +13,11 @@ class ThemeIpcChannelHandlers extends IpcChannelHandlers {
     SYSTEM: 'system'
   }
 
+  static isThemeAllowed (theme) {
+    return Object.values(this.THEME_SOURCES)
+      .some((item) => item === theme)
+  }
+
   async setThemeHandler (event, args) {
     if (args?.isSystemTheme) {
       nativeTheme.themeSource = this.constructor.THEME_SOURCES.SYSTEM
