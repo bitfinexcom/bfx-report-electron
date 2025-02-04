@@ -25,7 +25,10 @@ class ThemeIpcChannelHandlers extends IpcChannelHandlers {
       return this.#saveTheme(this.constructor.THEME_SOURCES.LIGHT)
     }
 
-    return this.getThemeHandler()
+    return {
+      ...(await this.getThemeHandler()),
+      isThemeSavedInConfigs: false
+    }
   }
 
   async getThemeHandler (event, args) {
@@ -43,7 +46,10 @@ class ThemeIpcChannelHandlers extends IpcChannelHandlers {
 
   async #saveTheme (theme) {
     if (!this.constructor.isThemeAllowed(theme)) {
-      return this.getThemeHandler()
+      return {
+        ...(await this.getThemeHandler()),
+        isThemeSavedInConfigs: false
+      }
     }
 
     const configsKeeper = getConfigsKeeperByName('main')
@@ -54,7 +60,10 @@ class ThemeIpcChannelHandlers extends IpcChannelHandlers {
       nativeTheme.themeSource = theme
     }
 
-    return this.getThemeHandler()
+    return {
+      ...(await this.getThemeHandler()),
+      isThemeSavedInConfigs: isSaved
+    }
   }
 }
 
