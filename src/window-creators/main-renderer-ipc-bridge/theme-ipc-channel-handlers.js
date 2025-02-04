@@ -3,6 +3,7 @@
 const { nativeTheme } = require('electron')
 
 const IpcChannelHandlers = require('./ipc.channel.handlers')
+const { getConfigsKeeperByName } = require('../../configs-keeper')
 
 class ThemeIpcChannelHandlers extends IpcChannelHandlers {
   static channelName = 'theme'
@@ -13,26 +14,15 @@ class ThemeIpcChannelHandlers extends IpcChannelHandlers {
     SYSTEM: 'system'
   }
 
-  static isThemeAllowed (theme) {
-    return Object.values(this.THEME_SOURCES)
-      .some((item) => item === theme)
-  }
-
   async setThemeHandler (event, args) {
     if (args?.isSystemTheme) {
-      nativeTheme.themeSource = this.constructor.THEME_SOURCES.SYSTEM
-
-      return this.getThemeHandler()
+      return this.#saveTheme(this.constructor.THEME_SOURCES.SYSTEM)
     }
     if (args?.isDarkTheme) {
-      nativeTheme.themeSource = this.constructor.THEME_SOURCES.DARK
-
-      return this.getThemeHandler()
+      return this.#saveTheme(this.constructor.THEME_SOURCES.DARK)
     }
     if (args?.isLightTheme) {
-      nativeTheme.themeSource = this.constructor.THEME_SOURCES.LIGHT
-
-      return this.getThemeHandler()
+      return this.#saveTheme(this.constructor.THEME_SOURCES.LIGHT)
     }
 
     return this.getThemeHandler()
@@ -44,6 +34,27 @@ class ThemeIpcChannelHandlers extends IpcChannelHandlers {
       isDarkTheme: nativeTheme.shouldUseDarkColors,
       isLightTheme: !nativeTheme.shouldUseDarkColors
     }
+  }
+
+  static isThemeAllowed (theme) {
+    return Object.values(this.THEME_SOURCES)
+      .some((item) => item === theme)
+  }
+
+  async #saveTheme (theme) {
+    if (!this.constructor.isThemeAllowed(theme)) {
+      return this.getThemeHandler()
+    }
+
+    const configsKeeper = getConfigsKeeperByName('main')
+    const isSaved = await configsKeeper
+      ?.saveConfigs?.({ theme })
+
+    if (isSaved) {
+      nativeTheme.themeSource = theme
+    }
+
+    return this.getThemeHandler()
   }
 }
 
