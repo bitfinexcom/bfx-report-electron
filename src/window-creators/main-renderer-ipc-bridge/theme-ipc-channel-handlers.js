@@ -15,13 +15,26 @@ class ThemeIpcChannelHandlers extends IpcChannelHandlers {
   }
 
   async setThemeHandler (event, args) {
-    if (args?.isSystemTheme) {
+    const {
+      isSystemTheme,
+      isDarkTheme,
+      isLightTheme
+    } = args ?? {}
+
+    if (
+      [isSystemTheme, isDarkTheme, isLightTheme]
+        .filter((f) => f).length > 1
+    ) {
+      throw new Error('ERR_INVALID_THEME_PARAM_HAS_BEEN_PASSED')
+    }
+
+    if (isSystemTheme) {
       return this.#saveTheme(this.constructor.THEME_SOURCES.SYSTEM)
     }
-    if (args?.isDarkTheme) {
+    if (isDarkTheme) {
       return this.#saveTheme(this.constructor.THEME_SOURCES.DARK)
     }
-    if (args?.isLightTheme) {
+    if (isLightTheme) {
       return this.#saveTheme(this.constructor.THEME_SOURCES.LIGHT)
     }
 
