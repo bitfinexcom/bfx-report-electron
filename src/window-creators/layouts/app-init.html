@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="shortcut icon" href="../../../bfx-report-ui/build/favicon.ico">
   <link href="../../../bfx-report-ui/build/fonts/inter.css" rel="stylesheet">
+  <link href="./themes.css" rel="stylesheet">
   <title>Bitfinex Reports</title>
   <style>
     html {
@@ -18,7 +19,7 @@
       padding: 0;
       margin: 0;
       text-align: center;
-      background-color: #172d3e;
+      background-color: var(--bgColor, #172d3e);
       font-family: "Inter", sans-serif;
       font-feature-settings: 'tnum';
     }
@@ -39,7 +40,7 @@
       width: 30px;
       height: 30px;
       border-radius: 50%;
-      background-color: #172d3e;
+      background-color: var(--bgColor, #172d3e);
       transition: background-color .3s;
       cursor: pointer;
     }
@@ -50,7 +51,7 @@
       position: absolute;
       width: 12px;
       height: 1px;
-      background: #9b9a9a;
+      background-color: var(--btnMinimizeAfterBg, #9b9a9a);
       bottom: 9px;
       left: calc((30px - 12px) / 2);
     }
@@ -58,7 +59,7 @@
     .minimize-btn:hover,
     .minimize-btn:active,
     .minimize-btn:focus {
-      background-color: #1c3649;
+      background-color: var(--btnMinimizeHoverBg, #9b9a9a);
     }
 
     .lds-roller {
@@ -89,7 +90,7 @@
       width: 6px;
       height: 6px;
       border-radius: 50%;
-      background: #f5f8fa;
+      background-color: var(--color, #ffffff);
       margin: -3px 0 0 -3px;
     }
 
@@ -184,12 +185,12 @@
       animation: logo-shower 3s ease-in-out;
       width: 200px;
       height: 200px;
-      background-color: #172d3e;
+      background-color: var(--bgColor, #172d3e);
     }
 
     .description {
       display: none;
-      color: #f5f8fa;
+      color: var(--color, #172d3e);
       position: fixed;
       text-align: center;
       margin: 0;
