@@ -1,5 +1,6 @@
 body .swal2-container {
-  font-family: "Roboto", sans-serif;
+  font-family: "Inter", sans-serif;
+  font-feature-settings: 'tnum';
   margin: 0;
 }
 
