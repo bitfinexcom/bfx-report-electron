@@ -1,0 +1,31 @@
+:root {
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* main */
+    --bgColor: #172d3e;
+    --color: #ffffff;
+    --color2: #808B93;
+
+    /* buttons */
+    --btnMinimizeBg: var(--bgColor);
+    --btnMinimizeAfterBg: #9b9a9a;
+    --btnMinimizeHoverBg: #19354a;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* main */
+    --bgColor: #ffffff;
+    --color: #102331;
+    --color2: #545c62;
+
+    /* buttons */
+    --btnMinimizeBg: var(--bgColor);
+    --btnMinimizeAfterBg: #9b9a9a;
+    --btnMinimizeHoverBg: #e5e5e5;
+  }
+}
