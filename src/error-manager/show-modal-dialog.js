@@ -26,6 +26,9 @@ const {
 const getUIFontsAsCSSString = require(
   '../helpers/get-ui-fonts-as-css-string'
 )
+const ThemeIpcChannelHandlers = require(
+  '../window-creators/main-renderer-ipc-bridge/theme-ipc-channel-handlers'
+)
 
 const mdStyle = fs.readFileSync(path.join(
   rootPath, 'node_modules', 'github-markdown-css/github-markdown.css'
@@ -92,7 +95,7 @@ const _fireAlert = (params) => {
     thickFrame: false,
     closable: false,
     hasShadow: false,
-    backgroundColor: '#172d3e',
+    backgroundColor: ThemeIpcChannelHandlers.getWindowBackgroundColor(),
     darkTheme: false,
     parent: win,
     modal: true,
@@ -104,7 +107,7 @@ const _fireAlert = (params) => {
   const swalOptions = {
     position: 'center',
     allowOutsideClick: false,
-    backdrop: 'rgba(0,0,0,0.0)',
+    backdrop: ThemeIpcChannelHandlers.getWindowBackgroundColor(),
     customClass: getAlertCustomClassObj({
       htmlContainer: 'markdown-body'
     }),
