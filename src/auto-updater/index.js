@@ -31,6 +31,9 @@ const {
 const getUIFontsAsCSSString = require(
   '../helpers/get-ui-fonts-as-css-string'
 )
+const ThemeIpcChannelHandlers = require(
+  '../window-creators/main-renderer-ipc-bridge/theme-ipc-channel-handlers'
+)
 
 const MENU_ITEM_IDS = require('../create-menu/menu.item.ids')
 
@@ -124,7 +127,7 @@ const _fireToast = (
     thickFrame: false,
     closable: false,
     hasShadow: false,
-    backgroundColor: '#172d3e',
+    backgroundColor: ThemeIpcChannelHandlers.getWindowBackgroundColor(),
     darkTheme: false,
     height,
     width: opts?.width ?? 1000,
@@ -138,7 +141,7 @@ const _fireToast = (
     toast: true,
     position: 'top-end',
     allowOutsideClick: false,
-    backdrop: 'rgba(0,0,0,0.0)',
+    backdrop: ThemeIpcChannelHandlers.getWindowBackgroundColor(),
 
     icon: 'info',
     title: i18next.t('autoUpdater.title'),
