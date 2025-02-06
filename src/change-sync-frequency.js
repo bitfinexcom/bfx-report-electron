@@ -33,6 +33,9 @@ const {
   WINDOW_EVENT_NAMES,
   addOnceProcEventHandler
 } = require('./window-creators/window-event-manager')
+const ThemeIpcChannelHandlers = require(
+  './window-creators/main-renderer-ipc-bridge/theme-ipc-channel-handlers'
+)
 
 const _getSchedulerRule = (timeFormat, alertRes) => {
   if (timeFormat.value === 'days') {
@@ -88,13 +91,13 @@ const _fireFrameless = (alert, opts) => {
     transparent: true,
     thickFrame: false,
     closable: false,
-    backgroundColor: '#172d3e',
+    backgroundColor: ThemeIpcChannelHandlers.getWindowBackgroundColor(),
     hasShadow: false
   }
   const swalOptions = {
-    background: '#172d3e',
+    background: ThemeIpcChannelHandlers.getWindowBackgroundColor(),
     allowOutsideClick: false,
-    backdrop: 'rgba(0,0,0,0.0)',
+    backdrop: ThemeIpcChannelHandlers.getWindowBackgroundColor(),
     ...opts
   }
 
