@@ -31,6 +31,9 @@ const {
 const MenuIpcChannelHandlers = require(
   './main-renderer-ipc-bridge/menu-ipc-channel-handlers'
 )
+const ThemeIpcChannelHandlers = require(
+  './main-renderer-ipc-bridge/theme-ipc-channel-handlers'
+)
 
 const shouldLocalhostBeUsedForLoadingUIInDevMode = parseEnvValToBool(
   process.env.SHOULD_LOCALHOST_BE_USED_FOR_LOADING_UI_IN_DEV_MODE
@@ -131,7 +134,7 @@ const _createWindow = async (
       ? bounds.y
       : y,
     icon: path.join(__dirname, '../../build/icons/512x512.png'),
-    backgroundColor: '#172d3e',
+    backgroundColor: ThemeIpcChannelHandlers.getWindowBackgroundColor(),
     show: false,
     ...winProps,
 
