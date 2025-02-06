@@ -14,6 +14,11 @@ class ThemeIpcChannelHandlers extends IpcChannelHandlers {
     SYSTEM: 'system'
   }
 
+  static WINDOW_BACKGROUND_COLORS = {
+    LIGHT: '#ffffff',
+    DARK: '#172d3e'
+  }
+
   async setThemeHandler (event, args) {
     const {
       isSystemTheme,
@@ -50,6 +55,14 @@ class ThemeIpcChannelHandlers extends IpcChannelHandlers {
       isDarkTheme: nativeTheme.shouldUseDarkColors,
       isLightTheme: !nativeTheme.shouldUseDarkColors
     }
+  }
+
+  static getWindowBackgroundColor () {
+    if (nativeTheme.shouldUseDarkColors) {
+      return this.WINDOW_BACKGROUND_COLORS.DARK
+    }
+
+    return this.WINDOW_BACKGROUND_COLORS.LIGHT
   }
 
   static isThemeAllowed (theme) {
