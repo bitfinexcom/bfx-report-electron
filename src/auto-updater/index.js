@@ -40,6 +40,9 @@ const MENU_ITEM_IDS = require('../create-menu/menu.item.ids')
 const isAutoUpdateDisabled = parseEnvValToBool(process.env.IS_AUTO_UPDATE_DISABLED)
 
 const fontsStyle = getUIFontsAsCSSString()
+const themeStyle = fs.readFileSync(path.join(
+  __dirname, '../window-creators/layouts/themes.css'
+))
 const toastStyle = fs.readFileSync(path.join(
   __dirname, 'toast-src/toast.css'
 ))
@@ -59,6 +62,7 @@ try {
 } catch (err) {}
 
 const fonts = `<style>${fontsStyle}</style>`
+const theme = `<style>${themeStyle}</style>`
 const style = `<style>${toastStyle}</style>`
 const script = `<script type="text/javascript">${toastScript}</script>`
 const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
@@ -96,7 +100,7 @@ const _fireToast = (
     return { value: false }
   }
 
-  const alert = new Alert([fonts, style, script])
+  const alert = new Alert([fonts, theme, style, script])
   toast = alert
 
   const eventHandlerCtx = addOnceProcEventHandler(
