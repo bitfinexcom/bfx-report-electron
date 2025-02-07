@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" href="../../../bfx-report-ui/build/favicon.ico">
     <link href="../../../bfx-report-ui/build/fonts/inter.css" rel="stylesheet">
+    <link href="./themes.css" rel="stylesheet">
     <title>Bitfinex Reports</title>
     <style>
       html {
@@ -19,7 +20,7 @@
         flex-direction: column;
         justify-content: center;
         text-align: center;
-        background-color: #172d3e;
+        background-color: var(--bgColor, #172d3e);
         font-family: "Inter", sans-serif;
         font-feature-settings: 'tnum';
       }
@@ -28,7 +29,7 @@
         margin: 0 0 20px;
         padding: 20px 10px;
         background-color: #db3737;
-        color: #f5f8fa;
+        color: var(--color, #ffffff);
         font-size: 16px;
       }
 
@@ -54,29 +55,33 @@
         font-size: 15px;
         padding: 5px 10px;
         text-decoration: none;
-        color: #172d3e;
-        background-color: #82baf6;
         text-align: center;
         letter-spacing: .5px;
         outline: 0;
         border: none;
         border-radius: 2px;
-        box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+        background-color: var(--btnBg, #82baf6);
+        border: 1px solid var(--btnBg, #82baf6);
+        color: var(--btnPrimaryColor, #102331);
+        box-shadow: none;
+        background-image: none;
       }
 
       .btn-close:hover,
       .btn-close:active,
       .btn-close:focus {
-        background-color: #4c88c8;
-        box-shadow: 0 3px 3px 0 rgba(0,0,0,0.14), 0 1px 7px 0 rgba(0,0,0,0.12), 0 3px 1px -1px rgba(0,0,0,0.2);
+        background-color: var(--btnPrimaryHoverBg, #4c88c8);
+        border: 1px solid var(--btnPrimaryHoverBg, #4c88c8);
+        color: var(--btnPrimaryHoverColor, #102331);
+        box-shadow: none;
       }
 
       .btn-close.btn-disabled {
         box-shadow: none;
         background-image: none;
-        color: rgba(255, 255, 255, 0.3);
+        color: #fff9;
         border-color: transparent;
-        background-color: #50617180;
+        background-color: #137cbd80;
         cursor: not-allowed;
       }
     </style>
