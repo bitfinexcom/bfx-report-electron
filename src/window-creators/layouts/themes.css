@@ -6,13 +6,18 @@
   :root {
     /* main */
     --bgColor: #172d3e;
+    --bgColor2: #0B1923;
     --color: #ffffff;
     --color2: #808B93;
+    --borderColor: #334A59;
+    --activeColor: #82baf6;
 
     /* buttons */
     --btnBg: #82baf6;
+    --btnColor: #ffffff;
     --btnPrimaryColor: #102331;
     --btnPrimaryHoverColor: #102331;
+    --btnHoverBg: #19354a;
     --btnPrimaryHoverBg: #4c88c8;
     --btnMinimizeBg: var(--bgColor);
     --btnMinimizeAfterBg: #9b9a9a;
@@ -24,13 +29,18 @@
   :root {
     /* main */
     --bgColor: #ffffff;
+    --bgColor2: #d8ecfb;
     --color: #102331;
     --color2: #545c62;
+    --borderColor: #102331;
+    --activeColor: #518bc9;
 
     /* buttons */
     --btnBg: #6fa8e5;
+    --btnColor: #102331;
     --btnPrimaryColor: #ffffff;
     --btnPrimaryHoverColor: #ffffff;
+    --btnHoverBg: #d8ecfb;
     --btnPrimaryHoverBg: #4c88c8;
     --btnMinimizeBg: var(--bgColor);
     --btnMinimizeAfterBg: #9b9a9a;
