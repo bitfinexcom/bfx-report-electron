@@ -10,6 +10,10 @@
     --color2: #808B93;
 
     /* buttons */
+    --btnBg: #82baf6;
+    --btnPrimaryColor: #102331;
+    --btnPrimaryHoverColor: #102331;
+    --btnPrimaryHoverBg: #4c88c8;
     --btnMinimizeBg: var(--bgColor);
     --btnMinimizeAfterBg: #9b9a9a;
     --btnMinimizeHoverBg: #19354a;
@@ -24,6 +28,10 @@
     --color2: #545c62;
 
     /* buttons */
+    --btnBg: #6fa8e5;
+    --btnPrimaryColor: #ffffff;
+    --btnPrimaryHoverColor: #ffffff;
+    --btnPrimaryHoverBg: #4c88c8;
     --btnMinimizeBg: var(--bgColor);
     --btnMinimizeAfterBg: #9b9a9a;
     --btnMinimizeHoverBg: #e5e5e5;
