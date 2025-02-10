@@ -90,10 +90,10 @@ body.swal2-toast-shown .swal2-container {
 }
 
 .swal2-styled.swal2-cancel {
-  border-radius: 2;
-  background-color: var(--bgColor, #0B1923);
-  border: 1px solid var(--borderColor, #0B1923);
-  color: var(--btnColor, #ffffff);;
+  border-radius: 2px;
+  background-color: var(--bgColor, #172d3e);
+  border: 1px solid var(--borderColor, #334A59);
+  color: var(--btnColor, #ffffff);
   box-shadow: none;
   background-image: none;
 }
@@ -102,7 +102,7 @@ body.swal2-toast-shown .swal2-container {
 .swal2-actions .swal2-styled.swal2-cancel:focus,
 .swal2-actions .swal2-styled.swal2-cancel:active {
   background-color: var(--btnHoverBg, #19354a);
-  border: 1px solid var(--borderColor, #0B1923);
+  border: 1px solid var(--borderColor, #334A59);
   box-shadow: none;
 }
 
