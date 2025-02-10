@@ -8,7 +8,7 @@ body::-webkit-scrollbar,
 .markdown-body pre::-webkit-scrollbar {
   width: 8px;
   height: 8px;
-  background-color: #0c1a25;
+  background-color: var(--tableScrollBg, #0c1a25);
 }
 
 body::-webkit-scrollbar-corner,
@@ -17,7 +17,7 @@ body::-webkit-scrollbar-corner,
 body::-webkit-scrollbar-thumb,
 .markdown-body pre::-webkit-scrollbar-thumb,
 .swal2-container::-webkit-scrollbar-thumb {
-  background-color: #5ebefa;
+  background-color: var(--tableScrollThumbBg, #2a3f4d);
 }
 
 body::-webkit-scrollbar-thumb,
@@ -29,70 +29,78 @@ body::-webkit-scrollbar-thumb,
 .swal2-popup {
   width: auto;
   min-width: 32em;
-  background-color: #172d3e;
+  background-color: var(--bgColor, #172d3e);
 }
 
 .swal2-styled.swal2-confirm {
   border-radius: 2px;
-  background-color: #82baf6;
+  background-color: var(--btnBg, #82baf6);
+  border: 1px solid var(--btnBg, #82baf6);
+  color: var(--btnPrimaryColor, #102331);
   transition: all 0.3s;
-  color: #102331;
   box-shadow: none;
+  background-image: none;
 }
 
 .swal2-actions .swal2-styled.swal2-confirm:hover,
 .swal2-actions .swal2-styled.swal2-confirm:focus,
 .swal2-actions .swal2-styled.swal2-confirm:active {
-  background-color: #4c88c8;
+  background-color: var(--btnPrimaryHoverBg, #4c88c8);
+  border: 1px solid var(--btnPrimaryHoverBg, #4c88c8);
+  color: var(--btnPrimaryHoverColor, #102331);
   box-shadow: none;
 }
 
 .swal2-styled.swal2-cancel {
   border-radius: 2px;
-  background-color: #172d3e;
-  border: 1px solid #19354a;
+  background-color: var(--bgColor, #172d3e);
+  border: 1px solid var(--borderColor, #334A59);
+  color: var(--btnColor, #ffffff);
+  transition: all 0.3s;
   box-shadow: none;
+  background-image: none;
 }
 
 .swal2-actions .swal2-styled.swal2-cancel:hover,
 .swal2-actions .swal2-styled.swal2-cancel:focus,
 .swal2-actions .swal2-styled.swal2-cancel:active {
-  background-color: #19354a;
+  background-color: var(--btnHoverBg, #19354a);
+  border: 1px solid var(--borderColor, #334A59);
   box-shadow: none;
 }
 
 .markdown-body {
-  background-color: #102331;
+  background-color: var(--bgColor2, #0B1923);
   padding: 16px;
   font-size: 1em;
 }
 
 .markdown-body table {
-  color: #f5f8fa;
+  color: var(--tableColor, #f5f8fa);
   overflow: unset;
 }
 
 .markdown-body table tr {
-  background-color: #102331;
+  background-color: var(--tableOddBg, #0B1923);
 }
 
 .markdown-body table thead tr {
-  background-color: #172d3e;
-  color: #82baf6;
+  background-color: var(--thBg, #0B1923);
+  color: var(--thColor, #82baf6);
 }
 
 .markdown-body table tr:nth-child(2n) {
-  background-color: #172d3e;
+  background-color: var(--tableEvenBg, #0B1923);
 }
 
 .markdown-body .highlight pre,
 .markdown-body pre {
-  background-color: #172d3e;
+  background-color: var(--bgColor, #172d3e);
 }
 
 .markdown-body table td,
 .markdown-body table th {
-  border: 1px solid #19354a;
+  border: 1px solid var(--tableBorder, #334A59);
 }
 
 .markdown-body details,
@@ -114,11 +122,11 @@ body::-webkit-scrollbar-thumb,
 
 .markdown-body h1,
 .markdown-body h2 {
-  border-bottom: 1px solid #19354a;
+  border-bottom: 1px solid var(--tableBorder, #334A59);
 }
 
 .markdown-body blockquote {
-  border-left: .25em solid #19354a;
+  border-left: .25em solid var(--tableBorder, #334A59);
 }
 
 .radioInput,
@@ -134,29 +142,37 @@ body::-webkit-scrollbar-thumb,
 .radioInput input[type=radio] {
   -webkit-appearance: none;
   margin: -5px 10px -4px 5px;
-  border: 2px solid #f5f8fa;
+  border: 2px solid var(--radioInputBorder, #f5f2f2);
+  background-color: transparent;
   cursor: pointer;
   width: 28px;
   height: 28px;
   border-radius: 14px;
+  transition: all 0.3s;
 }
 
 .radioInput input[type=radio]:focus {
   outline: none;
 }
 
+
+.radioInput input[type=radio]:hover {
+  background-color: var(--radioInputBgHover, #19354a);
+}
+
 .radioInput input[type=radio]:checked {
-  background-color: #3085d6;
+  background-color: var(--radioInputBgActive, #82baf6);
 }
 
 .rangeInput output {
   width: 20%;
 }
 
+/* TODO: */
 .rangeInput input[type=range] {
   margin: 0;
-  background: #f5f8fa;
-  border: 0.2px solid #010101;
+  background-color: transparent;
+  border: 0.2px solid var(--rangeInputBorder, #334A59);
   border-radius: 1.3px;
   height: 6.4px;
   width: 80%;
@@ -179,21 +195,17 @@ body::-webkit-scrollbar-thumb,
   margin-top: -10.8px;
   width: 28px;
   height: 28px;
-  background:  #3085d6;
+  background-color: var(--rangeInputBgActive, #3085d6);
   border: none;
   border-radius: 14px;
   cursor: pointer;
   -webkit-appearance: none;
-  box-shadow: -800px 0 0 -10.8px #3085d6;
-}
-
-.rangeInput input[type=range]:focus::-webkit-slider-runnable-track {
-  background-image: linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2));
+  box-shadow: -800px 0 0 -10.8px var(--rangeInputBgActive, #82baf6);
 }
 
 .swal2-title,
 .titleColor {
-  color: #82baf6;
+  color: var(--activeColor, #82baf6);
 }
 
 .swal2-html-container {
@@ -202,7 +214,7 @@ body::-webkit-scrollbar-thumb,
 
 .swal2-html-container,
 .textColor {
-  color: #f5f8fa;
+  color: var(--color, #ffffff);
 }
 
 .select-db-backup .radioInput {
