@@ -4,6 +4,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --swal2-input-background-color: #172d3e;
     /* main */
     --bgColor: #172d3e;
     --bgColor2: #0B1923;
@@ -11,6 +12,16 @@
     --color2: #808B93;
     --borderColor: #334A59;
     --activeColor: #82baf6;
+
+    /* tables */
+    --tableColor: #f5f8fa;
+    --thColor: #82baf6;
+    --thBg: #0B1923;
+    --tableBorder: #334A59;
+    --tableOddBg: #0B1923;
+    --tableEvenBg: #0B1923;
+    --tableScrollBg: #0c1a25;
+    --tableScrollThumbBg: #2a3f4d;
 
     /* buttons */
     --btnBg: #82baf6;
@@ -22,6 +33,15 @@
     --btnMinimizeBg: var(--bgColor);
     --btnMinimizeAfterBg: #9b9a9a;
     --btnMinimizeHoverBg: #19354a;
+
+    /* radio */
+    --radioInputBorder: #334A59;
+    --radioInputBgActive: #82baf6;
+    --radioInputBgHover: #19354a;
+
+    /* range */
+    --rangeInputBorder: #334A59;
+    --rangeInputBgActive: #3085d6;
   }
 }
 
@@ -35,6 +55,16 @@
     --borderColor: #102331;
     --activeColor: #518bc9;
 
+    /* tables */
+    --tableColor: #102331;
+    --thColor: #518bc9;
+    --thBg: #d8ecfb;
+    --tableBorder: #102331;
+    --tableOddBg: #d8ecfb;
+    --tableEvenBg: #ffffff;
+    --tableScrollBg: #d1d1d1;
+    --tableScrollThumbBg: #82baf6;
+
     /* buttons */
     --btnBg: #6fa8e5;
     --btnColor: #102331;
@@ -45,5 +75,14 @@
     --btnMinimizeBg: var(--bgColor);
     --btnMinimizeAfterBg: #9b9a9a;
     --btnMinimizeHoverBg: #e5e5e5;
+    
+    /* radio */
+    --radioInputBorder: #102331;
+    --radioInputBgActive: #6fa8e5;
+    --radioInputBgHover: #d8ecfb;
+
+    /* range */
+    --rangeInputBorder: #102331;
+    --rangeInputBgActive: #3085d6;
   }
 }
