@@ -168,7 +168,6 @@ body::-webkit-scrollbar-thumb,
   width: 20%;
 }
 
-/* TODO: */
 .rangeInput input[type=range] {
   margin: 0;
   background-color: transparent;

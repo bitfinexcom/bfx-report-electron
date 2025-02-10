@@ -41,7 +41,8 @@
 
     /* range */
     --rangeInputBorder: #334A59;
-    --rangeInputBgActive: #3085d6;
+    --rangeInputBgActive: #82baf6;
+    --rangeInputStripBg: #172d3e;
   }
 }
 
@@ -83,6 +84,7 @@
 
     /* range */
     --rangeInputBorder: #102331;
-    --rangeInputBgActive: #3085d6;
+    --rangeInputBgActive: #6fa8e5;
+    --rangeInputStripBg: #ffffff;
   }
 }
