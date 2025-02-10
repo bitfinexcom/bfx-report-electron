@@ -12,6 +12,9 @@ const getUIFontsAsCSSString = require(
 )
 
 const fontsStyle = getUIFontsAsCSSString()
+const themesStyle = fs.readFileSync(path.join(
+  __dirname, './window-creators/layouts/themes.css'
+))
 const modalDialogStyle = fs.readFileSync(path.join(
   __dirname, 'modal-dialog-src/modal-dialog.css'
 ))
@@ -112,14 +115,15 @@ const _fireFrameless = (alert, opts) => {
 }
 
 const fonts = `<style>${fontsStyle}</style>`
+const themes = `<style>${themesStyle}</style>`
 const style = `<style>${modalDialogStyle}</style>`
 const script = `<script type="text/javascript">${modalDialogScript}</script>`
 const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
 
 module.exports = () => {
   const configsKeeper = getConfigsKeeperByName('main')
-  const timeFormatAlert = new Alert([fonts, style])
-  const alert = new Alert([fonts, style, script])
+  const timeFormatAlert = new Alert([fonts, themes, style])
+  const alert = new Alert([fonts, themes, style, script])
 
   const closeTimeFormatAlert = () => {
     if (!timeFormatAlert.browserWindow) return
