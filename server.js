@@ -1,5 +1,6 @@
 'use strict'
 
+const fs = require('fs/promises')
 const { pick } = require('lib-js-util-base')
 const { fork } = require('child_process')
 const path = require('path')
@@ -13,6 +14,8 @@ const pathToConfDir = path.join(root, 'config')
 const pathToConfFacs = path.join(pathToConfDir, 'facs')
 const pathToConfFacsGrc = path.join(pathToConfFacs, 'grc.config.json')
 const confFacsGrc = require(pathToConfFacsGrc)
+const pathToConfReportService = path.join(pathToConfDir, 'service.report.json')
+const confReportService = require(pathToConfReportService)
 
 const PROCESS_MESSAGES = require(
   './bfx-reports-framework/workers/loc.api/process.message.manager/process.messages'
@@ -119,6 +122,7 @@ const allowedProcessStatesSet = _getAllowedStatesSet({
     const workerApiPort = process.env.WORKER_API_PORT
     const workerWsPort = process.env.WORKER_WS_PORT
     const expressApiPort = process.env.EXPRESS_API_PORT
+    const bfxMockedApiPort = process.env.BFX_MOCKED_API_PORT
 
     if (!secretKey) {
       throw new WrongSecretKeyError()
@@ -144,6 +148,45 @@ const allowedProcessStatesSet = _getAllowedStatesSet({
       grenacheClient: {
         grape
       }
+    })
+
+    confReportService.restUrl = `http://127.0.0.1:${bfxMockedApiPort}`
+    await fs.writeFile(
+      pathToConfReportService,
+      JSON.stringify(confReportService, null, 2)
+    )
+    const mockedBfxApiPath = path.join(__dirname, 'mockedBfxApi.js')
+    const mockedBfxApiIpc = fork(mockedBfxApiPath, [], {
+      env,
+      cwd: process.cwd(),
+      silent: false
+    })
+    mockedBfxApiIpc.on('close', () => {
+      process.nextTick(() => {
+        process.exit(0)
+      })
+    })
+    await new Promise((resolve, reject) => {
+      const handlerMess = (mess) => {
+        const { state } = mess ?? {}
+
+        if (state !== 'MOCKED_BFX_API_READY') {
+          return
+        }
+
+        mockedBfxApiIpc.removeListener('error', handlerErr)
+        mockedBfxApiIpc.removeListener('message', handlerMess)
+
+        resolve()
+      }
+      const handlerErr = (err) => {
+        mockedBfxApiIpc.removeListener('message', handlerMess)
+
+        reject(err)
+      }
+
+      mockedBfxApiIpc.once('error', handlerErr)
+      mockedBfxApiIpc.on('message', handlerMess)
     })
 
     const confGrape1 = {
