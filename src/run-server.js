@@ -22,7 +22,8 @@ module.exports = ({
     grape2ApiPort,
     workerApiPort,
     workerWsPort,
-    expressApiPort
+    expressApiPort,
+    bfxMockedApiPort
   } = portsMap
 
   const env = {
@@ -39,7 +40,8 @@ module.exports = ({
     GRAPE_2API_PORT: grape2ApiPort,
     WORKER_API_PORT: workerApiPort,
     WORKER_WS_PORT: workerWsPort,
-    EXPRESS_API_PORT: expressApiPort
+    EXPRESS_API_PORT: expressApiPort,
+    BFX_MOCKED_API_PORT: bfxMockedApiPort
   }
   const ipc = fork(serverPath, [], {
     env,
@@ -50,6 +52,7 @@ module.exports = ({
   ipcs.serverIpc = ipc
   ipc.once('close', () => {
     ipcs.serverIpc = null
+    process.exit(0)
   })
 
   return ipc
