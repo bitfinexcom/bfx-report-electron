@@ -11,6 +11,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "archiver": "7.0.1",
+    "bfx-api-mock-srv": "git+https://github.com/bitfinexcom/bfx-api-mock-srv.git",
     "bfx-svc-test-helper": "git+https://github.com/bitfinexcom/bfx-svc-test-helper.git",
     "bittorrent-dht": "10.0.2",
     "changelog-parser": "3.0.1",
