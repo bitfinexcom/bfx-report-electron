@@ -109,7 +109,6 @@ const _fireAlert = (params) => {
   const swalOptions = {
     position: 'center',
     allowOutsideClick: false,
-    backdrop: ThemeIpcChannelHandlers.getWindowBackgroundColor(),
     customClass: getAlertCustomClassObj({
       title: 'titleColor',
       container: 'textColor',

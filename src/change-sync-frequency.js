@@ -98,9 +98,7 @@ const _fireFrameless = (alert, opts) => {
     hasShadow: false
   }
   const swalOptions = {
-    background: ThemeIpcChannelHandlers.getWindowBackgroundColor(),
     allowOutsideClick: false,
-    backdrop: ThemeIpcChannelHandlers.getWindowBackgroundColor(),
     ...opts
   }
 

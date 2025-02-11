@@ -1,3 +1,12 @@
+html, body {
+  background-color: var(--bgColor, #172d3e);
+}
+
+.swal2-container.swal2-backdrop-show,
+.swal2-container.swal2-noanimation {
+  background: unset;
+}
+
 body .swal2-container {
   font-family: "Inter", sans-serif;
   font-feature-settings: 'tnum';

@@ -145,7 +145,6 @@ const _fireToast = (
     toast: true,
     position: 'top-end',
     allowOutsideClick: false,
-    backdrop: ThemeIpcChannelHandlers.getWindowBackgroundColor(),
 
     icon: 'info',
     title: i18next.t('autoUpdater.title'),
