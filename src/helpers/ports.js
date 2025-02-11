@@ -17,7 +17,8 @@ const defaultPorts = {
   grape2ApiPort: 30001,
   workerApiPort: 3501,
   workerWsPort: 10001,
-  expressApiPort: 34343
+  expressApiPort: 34343,
+  bfxMockedApiPort: 39393
 }
 const portRangesForLookingUp = [
   { from: 3500, to: 5000 },
