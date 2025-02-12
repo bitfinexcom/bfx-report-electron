@@ -65,6 +65,16 @@ const getOneFromRangeByCounter = (counter = 0, range = []) => {
 }
 
 const ccyList = ['BTC', 'ETH', 'LTC', 'UST', 'USD']
+const ledgerDescriptionList = [
+  'Crypto Withdrawal fee on wallet exchange',
+  'Transfer of 1020.0 UST from wallet Exchange to Exchange SA(ezewer->ezewert) on wallet exchange',
+  'Exchange 0.136 AAVE for USD @ 60.343 on wallet exchange',
+  'Trading fees for 0.005778 XAUT (XAUT:USD) @ 1896.6 on BFX (0.2%) on wallet exchange',
+  'Margin Funding Charge on wallet margin',
+  'Settlement @ 1.0005 on wallet margin',
+  'Position closed @ 1.0001 (TRADE) on wallet margin',
+  'Position #168174072 funding cost on wallet margin'
+]
 
 module.exports = new Map([
   [
@@ -128,7 +138,7 @@ module.exports = new Map([
             num * (i % 2 ? -1 : 1),
             num,
             null,
-            'Crypto Withdrawal fee on wallet exchange'
+            getOneFromRangeByCounter(i, ledgerDescriptionList)
           ]
         })
     }
