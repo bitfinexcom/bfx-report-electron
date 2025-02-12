@@ -51,6 +51,13 @@ const getMtsArray = (params) => {
   return res
 }
 
+const getRandomInt = (min, max) => {
+  const minCeiled = Math.ceil(min)
+  const maxFloored = Math.floor(max)
+
+  return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled)
+}
+
 module.exports = new Map([
   [
     'platform_status',
@@ -105,7 +112,7 @@ module.exports = new Map([
           const num = 0.001 * (i + 1)
 
           return [
-            12345,
+            Number.parseInt(`${mts}${getRandomInt(100, 999)}`),
             'BTC',
             null,
             mts,
