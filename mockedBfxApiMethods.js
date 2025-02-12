@@ -58,6 +58,14 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled)
 }
 
+const getOneFromRangeByCounter = (counter = 0, range = []) => {
+  const i = counter % range.length
+
+  return range[i]
+}
+
+const ccyList = ['BTC', 'ETH', 'LTC', 'UST', 'USD']
+
 module.exports = new Map([
   [
     'platform_status',
@@ -113,7 +121,7 @@ module.exports = new Map([
 
           return [
             Number.parseInt(`${mts}${getRandomInt(100, 999)}`),
-            'BTC',
+            getOneFromRangeByCounter(i, ccyList),
             null,
             mts,
             null,
