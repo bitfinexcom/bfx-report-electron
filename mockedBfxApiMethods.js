@@ -62,6 +62,25 @@ const getOneFromRangeByCounter = (counter = 0, range = []) => {
   return range[i]
 }
 
+const getPairFromCcyRangeByCounter = (
+  counter = 0,
+  range = [],
+  prefix = 't'
+) => {
+  const i = counter % range.length
+  const j = (counter + 1) % range.length
+  const first = range[i]
+  const second = range[j]
+  const separator = (
+    first.length > 3 ||
+    second.length > 3
+  )
+    ? ':'
+    : ''
+
+  return `${prefix}${first}${separator}${second}`
+}
+
 const ccyList = ['BTC', 'ETH', 'LTC', 'UST', 'USD']
 const ledgerDescriptionList = [
   'Crypto Withdrawal fee on wallet exchange',
@@ -73,8 +92,60 @@ const ledgerDescriptionList = [
   'Position closed @ 1.0001 (TRADE) on wallet margin',
   'Position #168174072 funding cost on wallet margin'
 ]
+const orderTypeList = [
+  'EXCHANGE MARKET',
+  'EXCHANGE LIMIT',
+  'MARKET',
+  'LIMIT'
+]
 
 module.exports = new Map([
+  [
+    'ledgers',
+    (args) => {
+      return getMtsArray(args)
+        .map((mts, i) => {
+          const balance = mts / 100_000_000_000
+
+          return [
+            getIdByMts(mts),
+            getOneFromRangeByCounter(mts, ccyList),
+            null,
+            mts,
+            null,
+            balance * (i % 2 ? -0.1 : 0.1),
+            balance,
+            null,
+            getOneFromRangeByCounter(mts, ledgerDescriptionList)
+          ]
+        })
+    }
+  ],
+  [
+    'trades',
+    (args) => {
+      return getMtsArray(args)
+        .map((mts, i) => {
+          const id = getIdByMts(mts)
+          const price = mts / 100_000_000_000
+
+          return [
+            id,
+            getPairFromCcyRangeByCounter(mts, ccyList),
+            mts,
+            id,
+            price * (i % 2 ? -0.1 : 0.1),
+            price,
+            getOneFromRangeByCounter(mts, orderTypeList),
+            price,
+            i % 2,
+            price * -0.01,
+            getOneFromRangeByCounter(mts, ccyList),
+            id
+          ]
+        })
+    }
+  ],
   [
     'platform_status',
     () => [1]
@@ -118,27 +189,6 @@ module.exports = new Map([
       null,
       'Timisoara'
     ]
-  ],
-  [
-    'ledgers',
-    (args) => {
-      return getMtsArray(args)
-        .map((mts, i) => {
-          const num = 0.001 * (i + 1)
-
-          return [
-            getIdByMts(mts),
-            getOneFromRangeByCounter(i, ccyList),
-            null,
-            mts,
-            null,
-            num * (i % 2 ? -1 : 1),
-            num,
-            null,
-            getOneFromRangeByCounter(i, ledgerDescriptionList)
-          ]
-        })
-    }
   ],
   [
     'symbols',
