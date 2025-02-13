@@ -1,6 +1,7 @@
 'use strict'
 
 const moment = require('moment')
+const { randomInt } = require('node:crypto')
 
 const userAccountStart = Date.UTC(2013, 0, 1)
 const numberOfEntriesPerDay = 1_000
@@ -51,12 +52,9 @@ const getMtsArray = (params) => {
   return res
 }
 
-const getRandomInt = (min, max) => {
-  const minCeiled = Math.ceil(min)
-  const maxFloored = Math.floor(max)
-
-  return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled)
-}
+const getIdByMts = (mts = Date.now()) => (
+  Number.parseInt(`${mts}${randomInt(100, 1000)}`)
+)
 
 const getOneFromRangeByCounter = (counter = 0, range = []) => {
   const i = counter % range.length
@@ -121,7 +119,6 @@ module.exports = new Map([
       'Timisoara'
     ]
   ],
-  // TODO:
   [
     'ledgers',
     (args) => {
@@ -130,7 +127,7 @@ module.exports = new Map([
           const num = 0.001 * (i + 1)
 
           return [
-            Number.parseInt(`${mts}${getRandomInt(100, 999)}`),
+            getIdByMts(mts),
             getOneFromRangeByCounter(i, ccyList),
             null,
             mts,
