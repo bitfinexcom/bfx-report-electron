@@ -8,12 +8,13 @@ const numberOfEntriesPerDay = 1_000
 const msPerDay = 24 * 60 * 60 * 1_000
 const msBetweenEnrties = msPerDay / (numberOfEntriesPerDay - 1)
 
-const getMtsArray = (params) => {
+const getMtsArray = (params, opts) => {
   const start = Math.max(userAccountStart, params?.start ?? 0)
   const end = Math.min(Date.now(), params?.end ?? Date.now())
   const limit = Math.min(10_000, params?.limit ?? 10_000)
   const order = params?.order ?? -1
   const isASC = order > 0
+  const _msBetweenEnrties = opts?.msBetweenEnrties ?? msBetweenEnrties
 
   const res = []
 
@@ -27,8 +28,8 @@ const getMtsArray = (params) => {
   )
   const mDateOfTimePoint = moment.utc(timePoint)
   const transTimePoint = isASC
-    ? timePoint + msBetweenEnrties
-    : timePoint - msBetweenEnrties
+    ? timePoint + _msBetweenEnrties
+    : timePoint - _msBetweenEnrties
   const mDate = mDateOfTimePoint.isSame(transTimePoint, 'day')
     ? mDateOfTimePoint
     : moment.utc(transTimePoint)
@@ -41,13 +42,13 @@ const getMtsArray = (params) => {
   const firstPointMs = diff === 0
     ? timePoint
     : mDateOfDayMs + (
-      roundOff(diff / msBetweenEnrties) * msBetweenEnrties
+      roundOff(diff / _msBetweenEnrties) * _msBetweenEnrties
     )
 
   for (let i = 0; res.length < limit; i += 1) {
     const ms = isASC
-      ? firstPointMs + (msBetweenEnrties * i)
-      : firstPointMs - (msBetweenEnrties * i)
+      ? firstPointMs + (_msBetweenEnrties * i)
+      : firstPointMs - (_msBetweenEnrties * i)
 
     if (isASC && ms > end) {
       break
@@ -75,12 +76,16 @@ const getOneFromRangeByCounter = (counter = 0, range = []) => {
 const getPairFromCcyRangeByCounter = (
   counter = 0,
   range = [],
-  prefix = 't'
+  opts
 ) => {
+  const {
+    prefix = 't',
+    suffix = ''
+  } = opts ?? {}
   const i = counter % range.length
   const j = (counter + 1) % range.length
-  const first = range[i]
-  const second = range[j]
+  const first = `${range[i]}${suffix}`
+  const second = `${range[j]}${suffix}`
   const separator = (
     first.length > 3 ||
     second.length > 3
@@ -190,6 +195,48 @@ module.exports = new Map([
             mts,
             price * 0.1,
             price
+          ]
+        })
+    }
+  ],
+  [
+    'status_messages',
+    (args) => {
+      return getMtsArray(
+        { end: Date.UTC(2025, 0, 1), limit: 100 },
+        { msBetweenEnrties: msPerDay }
+      )
+        .map((mts, i) => {
+          const price = mts / 100_000_000_000
+          const key = (args?.keys ?? ['ALL']).some((k) => k === 'ALL')
+            ? getPairFromCcyRangeByCounter(mts, ccyList, { suffix: 'F0' })
+            : getOneFromRangeByCounter(mts, args?.keys)
+
+          return [
+            key,
+            mts,
+            null,
+            price,
+            price,
+            null,
+            price * 100,
+            null,
+            mts,
+            price * 0.1,
+            6,
+            null,
+            price * -0.01,
+            null,
+            null,
+            price,
+            null,
+            null,
+            price * 100,
+            null,
+            null,
+            null,
+            0.0005,
+            0.0025
           ]
         })
     }
