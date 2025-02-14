@@ -119,7 +119,7 @@ module.exports = new Map([
 
           return [
             getIdByMts(mts),
-            getOneFromRangeByCounter(mts, ccyList),
+            args?.symbol ?? getOneFromRangeByCounter(mts, ccyList),
             null,
             mts,
             null,
@@ -141,7 +141,7 @@ module.exports = new Map([
 
           return [
             id,
-            getPairFromCcyRangeByCounter(mts, ccyList),
+            args?.symbol ?? getPairFromCcyRangeByCounter(mts, ccyList),
             mts,
             id,
             price * (i % 2 ? -0.1 : 0.1),
@@ -152,6 +152,27 @@ module.exports = new Map([
             price * -0.01,
             getOneFromRangeByCounter(mts, ccyList),
             id
+          ]
+        })
+    }
+  ],
+  [
+    'f_trade_hist',
+    (args) => {
+      return getMtsArray(args)
+        .map((mts, i) => {
+          const id = getIdByMts(mts)
+          const amount = mts / 100_000_000_000
+
+          return [
+            id,
+            args?.symbol ?? `f${getOneFromRangeByCounter(mts, ccyList)}`,
+            mts,
+            id,
+            amount * (i % 2 ? -0.1 : 0.1),
+            amount * 0.001,
+            i % 120,
+            null
           ]
         })
     }
