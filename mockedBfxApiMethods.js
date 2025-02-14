@@ -17,11 +17,21 @@ const getMtsArray = (params) => {
 
   const res = []
 
+  if (end <= userAccountStart) {
+    return res
+  }
+
   const timePoint = isASC ? start : end
   const roundOff = (ms) => (
     isASC ? Math.ceil(ms) : Math.floor(ms)
   )
-  const mDate = moment.utc(timePoint)
+  const mDateOfTimePoint = moment.utc(timePoint)
+  const transTimePoint = isASC
+    ? timePoint + msBetweenEnrties
+    : timePoint - msBetweenEnrties
+  const mDate = mDateOfTimePoint.isSame(transTimePoint, 'day')
+    ? mDateOfTimePoint
+    : moment.utc(transTimePoint)
   const year = mDate.year()
   const month = mDate.month()
   const date = mDate.date()
