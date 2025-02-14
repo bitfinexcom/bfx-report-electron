@@ -337,6 +337,31 @@ module.exports = new Map([
     }
   ],
   [
+    'order_trades',
+    (args) => {
+      return getMtsArray(args)
+        .map((mts, i) => {
+          const id = getIdByMts(mts)
+          const price = mts / 100_000_000_000
+
+          return [
+            id,
+            args?.symbol ?? getPairFromCcyRangeByCounter(mts, ccyList),
+            mts,
+            args?.orderId ?? id,
+            price * 0.01,
+            price,
+            null,
+            null,
+            i % 2 ? -1 : 1,
+            price * -0.001,
+            getOneFromRangeByCounter(mts, ccyList),
+            id
+          ]
+        })
+    }
+  ],
+  [
     'platform_status',
     () => [1]
   ],
