@@ -113,6 +113,11 @@ const orderTypeList = [
   'MARKET',
   'LIMIT'
 ]
+const orderStatusList = [
+  'CANCELED',
+  'EXECUTED',
+  'POSTONLY CANCELED'
+]
 
 module.exports = new Map([
   [
@@ -237,6 +242,51 @@ module.exports = new Map([
             null,
             0.0005,
             0.0025
+          ]
+        })
+    }
+  ],
+  [
+    'orders',
+    (args) => {
+      return getMtsArray(args)
+        .map((mts, i) => {
+          const id = getIdByMts(mts)
+          const price = mts / 100_000_000_000
+
+          return [
+            id,
+            100,
+            mts,
+            args?.symbol ?? getPairFromCcyRangeByCounter(mts, ccyList),
+            mts,
+            mts,
+            price * 0.1,
+            price * 0.1,
+            getOneFromRangeByCounter(mts, orderTypeList),
+            null,
+            null,
+            null,
+            '0',
+            getOneFromRangeByCounter(mts, orderStatusList),
+            null,
+            null,
+            price,
+            0,
+            0,
+            0,
+            null,
+            null,
+            null,
+            0,
+            0,
+            null,
+            null,
+            null,
+            'API>BFX',
+            null,
+            null,
+            { _$F7: 1 }
           ]
         })
     }
