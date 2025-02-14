@@ -292,6 +292,51 @@ module.exports = new Map([
     }
   ],
   [
+    'active_orders',
+    (args) => {
+      return getMtsArray(args)
+        .map((mts, i) => {
+          const id = getIdByMts(mts)
+          const price = mts / 100_000_000_000
+
+          return [
+            id,
+            null,
+            mts,
+            args?.symbol ?? getPairFromCcyRangeByCounter(mts, ccyList),
+            mts,
+            mts,
+            price * 0.1,
+            price * 0.1,
+            getOneFromRangeByCounter(mts, orderTypeList),
+            null,
+            null,
+            null,
+            '0',
+            'ACTIVE',
+            null,
+            null,
+            price,
+            0,
+            0,
+            0,
+            null,
+            null,
+            null,
+            0,
+            0,
+            null,
+            null,
+            null,
+            'API>BFX',
+            null,
+            null,
+            { _$F7: 1 }
+          ]
+        })
+    }
+  ],
+  [
     'platform_status',
     () => [1]
   ],
