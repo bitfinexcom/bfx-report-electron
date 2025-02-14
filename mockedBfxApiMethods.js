@@ -178,6 +178,23 @@ module.exports = new Map([
     }
   ],
   [
+    'public_trades',
+    (args) => {
+      return getMtsArray(args)
+        .map((mts, i) => {
+          const id = getIdByMts(mts)
+          const price = mts / 100_000_000_000
+
+          return [
+            id,
+            mts,
+            price * 0.1,
+            price
+          ]
+        })
+    }
+  ],
+  [
     'platform_status',
     () => [1]
   ],
