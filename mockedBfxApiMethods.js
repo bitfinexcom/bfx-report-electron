@@ -504,6 +504,38 @@ module.exports = new Map([
     }
   ],
   [
+    'positions_hist',
+    (args) => {
+      return getMtsArray(args)
+        .map((mts, i) => {
+          const id = getIdByMts(mts)
+
+          return [
+            args?.symbol ?? getPairFromCcyRangeByCounter(mts, ccyList),
+            'CLOSED',
+            0,
+            mts / 100_000_000_000,
+            0,
+            0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            id,
+            mts,
+            mts,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        })
+    }
+  ],
+  [
     'platform_status',
     () => [1]
   ],
