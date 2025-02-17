@@ -612,6 +612,46 @@ module.exports = new Map([
     }
   ],
   [
+    'positions_audit',
+    (args) => {
+      return getMtsArray(args, { msBetweenEnrties: msPerDay })
+        .map((mts, i) => {
+          const id = getIdByMts(mts)
+          const price = mts / 100_000_000_000
+
+          return [
+            getPairFromCcyRangeByCounter(mts, ccyList),
+            'ACTIVE',
+            price * (i % 2 ? -0.01 : 0.01),
+            price,
+            0,
+            0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            getOneFromRangeByCounter(mts, args?.ids) ?? id,
+            mts,
+            mts,
+            null,
+            null,
+            null,
+            0,
+            null,
+            {
+              reason: 'TRADE',
+              order_id: id,
+              liq_stage: null,
+              trade_price: price,
+              trade_amount: price * (i % 2 ? -0.01 : 0.01),
+              order_id_oppo: id
+            }
+          ]
+        })
+    }
+  ],
+  [
     'platform_status',
     () => [1]
   ],
