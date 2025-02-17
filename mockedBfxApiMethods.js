@@ -652,6 +652,24 @@ module.exports = new Map([
     }
   ],
   [
+    'logins_hist',
+    (args) => {
+      return getMtsArray(args)
+        .map((mts) => {
+          return [
+            getIdByMts(mts),
+            null,
+            mts,
+            null,
+            '192.168.0.1',
+            null,
+            null,
+            '{"asn": "28545, Cablemas Telecomunicaciones SA de CV", "geo": "Cancún, MX", "user_agent":   {"os": "Windows 10", "raw": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36", "browser": "Chrome", "version": "79.0.3945.117", "platform": "Windows", "is_mobile": false}}'
+          ]
+        })
+    }
+  ],
+  [
     'platform_status',
     () => [1]
   ],
