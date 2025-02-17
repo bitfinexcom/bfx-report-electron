@@ -466,6 +466,44 @@ module.exports = new Map([
     }
   ],
   [
+    'f_credit_hist',
+    (args) => {
+      return getMtsArray(args)
+        .map((mts, i) => {
+          const id = getIdByMts(mts)
+          const amount = mts / 10_000_000_000
+          const symbol = args?.symbol ?? `f${getOneFromRangeByCounter(mts, ccyList)}`
+
+          return [
+            id,
+            symbol,
+            i % 2 ? -1 : 1,
+            mts,
+            mts,
+            amount * (i % 2 ? -1 : 1),
+            null,
+            'CLOSED (expired)',
+            'FIXED',
+            null,
+            null,
+            amount * 0.01,
+            i % 120,
+            mts,
+            mts,
+            null,
+            0,
+            null,
+            0,
+            null,
+            0,
+            symbol.replace('f', '').length > 3
+              ? `${symbol}:USD`
+              : `${symbol}USD`
+          ]
+        })
+    }
+  ],
+  [
     'platform_status',
     () => [1]
   ],
