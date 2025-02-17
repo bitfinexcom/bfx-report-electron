@@ -362,6 +362,42 @@ module.exports = new Map([
     }
   ],
   [
+    'movements',
+    (args) => {
+      return getMtsArray(args)
+        .map((mts, i) => {
+          const id = getIdByMts(mts)
+          const amount = mts / 100_000_000_000
+          const ccy = args?.ccy ?? getPairFromCcyRangeByCounter(mts, ccyList)
+
+          return [
+            id,
+            ccy,
+            `${ccy}_MOCKED_CCY_NAME`,
+            null,
+            null,
+            mts,
+            mts,
+            null,
+            null,
+            'COMPLETED',
+            null,
+            null,
+            amount * (i % 2 ? -0.1 : 0.1),
+            amount * -0.001,
+            null,
+            null,
+            args?.address ?? id,
+            null,
+            null,
+            null,
+            id,
+            null
+          ]
+        })
+    }
+  ],
+  [
     'platform_status',
     () => [1]
   ],
