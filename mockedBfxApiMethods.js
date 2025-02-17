@@ -398,6 +398,40 @@ module.exports = new Map([
     }
   ],
   [
+    'f_offer_hist',
+    (args) => {
+      return getMtsArray(args)
+        .map((mts, i) => {
+          const id = getIdByMts(mts)
+          const amount = mts / 10_000_000_000
+
+          return [
+            id,
+            args?.symbol ?? `f${getOneFromRangeByCounter(mts, ccyList)}`,
+            mts,
+            mts,
+            amount * (i % 2 ? -1 : 0),
+            amount * -1,
+            'LIMIT',
+            null,
+            null,
+            null,
+            i % 2 ? 'CANCELED' : 'EXECUTED',
+            null,
+            null,
+            null,
+            amount * 0.01,
+            i % 120,
+            0,
+            0,
+            null,
+            null,
+            null
+          ]
+        })
+    }
+  ],
+  [
     'platform_status',
     () => [1]
   ],
