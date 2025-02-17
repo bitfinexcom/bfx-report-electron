@@ -536,6 +536,39 @@ module.exports = new Map([
     }
   ],
   [
+    'positions_snap',
+    (args) => {
+      return getMtsArray(args)
+        .map((mts, i) => {
+          const id = getIdByMts(mts)
+          const price = mts / 100_000_000_000
+
+          return [
+            args?.symbol ?? getPairFromCcyRangeByCounter(mts, ccyList),
+            'ACTIVE',
+            price * (i % 2 ? -0.01 : 0.01),
+            price,
+            0,
+            0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            id,
+            mts,
+            mts,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
+        })
+    }
+  ],
+  [
     'platform_status',
     () => [1]
   ],
