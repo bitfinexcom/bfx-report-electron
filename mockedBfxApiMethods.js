@@ -432,6 +432,40 @@ module.exports = new Map([
     }
   ],
   [
+    'f_loan_hist',
+    (args) => {
+      return getMtsArray(args)
+        .map((mts, i) => {
+          const id = getIdByMts(mts)
+          const amount = mts / 10_000_000_000
+
+          return [
+            id,
+            args?.symbol ?? `f${getOneFromRangeByCounter(mts, ccyList)}`,
+            i % 2 ? -1 : 1,
+            mts,
+            mts,
+            amount * (i % 2 ? -1 : 1),
+            null,
+            'CLOSED (used)',
+            null,
+            null,
+            null,
+            amount * 0.01,
+            i % 120,
+            mts,
+            mts,
+            null,
+            0,
+            null,
+            0,
+            null,
+            0
+          ]
+        })
+    }
+  ],
+  [
     'platform_status',
     () => [1]
   ],
