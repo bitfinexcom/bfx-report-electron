@@ -923,6 +923,43 @@ module.exports = new Map([
     ]
   ],
   [
+    'movement_info',
+    () => [
+      24,
+      'EUR',
+      'WIRE',
+      null,
+      'remark related to bank details',
+      1677086074000,
+      1677086210000,
+      null,
+      null,
+      'COMPLETED',
+      null,
+      null,
+      -29.5,
+      -0.5,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      'testing note',
+      null,
+      null,
+      0,
+      123,
+      null,
+      null,
+      'abcd-1234',
+      'COMPLETED',
+      'finished withdrawal in platform',
+      { router: 'my-router', meta: { foo: 'bar' } }
+    ]
+  ],
+  [
     'platform_status',
     () => [1]
   ],
