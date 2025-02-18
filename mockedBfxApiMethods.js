@@ -670,6 +670,23 @@ module.exports = new Map([
     }
   ],
   [
+    'change_log',
+    (args) => {
+      return getMtsArray(args)
+        .map((mts) => {
+          return [
+            mts,
+            null,
+            'withdraw:request',
+            null,
+            null,
+            '192.168.0.1',
+            'Mozilla/5.0 (X11; CrOS x86_64 12499.51.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.92 Safari/537.36'
+          ]
+        })
+    }
+  ],
+  [
     'platform_status',
     () => [1]
   ],
