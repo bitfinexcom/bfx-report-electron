@@ -799,6 +799,37 @@ module.exports = new Map([
     }
   ],
   [
+    'tickers_hist',
+    (args) => {
+      return getMtsArray(args)
+        .map((mts) => {
+          const price = mts / 100_000_000_000
+          const symbol = (
+            Array.isArray(args?.symbols) &&
+            args.symbols.filter((s) => s !== 'ALL').length > 0
+          )
+            ? getOneFromRangeByCounter(mts, args.symbols)
+            : getPairFromCcyRangeByCounter(mts, ccyList, { suffix: 'F0' })
+
+          return [
+            symbol,
+            price,
+            null,
+            price,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            mts
+          ]
+        })
+    }
+  ],
+  [
     'platform_status',
     () => [1]
   ],
