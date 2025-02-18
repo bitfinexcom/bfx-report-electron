@@ -118,6 +118,7 @@ const orderStatusList = [
   'EXECUTED',
   'POSTONLY CANCELED'
 ]
+const wallets = ['exchange', 'margin', 'funding']
 
 module.exports = new Map([
   [
@@ -843,6 +844,37 @@ module.exports = new Map([
             price,
             price,
             price * 0.01
+          ]
+        })
+    }
+  ],
+  [
+    'wallets',
+    (args) => {
+      return getMtsArray(
+        { end: Date.UTC(2025, 0, 1), limit: 100 },
+        { msBetweenEnrties: msPerDay }
+      )
+        .map((mts, i) => {
+          const balance = mts / 100_000_000_000
+          const id = getIdByMts(mts)
+
+          return [
+            getOneFromRangeByCounter(mts, wallets),
+            getOneFromRangeByCounter(mts, ccyList),
+            balance,
+            0,
+            balance,
+            getOneFromRangeByCounter(mts, ledgerDescriptionList),
+            {
+              reason: 'TRADE',
+              order_id: id,
+              order_id_oppo: id,
+              trade_price: balance * 0.1,
+              trade_amount: balance * -0.01,
+              order_cid: mts,
+              order_gid: mts
+            }
           ]
         })
     }
