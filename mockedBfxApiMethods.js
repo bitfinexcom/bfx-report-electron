@@ -369,7 +369,7 @@ module.exports = new Map([
         .map((mts, i) => {
           const id = getIdByMts(mts)
           const amount = mts / 100_000_000_000
-          const ccy = args?.ccy ?? getPairFromCcyRangeByCounter(mts, ccyList)
+          const ccy = args?.ccy ?? getOneFromRangeByCounter(mts, ccyList)
 
           return [
             id,
