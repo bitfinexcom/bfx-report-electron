@@ -880,6 +880,49 @@ module.exports = new Map([
     }
   ],
   [
+    'account_summary',
+    () => [
+      null,
+      null,
+      null,
+      null,
+      [
+        [0.001, 0.001, 0.001, null, null, -0.0002],
+        [0.002, 0.002, 0.002, null, null, 0.00075]
+      ],
+      [
+        [
+          { curr: 'BTC', vol: 12.34858 },
+          { curr: 'ETH', vol: 2 },
+          {
+            curr: 'Total (USD)',
+            vol: 495973.5354,
+            vol_safe: 495973.5354,
+            vol_maker: 1115.8412,
+            vol_BFX: 495973.5354,
+            vol_BFX_safe: 495973.5354,
+            vol_BFX_maker: 1115.8412
+          }
+        ],
+        { BTC: 0.00005, ETH: 0.00001, USD: 2.9 },
+        2.97
+      ],
+      [
+        null,
+        {
+          XAUT: 0.0057617,
+          IOT: 6.73137494,
+          BTC: 210.94145628,
+          USD: 767.84999046
+        },
+        116791.04974429001
+      ],
+      null,
+      null,
+      { leo_lev: 0, leo_amount_avg: 0.00123321 }
+    ]
+  ],
+  [
     'platform_status',
     () => [1]
   ],
