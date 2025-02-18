@@ -12,7 +12,7 @@ const getMtsArray = (params, opts) => {
   const start = Math.max(userAccountStart, params?.start ?? 0)
   const end = Math.min(Date.now(), params?.end ?? Date.now())
   const limit = Math.min(10_000, params?.limit ?? 10_000)
-  const order = params?.order ?? -1
+  const order = params?.order ?? params?.sort ?? -1
   const isASC = order > 0
   const _msBetweenEnrties = opts?.msBetweenEnrties ?? msBetweenEnrties
 
@@ -825,6 +825,24 @@ module.exports = new Map([
             null,
             null,
             mts
+          ]
+        })
+    }
+  ],
+  [
+    'candles',
+    (args) => {
+      return getMtsArray(args?.query)
+        .map((mts) => {
+          const price = mts / 100_000_000_000
+
+          return [
+            mts,
+            price,
+            price,
+            price,
+            price,
+            price * 0.01
           ]
         })
     }
