@@ -833,7 +833,7 @@ module.exports = new Map([
   [
     'candles',
     (args) => {
-      return getMtsArray(args?.query)
+      return getMtsArray(args, { msBetweenEnrties: msPerDay })
         .map((mts) => {
           const price = mts / 100_000_000_000
 
