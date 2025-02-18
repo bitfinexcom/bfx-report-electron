@@ -687,6 +687,114 @@ module.exports = new Map([
     }
   ],
   [
+    'invoice_list',
+    (args) => {
+      return getMtsArray(args)
+        .map((mts) => {
+          const id = getIdByMts(mts)
+          const amount = mts / 10_000_000_000
+
+          return {
+            id,
+            t: mts,
+            type: 'ECOMMERCE',
+            duration: 900,
+            amount,
+            currency: 'USD',
+            orderId: `${id}`,
+            payCurrencies: [
+              'BTC',
+              'ETH',
+              'UST-ETH',
+              'LNX'
+            ],
+            webhook: 'https://bfx-pay-123.321.com',
+            redirectUrl: 'https://bfx-pay-123.321.com?page_id123',
+            status: 'EXPIRED',
+            customerInfo: {
+              nationality: 'UA',
+              residCountry: 'UA',
+              residState: null,
+              residCity: 'Kharkiv',
+              residZipCode: '12345',
+              residStreet: 'street',
+              residBuildingNo: null,
+              fullName: 'name user',
+              email: 'user@mail.com',
+              tosAccepted: true
+            },
+            invoices: [
+              {
+                amount,
+                currency: 'BTC',
+                payCurrency: 'BTC',
+                poolCurrency: 'BTC',
+                address: '1234567890qwerty'
+              },
+              {
+                amount,
+                currency: 'ETH',
+                payCurrency: 'ETH',
+                poolCurrency: 'ETH',
+                address: '1234567890qwerty'
+              },
+              {
+                amount,
+                currency: 'UST',
+                payCurrency: 'UST',
+                poolCurrency: 'ETH',
+                address: '1234567890qwerty'
+              },
+              {
+                amount,
+                currency: 'BTC',
+                payCurrency: 'BTC',
+                poolCurrency: 'LNX',
+                address: '1234567890qwerty',
+                ext: {
+                  hash: '1234567890qwerty',
+                  payment_request: '1234567890qwerty',
+                  node_pub: '1234567890qwerty'
+                }
+              }
+            ],
+            payment: {
+              txid: '1234567890qwerty',
+              amount,
+              currency: 'UST',
+              method: 'TETHERUSE',
+              status: 'COMPLETED',
+              confirmations: 5,
+              created_at: mts,
+              updated_at: mts,
+              depositId: id,
+              ledgerId: id,
+              forceCompleted: false,
+              amountDiff: ''
+            },
+            additionalPayments: [
+              {
+                txid: '1234567890qwerty',
+                amount,
+                currency: 'UST',
+                method: 'TETHERUSE',
+                status: 'COMPLETED',
+                confirmations: 5,
+                created_at: mts,
+                updated_at: mts,
+                depositId: id,
+                ledgerId: id
+              }
+            ],
+            merchantName: 'Testing',
+            meta: {},
+            flags: ['COMPLETED'],
+            recalculatedAt: mts
+          }
+        })
+    }
+  ],
+  [
     'platform_status',
     () => [1]
   ],
