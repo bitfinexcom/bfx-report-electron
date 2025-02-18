@@ -689,9 +689,13 @@ module.exports = new Map([
   [
     'invoice_list',
     (args) => {
-      return getMtsArray(args)
+      const mtsArr = args?.id
+        ? [getMtsArray(args)[0]]
+        : getMtsArray(args)
+
+      return mtsArr
         .map((mts) => {
-          const id = getIdByMts(mts)
+          const id = args?.id ?? getIdByMts(mts)
           const amount = mts / 10_000_000_000
 
           return {
