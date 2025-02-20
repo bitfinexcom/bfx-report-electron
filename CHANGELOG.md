@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.33.0] - 2025-02-19
+
+### Added
+
+- Implemented `Electron` app menu bar and corresponding functionality in the UI title instead of the native one. This is very useful as it saves overall space and at the same time constantly displays the menu and does not require the user to press the `Alt` key to display it (as the practice has shown, because of the last one, many inexperienced users do not even know about the existence of menu functions). Available for the `Windows` and `Linux` app users. On the `Mac` we have to hide the menu in the UI and show the native electron menu bar due to some `MacOS` specifics, it's impossible to have proper menu item control from the UI. PR: [bfx-report-ui#898](https://github.com/bitfinexcom/bfx-report-ui/pull/898)
+- Added exponential backoff and jitter for bfx-api requests to improve `Rate Limit` bypassing. Here we implemented `Decorrelated Jitter` described in AWS article https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/ And added a small improvement to shift the starting point of jitter for each iteration. In practice, it helps better to move through the `Rate Limit` for the `Sync` and `Tax Report`. PR: [bfx-report#420](https://github.com/bitfinexcom/bfx-report/pull/420)
+
+### Changed
+
+- Changed font family to `Inter` similar to used on the main platform. PR: [bfx-report-ui#896](https://github.com/bitfinexcom/bfx-report-ui/pull/896)
+- Reworked and optimized `ThemeSwitcher` component in a more performant way and reduced redundant code. PR: [bfx-report-ui#897](https://github.com/bitfinexcom/bfx-report-ui/pull/897)
+- Changed the font family from `Roboto` to `Inter` in the Electron env to prevent throwing error due to the last UI changes (electron layouts use font source from the UI sub-module). PR: [bfx-report-electron#494](https://github.com/bitfinexcom/bfx-report-electron/pull/494)
+- Disabled native title menu bar to use UI implementation via Electron renderer IPC bridge. PR: [bfx-report-electron#504](https://github.com/bitfinexcom/bfx-report-electron/pull/504)
+- Migrated from `html-pdf` to `puppeteer` for `pdf` creation as the first one repo is not `maintained` anymore. PRs: [bfx-reports-framework#432](https://github.com/bitfinexcom/bfx-reports-framework/pull/432), [bfx-report#419](https://github.com/bitfinexcom/bfx-report/pull/419)
+
+### Fixed
+
+- Fixed setting `IS_AUTO_UPDATE_DISABLED` config flag for the `dev` mode. PR: [bfx-report-electron#484](https://github.com/bitfinexcom/bfx-report-electron/pull/484)
+- Fixed the UI setup flow for the `dev` mode. PR: [bfx-report-electron#485](https://github.com/bitfinexcom/bfx-report-electron/pull/485)
+- Fixed error metadata processing, related to this test pipeline: https://github.com/bitfinexcom/bfx-report/actions/runs/12114987593/job/33772854879 PR: [bfx-report#418](https://github.com/bitfinexcom/bfx-report/pull/418)
+
 ## [4.32.0] - 2025-01-22
 
 ### Added

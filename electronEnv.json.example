@@ -1,6 +1,5 @@
 {
   "NODE_ENV": "production",
   "IS_AUTO_UPDATE_DISABLED": false,
-  "REPO_OWNER": "bitfinexcom",
-  "SHOW_NATIVE_TITLE_BAR": true
+  "REPO_OWNER": "bitfinexcom"
 }
