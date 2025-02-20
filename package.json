@@ -26,7 +26,7 @@
     "github-markdown-css": "5.1.0",
     "grenache-grape": "git+https://github.com/bitfinexcom/grenache-grape.git",
     "i18next": "23.15.1",
-    "i18next-fs-backend": "2.3.2",
+    "i18next-fs-backend": "2.6.0",
     "js-yaml": "4.1.0",
     "lib-js-util-base": "git+https://github.com/bitfinexcom/lib-js-util-base.git",
     "new-github-issue-url": "0.2.1",
