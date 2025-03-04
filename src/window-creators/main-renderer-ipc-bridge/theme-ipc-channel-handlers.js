@@ -2,6 +2,7 @@
 
 const { nativeTheme } = require('electron')
 
+const { ThemeParamPassingError } = require('../../errors')
 const IpcChannelHandlers = require('./ipc.channel.handlers')
 const { getConfigsKeeperByName } = require('../../configs-keeper')
 const wins = require('../windows')
@@ -32,7 +33,7 @@ class ThemeIpcChannelHandlers extends IpcChannelHandlers {
       [isSystemTheme, isDarkTheme, isLightTheme]
         .filter((f) => f).length > 1
     ) {
-      throw new Error('ERR_INVALID_THEME_PARAM_HAS_BEEN_PASSED')
+      throw new ThemeParamPassingError()
     }
 
     if (isSystemTheme) {
