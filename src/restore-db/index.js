@@ -38,6 +38,9 @@ const ThemeIpcChannelHandlers = require(
 )
 
 const fontsStyle = getUIFontsAsCSSString()
+const themesStyle = fs.readFileSync(path.join(
+  __dirname, '../window-creators/layouts/themes.css'
+))
 const alertStyle = fs.readFileSync(path.join(
   __dirname, '../modal-dialog-src/modal-dialog.css'
 ))
@@ -53,6 +56,7 @@ const PROCESS_STATES = require(
 )
 
 const fonts = `<style>${fontsStyle}</style>`
+const themes = `<style>${themesStyle}</style>`
 const style = `<style>${alertStyle}</style>`
 const script = `<script type="text/javascript">${alertScript}</script>`
 const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
@@ -86,7 +90,7 @@ const _fireAlert = (params) => {
   const { height: screenHeight } = workArea
   const maxHeight = Math.floor(screenHeight * 0.90)
 
-  const alert = new Alert([fonts, style, script])
+  const alert = new Alert([fonts, themes, style, script])
 
   const eventHandlerCtx = addOnceProcEventHandler(
     WINDOW_EVENT_NAMES.CLOSED,
