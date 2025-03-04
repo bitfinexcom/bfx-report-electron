@@ -1,6 +1,6 @@
 'use strict'
 
-const { app, nativeTheme } = require('electron')
+const { app } = require('electron')
 const path = require('path')
 const i18next = require('i18next')
 
@@ -198,9 +198,7 @@ module.exports = async () => {
     const savedLanguage = configsKeeper.getConfigByName('language')
 
     if (savedTheme !== ThemeIpcChannelHandlers.THEME_SOURCES.SYSTEM) {
-      nativeTheme.themeSource = ThemeIpcChannelHandlers.isThemeAllowed(savedTheme)
-        ? savedTheme
-        : ThemeIpcChannelHandlers.THEME_SOURCES.SYSTEM
+      ThemeIpcChannelHandlers.applyTheme(savedTheme)
     }
     if (savedLanguage) {
       await i18next.changeLanguage(savedLanguage)
