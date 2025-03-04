@@ -35,6 +35,9 @@ const mdStyle = fs.readFileSync(path.join(
   rootPath, 'node_modules', 'github-markdown-css/github-markdown.css'
 ))
 const fontsStyle = getUIFontsAsCSSString()
+const themesStyle = fs.readFileSync(path.join(
+  __dirname, '../window-creators/layouts/themes.css'
+))
 const alertStyle = fs.readFileSync(path.join(
   __dirname, '../modal-dialog-src/modal-dialog.css'
 ))
@@ -43,6 +46,7 @@ const alertScript = fs.readFileSync(path.join(
 ))
 
 const fonts = `<style>${fontsStyle}</style>`
+const themes = `<style>${themesStyle}</style>`
 const mdS = `<style>${mdStyle}</style>`
 const style = `<style>${alertStyle}</style>`
 const script = `<script type="text/javascript">${alertScript}</script>`
@@ -79,7 +83,7 @@ const _fireAlert = (params) => {
   const { height: screenHeight } = workArea
   const maxHeight = Math.floor(screenHeight * 0.90)
 
-  const alert = new Alert([mdS, fonts, style, script])
+  const alert = new Alert([mdS, fonts, themes, style, script])
 
   const eventHandlerCtx = addOnceProcEventHandler(
     WINDOW_EVENT_NAMES.CLOSED,
