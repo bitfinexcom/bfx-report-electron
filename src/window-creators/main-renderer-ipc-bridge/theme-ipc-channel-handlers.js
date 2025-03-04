@@ -4,6 +4,8 @@ const { nativeTheme } = require('electron')
 
 const IpcChannelHandlers = require('./ipc.channel.handlers')
 const { getConfigsKeeperByName } = require('../../configs-keeper')
+const wins = require('../windows')
+const isMainWinAvailable = require('../../helpers/is-main-win-available')
 
 class ThemeIpcChannelHandlers extends IpcChannelHandlers {
   static channelName = 'theme'
@@ -70,6 +72,22 @@ class ThemeIpcChannelHandlers extends IpcChannelHandlers {
       .some((item) => item === theme)
   }
 
+  static applyTheme (theme) {
+    nativeTheme.themeSource = this.isThemeAllowed(theme)
+      ? theme
+      : this.THEME_SOURCES.SYSTEM
+
+    const winBgColor = this.getWindowBackgroundColor()
+
+    for (const win of Object.values(wins)) {
+      if (!isMainWinAvailable(win)) {
+        continue
+      }
+
+      win.setBackgroundColor(winBgColor)
+    }
+  }
+
   async #saveTheme (theme) {
     if (!this.constructor.isThemeAllowed(theme)) {
       return {
@@ -83,7 +101,7 @@ class ThemeIpcChannelHandlers extends IpcChannelHandlers {
       ?.saveConfigs?.({ theme })
 
     if (isSaved) {
-      nativeTheme.themeSource = theme
+      this.constructor.applyTheme(theme)
     }
 
     return {
