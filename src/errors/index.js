@@ -113,6 +113,12 @@ class TriggeringSyncAfterUpdatesError extends BaseError {
   }
 }
 
+class ThemeParamPassingError extends BaseError {
+  constructor (message = 'ERR_INVALID_THEME_PARAM_HAS_BEEN_PASSED') {
+    super(message)
+  }
+}
+
 module.exports = {
   BaseError,
   InvalidFilePathError,
@@ -131,5 +137,6 @@ module.exports = {
   UserManualShowingError,
   DbRestoringError,
   ShowingChangelogError,
-  TriggeringSyncAfterUpdatesError
+  TriggeringSyncAfterUpdatesError,
+  ThemeParamPassingError
 }
