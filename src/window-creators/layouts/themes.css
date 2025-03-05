@@ -4,7 +4,6 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --swal2-input-background-color: #172d3e;
     /* main */
     --bgColor: #172d3e;
     --bgColor2: #0B1923;
