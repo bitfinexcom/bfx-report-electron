@@ -15,6 +15,9 @@ const GeneralIpcChannelHandlers = require(
 const MenuIpcChannelHandlers = require(
   './window-creators/main-renderer-ipc-bridge/menu-ipc-channel-handlers'
 )
+const ThemeIpcChannelHandlers = require(
+  './window-creators/main-renderer-ipc-bridge/theme-ipc-channel-handlers'
+)
 const triggerSyncAfterUpdates = require('./trigger-sync-after-updates')
 const triggerElectronLoad = require('./trigger-electron-load')
 const runServer = require('./run-server')
@@ -146,6 +149,7 @@ const _manageConfigs = (params = {}) => {
   const configsKeeper = configsKeeperFactory(
     { pathToUserData },
     {
+      theme: ThemeIpcChannelHandlers.THEME_SOURCES.SYSTEM,
       language: null,
       pathToUserReportFiles,
       schedulerRule,
@@ -166,7 +170,8 @@ module.exports = async () => {
     initIpcChannelHandlers(
       GeneralIpcChannelHandlers,
       TranslationIpcChannelHandlers,
-      MenuIpcChannelHandlers
+      MenuIpcChannelHandlers,
+      ThemeIpcChannelHandlers
     )
 
     app.disableHardwareAcceleration()
@@ -189,8 +194,12 @@ module.exports = async () => {
       pathToUserData,
       pathToUserDocuments
     })
+    const savedTheme = configsKeeper.getConfigByName('theme')
     const savedLanguage = configsKeeper.getConfigByName('language')
 
+    if (savedTheme !== ThemeIpcChannelHandlers.THEME_SOURCES.SYSTEM) {
+      ThemeIpcChannelHandlers.applyTheme(savedTheme)
+    }
     if (savedLanguage) {
       await i18next.changeLanguage(savedLanguage)
     }

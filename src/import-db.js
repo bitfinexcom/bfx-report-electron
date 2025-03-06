@@ -95,7 +95,7 @@ module.exports = ({
         )
 
         const unzipped = prettyUnzippedBytes
-          ? `<br><small style="color:#808b93">${_unzipped}</small>`
+          ? `<br><small>${_unzipped}</small>`
           : ''
         const description = `${_description}${unzipped}`
 

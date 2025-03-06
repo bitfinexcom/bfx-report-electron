@@ -1,0 +1,89 @@
+:root {
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* main */
+    --bgColor: #172d3e;
+    --bgColor2: #0B1923;
+    --color: #ffffff;
+    --color2: #808B93;
+    --borderColor: #334A59;
+    --activeColor: #82baf6;
+
+    /* tables */
+    --tableColor: #f5f8fa;
+    --thColor: #82baf6;
+    --thBg: #0B1923;
+    --tableBorder: #334A59;
+    --tableOddBg: #0B1923;
+    --tableEvenBg: #0B1923;
+    --tableScrollBg: #0c1a25;
+    --tableScrollThumbBg: #2a3f4d;
+
+    /* buttons */
+    --btnBg: #82baf6;
+    --btnColor: #ffffff;
+    --btnPrimaryColor: #102331;
+    --btnPrimaryHoverColor: #102331;
+    --btnHoverBg: #19354a;
+    --btnPrimaryHoverBg: #4c88c8;
+    --btnMinimizeBg: var(--bgColor);
+    --btnMinimizeAfterBg: #9b9a9a;
+    --btnMinimizeHoverBg: #19354a;
+
+    /* radio */
+    --radioInputBorder: #334A59;
+    --radioInputBgActive: #82baf6;
+    --radioInputBgHover: #19354a;
+
+    /* range */
+    --rangeInputBorder: #334A59;
+    --rangeInputBgActive: #82baf6;
+    --rangeInputStripBg: #172d3e;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* main */
+    --bgColor: #ffffff;
+    --bgColor2: #d8ecfb;
+    --color: #102331;
+    --color2: #545c62;
+    --borderColor: #102331;
+    --activeColor: #518bc9;
+
+    /* tables */
+    --tableColor: #102331;
+    --thColor: #518bc9;
+    --thBg: #d8ecfb;
+    --tableBorder: #102331;
+    --tableOddBg: #d8ecfb;
+    --tableEvenBg: #ffffff;
+    --tableScrollBg: #d1d1d1;
+    --tableScrollThumbBg: #82baf6;
+
+    /* buttons */
+    --btnBg: #6fa8e5;
+    --btnColor: #102331;
+    --btnPrimaryColor: #ffffff;
+    --btnPrimaryHoverColor: #ffffff;
+    --btnHoverBg: #d8ecfb;
+    --btnPrimaryHoverBg: #4c88c8;
+    --btnMinimizeBg: var(--bgColor);
+    --btnMinimizeAfterBg: #9b9a9a;
+    --btnMinimizeHoverBg: #e5e5e5;
+    
+    /* radio */
+    --radioInputBorder: #102331;
+    --radioInputBgActive: #6fa8e5;
+    --radioInputBgHover: #d8ecfb;
+
+    /* range */
+    --rangeInputBorder: #102331;
+    --rangeInputBgActive: #6fa8e5;
+    --rangeInputStripBg: #ffffff;
+  }
+}

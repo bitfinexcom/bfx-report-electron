@@ -86,7 +86,7 @@ module.exports = ({
         )
 
         const archived = prettyArchiveSize
-          ? `<br><small style="color:#808b93">${_archived}</small>`
+          ? `<br><small>${_archived}</small>`
           : ''
         const description = `${_description}${archived}`
 

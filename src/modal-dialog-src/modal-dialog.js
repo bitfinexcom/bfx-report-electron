@@ -13,10 +13,10 @@ window.addEventListener('load', () => {
 
       target.style.background = `linear-gradient(
         to right,
-        #3085d6 0%,
-        #3085d6 ${per}%,
-        #f5f8fa ${per}%,
-        #f5f8fa 100%
+        var(--rangeInputBgActive, #82baf6) 0%,
+        var(--rangeInputBgActive, #82baf6) ${per}%,
+        var(--rangeInputStripBg, #172d3e) ${per}%,
+        var(--rangeInputStripBg, #172d3e) 100%
       )`
     } catch (err) {
       console.error(err)
