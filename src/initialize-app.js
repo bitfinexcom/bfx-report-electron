@@ -90,7 +90,7 @@ const _ipcMessToPromise = (ipc) => {
       const timeout = setTimeout(() => {
         rmHandler()
         reject(new AppInitializationError())
-      }, 10 * 60 * 1000).unref()
+      }, 30 * 60 * 1000).unref()
 
       const rmHandler = () => {
         ipc.off('message', handler)
