@@ -1,5 +1,278 @@
 {
   "common": {
-    "title": "Informes"
+    "confirmButtonText": "OK",
+    "cancelButtonText": "Cancelar"
+  },
+  "menu": {
+    "macMainSubmenu": {
+      "servicesLabel": "Serviços",
+      "hideLabel": "Ocultar",
+      "hideOthersLabel": "Ocultar Outros",
+      "unhideLabel": "Mostrar",
+      "quitLabel": "Sair"
+    },
+    "fileSubMenu": {
+      "label": "Arquivo",
+      "closeLabel": "Fechar",
+      "quitLabel": "Sair"
+    },
+    "editSubMenu": {
+      "label": "Editar",
+      "undoLabel": "Desfazer",
+      "redoLabel": "Refazer",
+      "cutLabel": "Cortar",
+      "copyLabel": "Copiar",
+      "pasteLabel": "Colar",
+      "pasteAndMatchStyleLabel": "Colar e Manter o Estilo",
+      "deleteLabel": "Excluir",
+      "selectAllLabel": "Selecionar Tudo",
+      "substitutionsSubMenu": {
+        "label": "Substituições",
+        "showSubstitutions": "Mostrar Substituições",
+        "toggleSmartQuotes": "Aspas Inteligentes",
+        "toggleSmartDashes": "Traços Inteligentes",
+        "toggleTextReplacement": "Substituição de Texto"
+      },
+      "speechSubMenu": {
+        "label": "Fala",
+        "startSpeakingLabel": "Começar a Falar",
+        "stopSpeakingLabel": "Parar de Falar"
+      }
+    },
+    "viewSubMenu": {
+      "label": "Visualizar",
+      "reloadLabel": "Recarregar",
+      "forceReloadLabel": "Recarregar Forçadamente",
+      "toggleDevToolsLabel": "Alternar Ferramentas de Desenvolvedor",
+      "resetZoomLabel": "Tamanho Real",
+      "zoomInLabel": "Ampliar",
+      "zoomOutLabel": "Reduzir",
+      "togglefullscreenLabel": "Alternar Tela Cheia"
+    },
+    "windowSubMenu": {
+      "label": "Janela",
+      "minimizeLabel": "Minimizar",
+      "zoomLabel": "Zoom",
+      "frontLabel": "Trazer Tudo para Frente",
+      "windowLabel": "Janela"
+    },
+    "toolsSubMenu": {
+      "label": "Ferramentas",
+      "dataManagementSubMenu": {
+        "label": "Gerenciamento de Dados",
+        "exportDbLabel": "Exportar DB",
+        "importDbLabel": "Importar DB",
+        "restoreDbLabel": "Restaurar DB",
+        "backupDbLabel": "Backup do DB",
+        "removeDbLabel": "Remover DB",
+        "clearAllDataLabel": "Limpar Todos os Dados (exceto credenciais de usuário)"
+      },
+      "changeReportsFolderLabel": "Alterar Pasta de Relatórios",
+      "changeSyncFrequencyLabel": "Alterar Frequência de Sincronização"
+    },
+    "helpSubMenu": {
+      "label": "Ajuda",
+      "openNewGitHubIssueLabel": "Abrir nova Issue no GitHub",
+      "checkForUpdatesLabel": "Verificar por Atualizações",
+      "quitAndInstallUpdatesLabel": "Sair e Instalar Atualizações",
+      "userManualLabel": "Manual do Usuário",
+      "changelogLabel": "Registro de Mudanças",
+      "aboutLabel": "Sobre {{appName}}"
+    }
+  },
+  "appInitError": {
+    "description": "Erro na inicialização do aplicativo",
+    "closeBtnText": "Fechar"
+  },
+  "errorManager": {
+    "failedToGetDocsPath": {
+      "title": "O diretório de Documentos do OS foi mal configurado",
+      "message": "Isso indica que o diretório `Documentos` do seu sistema operacional foi mal configurado.\n\rPor favor, defina para um local válido ou redefina para o padrão"
+    },
+    "errorModalDialog": {
+      "errBoxTitle": "Relatório de erro",
+      "errBoxDescription": "Uma nova issue será aberta no GitHub",
+      "zenityBtn": "Reportar e Sair",
+      "confirmButtonText": "Reportar",
+      "title": "Deve ser enviado um relatório de erro?"
+    }
+  },
+  "nativeNotification": {
+    "defaulTitle": "Relatório Bitfinex",
+    "defaultBody": "Notificação",
+    "sync": {
+      "completedBody": "Sincronização de dados concluída com sucesso!",
+      "interruptedBody": "Sincronização de dados interrompida!",
+      "errorBody": "Sincronização de dados concluída com erro!"
+    },
+    "trxTaxReport": {
+      "completedBody": "Seu relatório de impostos está pronto!",
+      "errorBody": "Ocorreu um erro inesperado ao gerar o relatório de impostos!"
+    }
+  },
+  "autoUpdater": {
+    "title": "Atualizar",
+    "loadingWindow": {
+      "description": "Atualizando..."
+    },
+    "errorToast": {
+      "title": "Falha na atualização do aplicativo",
+      "inetIssueTitle": "Internet desconectada"
+    },
+    "checkingForUpdateToast": {
+      "title": "Verificando por atualizações"
+    },
+    "updateAvailableToast": {
+      "title": "Uma atualização para v{{version}} está disponível",
+      "description": "Iniciando o download..."
+    },
+    "updateNotAvailableToast": {
+      "title": "Nenhuma atualização disponível"
+    },
+    "downloadProgressToast": {
+      "title": "Baixando..."
+    },
+    "updateDownloadedToast": {
+      "title": "Atualização v{{version}} baixada",
+      "description": "Deve o aplicativo ser atualizado agora?"
+    }
+  },
+  "restoreDB": {
+    "modalDialog": {
+      "title": "Selecionar arquivo de backup do DB"
+    },
+    "messageModalDialog": {
+      "title": "Restaurando DB",
+      "message": "Arquivo de backup do DB não encontrado",
+      "dbRestoredMessage": "DB foi restaurado",
+      "dbNotRestoredMessage": "DB não foi restaurado"
+    }
+  },
+  "showDocs": {
+    "modalDialog": {
+      "title": "Manual do Usuário",
+      "cancelButtonText": "Fechar"
+    }
+  },
+  "printToPDF": {
+    "defaultTemplate": "Sem dados",
+    "pagination": {
+      "page": "Página",
+      "from": "de"
+    }
+  },
+  "changeReportsFolder": {
+    "modalDialog": {
+      "title": "Alterar pasta de relatórios",
+      "buttonLabel": "Selecionar"
+    }
+  },
+  "changeSyncFrequency": {
+    "title": "Alterar frequência de sincronização",
+    "timeFormatModalDialog": {
+      "title": "Definir formato de tempo",
+      "inputOptions": {
+        "mins": "Minutos",
+        "hours": "Horas",
+        "days": "Dias"
+      }
+    },
+    "timeModalDialog": {
+      "title": "Definir frequência de sincronização"
+    }
+  },
+  "enforceMacOSAppLocation": {
+    "appLocationModalDialog": {
+      "message": "Mover para a pasta Aplicações?",
+      "detail": "{{productName}} deve estar na pasta Aplicações para funcionar corretamente",
+      "confirmButtonText": "Mover para a pasta Aplicações",
+      "cancelButtonText": "Sair do {{productName}}"
+    },
+    "loadingWindow": {
+      "description": "Movendo o aplicativo..."
+    },
+    "appRunningModalDialog": {
+      "message": "Outra versão do {{productName}} está sendo executada. Saia dela e inicie esta versão novamente"
+    }
+  },
+  "showAboutModalDialog": {
+    "copyButtonText": "Copiar",
+    "gitHubButtonText": "Abrir GitHub"
+  },
+  "showErrorModalDialog": {
+    "enoentErrorMessage": "Arquivo ou diretório não encontrado",
+    "eaccesErrorMessage": "Permissão negada",
+    "invalidFilePathErrorMessage": "Caminho de arquivo inválido",
+    "invalidFileNameInArchErrorMessage": "Nome de arquivo inválido no arquivo",
+    "dbImportingErrorMessage": "O banco de dados não foi importado",
+    "dbRemovingErrorMessage": "O banco de dados não foi removido",
+    "reportsFolderChangingErrorMessage": "A pasta de relatórios não foi alterada",
+    "syncFrequencyChangingErrorMessage": "A frequência de sincronização não foi alterada",
+    "unexpectedExceptionMessage": "Ocorreu uma exceção inesperada"
+  },
+  "exportDB": {
+    "saveDialog": {
+      "title": "Exportação do banco de dados",
+      "buttonLabel": "Exportar"
+    },
+    "modalDialog": {
+      "title": "Exportação do banco de dados",
+      "message": "Exportado com sucesso"
+    },
+    "loadingWindow": {
+      "description": "Exportando DB ...",
+      "archiveSize": "tamanho do arquivo {{prettyArchiveSize}}"
+    }
+  },
+  "importDB": {
+    "openDialog": {
+      "title": "Importação do banco de dados",
+      "buttonLabel": "Importar"
+    },
+    "modalDialog": {
+      "title": "Importação do banco de dados"
+    },
+    "loadingWindow": {
+      "description": "Importando DB ...",
+      "unzippedBytes": "Tamanho do DB {{prettyUnzippedBytes}}"
+    }
+  },
+  "removeDB": {
+    "modalDialog": {
+      "clearDataTitle": "Limpar todos os dados",
+      "removeDBTitle": "Remover banco de dados",
+      "clearDataMessage": "Você tem certeza que deseja limpar todos os dados?",
+      "removeDBMessage": "Você tem certeza que deseja remover o banco de dados?"
+    },
+    "messageModalDialog": {
+      "dbRemovingTitle": "Removendo DB",
+      "dbDataHasBeenRemovedMessage": "Dados do DB foram removidos",
+      "dbDataHasNotBeenRemovedMessage": "Dados do DB não foram removidos",
+      "dbHasNotBeenRestoredTitle": "DB não foi restaurado",
+      "removeDBTitle": "Remover banco de dados",
+      "removeDBMessage": "Todos os dados devem ser removidos?"
+    },
+    "loadingWindow": {
+      "removingDBDescription": "Removendo DB ...",
+      "clearingAllDataDescription": "Limpando todos os dados ..."
+    }
+  },
+  "backupDB": {
+    "backupDBTitle": "Backup do DB",
+    "dbBackupHasCompletedMessage": "Backup do DB concluído com sucesso",
+    "dbBackupHasFailedMessage": "Falha no backup do DB"
+  },
+  "migrationDB": {
+    "messageModalDialog": {
+      "dbMigrationHasFailedMessage": "Migração do DB falhou",
+      "dbMigrationHasCompletedMessage": "Migração do DB concluída com sucesso"
+    },
+    "actionRequestModalDialog": {
+      "title": "A migração falhou",
+      "message": "O que deve ser feito?",
+      "exitButtonText": "Sair",
+      "restoreDBButtonText": "Tentar restaurar o DB",
+      "removeDBButtonText": "Remover DB"
+    }
   }
 }
