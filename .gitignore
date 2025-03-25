@@ -8,7 +8,6 @@ bfx-reports-framework/*
 !bfx-reports-framework/.gitkeep
 dist/*
 !dist/.gitkeep
-package-lock.json
 .env
 lastCommit.json
 electronEnv.json
