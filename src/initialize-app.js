@@ -45,9 +45,6 @@ const getUserDataPath = require('./helpers/get-user-data-path')
 const {
   checkForUpdatesAndNotify
 } = require('./auto-updater')
-const {
-  manageChangelog
-} = require('./changelog-manager')
 const enforceMacOSAppLocation = require(
   './enforce-macos-app-location'
 )
@@ -153,7 +150,6 @@ const _manageConfigs = (params = {}) => {
       language: null,
       pathToUserReportFiles,
       schedulerRule,
-      shownChangelogVer: '0.0.0',
       triggeredSyncAfterUpdatesVer: '0.0.0'
     }
   )
@@ -225,7 +221,6 @@ module.exports = async () => {
     await hideLoadingWindow({ isRequiredToShowMainWin: true })
     await triggerElectronLoad(portsMap)
     await checkForUpdatesAndNotify()
-    await manageChangelog()
 
     printToPDF()
   } catch (err) {
