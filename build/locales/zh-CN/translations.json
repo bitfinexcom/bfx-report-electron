@@ -1,5 +1,278 @@
 {
   "common": {
-    "title": "报告"
+    "confirmButtonText": "确定",
+    "cancelButtonText": "取消"
+  },
+  "menu": {
+    "macMainSubmenu": {
+      "servicesLabel": "服务",
+      "hideLabel": "隐藏",
+      "hideOthersLabel": "隐藏其他",
+      "unhideLabel": "取消隐藏",
+      "quitLabel": "退出"
+    },
+    "fileSubMenu": {
+      "label": "文件",
+      "closeLabel": "关闭",
+      "quitLabel": "退出"
+    },
+    "editSubMenu": {
+      "label": "编辑",
+      "undoLabel": "撤销",
+      "redoLabel": "重做",
+      "cutLabel": "剪切",
+      "copyLabel": "复制",
+      "pasteLabel": "粘贴",
+      "pasteAndMatchStyleLabel": "粘贴并匹配样式",
+      "deleteLabel": "删除",
+      "selectAllLabel": "全选",
+      "substitutionsSubMenu": {
+        "label": "替换",
+        "showSubstitutions": "显示替换",
+        "toggleSmartQuotes": "智能引号",
+        "toggleSmartDashes": "智能破折号",
+        "toggleTextReplacement": "文本替换"
+      },
+      "speechSubMenu": {
+        "label": "语音",
+        "startSpeakingLabel": "开始朗读",
+        "stopSpeakingLabel": "停止朗读"
+      }
+    },
+    "viewSubMenu": {
+      "label": "查看",
+      "reloadLabel": "重新加载",
+      "forceReloadLabel": "强制重新加载",
+      "toggleDevToolsLabel": "切换开发者工具",
+      "resetZoomLabel": "实际大小",
+      "zoomInLabel": "放大",
+      "zoomOutLabel": "缩小",
+      "togglefullscreenLabel": "切换全屏"
+    },
+    "windowSubMenu": {
+      "label": "窗口",
+      "minimizeLabel": "最小化",
+      "zoomLabel": "放大",
+      "frontLabel": "全部置前",
+      "windowLabel": "窗口"
+    },
+    "toolsSubMenu": {
+      "label": "工具",
+      "dataManagementSubMenu": {
+        "label": "数据管理",
+        "exportDbLabel": "导出数据库",
+        "importDbLabel": "导入数据库",
+        "restoreDbLabel": "恢复数据库",
+        "backupDbLabel": "备份数据库",
+        "removeDbLabel": "移除数据库",
+        "clearAllDataLabel": "清除所有数据（除用户凭据）"
+      },
+      "changeReportsFolderLabel": "更改报告文件夹",
+      "changeSyncFrequencyLabel": "更改同步频率"
+    },
+    "helpSubMenu": {
+      "label": "帮助",
+      "openNewGitHubIssueLabel": "打开新的GitHub问题",
+      "checkForUpdatesLabel": "检查更新",
+      "quitAndInstallUpdatesLabel": "退出并安装更新",
+      "userManualLabel": "用户手册",
+      "changelogLabel": "更新日志",
+      "aboutLabel": "关于 {{appName}}"
+    }
+  },
+  "appInitError": {
+    "description": "应用初始化错误",
+    "closeBtnText": "关闭"
+  },
+  "errorManager": {
+    "failedToGetDocsPath": {
+      "title": "操作系统文档目录配置错误",
+      "message": "这表示您的操作系统 `Documents` 目录已配置错误。\n\r请将其设置为有效位置，或重置为默认位置"
+    },
+    "errorModalDialog": {
+      "errBoxTitle": "错误报告",
+      "errBoxDescription": "将打开一个新的GitHub问题",
+      "zenityBtn": "报告并退出",
+      "confirmButtonText": "报告",
+      "title": "是否提交错误报告？"
+    }
+  },
+  "nativeNotification": {
+    "defaulTitle": "Bitfinex报告",
+    "defaultBody": "通知",
+    "sync": {
+      "completedBody": "数据同步成功完成！",
+      "interruptedBody": "数据同步被中断！",
+      "errorBody": "数据同步完成，但发生错误！"
+    },
+    "trxTaxReport": {
+      "completedBody": "您的税务报告已准备好！",
+      "errorBody": "生成税务报告时发生了意外错误！"
+    }
+  },
+  "autoUpdater": {
+    "title": "更新",
+    "loadingWindow": {
+      "description": "更新中..."
+    },
+    "errorToast": {
+      "title": "应用更新失败",
+      "inetIssueTitle": "网络已断开"
+    },
+    "checkingForUpdateToast": {
+      "title": "检查更新中"
+    },
+    "updateAvailableToast": {
+      "title": "v{{version}}版本的更新可用",
+      "description": "开始下载..."
+    },
+    "updateNotAvailableToast": {
+      "title": "没有可用的更新"
+    },
+    "downloadProgressToast": {
+      "title": "下载中..."
+    },
+    "updateDownloadedToast": {
+      "title": "v{{version}}版本更新已下载",
+      "description": "是否立即更新应用程序？"
+    }
+  },
+  "restoreDB": {
+    "modalDialog": {
+      "title": "选择数据库备份文件"
+    },
+    "messageModalDialog": {
+      "title": "恢复数据库",
+      "message": "未找到合适的数据库备份文件",
+      "dbRestoredMessage": "数据库已恢复",
+      "dbNotRestoredMessage": "数据库未恢复"
+    }
+  },
+  "showDocs": {
+    "modalDialog": {
+      "title": "用户手册",
+      "cancelButtonText": "关闭"
+    }
+  },
+  "printToPDF": {
+    "defaultTemplate": "无数据",
+    "pagination": {
+      "page": "页",
+      "from": "从"
+    }
+  },
+  "changeReportsFolder": {
+    "modalDialog": {
+      "title": "更改报告文件夹",
+      "buttonLabel": "选择"
+    }
+  },
+  "changeSyncFrequency": {
+    "title": "更改同步频率",
+    "timeFormatModalDialog": {
+      "title": "设置时间格式",
+      "inputOptions": {
+        "mins": "分钟",
+        "hours": "小时",
+        "days": "天"
+      }
+    },
+    "timeModalDialog": {
+      "title": "设置同步频率"
+    }
+  },
+  "enforceMacOSAppLocation": {
+    "appLocationModalDialog": {
+      "message": "是否移动到应用程序文件夹？",
+      "detail": "{{productName}} 必须位于应用程序文件夹中才能正常运行",
+      "confirmButtonText": "移动到应用程序文件夹",
+      "cancelButtonText": "退出 {{productName}}"
+    },
+    "loadingWindow": {
+      "description": "移动应用程序中..."
+    },
+    "appRunningModalDialog": {
+      "message": "另一个版本的 {{productName}} 正在运行。请退出它，然后重新启动此版本的应用程序"
+    }
+  },
+  "showAboutModalDialog": {
+    "copyButtonText": "复制",
+    "gitHubButtonText": "打开GitHub"
+  },
+  "showErrorModalDialog": {
+    "enoentErrorMessage": "没有此类文件或目录",
+    "eaccesErrorMessage": "权限被拒绝",
+    "invalidFilePathErrorMessage": "无效的文件路径",
+    "invalidFileNameInArchErrorMessage": "归档中的文件名无效",
+    "dbImportingErrorMessage": "数据库未导入",
+    "dbRemovingErrorMessage": "数据库未移除",
+    "reportsFolderChangingErrorMessage": "报告文件夹未更改",
+    "syncFrequencyChangingErrorMessage": "同步频率未更改",
+    "unexpectedExceptionMessage": "发生了意外异常"
+  },
+  "exportDB": {
+    "saveDialog": {
+      "title": "数据库导出",
+      "buttonLabel": "导出"
+    },
+    "modalDialog": {
+      "title": "数据库导出",
+      "message": "导出成功"
+    },
+    "loadingWindow": {
+      "description": "导出数据库中...",
+      "archiveSize": "归档大小 {{prettyArchiveSize}}"
+    }
+  },
+  "importDB": {
+    "openDialog": {
+      "title": "数据库导入",
+      "buttonLabel": "导入"
+    },
+    "modalDialog": {
+      "title": "数据库导入"
+    },
+    "loadingWindow": {
+      "description": "导入数据库中...",
+      "unzippedBytes": "数据库大小 {{prettyUnzippedBytes}}"
+    }
+  },
+  "removeDB": {
+    "modalDialog": {
+      "clearDataTitle": "清除所有数据",
+      "removeDBTitle": "移除数据库",
+      "clearDataMessage": "您确定要清除所有数据吗？",
+      "removeDBMessage": "您确定要移除数据库吗？"
+    },
+    "messageModalDialog": {
+      "dbRemovingTitle": "移除数据库",
+      "dbDataHasBeenRemovedMessage": "数据库数据已移除",
+      "dbDataHasNotBeenRemovedMessage": "数据库数据未移除",
+      "dbHasNotBeenRestoredTitle": "数据库未恢复",
+      "removeDBTitle": "移除数据库",
+      "removeDBMessage": "是否移除所有表？"
+    },
+    "loadingWindow": {
+      "removingDBDescription": "移除数据库中...",
+      "clearingAllDataDescription": "清除所有数据中..."
+    }
+  },
+  "backupDB": {
+    "backupDBTitle": "数据库备份",
+    "dbBackupHasCompletedMessage": "数据库备份已成功完成",
+    "dbBackupHasFailedMessage": "数据库备份失败"
+  },
+  "migrationDB": {
+    "messageModalDialog": {
+      "dbMigrationHasFailedMessage": "数据库迁移失败",
+      "dbMigrationHasCompletedMessage": "数据库迁移成功完成"
+    },
+    "actionRequestModalDialog": {
+      "title": "迁移失败",
+      "message": "应该做什么？",
+      "exitButtonText": "退出",
+      "restoreDBButtonText": "尝试恢复数据库",
+      "removeDBButtonText": "移除数据库"
+    }
   }
 }
