@@ -15,6 +15,9 @@ const GeneralIpcChannelHandlers = require(
 const MenuIpcChannelHandlers = require(
   './window-creators/main-renderer-ipc-bridge/menu-ipc-channel-handlers'
 )
+const ThemeIpcChannelHandlers = require(
+  './window-creators/main-renderer-ipc-bridge/theme-ipc-channel-handlers'
+)
 const triggerSyncAfterUpdates = require('./trigger-sync-after-updates')
 const triggerElectronLoad = require('./trigger-electron-load')
 const runServer = require('./run-server')
@@ -42,9 +45,6 @@ const getUserDataPath = require('./helpers/get-user-data-path')
 const {
   checkForUpdatesAndNotify
 } = require('./auto-updater')
-const {
-  manageChangelog
-} = require('./changelog-manager')
 const enforceMacOSAppLocation = require(
   './enforce-macos-app-location'
 )
@@ -90,7 +90,7 @@ const _ipcMessToPromise = (ipc) => {
       const timeout = setTimeout(() => {
         rmHandler()
         reject(new AppInitializationError())
-      }, 10 * 60 * 1000).unref()
+      }, 30 * 60 * 1000).unref()
 
       const rmHandler = () => {
         ipc.off('message', handler)
@@ -146,10 +146,10 @@ const _manageConfigs = (params = {}) => {
   const configsKeeper = configsKeeperFactory(
     { pathToUserData },
     {
+      theme: ThemeIpcChannelHandlers.THEME_SOURCES.SYSTEM,
       language: null,
       pathToUserReportFiles,
       schedulerRule,
-      shownChangelogVer: '0.0.0',
       triggeredSyncAfterUpdatesVer: '0.0.0'
     }
   )
@@ -166,7 +166,8 @@ module.exports = async () => {
     initIpcChannelHandlers(
       GeneralIpcChannelHandlers,
       TranslationIpcChannelHandlers,
-      MenuIpcChannelHandlers
+      MenuIpcChannelHandlers,
+      ThemeIpcChannelHandlers
     )
 
     app.disableHardwareAcceleration()
@@ -189,8 +190,12 @@ module.exports = async () => {
       pathToUserData,
       pathToUserDocuments
     })
+    const savedTheme = configsKeeper.getConfigByName('theme')
     const savedLanguage = configsKeeper.getConfigByName('language')
 
+    if (savedTheme !== ThemeIpcChannelHandlers.THEME_SOURCES.SYSTEM) {
+      ThemeIpcChannelHandlers.applyTheme(savedTheme)
+    }
     if (savedLanguage) {
       await i18next.changeLanguage(savedLanguage)
     }
@@ -216,7 +221,6 @@ module.exports = async () => {
     await hideLoadingWindow({ isRequiredToShowMainWin: true })
     await triggerElectronLoad(portsMap)
     await checkForUpdatesAndNotify()
-    await manageChangelog()
 
     printToPDF()
   } catch (err) {

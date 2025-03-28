@@ -1,3 +1,12 @@
+html, body {
+  background-color: var(--bgColor, #172d3e);
+}
+
+.swal2-container.swal2-backdrop-show,
+.swal2-container.swal2-noanimation {
+  background: unset;
+}
+
 body .swal2-container {
   font-family: "Inter", sans-serif;
   font-feature-settings: 'tnum';
@@ -31,7 +40,7 @@ body.swal2-toast-shown .swal2-container {
   justify-content: space-between;
   align-items: center;
   box-sizing: content-box;
-  background-color: #172d3e;
+  background-color: var(--bgColor, #172d3e);
   overflow: revert;
 }
 
@@ -62,40 +71,47 @@ body.swal2-toast-shown .swal2-container {
 }
 
 .swal2-title {
-  color: #82baf6;
+  color: var(--activeColor, #172d3e);
 }
 
 .swal2-html-container {
-  color: #f5f8fa;
+  color: var(--color, #ffffff);
   overflow: revert;
 }
 
 .swal2-styled.swal2-confirm {
   border-radius: 2px;
-  background-color: #82baf6;
+  background-color: var(--btnBg, #82baf6);
+  border: 1px solid var(--btnBg, #82baf6);
+  color: var(--btnPrimaryColor, #102331);
   transition: all 0.3s;
-  color: #102331;
   box-shadow: none;
+  background-image: none;
 }
 
 .swal2-actions .swal2-styled.swal2-confirm:hover,
 .swal2-actions .swal2-styled.swal2-confirm:focus,
 .swal2-actions .swal2-styled.swal2-confirm:active {
-  background-color: #4c88c8;
+  background-color: var(--btnPrimaryHoverBg, #4c88c8);
+  border: 1px solid var(--btnPrimaryHoverBg, #4c88c8);
+  color: var(--btnPrimaryHoverColor, #102331);
   box-shadow: none;
 }
 
 .swal2-styled.swal2-cancel {
-  border-radius: 2;
-  background-color: #172d3e;
-  border: 1px solid #19354a;
+  border-radius: 2px;
+  background-color: var(--bgColor, #172d3e);
+  border: 1px solid var(--borderColor, #334A59);
+  color: var(--btnColor, #ffffff);
   box-shadow: none;
+  background-image: none;
 }
 
 .swal2-actions .swal2-styled.swal2-cancel:hover,
 .swal2-actions .swal2-styled.swal2-cancel:focus,
 .swal2-actions .swal2-styled.swal2-cancel:active {
-  background-color: #19354a;
+  background-color: var(--btnHoverBg, #19354a);
+  border: 1px solid var(--borderColor, #334A59);
   box-shadow: none;
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "bfx-report-electron",
-  "version": "4.33.0",
+  "version": "4.34.0",
   "repository": "https://github.com/bitfinexcom/bfx-report-electron",
   "description": "Reporting tool",
   "author": "bitfinex.com",
@@ -15,7 +15,6 @@
     "bittorrent-dht": "10.0.2",
     "changelog-parser": "3.0.1",
     "clean-stack": "3.0.1",
-    "compare-versions": "4.1.1",
     "cron-validate": "1.4.3",
     "electron-alert": "0.1.20",
     "electron-log": "4.4.8",
@@ -23,7 +22,7 @@
     "electron-updater": "5.3.0",
     "extract-zip": "2.0.1",
     "get-port": "7.0.0",
-    "github-markdown-css": "5.1.0",
+    "github-markdown-css": "5.8.1",
     "grenache-grape": "git+https://github.com/bitfinexcom/grenache-grape.git",
     "i18next": "23.15.1",
     "i18next-fs-backend": "2.3.2",
@@ -35,19 +34,19 @@
     "yauzl": "3.2.0"
   },
   "devDependencies": {
-    "@wdio/cli": "8.22.1",
-    "@wdio/junit-reporter": "8.21.0",
-    "@wdio/local-runner": "8.22.1",
-    "@wdio/mocha-framework": "8.22.0",
-    "@wdio/spec-reporter": "8.21.0",
+    "@wdio/cli": "9.12.1",
+    "@wdio/junit-reporter": "9.11.0",
+    "@wdio/local-runner": "9.12.1",
+    "@wdio/mocha-framework": "9.12.1",
+    "@wdio/spec-reporter": "9.11.0",
     "concurrently": "9.0.1",
     "cross-env": "7.0.3",
     "dotenv": "16.3.1",
-    "electron": "33.3.1",
+    "electron": "33.4.2",
     "electron-builder": "24.13.3",
-    "mocha": "10.2.0",
+    "mocha": "11.1.0",
     "standard": "17.1.0",
-    "wdio-electron-service": "5.4.0"
+    "wdio-electron-service": "8.0.2"
   },
   "standard": {
     "globals": [

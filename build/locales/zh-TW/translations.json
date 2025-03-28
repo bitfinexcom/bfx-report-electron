@@ -1,5 +1,278 @@
 {
   "common": {
-    "title": "報告"
+    "confirmButtonText": "確定",
+    "cancelButtonText": "取消"
+  },
+  "menu": {
+    "macMainSubmenu": {
+      "servicesLabel": "服務",
+      "hideLabel": "隱藏",
+      "hideOthersLabel": "隱藏其他",
+      "unhideLabel": "顯示",
+      "quitLabel": "退出"
+    },
+    "fileSubMenu": {
+      "label": "檔案",
+      "closeLabel": "關閉",
+      "quitLabel": "退出"
+    },
+    "editSubMenu": {
+      "label": "編輯",
+      "undoLabel": "撤銷",
+      "redoLabel": "重做",
+      "cutLabel": "剪切",
+      "copyLabel": "複製",
+      "pasteLabel": "粘貼",
+      "pasteAndMatchStyleLabel": "粘貼並匹配樣式",
+      "deleteLabel": "刪除",
+      "selectAllLabel": "全選",
+      "substitutionsSubMenu": {
+        "label": "替換",
+        "showSubstitutions": "顯示替換",
+        "toggleSmartQuotes": "智能引號",
+        "toggleSmartDashes": "智能破折號",
+        "toggleTextReplacement": "文字替換"
+      },
+      "speechSubMenu": {
+        "label": "語音",
+        "startSpeakingLabel": "開始語音",
+        "stopSpeakingLabel": "停止語音"
+      }
+    },
+    "viewSubMenu": {
+      "label": "檢視",
+      "reloadLabel": "重新載入",
+      "forceReloadLabel": "強制重新載入",
+      "toggleDevToolsLabel": "切換開發者工具",
+      "resetZoomLabel": "實際大小",
+      "zoomInLabel": "放大",
+      "zoomOutLabel": "縮小",
+      "togglefullscreenLabel": "切換全螢幕"
+    },
+    "windowSubMenu": {
+      "label": "視窗",
+      "minimizeLabel": "最小化",
+      "zoomLabel": "縮放",
+      "frontLabel": "將所有視窗置於最前",
+      "windowLabel": "視窗"
+    },
+    "toolsSubMenu": {
+      "label": "工具",
+      "dataManagementSubMenu": {
+        "label": "資料管理",
+        "exportDbLabel": "匯出資料庫",
+        "importDbLabel": "匯入資料庫",
+        "restoreDbLabel": "還原資料庫",
+        "backupDbLabel": "備份資料庫",
+        "removeDbLabel": "刪除資料庫",
+        "clearAllDataLabel": "清除所有資料（用戶憑證除外）"
+      },
+      "changeReportsFolderLabel": "更改報告資料夾",
+      "changeSyncFrequencyLabel": "更改同步頻率"
+    },
+    "helpSubMenu": {
+      "label": "幫助",
+      "openNewGitHubIssueLabel": "開啟新的 GitHub 問題",
+      "checkForUpdatesLabel": "檢查更新",
+      "quitAndInstallUpdatesLabel": "退出並安裝更新",
+      "userManualLabel": "使用手冊",
+      "changelogLabel": "更新日誌",
+      "aboutLabel": "關於 {{appName}}"
+    }
+  },
+  "appInitError": {
+    "description": "應用程式初始化錯誤",
+    "closeBtnText": "關閉"
+  },
+  "errorManager": {
+    "failedToGetDocsPath": {
+      "title": "操作系統的文件目錄配置錯誤",
+      "message": "這表示您的操作系統的 `Documents` 目錄配置錯誤。\n\r請將其設置為有效位置或重設為預設位置"
+    },
+    "errorModalDialog": {
+      "errBoxTitle": "錯誤報告",
+      "errBoxDescription": "將開啟新的 GitHub 問題",
+      "zenityBtn": "報告並退出",
+      "confirmButtonText": "報告",
+      "title": "是否提交錯誤報告?"
+    }
+  },
+  "nativeNotification": {
+    "defaulTitle": "Bitfinex 報告",
+    "defaultBody": "通知",
+    "sync": {
+      "completedBody": "資料同步成功完成！",
+      "interruptedBody": "資料同步中斷！",
+      "errorBody": "資料同步發生錯誤！"
+    },
+    "trxTaxReport": {
+      "completedBody": "您的稅務報告已準備好！",
+      "errorBody": "生成稅務報告時發生了意外錯誤！"
+    }
+  },
+  "autoUpdater": {
+    "title": "更新",
+    "loadingWindow": {
+      "description": "正在更新..."
+    },
+    "errorToast": {
+      "title": "應用程式更新失敗",
+      "inetIssueTitle": "網路已斷開"
+    },
+    "checkingForUpdateToast": {
+      "title": "檢查更新中"
+    },
+    "updateAvailableToast": {
+      "title": "v{{version}} 版本更新可用",
+      "description": "開始下載..."
+    },
+    "updateNotAvailableToast": {
+      "title": "沒有可用更新"
+    },
+    "downloadProgressToast": {
+      "title": "下載中..."
+    },
+    "updateDownloadedToast": {
+      "title": "v{{version}} 版本更新已下載",
+      "description": "是否現在更新應用程式?"
+    }
+  },
+  "restoreDB": {
+    "modalDialog": {
+      "title": "選擇資料庫備份檔案"
+    },
+    "messageModalDialog": {
+      "title": "資料庫恢復",
+      "message": "未找到合適的資料庫備份檔案",
+      "dbRestoredMessage": "資料庫已恢復",
+      "dbNotRestoredMessage": "資料庫未恢復"
+    }
+  },
+  "showDocs": {
+    "modalDialog": {
+      "title": "使用手冊",
+      "cancelButtonText": "關閉"
+    }
+  },
+  "printToPDF": {
+    "defaultTemplate": "無資料",
+    "pagination": {
+      "page": "頁",
+      "from": "從"
+    }
+  },
+  "changeReportsFolder": {
+    "modalDialog": {
+      "title": "更改報告資料夾",
+      "buttonLabel": "選擇"
+    }
+  },
+  "changeSyncFrequency": {
+    "title": "更改同步頻率",
+    "timeFormatModalDialog": {
+      "title": "設置時間格式",
+      "inputOptions": {
+        "mins": "分鐘",
+        "hours": "小時",
+        "days": "天"
+      }
+    },
+    "timeModalDialog": {
+      "title": "設置同步頻率"
+    }
+  },
+  "enforceMacOSAppLocation": {
+    "appLocationModalDialog": {
+      "message": "移動到應用程式資料夾?",
+      "detail": "{{productName}} 必須位於應用程式資料夾中才能正確運行",
+      "confirmButtonText": "移動到應用程式資料夾",
+      "cancelButtonText": "退出 {{productName}}"
+    },
+    "loadingWindow": {
+      "description": "正在移動應用程式..."
+    },
+    "appRunningModalDialog": {
+      "message": "另一個版本的 {{productName}} 正在運行。請退出後再次啟動此版本的應用程式"
+    }
+  },
+  "showAboutModalDialog": {
+    "copyButtonText": "複製",
+    "gitHubButtonText": "打開 GitHub"
+  },
+  "showErrorModalDialog": {
+    "enoentErrorMessage": "沒有這個檔案或目錄",
+    "eaccesErrorMessage": "權限被拒絕",
+    "invalidFilePathErrorMessage": "無效的檔案路徑",
+    "invalidFileNameInArchErrorMessage": "檔案名稱在壓縮檔中無效",
+    "dbImportingErrorMessage": "資料庫未被匯入",
+    "dbRemovingErrorMessage": "資料庫未被刪除",
+    "reportsFolderChangingErrorMessage": "報告資料夾未被更改",
+    "syncFrequencyChangingErrorMessage": "同步頻率未被更改",
+    "unexpectedExceptionMessage": "發生了意外的異常"
+  },
+  "exportDB": {
+    "saveDialog": {
+      "title": "資料庫匯出",
+      "buttonLabel": "匯出"
+    },
+    "modalDialog": {
+      "title": "資料庫匯出",
+      "message": "匯出成功"
+    },
+    "loadingWindow": {
+      "description": "正在匯出資料庫 ...",
+      "archiveSize": "壓縮檔大小 {{prettyArchiveSize}}"
+    }
+  },
+  "importDB": {
+    "openDialog": {
+      "title": "資料庫匯入",
+      "buttonLabel": "匯入"
+    },
+    "modalDialog": {
+      "title": "資料庫匯入"
+    },
+    "loadingWindow": {
+      "description": "正在匯入資料庫 ...",
+      "unzippedBytes": "資料庫大小 {{prettyUnzippedBytes}}"
+    }
+  },
+  "removeDB": {
+    "modalDialog": {
+      "clearDataTitle": "清除所有資料",
+      "removeDBTitle": "刪除資料庫",
+      "clearDataMessage": "您確定要清除所有資料嗎？",
+      "removeDBMessage": "您確定要刪除資料庫嗎？"
+    },
+    "messageModalDialog": {
+      "dbRemovingTitle": "資料庫刪除中",
+      "dbDataHasBeenRemovedMessage": "資料庫資料已刪除",
+      "dbDataHasNotBeenRemovedMessage": "資料庫資料未刪除",
+      "dbHasNotBeenRestoredTitle": "資料庫未被恢復",
+      "removeDBTitle": "刪除資料庫",
+      "removeDBMessage": "是否刪除所有表格?"
+    },
+    "loadingWindow": {
+      "removingDBDescription": "正在刪除資料庫 ...",
+      "clearingAllDataDescription": "正在清除所有資料 ..."
+    }
+  },
+  "backupDB": {
+    "backupDBTitle": "資料庫備份",
+    "dbBackupHasCompletedMessage": "資料庫備份成功完成",
+    "dbBackupHasFailedMessage": "資料庫備份失敗"
+  },
+  "migrationDB": {
+    "messageModalDialog": {
+      "dbMigrationHasFailedMessage": "資料庫遷移失敗",
+      "dbMigrationHasCompletedMessage": "資料庫遷移成功完成"
+    },
+    "actionRequestModalDialog": {
+      "title": "遷移失敗",
+      "message": "應該怎麼做?",
+      "exitButtonText": "退出",
+      "restoreDBButtonText": "嘗試恢復資料庫",
+      "removeDBButtonText": "刪除資料庫"
+    }
   }
 }

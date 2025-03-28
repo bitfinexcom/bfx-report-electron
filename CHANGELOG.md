@@ -7,6 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.34.0] - 2025-03-26
+
+### Added
+
+- Added `light/dark` themes to the electron wrapper and adds ability to couple with the UI. PR: [bfx-report-electron#511](https://github.com/bitfinexcom/bfx-report-electron/pull/511)
+- Added the rest of translation files to the electron wrapper. PR: [bfx-report-electron#517](https://github.com/bitfinexcom/bfx-report-electron/pull/517)
+- Added ability to display `Login to Reports with token` screen after the logout (like it was before the previous updates) and removed the outdated title from it. Implemented logging out from the main platform on `Reports` logout. PR: [bfx-report-ui#902](https://github.com/bitfinexcom/bfx-report-ui/pull/902)
+
+### Changed
+
+- Increased `WebSockets` ping interval between `HTTP` server and `Grenache` worker for performance due to heavy sync cases. PR: [bfx-report-express#44](https://github.com/bitfinexcom/bfx-report-express/pull/44)
+- Removed seeing `changelog` on startup. PR: [bfx-report-electron#514](https://github.com/bitfinexcom/bfx-report-electron/pull/514)
+- Increased app initialization timeout to `30min` to be able to execute sqlite `vacuum` command on launch. PR: [bfx-report-electron#516](https://github.com/bitfinexcom/bfx-report-electron/pull/516)
+
+### Fixed
+
+- Fixed local path showing when exporting report files. PR: [bfx-report#422](https://github.com/bitfinexcom/bfx-report/pull/422)
+- Made comprehensive sync performance improvement. PR: [bfx-reports-framework#437](https://github.com/bitfinexcom/bfx-reports-framework/pull/437)
+- Fixed `WebSocket` reconnection flow for long sync cases to prevent losing sync finishing event. PR: [bfx-report-ui#904](https://github.com/bitfinexcom/bfx-report-ui/pull/904)
+- Fixed incorrect symbols processing during redirection from `Orders` to `Order Trades` section for paper trading pairs and related errors. PR: [bfx-report-ui#905](https://github.com/bitfinexcom/bfx-report-ui/pull/905)
+- Fixed the synchronization type checking flow to prevent the possibility of an incorrect state setting in some cases. Allowed fetching of previously synced reports during the auto-sync after the app update. PR: [bfx-report-ui#908](https://github.com/bitfinexcom/bfx-report-ui/pull/908)
+
+### Security
+
+- Updated deps with vulnerabilities and added `package-lock` file due to the last security requirements. PRs: [bfx-report-ui#912](https://github.com/bitfinexcom/bfx-report-ui/pull/912), [bfx-report#424](https://github.com/bitfinexcom/bfx-report/pull/424), [bfx-report#427](https://github.com/bitfinexcom/bfx-report/pull/427), [bfx-reports-framework#439](https://github.com/bitfinexcom/bfx-reports-framework/pull/439), [bfx-reports-framework#441](https://github.com/bitfinexcom/bfx-reports-framework/pull/441), [bfx-report-express#45](https://github.com/bitfinexcom/bfx-report-express/pull/45), [bfx-report-electron#518](https://github.com/bitfinexcom/bfx-report-electron/pull/518), [bfx-report-electron#520](https://github.com/bitfinexcom/bfx-report-electron/pull/520)
+- Updated `axios` to `1.8.4` in the UI. PR: [bfx-report-ui#911](https://github.com/bitfinexcom/bfx-report-ui/pull/911)
+
 ## [4.33.0] - 2025-02-19
 
 ### Added

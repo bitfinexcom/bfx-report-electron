@@ -1,5 +1,278 @@
 {
   "common": {
-    "title": "Báo cáo"
+    "confirmButtonText": "OK",
+    "cancelButtonText": "Hủy"
+  },
+  "menu": {
+    "macMainSubmenu": {
+      "servicesLabel": "Dịch vụ",
+      "hideLabel": "Ẩn",
+      "hideOthersLabel": "Ẩn Các Cửa Sổ Khác",
+      "unhideLabel": "Hiển Thị",
+      "quitLabel": "Thoát"
+    },
+    "fileSubMenu": {
+      "label": "Tệp",
+      "closeLabel": "Đóng",
+      "quitLabel": "Thoát"
+    },
+    "editSubMenu": {
+      "label": "Chỉnh sửa",
+      "undoLabel": "Hoàn tác",
+      "redoLabel": "Làm lại",
+      "cutLabel": "Cắt",
+      "copyLabel": "Sao chép",
+      "pasteLabel": "Dán",
+      "pasteAndMatchStyleLabel": "Dán và Phù hợp Kiểu",
+      "deleteLabel": "Xóa",
+      "selectAllLabel": "Chọn Tất Cả",
+      "substitutionsSubMenu": {
+        "label": "Thay thế",
+        "showSubstitutions": "Hiển thị Thay Thế",
+        "toggleSmartQuotes": "Dấu Nháy Thông Minh",
+        "toggleSmartDashes": "Dấu Gạch Thông Minh",
+        "toggleTextReplacement": "Thay Thế Văn Bản"
+      },
+      "speechSubMenu": {
+        "label": "Lời nói",
+        "startSpeakingLabel": "Bắt đầu Nói",
+        "stopSpeakingLabel": "Dừng Nói"
+      }
+    },
+    "viewSubMenu": {
+      "label": "Xem",
+      "reloadLabel": "Tải Lại",
+      "forceReloadLabel": "Tải Lại Cưỡng Bức",
+      "toggleDevToolsLabel": "Chuyển đổi Công Cụ Phát Triển",
+      "resetZoomLabel": "Kích Thước Thực",
+      "zoomInLabel": "Phóng To",
+      "zoomOutLabel": "Thu Nhỏ",
+      "togglefullscreenLabel": "Chuyển Đổi Toàn Màn Hình"
+    },
+    "windowSubMenu": {
+      "label": "Cửa sổ",
+      "minimizeLabel": "Thu Nhỏ",
+      "zoomLabel": "Phóng To",
+      "frontLabel": "Đưa Tất Cả Ra Trước",
+      "windowLabel": "Cửa sổ"
+    },
+    "toolsSubMenu": {
+      "label": "Công cụ",
+      "dataManagementSubMenu": {
+        "label": "Quản lý Dữ liệu",
+        "exportDbLabel": "Xuất Cơ sở Dữ liệu",
+        "importDbLabel": "Nhập Cơ sở Dữ liệu",
+        "restoreDbLabel": "Khôi Phục Cơ sở Dữ liệu",
+        "backupDbLabel": "Sao Lưu Cơ sở Dữ liệu",
+        "removeDbLabel": "Xóa Cơ sở Dữ liệu",
+        "clearAllDataLabel": "Xóa Tất Cả Dữ Liệu (trừ thông tin người dùng)"
+      },
+      "changeReportsFolderLabel": "Thay Đổi Thư Mục Báo Cáo",
+      "changeSyncFrequencyLabel": "Thay Đổi Tần Suất Đồng Bộ"
+    },
+    "helpSubMenu": {
+      "label": "Trợ giúp",
+      "openNewGitHubIssueLabel": "Mở Vấn Đề Mới trên GitHub",
+      "checkForUpdatesLabel": "Kiểm Tra Cập Nhật",
+      "quitAndInstallUpdatesLabel": "Thoát và Cài Đặt Cập Nhật",
+      "userManualLabel": "Hướng Dẫn Sử Dụng",
+      "changelogLabel": "Nhật Ký Thay Đổi",
+      "aboutLabel": "Về {{appName}}"
+    }
+  },
+  "appInitError": {
+    "description": "Lỗi khởi tạo ứng dụng",
+    "closeBtnText": "Đóng"
+  },
+  "errorManager": {
+    "failedToGetDocsPath": {
+      "title": "Thư mục Tài liệu hệ điều hành bị cấu hình sai",
+      "message": "Điều này có nghĩa là thư mục `Tài liệu` của hệ điều hành của bạn đã bị cấu hình sai.\n\rVui lòng thiết lập lại thư mục này đến vị trí hợp lệ hoặc khôi phục về mặc định."
+    },
+    "errorModalDialog": {
+      "errBoxTitle": "Báo cáo lỗi",
+      "errBoxDescription": "Một vấn đề mới trên GitHub sẽ được mở",
+      "zenityBtn": "Báo cáo và Thoát",
+      "confirmButtonText": "Báo cáo",
+      "title": "Có nên gửi báo cáo lỗi không?"
+    }
+  },
+  "nativeNotification": {
+    "defaulTitle": "Báo cáo Bitfinex",
+    "defaultBody": "Thông báo",
+    "sync": {
+      "completedBody": "Đồng bộ dữ liệu hoàn tất thành công!",
+      "interruptedBody": "Đồng bộ dữ liệu bị gián đoạn!",
+      "errorBody": "Đồng bộ dữ liệu hoàn tất với lỗi!"
+    },
+    "trxTaxReport": {
+      "completedBody": "Báo cáo thuế của bạn đã sẵn sàng!",
+      "errorBody": "Đã xảy ra lỗi ngoài ý muốn khi tạo báo cáo thuế!"
+    }
+  },
+  "autoUpdater": {
+    "title": "Cập nhật",
+    "loadingWindow": {
+      "description": "Đang cập nhật..."
+    },
+    "errorToast": {
+      "title": "Cập nhật ứng dụng thất bại",
+      "inetIssueTitle": "Mất kết nối internet"
+    },
+    "checkingForUpdateToast": {
+      "title": "Đang kiểm tra cập nhật"
+    },
+    "updateAvailableToast": {
+      "title": "Có sẵn bản cập nhật v{{version}}",
+      "description": "Đang tải xuống..."
+    },
+    "updateNotAvailableToast": {
+      "title": "Không có bản cập nhật nào"
+    },
+    "downloadProgressToast": {
+      "title": "Đang tải xuống..."
+    },
+    "updateDownloadedToast": {
+      "title": "Cập nhật v{{version}} đã được tải xuống",
+      "description": "Có nên cập nhật ứng dụng ngay bây giờ không?"
+    }
+  },
+  "restoreDB": {
+    "modalDialog": {
+      "title": "Chọn tệp sao lưu cơ sở dữ liệu"
+    },
+    "messageModalDialog": {
+      "title": "Khôi phục cơ sở dữ liệu",
+      "message": "Không tìm thấy tệp sao lưu cơ sở dữ liệu phù hợp",
+      "dbRestoredMessage": "Cơ sở dữ liệu đã được khôi phục",
+      "dbNotRestoredMessage": "Cơ sở dữ liệu chưa được khôi phục"
+    }
+  },
+  "showDocs": {
+    "modalDialog": {
+      "title": "Hướng dẫn sử dụng",
+      "cancelButtonText": "Đóng"
+    }
+  },
+  "printToPDF": {
+    "defaultTemplate": "Không có dữ liệu",
+    "pagination": {
+      "page": "Trang",
+      "from": "từ"
+    }
+  },
+  "changeReportsFolder": {
+    "modalDialog": {
+      "title": "Thay đổi thư mục báo cáo",
+      "buttonLabel": "Chọn"
+    }
+  },
+  "changeSyncFrequency": {
+    "title": "Thay đổi tần suất đồng bộ",
+    "timeFormatModalDialog": {
+      "title": "Đặt định dạng thời gian",
+      "inputOptions": {
+        "mins": "Phút",
+        "hours": "Giờ",
+        "days": "Ngày"
+      }
+    },
+    "timeModalDialog": {
+      "title": "Đặt tần suất đồng bộ"
+    }
+  },
+  "enforceMacOSAppLocation": {
+    "appLocationModalDialog": {
+      "message": "Chuyển vào thư mục Ứng dụng?",
+      "detail": "{{productName}} phải nằm trong thư mục Ứng dụng để chạy chính xác",
+      "confirmButtonText": "Chuyển vào thư mục Ứng dụng",
+      "cancelButtonText": "Thoát {{productName}}"
+    },
+    "loadingWindow": {
+      "description": "Đang di chuyển ứng dụng..."
+    },
+    "appRunningModalDialog": {
+      "message": "Một phiên bản khác của {{productName}} đang chạy. Thoát phiên bản đó, sau đó khởi động lại phiên bản này."
+    }
+  },
+  "showAboutModalDialog": {
+    "copyButtonText": "Sao chép",
+    "gitHubButtonText": "Mở GitHub"
+  },
+  "showErrorModalDialog": {
+    "enoentErrorMessage": "Không có tệp hoặc thư mục như vậy",
+    "eaccesErrorMessage": "Quyền bị từ chối",
+    "invalidFilePathErrorMessage": "Đường dẫn tệp không hợp lệ",
+    "invalidFileNameInArchErrorMessage": "Tên tệp không hợp lệ trong tệp lưu trữ",
+    "dbImportingErrorMessage": "Cơ sở dữ liệu không được nhập",
+    "dbRemovingErrorMessage": "Cơ sở dữ liệu không được xóa",
+    "reportsFolderChangingErrorMessage": "Thư mục báo cáo không được thay đổi",
+    "syncFrequencyChangingErrorMessage": "Tần suất đồng bộ không được thay đổi",
+    "unexpectedExceptionMessage": "Đã xảy ra ngoại lệ ngoài ý muốn"
+  },
+  "exportDB": {
+    "saveDialog": {
+      "title": "Xuất cơ sở dữ liệu",
+      "buttonLabel": "Xuất"
+    },
+    "modalDialog": {
+      "title": "Xuất cơ sở dữ liệu",
+      "message": "Xuất thành công"
+    },
+    "loadingWindow": {
+      "description": "Đang xuất cơ sở dữ liệu...",
+      "archiveSize": "kích thước lưu trữ {{prettyArchiveSize}}"
+    }
+  },
+  "importDB": {
+    "openDialog": {
+      "title": "Nhập cơ sở dữ liệu",
+      "buttonLabel": "Nhập"
+    },
+    "modalDialog": {
+      "title": "Nhập cơ sở dữ liệu"
+    },
+    "loadingWindow": {
+      "description": "Đang nhập cơ sở dữ liệu...",
+      "unzippedBytes": "Kích thước cơ sở dữ liệu {{prettyUnzippedBytes}}"
+    }
+  },
+  "removeDB": {
+    "modalDialog": {
+      "clearDataTitle": "Xóa tất cả dữ liệu",
+      "removeDBTitle": "Xóa cơ sở dữ liệu",
+      "clearDataMessage": "Bạn có chắc chắn muốn xóa tất cả dữ liệu không?",
+      "removeDBMessage": "Bạn có chắc chắn muốn xóa cơ sở dữ liệu không?"
+    },
+    "messageModalDialog": {
+      "dbRemovingTitle": "Xóa cơ sở dữ liệu",
+      "dbDataHasBeenRemovedMessage": "Dữ liệu cơ sở dữ liệu đã bị xóa",
+      "dbDataHasNotBeenRemovedMessage": "Dữ liệu cơ sở dữ liệu chưa bị xóa",
+      "dbHasNotBeenRestoredTitle": "Cơ sở dữ liệu chưa được khôi phục",
+      "removeDBTitle": "Xóa cơ sở dữ liệu",
+      "removeDBMessage": "Tất cả các bảng có nên bị xóa không?"
+    },
+    "loadingWindow": {
+      "removingDBDescription": "Đang xóa cơ sở dữ liệu...",
+      "clearingAllDataDescription": "Đang xóa tất cả dữ liệu..."
+    }
+  },
+  "backupDB": {
+    "backupDBTitle": "Sao lưu cơ sở dữ liệu",
+    "dbBackupHasCompletedMessage": "Sao lưu cơ sở dữ liệu đã hoàn thành",
+    "dbBackupHasFailedMessage": "Sao lưu cơ sở dữ liệu thất bại"
+  },
+  "migrationDB": {
+    "messageModalDialog": {
+      "dbMigrationHasFailedMessage": "Di chuyển cơ sở dữ liệu thất bại",
+      "dbMigrationHasCompletedMessage": "Di chuyển cơ sở dữ liệu hoàn tất"
+    },
+    "actionRequestModalDialog": {
+      "title": "Di chuyển thất bại",
+      "message": "Cần làm gì?",
+      "exitButtonText": "Thoát",
+      "restoreDBButtonText": "Thử khôi phục cơ sở dữ liệu",
+      "removeDBButtonText": "Xóa cơ sở dữ liệu"
+    }
   }
 }

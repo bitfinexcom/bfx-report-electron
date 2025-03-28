@@ -33,8 +33,14 @@ const {
   WINDOW_EVENT_NAMES,
   addOnceProcEventHandler
 } = require('../window-creators/window-event-manager')
+const ThemeIpcChannelHandlers = require(
+  '../window-creators/main-renderer-ipc-bridge/theme-ipc-channel-handlers'
+)
 
 const fontsStyle = getUIFontsAsCSSString()
+const themesStyle = fs.readFileSync(path.join(
+  __dirname, '../window-creators/layouts/themes.css'
+))
 const alertStyle = fs.readFileSync(path.join(
   __dirname, '../modal-dialog-src/modal-dialog.css'
 ))
@@ -50,6 +56,7 @@ const PROCESS_STATES = require(
 )
 
 const fonts = `<style>${fontsStyle}</style>`
+const themes = `<style>${themesStyle}</style>`
 const style = `<style>${alertStyle}</style>`
 const script = `<script type="text/javascript">${alertScript}</script>`
 const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
@@ -83,7 +90,7 @@ const _fireAlert = (params) => {
   const { height: screenHeight } = workArea
   const maxHeight = Math.floor(screenHeight * 0.90)
 
-  const alert = new Alert([fonts, style, script])
+  const alert = new Alert([fonts, themes, style, script])
 
   const eventHandlerCtx = addOnceProcEventHandler(
     WINDOW_EVENT_NAMES.CLOSED,
@@ -97,7 +104,7 @@ const _fireAlert = (params) => {
     thickFrame: false,
     closable: false,
     hasShadow: false,
-    backgroundColor: '#172d3e',
+    backgroundColor: ThemeIpcChannelHandlers.getWindowBackgroundColor(),
     darkTheme: false,
     parent: win,
     modal: true,
@@ -106,7 +113,6 @@ const _fireAlert = (params) => {
   const swalOptions = {
     position: 'center',
     allowOutsideClick: false,
-    backdrop: 'rgba(0,0,0,0.0)',
     customClass: getAlertCustomClassObj({
       title: 'titleColor',
       container: 'textColor',

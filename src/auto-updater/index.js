@@ -31,12 +31,18 @@ const {
 const getUIFontsAsCSSString = require(
   '../helpers/get-ui-fonts-as-css-string'
 )
+const ThemeIpcChannelHandlers = require(
+  '../window-creators/main-renderer-ipc-bridge/theme-ipc-channel-handlers'
+)
 
 const MENU_ITEM_IDS = require('../create-menu/menu.item.ids')
 
 const isAutoUpdateDisabled = parseEnvValToBool(process.env.IS_AUTO_UPDATE_DISABLED)
 
 const fontsStyle = getUIFontsAsCSSString()
+const themesStyle = fs.readFileSync(path.join(
+  __dirname, '../window-creators/layouts/themes.css'
+))
 const toastStyle = fs.readFileSync(path.join(
   __dirname, 'toast-src/toast.css'
 ))
@@ -56,6 +62,7 @@ try {
 } catch (err) {}
 
 const fonts = `<style>${fontsStyle}</style>`
+const themes = `<style>${themesStyle}</style>`
 const style = `<style>${toastStyle}</style>`
 const script = `<script type="text/javascript">${toastScript}</script>`
 const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
@@ -93,7 +100,7 @@ const _fireToast = (
     return { value: false }
   }
 
-  const alert = new Alert([fonts, style, script])
+  const alert = new Alert([fonts, themes, style, script])
   toast = alert
 
   const eventHandlerCtx = addOnceProcEventHandler(
@@ -124,7 +131,7 @@ const _fireToast = (
     thickFrame: false,
     closable: false,
     hasShadow: false,
-    backgroundColor: '#172d3e',
+    backgroundColor: ThemeIpcChannelHandlers.getWindowBackgroundColor(),
     darkTheme: false,
     height,
     width: opts?.width ?? 1000,
@@ -138,7 +145,6 @@ const _fireToast = (
     toast: true,
     position: 'top-end',
     allowOutsideClick: false,
-    backdrop: 'rgba(0,0,0,0.0)',
 
     icon: 'info',
     title: i18next.t('autoUpdater.title'),
