@@ -13,6 +13,8 @@ const Alert = require('electron-alert')
 const yaml = require('js-yaml')
 const i18next = require('i18next')
 
+const isMac = process.platform === 'darwin'
+
 const log = require('../error-manager/log')
 const BfxMacUpdater = require('./bfx.mac.updater')
 const wins = require('../window-creators/windows')
@@ -123,12 +125,13 @@ const _fireToast = (
     })
   }
   const autoUpdateToastRepositionHandler = () => {
+    const heightOffset = isMac ? 26 : 40
     const { x, y, width } = win.getContentBounds()
     const { width: alWidth } = alert.browserWindow.getContentBounds()
 
     const boundsOpts = {
       x: (x + width) - alWidth,
-      y,
+      y: y + heightOffset,
       height
     }
 
