@@ -140,11 +140,11 @@ const _fireToast = (
 
   const bwOptions = {
     frame: false,
-    transparent: false,
+    transparent: true,
     thickFrame: false,
     closable: false,
     hasShadow: false,
-    backgroundColor: ThemeIpcChannelHandlers.getWindowBackgroundColor(),
+    backgroundColor: ThemeIpcChannelHandlers.getWindowTitleBackgroundColor(),
     darkTheme: false,
     height,
     width: opts?.width ?? 1000,
