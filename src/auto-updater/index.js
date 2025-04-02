@@ -77,6 +77,16 @@ const _sendProgress = (progress) => {
     progress
   )
 }
+const _sendUid = (alert) => {
+  if (!alert?.uid) {
+    return
+  }
+
+  alert?.browserWindow?.webContents.send(
+    'auto-update-toast:uid',
+    alert.uid
+  )
+}
 
 const _fireToast = (
   opts = {},
@@ -185,11 +195,11 @@ const _fireToast = (
     didClose: () => {
       eventHandlerCtx.removeListener()
       ipcMain.removeListener(
-        'auto-update-toast:width',
+        `${alert.uid}auto-update-toast:width`,
         autoUpdateToastWidthHandler
       )
       ipcMain.removeListener(
-        alert.uid + 'reposition',
+        `${alert.uid}reposition`,
         autoUpdateToastRepositionHandler
       )
 
@@ -206,8 +216,9 @@ const _fireToast = (
     sound
   )
 
-  ipcMain.on('auto-update-toast:width', autoUpdateToastWidthHandler)
-  ipcMain.on(alert.uid + 'reposition', autoUpdateToastRepositionHandler)
+  _sendUid(alert)
+  ipcMain.on(`${alert.uid}auto-update-toast:width`, autoUpdateToastWidthHandler)
+  ipcMain.on(`${alert.uid}reposition`, autoUpdateToastRepositionHandler)
 
   return res
 }

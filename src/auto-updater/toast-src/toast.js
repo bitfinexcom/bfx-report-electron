@@ -1,9 +1,14 @@
 'use strict'
 
+const { ipcRenderer } = require('electron')
+let uid = ''
+
+ipcRenderer.once('auto-update-toast:uid', (event, autoUpdateUid) => {
+  uid = autoUpdateUid
+})
+
 window.addEventListener('load', () => {
   try {
-    const { ipcRenderer } = require('electron')
-
     const container = document.body
     const processWrapper = document.createElement('div')
     const htmlContainers = document.getElementsByClassName('swal2-popup')
@@ -64,7 +69,7 @@ window.addEventListener('load', () => {
       )
     }
 
-    ipcRenderer.send('auto-update-toast:width', { width })
+    ipcRenderer.send(`${uid}auto-update-toast:width`, { width })
   } catch (err) {
     console.error(err)
   }
