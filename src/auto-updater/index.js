@@ -125,7 +125,10 @@ const _fireToast = (
     })
   }
   const autoUpdateToastRepositionHandler = () => {
-    const heightOffset = isMac ? 0 : 40
+    const macOffset = wins.mainWindow?.isFullScreen()
+      ? 0
+      : 28
+    const heightOffset = isMac ? macOffset : 40
     const { x, y, width } = win.getContentBounds()
     const { width: alWidth } = alert.browserWindow.getContentBounds()
 
