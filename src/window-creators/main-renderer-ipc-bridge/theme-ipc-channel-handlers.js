@@ -7,6 +7,7 @@ const IpcChannelHandlers = require('./ipc.channel.handlers')
 const { getConfigsKeeperByName } = require('../../configs-keeper')
 const wins = require('../windows')
 const isMainWinAvailable = require('../../helpers/is-main-win-available')
+const isMac = process.platform === 'darwin'
 
 class ThemeIpcChannelHandlers extends IpcChannelHandlers {
   static channelName = 'theme'
@@ -109,6 +110,10 @@ class ThemeIpcChannelHandlers extends IpcChannelHandlers {
       }
 
       win.setBackgroundColor(winBgColor)
+    }
+
+    if (isMac) {
+      return
     }
 
     wins?.mainWindow?.setTitleBarOverlay({
