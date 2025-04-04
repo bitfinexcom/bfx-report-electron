@@ -176,8 +176,11 @@ const _createWindow = async (
   }
 
   if (!pathname) {
-    const props = await createLoadingWindow()
-    props.win.setAlwaysOnTop(true)
+    await showLoadingWindow({
+      shouldCloseBtnBeShown: true,
+      shouldMinimizeBtnBeShown: true
+    })
+    wins.loadingWindow.setAlwaysOnTop(true)
 
     return res
   }
@@ -317,16 +320,6 @@ const createMainWindow = async ({
 }
 
 const createLoadingWindow = async () => {
-  if (
-    wins.loadingWindow &&
-    typeof wins.loadingWindow === 'object' &&
-    !wins.loadingWindow.isDestroyed()
-  ) {
-    await showLoadingWindow()
-
-    return { win: wins.loadingWindow }
-  }
-
   const winProps = await _createChildWindow(
     pathToLayoutAppInit,
     'loadingWindow',

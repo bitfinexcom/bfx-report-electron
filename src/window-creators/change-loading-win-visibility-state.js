@@ -198,7 +198,9 @@ const showLoadingWindow = async (opts) => {
     isRequiredToCloseAllWins = false,
     isNotRunProgressLoaderRequired = false,
     isIndeterminateMode = false,
-    noParent = false
+    noParent = false,
+    shouldCloseBtnBeShown,
+    shouldMinimizeBtnBeShown
   } = opts ?? {}
 
   if (
@@ -223,6 +225,11 @@ const showLoadingWindow = async (opts) => {
     _runProgressLoader({ progress: _progress, isIndeterminateMode })
   }
 
+  GeneralIpcChannelHandlers
+    .sendLoadingBtnStates(wins.loadingWindow, {
+      shouldCloseBtnBeShown: shouldCloseBtnBeShown ?? false,
+      shouldMinimizeBtnBeShown: shouldMinimizeBtnBeShown ?? false
+    })
   await setLoadingDescription({ progress: _progress, description })
 
   if (!wins.loadingWindow.isVisible()) {
