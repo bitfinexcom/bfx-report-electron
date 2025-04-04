@@ -36,6 +36,10 @@ class GeneralIpcChannelHandlers extends IpcChannelHandlers {
   static sendLoadingDescription (win, args) {
     return this.sendToRenderer(this.sendLoadingDescription, win, args)
   }
+
+  static sendLoadingBtnStates (win, args) {
+    return this.sendToRenderer(this.sendLoadingBtnStates, win, args)
+  }
 }
 
 module.exports = GeneralIpcChannelHandlers
