@@ -1,5 +1,5 @@
 html, body {
-  background-color: var(--bgColor, #172d3e);
+  background-color: var(--bgColor2, #0B1923);
 }
 
 .swal2-container.swal2-backdrop-show,
@@ -40,7 +40,7 @@ body.swal2-toast-shown .swal2-container {
   justify-content: space-between;
   align-items: center;
   box-sizing: content-box;
-  background-color: var(--bgColor, #172d3e);
+  background-color: var(--bgColor2, #0B1923);
   overflow: revert;
 }
 
@@ -100,7 +100,7 @@ body.swal2-toast-shown .swal2-container {
 
 .swal2-styled.swal2-cancel {
   border-radius: 2px;
-  background-color: var(--bgColor, #172d3e);
+  background-color: var(--bgColor2, #0B1923);
   border: 1px solid var(--borderColor, #334A59);
   color: var(--btnColor, #ffffff);
   box-shadow: none;

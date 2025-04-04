@@ -13,6 +13,8 @@ const Alert = require('electron-alert')
 const yaml = require('js-yaml')
 const i18next = require('i18next')
 
+const isMac = process.platform === 'darwin'
+
 const log = require('../error-manager/log')
 const BfxMacUpdater = require('./bfx.mac.updater')
 const wins = require('../window-creators/windows')
@@ -77,6 +79,16 @@ const _sendProgress = (progress) => {
     progress
   )
 }
+const _sendUid = (alert) => {
+  if (!alert?.uid) {
+    return
+  }
+
+  alert?.browserWindow?.webContents.send(
+    'auto-update-toast:uid',
+    alert.uid
+  )
+}
 
 const _fireToast = (
   opts = {},
@@ -113,12 +125,16 @@ const _fireToast = (
     })
   }
   const autoUpdateToastRepositionHandler = () => {
+    const macOffset = wins.mainWindow?.isFullScreen()
+      ? 0
+      : 28
+    const heightOffset = isMac ? macOffset : 40
     const { x, y, width } = win.getContentBounds()
     const { width: alWidth } = alert.browserWindow.getContentBounds()
 
     const boundsOpts = {
       x: (x + width) - alWidth,
-      y,
+      y: y + heightOffset,
       height
     }
 
@@ -127,11 +143,11 @@ const _fireToast = (
 
   const bwOptions = {
     frame: false,
-    transparent: false,
+    transparent: true,
     thickFrame: false,
     closable: false,
     hasShadow: false,
-    backgroundColor: ThemeIpcChannelHandlers.getWindowBackgroundColor(),
+    backgroundColor: ThemeIpcChannelHandlers.getWindowTitleBackgroundColor(),
     darkTheme: false,
     height,
     width: opts?.width ?? 1000,
@@ -185,11 +201,11 @@ const _fireToast = (
     didClose: () => {
       eventHandlerCtx.removeListener()
       ipcMain.removeListener(
-        'auto-update-toast:width',
+        `${alert.uid}auto-update-toast:width`,
         autoUpdateToastWidthHandler
       )
       ipcMain.removeListener(
-        alert.uid + 'reposition',
+        `${alert.uid}reposition`,
         autoUpdateToastRepositionHandler
       )
 
@@ -206,8 +222,9 @@ const _fireToast = (
     sound
   )
 
-  ipcMain.on('auto-update-toast:width', autoUpdateToastWidthHandler)
-  ipcMain.on(alert.uid + 'reposition', autoUpdateToastRepositionHandler)
+  _sendUid(alert)
+  ipcMain.on(`${alert.uid}auto-update-toast:width`, autoUpdateToastWidthHandler)
+  ipcMain.on(`${alert.uid}reposition`, autoUpdateToastRepositionHandler)
 
   return res
 }
