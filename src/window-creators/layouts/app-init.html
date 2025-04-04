@@ -35,7 +35,7 @@
       padding: 5px;
     }
 
-    .minimize-btn {
+    .window-btn {
       position: relative;
       display: block;
       width: 30px;
@@ -46,7 +46,7 @@
       cursor: pointer;
     }
 
-    .minimize-btn::after {
+    .window-btn__minimize::after {
       content: "";
       display: block;
       position: absolute;
@@ -57,10 +57,14 @@
       left: calc((30px - 12px) / 2);
     }
 
-    .minimize-btn:hover,
-    .minimize-btn:active,
-    .minimize-btn:focus {
+    .window-btn:hover,
+    .window-btn:active,
+    .window-btn:focus {
       background-color: var(--btnMinimizeHoverBg, #9b9a9a);
+    }
+
+    .window-btn--disabled {
+      display: none;
     }
 
     .lds-roller {
@@ -236,7 +240,7 @@
 
 <body class="body">
   <div class="win-control-btn">
-    <div id="minBtn" class="minimize-btn"></div>
+    <div id="minBtn" class="window-btn window-btn__minimize window-btn--disabled"></div>
   </div>
   <div class="lds-roller">
     <div></div>
@@ -274,6 +278,17 @@
       }
     }, 2500)
 
+    window.bfxReportElectronApi?.onLoadingBtnStates((args) => {
+      try {
+        if (args?.shouldMinimizeBtnBeShown) {
+          minBtnElem.classList.remove('window-btn--disabled')
+        } else {
+          minBtnElem.classList.add('window-btn--disabled')
+        }
+      } catch (err) {
+        console.debug(err)
+      }
+    })
     window.bfxReportElectronApi?.onLoadingDescription((args) => {
       try {
         if (typeof args?.description !== 'string') {
