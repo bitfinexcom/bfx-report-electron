@@ -283,10 +283,18 @@
     const rollers = document.getElementsByClassName('lds-roller')
     const descriptionElem = document.getElementById('description')
     const minBtnElem = document.getElementById('minBtn')
+    const closeBtnElem = document.getElementById('closeBtn')
 
     minBtnElem.onclick = async () => {
       try {
         await window.bfxReportElectronApi?.minimizeLoadingWindow()
+      } catch (err) {
+        console.error(err)
+      }
+    }
+    closeBtnElem.onclick = async () => {
+      try {
+        await window.bfxReportElectronApi?.closeLoadingWindow()
       } catch (err) {
         console.error(err)
       }
@@ -304,6 +312,11 @@
           minBtnElem.classList.remove('window-btn--disabled')
         } else {
           minBtnElem.classList.add('window-btn--disabled')
+        }
+        if (args?.shouldCloseBtnBeShown) {
+          closeBtnElem.classList.remove('window-btn--disabled')
+        } else {
+          closeBtnElem.classList.add('window-btn--disabled')
         }
       } catch (err) {
         console.debug(err)
