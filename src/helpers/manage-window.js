@@ -28,6 +28,9 @@ const hideWindow = (win, opts) => {
       if (shouldWinBeBlurred) {
         win.blur()
       }
+      if (win.isMinimized()) {
+        win.restore()
+      }
 
       win.hide()
     } catch (err) {
