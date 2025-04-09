@@ -251,8 +251,10 @@ const createMainWindow = async ({
     : {
         titleBarOverlay: {
           height: 40,
-          color: '#0b1923ff',
-          symbolColor: '#fff'
+          color: ThemeIpcChannelHandlers.getWindowTitleBackgroundColor(),
+          symbolColor: ThemeIpcChannelHandlers.getWindowTitleBackgroundColor(
+            { isSymbolColor: true }
+          )
         }
       }
   const titleBarOpts = showNativeTitleBar

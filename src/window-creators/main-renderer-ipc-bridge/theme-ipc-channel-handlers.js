@@ -7,6 +7,7 @@ const IpcChannelHandlers = require('./ipc.channel.handlers')
 const { getConfigsKeeperByName } = require('../../configs-keeper')
 const wins = require('../windows')
 const isMainWinAvailable = require('../../helpers/is-main-win-available')
+const isMac = process.platform === 'darwin'
 
 class ThemeIpcChannelHandlers extends IpcChannelHandlers {
   static channelName = 'theme'
@@ -20,6 +21,11 @@ class ThemeIpcChannelHandlers extends IpcChannelHandlers {
   static WINDOW_BACKGROUND_COLORS = {
     LIGHT: '#ffffff',
     DARK: '#172d3e'
+  }
+
+  static WINDOW_TITLE_BACKGROUND_COLORS = {
+    LIGHT: '#d8ecfb',
+    DARK: '#0B1923'
   }
 
   async setThemeHandler (event, args) {
@@ -68,6 +74,20 @@ class ThemeIpcChannelHandlers extends IpcChannelHandlers {
     return this.WINDOW_BACKGROUND_COLORS.LIGHT
   }
 
+  static getWindowTitleBackgroundColor (opts) {
+    const { isSymbolColor } = opts ?? {}
+
+    if (nativeTheme.shouldUseDarkColors) {
+      return isSymbolColor
+        ? this.WINDOW_TITLE_BACKGROUND_COLORS.LIGHT
+        : this.WINDOW_TITLE_BACKGROUND_COLORS.DARK
+    }
+
+    return isSymbolColor
+      ? this.WINDOW_TITLE_BACKGROUND_COLORS.DARK
+      : this.WINDOW_TITLE_BACKGROUND_COLORS.LIGHT
+  }
+
   static isThemeAllowed (theme) {
     return Object.values(this.THEME_SOURCES)
       .some((item) => item === theme)
@@ -79,6 +99,10 @@ class ThemeIpcChannelHandlers extends IpcChannelHandlers {
       : this.THEME_SOURCES.SYSTEM
 
     const winBgColor = this.getWindowBackgroundColor()
+    const winTitleBgColor = this.getWindowTitleBackgroundColor()
+    const winTitleSymbolColor = this.getWindowTitleBackgroundColor(
+      { isSymbolColor: true }
+    )
 
     for (const win of Object.values(wins)) {
       if (!isMainWinAvailable(win)) {
@@ -87,6 +111,15 @@ class ThemeIpcChannelHandlers extends IpcChannelHandlers {
 
       win.setBackgroundColor(winBgColor)
     }
+
+    if (isMac) {
+      return
+    }
+
+    wins?.mainWindow?.setTitleBarOverlay({
+      color: winTitleBgColor,
+      symbolColor: winTitleSymbolColor
+    })
   }
 
   async #saveTheme (theme) {
