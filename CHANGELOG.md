@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.34.1] - 2025-04-09
+
+### Added
+
+- Added ability to avoid queuing sync by scheduler if sync is already in progress to prevent redundant sync in case a user has lots of data and sync takes time until the run of the scheduler. PR: [bfx-reports-framework#446](https://github.com/bitfinexcom/bfx-reports-framework/pull/446)
+- Added `Margin trading` and `Derivative` support to the `Tax Report` sources. PR: [bfx-report-ui#909](https://github.com/bitfinexcom/bfx-report-ui/pull/909)
+
+### Changed
+
+- Changed the order of getting the price of the pub trades moving from the end to the start by timestamps to overcome some rare cases. Related to this issue: [bfx-report-electron#493](https://github.com/bitfinexcom/bfx-report-electron/issues/493). PR: [bfx-reports-framework#445](https://github.com/bitfinexcom/bfx-reports-framework/pull/445)
+- Disabled `Average Win/Loss` refresh button during initial synchronization to prevent report generation errors. Added a corresponding notice to communicate this to the user. PR: [bfx-report-ui#916](https://github.com/bitfinexcom/bfx-report-ui/pull/916)
+- Improved derivative currencies formatting (like `ETHF0` -> `ETH (deriv)` etc.) for a more consistent looking and representation. PR: [bfx-report-ui#910](https://github.com/bitfinexcom/bfx-report-ui/pull/910)
+- Improved sync info popup proportions for a better look after the changing used font family. PR: [bfx-report-ui#901](https://github.com/bitfinexcom/bfx-report-ui/pull/901)
+- Disabled `Traded Volume` refresh button during initial synchronization to prevent report generation errors. Added a corresponding notice to communicate this to the user. PR: [bfx-report-ui#906](https://github.com/bitfinexcom/bfx-report-ui/pull/906)
+
+### Fixed
+
+- Fixed `auto-update-toast:width` listener by adding `uid` to define `alert` instance and ajusts toast position and theme colors. Related to this issue: [bfx-report-electron#526](https://github.com/bitfinexcom/bfx-report-electron/issues/526). PR: [bfx-report-electron#527](https://github.com/bitfinexcom/bfx-report-electron/pull/527)
+- Fixed query builder for `null` operator for sub-query. PR: [bfx-reports-framework#444](https://github.com/bitfinexcom/bfx-reports-framework/pull/444)
+- Prevented `getLastFinishedSyncMts` requests and sync progress checking after the logout to avoid auth errors. PR: [bfx-report-ui#917](https://github.com/bitfinexcom/bfx-report-ui/pull/917)
+- Fixed the `Electron` menu functionality to be available before login. PR: [bfx-report-ui#907](https://github.com/bitfinexcom/bfx-report-ui/pull/907)
+
 ## [4.34.0] - 2025-03-26
 
 ### Added
