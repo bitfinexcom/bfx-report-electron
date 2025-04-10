@@ -50,7 +50,9 @@ module.exports = async () => {
     description: i18next
       .t('enforceMacOSAppLocation.loadingWindow.description'),
     isRequiredToCloseAllWins: true,
-    isIndeterminateMode: true
+    isIndeterminateMode: true,
+    shouldCloseBtnBeShown: true,
+    shouldMinimizeBtnBeShown: true
   })
 
   app.moveToApplicationsFolder({

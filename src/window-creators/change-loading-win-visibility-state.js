@@ -24,7 +24,7 @@ const _closeAllWindows = () => {
   return Promise.all(promises)
 }
 
-const _setParentWindow = (noParent) => {
+const setParentToLoadingWindow = (noParent) => {
   // TODO: The reason for it related to the electronjs issue:
   // `[Bug]: Wrong main window hidden state on macOS when using 'parent' option`
   // https://github.com/electron/electron/issues/29732
@@ -198,7 +198,9 @@ const showLoadingWindow = async (opts) => {
     isRequiredToCloseAllWins = false,
     isNotRunProgressLoaderRequired = false,
     isIndeterminateMode = false,
-    noParent = false
+    noParent = false,
+    shouldCloseBtnBeShown,
+    shouldMinimizeBtnBeShown
   } = opts ?? {}
 
   if (
@@ -210,7 +212,7 @@ const showLoadingWindow = async (opts) => {
       .createLoadingWindow()
   }
 
-  _setParentWindow(isRequiredToCloseAllWins || noParent)
+  setParentToLoadingWindow(isRequiredToCloseAllWins || noParent)
 
   const _progress = Number.isFinite(progress)
     ? Math.floor(progress * 100) / 100
@@ -223,6 +225,11 @@ const showLoadingWindow = async (opts) => {
     _runProgressLoader({ progress: _progress, isIndeterminateMode })
   }
 
+  GeneralIpcChannelHandlers
+    .sendLoadingBtnStates(wins.loadingWindow, {
+      shouldCloseBtnBeShown: shouldCloseBtnBeShown ?? false,
+      shouldMinimizeBtnBeShown: shouldMinimizeBtnBeShown ?? false
+    })
   await setLoadingDescription({ progress: _progress, description })
 
   if (!wins.loadingWindow.isVisible()) {
@@ -269,5 +276,6 @@ const hideLoadingWindow = async (opts) => {
 module.exports = {
   showLoadingWindow,
   hideLoadingWindow,
-  setLoadingDescription
+  setLoadingDescription,
+  setParentToLoadingWindow
 }
