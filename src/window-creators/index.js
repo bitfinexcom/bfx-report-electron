@@ -17,7 +17,7 @@ const createMenu = require('../create-menu')
 const {
   showLoadingWindow,
   hideLoadingWindow,
-  setParentToLoadingWindow
+  setParentToStartupLoadingWindow
 } = require('./change-loading-win-visibility-state')
 const {
   showWindow,
@@ -190,7 +190,7 @@ const _createWindow = async (
     centerWindow(wins[winName])
   }
 
-  setParentToLoadingWindow()
+  setParentToStartupLoadingWindow()
   await showWindow(wins[winName])
 
   return res

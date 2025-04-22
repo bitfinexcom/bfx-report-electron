@@ -12,6 +12,7 @@ const {
 const GeneralIpcChannelHandlers = require(
   './main-renderer-ipc-bridge/general-ipc-channel-handlers'
 )
+const WINDOW_NAMES = require('./window.names')
 
 let intervalMarker
 
@@ -24,7 +25,7 @@ const _closeAllWindows = () => {
   return Promise.all(promises)
 }
 
-const setParentToLoadingWindow = (noParent) => {
+const setParentToStartupLoadingWindow = (noParent) => {
   // TODO: The reason for it related to the electronjs issue:
   // `[Bug]: Wrong main window hidden state on macOS when using 'parent' option`
   // https://github.com/electron/electron/issues/29732
@@ -32,31 +33,32 @@ const setParentToLoadingWindow = (noParent) => {
     return
   }
 
-  if (wins.loadingWindow.isFocused()) {
+  if (wins[WINDOW_NAMES.STARTUP_LOADING_WINDOW].isFocused()) {
     return
   }
 
   const win = BrowserWindow.getFocusedWindow()
 
   if (noParent) {
-    wins.loadingWindow.setParentWindow(null)
+    wins[WINDOW_NAMES.STARTUP_LOADING_WINDOW].setParentWindow(null)
 
     return
   }
   if (
     Object.values(wins).every((w) => w !== win) ||
-    win === wins.loadingWindow
+    win === wins[WINDOW_NAMES.STARTUP_LOADING_WINDOW]
   ) {
-    const mainWindow = !wins.mainWindow?.isDestroyed()
-      ? wins.mainWindow
+    const mainWindow = !wins[WINDOW_NAMES.MAIN_WINDOW]?.isDestroyed()
+      ? wins[WINDOW_NAMES.MAIN_WINDOW]
       : null
 
-    wins.loadingWindow.setParentWindow(mainWindow)
+    wins[WINDOW_NAMES.STARTUP_LOADING_WINDOW]
+      .setParentWindow(mainWindow)
 
     return
   }
 
-  wins.loadingWindow.setParentWindow(win)
+  wins[WINDOW_NAMES.STARTUP_LOADING_WINDOW].setParentWindow(win)
 }
 
 const _runProgressLoader = (opts) => {
@@ -212,7 +214,7 @@ const showLoadingWindow = async (opts) => {
       .createLoadingWindow()
   }
 
-  setParentToLoadingWindow(isRequiredToCloseAllWins || noParent)
+  setParentToStartupLoadingWindow(isRequiredToCloseAllWins || noParent)
 
   const _progress = Number.isFinite(progress)
     ? Math.floor(progress * 100) / 100
@@ -277,5 +279,5 @@ module.exports = {
   showLoadingWindow,
   hideLoadingWindow,
   setLoadingDescription,
-  setParentToLoadingWindow
+  setParentToStartupLoadingWindow
 }
