@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.35.0] - 2025-04-23
+
+### Added
+
+- Added warning message styles for PDF reports. PR: [bfx-report#429](https://github.com/bitfinexcom/bfx-report/pull/429)
+- Added ability to continue the `Tax Report` generation without `delisted` currencies. PR: [bfx-reports-framework#449](https://github.com/bitfinexcom/bfx-reports-framework/pull/449)
+- Added ability to deduct trading fees in the `Tax Report`. Added a flag `shouldFeesBeDeducted` to use that via a checkbox in the UI. PR: [bfx-reports-framework#450](https://github.com/bitfinexcom/bfx-reports-framework/pull/450)
+- Added native behavior to minimize and close the loading window. The main reason is to provide the ability to `minimize` and then `restore` the loading window on all OSs as each OS has a specific behavior. Also added a close button to be able to interrupt the app startup. PR: [bfx-report-electron#530](https://github.com/bitfinexcom/bfx-report-electron/pull/530)
+- Implemented `Credit Line` wallet representation in the `Balances` section. Added `Credit Line` wallet support in the columns filters. PR: [bfx-report-ui#920](https://github.com/bitfinexcom/bfx-report-ui/pull/920)
+- Implemented UI theme selection binding with Electron wrapper. The main idea is to have synchronized theme in UI and Electron-specific menus, modals, etc. PR: [bfx-report-ui#921](https://github.com/bitfinexcom/bfx-report-ui/pull/921)
+
+### Changed
+
+- Actualized the `Tax Report` data handling. PR: [bfx-report-ui#922](https://github.com/bitfinexcom/bfx-report-ui/pull/922)
+- Disabled `Concentration Risk` refresh button during initial synchronization to prevent report generation errors. Added a corresponding notice to communicate this to the user. PR: [bfx-report-ui#923](https://github.com/bitfinexcom/bfx-report-ui/pull/923)
+
 ## [4.34.1] - 2025-04-09
 
 ### Added
