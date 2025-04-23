@@ -48,7 +48,7 @@ const publicDir = path.join(__dirname, '../../bfx-report-ui/build')
 const loadURL = serve({ directory: publicDir })
 
 const pathToLayouts = path.join(__dirname, 'layouts')
-const pathToLayoutAppInit = path.join(pathToLayouts, 'app-init.html')
+const pathToLayoutAppInit = path.join(pathToLayouts, 'startup-loading-window.html')
 
 const _getFileURL = (params) => {
   const {
