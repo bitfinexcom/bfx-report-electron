@@ -13,6 +13,7 @@ const pauseApp = require('./pause-app')
 const relaunch = require('./relaunch')
 const { rm, isMainWinAvailable } = require('./helpers')
 const wins = require('./window-creators/windows')
+const WINDOW_NAMES = require('./window-creators/window.names')
 const {
   setLoadingDescription
 } = require('./window-creators/change-loading-win-visibility-state')
@@ -44,8 +45,8 @@ module.exports = ({
   pathToUserDocuments
 }) => {
   return async () => {
-    const win = isMainWinAvailable(wins.mainWindow)
-      ? wins.mainWindow
+    const win = isMainWinAvailable(wins[WINDOW_NAMES.MAIN_WINDOW])
+      ? wins[WINDOW_NAMES.MAIN_WINDOW]
       : BrowserWindow.getFocusedWindow()
 
     try {
@@ -99,7 +100,11 @@ module.exports = ({
           : ''
         const description = `${_description}${unzipped}`
 
-        await setLoadingDescription({ progress, description })
+        await setLoadingDescription({
+          windowName: WINDOW_NAMES.LOADING_WINDOW,
+          progress,
+          description
+        })
       }
 
       await pauseApp({
@@ -130,8 +135,8 @@ module.exports = ({
       relaunch()
     } catch (err) {
       try {
-        const _win = isMainWinAvailable(wins.loadingWindow)
-          ? wins.loadingWindow
+        const _win = isMainWinAvailable(wins[WINDOW_NAMES.LOADING_WINDOW])
+          ? wins[WINDOW_NAMES.LOADING_WINDOW]
           : win
         await showErrorModalDialog(
           _win,
