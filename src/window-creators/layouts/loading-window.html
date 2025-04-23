@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="shortcut icon" href="../../../bfx-report-ui/build/favicon.ico">
+  <link href="../../../bfx-report-ui/build/fonts/inter.css" rel="stylesheet">
+  <link href="./themes.css" rel="stylesheet">
+  <title>Bitfinex Reports</title>
+  <style>
+    html {
+      height: 100%;
+      background-color: var(--bgColor, #172d3e);
+    }
+
+    body {
+      position: relative;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+      text-align: center;
+      background-color: var(--bgColor, #172d3e);
+      font-family: "Inter", sans-serif;
+      font-feature-settings: 'tnum';
+    }
+
+    .win-control-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: block;
+      min-height: 30px;
+      margin: 0;
+      padding: 5px;
+    }
+
+    .window-btn {
+      position: relative;
+      display: inline-block;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: var(--bgColor, #172d3e);
+      transition: background-color .3s;
+      cursor: pointer;
+    }
+
+    .window-btn__minimize::after {
+      content: "";
+      display: block;
+      position: absolute;
+      width: 12px;
+      height: 1px;
+      background-color: var(--btnWindowAfterBg, #9b9a9a);
+      bottom: 9px;
+      left: calc((30px - 12px) / 2);
+    }
+
+    .window-btn__close::before, .window-btn__close::after {
+      content: "";
+      display: block;
+      position: absolute;
+      width: 17px; /* sqrt(12^2 + 12^2) where 12px width */
+      height: 1px;
+      background-color: var(--btnWindowAfterBg, #9b9a9a);
+      bottom: calc((11px / 2) + 9px);
+      left: calc((30px - 17px) / 2);
+    }
+
+    .window-btn__close::before {
+      transform: rotate(45deg);
+    }
+
+    .window-btn__close::after {
+      transform: rotate(-45deg);
+    }
+
+    .window-btn:hover,
+    .window-btn:active,
+    .window-btn:focus {
+      background-color: var(--btnWindowHoverBg, #9b9a9a);
+    }
+
+    .window-btn--disabled {
+      display: none;
+    }
+
+    .lds-roller {
+      display: inline-block;
+      position: absolute;
+      width: 128px;
+      height: 128px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity .5s ease-in-out;
+    }
+
+    .show-roller {
+      opacity: 1;
+    }
+
+    .lds-roller div {
+      animation: lds-roller 2.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      transform-origin: 64px 64px;
+    }
+
+    .lds-roller div:after {
+      content: " ";
+      display: block;
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--color, #ffffff);
+      margin: -3px 0 0 -3px;
+    }
+
+    .lds-roller div:nth-child(1) {
+      animation-delay: -0.036s;
+    }
+
+    .lds-roller div:nth-child(1):after {
+      top: 100px;
+      left: 100px;
+    }
+
+    .lds-roller div:nth-child(2) {
+      animation-delay: -0.072s;
+    }
+
+    .lds-roller div:nth-child(2):after {
+      top: 108px;
+      left: 90px;
+    }
+
+    .lds-roller div:nth-child(3) {
+      animation-delay: -0.108s;
+    }
+
+    .lds-roller div:nth-child(3):after {
+      top: 113px;
+      left: 77px;
+    }
+
+    .lds-roller div:nth-child(4) {
+      animation-delay: -0.144s;
+    }
+
+    .lds-roller div:nth-child(4):after {
+      top: 115px;
+      left: 64px;
+    }
+
+    .lds-roller div:nth-child(5) {
+      animation-delay: -0.18s;
+    }
+
+    .lds-roller div:nth-child(5):after {
+      top: 113px;
+      left: 51px;
+    }
+
+    .lds-roller div:nth-child(6) {
+      animation-delay: -0.216s;
+    }
+
+    .lds-roller div:nth-child(6):after {
+      top: 108px;
+      left: 38px;
+    }
+
+    .lds-roller div:nth-child(7) {
+      animation-delay: -0.252s;
+    }
+
+    .lds-roller div:nth-child(7):after {
+      top: 100px;
+      left: 28px;
+    }
+
+    .lds-roller div:nth-child(8) {
+      animation-delay: -0.288s;
+    }
+
+    .lds-roller div:nth-child(8):after {
+      top: 90px;
+      left: 20px;
+    }
+
+    .logo-img {
+      width: 40px;
+      height: 40px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .logo {
+      display: inline-block;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      animation: logo-shower 3s ease-in-out;
+      width: 200px;
+      height: 200px;
+      background-color: var(--bgColor, #172d3e);
+    }
+
+    .description {
+      display: none;
+      color: var(--color, #172d3e);
+      position: fixed;
+      text-align: center;
+      margin: 0;
+      width: 100%;
+      padding: 20px 0;
+      bottom: 0;
+    }
+
+    .description small {
+      color: var(--color2, #808B93);
+    }
+
+    @keyframes lds-roller {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes logo-shower {
+      0% {
+        opacity: 0;
+      }
+
+      40% {
+        opacity: 1;
+      }
+
+      60% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body class="body">
+  <div class="win-control-btn">
+    <div id="minBtn" class="window-btn window-btn__minimize window-btn--disabled"></div>
+    <div id="closeBtn" class="window-btn window-btn__close window-btn--disabled"></div>
+  </div>
+  <div class="lds-roller">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+  <div class="logo">
+    <img class="logo-img" src="../../../build/loader.png" alt="logo">
+  </div>
+  <div id="description" class="description"></div>
+</body>
+
+<script>
+  window.addEventListener('load', () => {
+    const rollers = document.getElementsByClassName('lds-roller')
+    const descriptionElem = document.getElementById('description')
+    const minBtnElem = document.getElementById('minBtn')
+    const closeBtnElem = document.getElementById('closeBtn')
+
+    minBtnElem.onclick = async () => {
+      try {
+        await window.bfxReportElectronApi?.minimizeLoadingWindow()
+      } catch (err) {
+        console.error(err)
+      }
+    }
+    closeBtnElem.onclick = async () => {
+      try {
+        await window.bfxReportElectronApi?.closeLoadingWindow()
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+    setTimeout(() => {
+      for (const roller of rollers) {
+        roller.classList.add("show-roller")
+      }
+    }, 2500)
+
+    window.bfxReportElectronApi?.onLoadingBtnStates((args) => {
+      try {
+        if (args?.shouldMinimizeBtnBeShown) {
+          minBtnElem.classList.remove('window-btn--disabled')
+        } else {
+          minBtnElem.classList.add('window-btn--disabled')
+        }
+        if (args?.shouldCloseBtnBeShown) {
+          closeBtnElem.classList.remove('window-btn--disabled')
+        } else {
+          closeBtnElem.classList.add('window-btn--disabled')
+        }
+      } catch (err) {
+        console.debug(err)
+      }
+    })
+    window.bfxReportElectronApi?.onLoadingDescription((args) => {
+      try {
+        if (typeof args?.description !== 'string') {
+          window.bfxReportElectronApi?.sendLoadingDescriptionReady()
+
+          return
+        }
+
+        descriptionElem.innerHTML = args.description
+
+        descriptionElem.style.display = args.description
+          ? 'block'
+          : 'none'
+
+        window.bfxReportElectronApi?.sendLoadingDescriptionReady()
+      } catch (err) {
+        console.error(err)
+
+        window.bfxReportElectronApi?.sendLoadingDescriptionReady({ err })
+      }
+    })
+  })
+</script>
+</html>
