@@ -143,10 +143,11 @@ const _stopProgressLoader = (
 const setLoadingDescription = async (params) => {
   try {
     const {
-      win = wins.loadingWindow,
+      windowName = WINDOW_NAMES.STARTUP_LOADING_WINDOW,
       progress,
       description = ''
     } = params ?? {}
+    const win = wins[windowName]
 
     if (
       !win ||
@@ -177,11 +178,17 @@ const setLoadingDescription = async (params) => {
       : '<p></p>'
     const _description = `${progressChunk}${descriptionChunk}`
 
-    const loadingDescReadyPromise = GeneralIpcChannelHandlers
-      .onLoadingDescriptionReady()
+    const loadingDescReadyPromise = windowName === WINDOW_NAMES.LOADING_WINDOW
+      ? GeneralIpcChannelHandlers.onLoadingDescriptionReady()
+      : GeneralIpcChannelHandlers.onStartupLoadingDescriptionReady()
 
-    GeneralIpcChannelHandlers
-      .sendLoadingDescription(win, { description: _description })
+    if (windowName === WINDOW_NAMES.LOADING_WINDOW) {
+      GeneralIpcChannelHandlers
+        .sendLoadingDescription(win, { description: _description })
+    } else {
+      GeneralIpcChannelHandlers
+        .sendStartupLoadingDescription(win, { description: _description })
+    }
 
     const loadingRes = await loadingDescReadyPromise
 
