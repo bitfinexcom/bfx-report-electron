@@ -14,18 +14,25 @@ const GeneralIpcChannelHandlers = require(
 )
 const WINDOW_NAMES = require('./window.names')
 
-let intervalMarker
+const intervalMap = new Map()
 
-const _closeAllWindows = () => {
+const _closeAllWindows = (opts) => {
+  const excepedWindowName = opts?.excepedWindowName ?? WINDOW_NAMES.STARTUP_LOADING_WINDOW
+  const excepedWin = wins[excepedWindowName]
   const _wins = BrowserWindow.getAllWindows()
-    .filter((win) => win !== wins.loadingWindow)
+    .filter((win) => win !== excepedWin)
 
   const promises = _wins.map((win) => hideWindow(win))
 
   return Promise.all(promises)
 }
 
-const setParentToStartupLoadingWindow = (noParent) => {
+const setParentToLoadingWindow = (opts) => {
+  const {
+    windowName = WINDOW_NAMES.STARTUP_LOADING_WINDOW,
+    noParent
+  } = opts ?? {}
+
   // TODO: The reason for it related to the electronjs issue:
   // `[Bug]: Wrong main window hidden state on macOS when using 'parent' option`
   // https://github.com/electron/electron/issues/29732
@@ -33,40 +40,41 @@ const setParentToStartupLoadingWindow = (noParent) => {
     return
   }
 
-  if (wins[WINDOW_NAMES.STARTUP_LOADING_WINDOW].isFocused()) {
+  if (wins[windowName].isFocused()) {
     return
   }
 
   const win = BrowserWindow.getFocusedWindow()
 
   if (noParent) {
-    wins[WINDOW_NAMES.STARTUP_LOADING_WINDOW].setParentWindow(null)
+    wins[windowName].setParentWindow(null)
 
     return
   }
   if (
     Object.values(wins).every((w) => w !== win) ||
-    win === wins[WINDOW_NAMES.STARTUP_LOADING_WINDOW]
+    win === wins[windowName]
   ) {
     const mainWindow = !wins[WINDOW_NAMES.MAIN_WINDOW]?.isDestroyed()
       ? wins[WINDOW_NAMES.MAIN_WINDOW]
       : null
 
-    wins[WINDOW_NAMES.STARTUP_LOADING_WINDOW]
+    wins[windowName]
       .setParentWindow(mainWindow)
 
     return
   }
 
-  wins[WINDOW_NAMES.STARTUP_LOADING_WINDOW].setParentWindow(win)
+  wins[windowName].setParentWindow(win)
 }
 
 const _runProgressLoader = (opts) => {
   const {
-    win = wins.loadingWindow,
+    windowName = WINDOW_NAMES.STARTUP_LOADING_WINDOW,
     isIndeterminateMode = false,
     progress
   } = opts ?? {}
+  const win = wins[windowName]
 
   if (
     !win ||
@@ -102,7 +110,7 @@ const _runProgressLoader = (opts) => {
   const step = 1 / (duration / interval)
   let _progress = 0
 
-  intervalMarker = setInterval(() => {
+  const intervalMarker = setInterval(() => {
     if (_progress >= 1) {
       _progress = 0
     }
@@ -114,6 +122,7 @@ const _runProgressLoader = (opts) => {
       typeof win !== 'object' ||
       win.isDestroyed()
     ) {
+      const intervalMarker = intervalMap.get(windowName)
       clearInterval(intervalMarker)
 
       return
@@ -121,11 +130,17 @@ const _runProgressLoader = (opts) => {
 
     win.setProgressBar(_progress)
   }, interval).unref()
+
+  intervalMap.set(windowName, intervalMarker)
 }
 
-const _stopProgressLoader = (
-  win = wins.loadingWindow
-) => {
+const _stopProgressLoader = (opts) => {
+  const {
+    windowName = WINDOW_NAMES.STARTUP_LOADING_WINDOW
+  } = opts ?? {}
+  const win = wins[windowName]
+  const intervalMarker = intervalMap.get(windowName)
+
   clearInterval(intervalMarker)
 
   if (
@@ -185,7 +200,8 @@ const setLoadingDescription = async (params) => {
     if (windowName === WINDOW_NAMES.LOADING_WINDOW) {
       GeneralIpcChannelHandlers
         .sendLoadingDescription(win, { description: _description })
-    } else {
+    }
+    if (windowName === WINDOW_NAMES.STARTUP_LOADING_WINDOW) {
       GeneralIpcChannelHandlers
         .sendStartupLoadingDescription(win, { description: _description })
     }
@@ -209,19 +225,29 @@ const showLoadingWindow = async (opts) => {
     isIndeterminateMode = false,
     noParent = false,
     shouldCloseBtnBeShown,
-    shouldMinimizeBtnBeShown
+    shouldMinimizeBtnBeShown,
+    windowName = WINDOW_NAMES.STARTUP_LOADING_WINDOW
   } = opts ?? {}
+  const win = wins[windowName]
 
   if (
-    !wins.loadingWindow ||
-    typeof wins.loadingWindow !== 'object' ||
-    wins.loadingWindow.isDestroyed()
+    !win ||
+    typeof win !== 'object' ||
+    win.isDestroyed()
   ) {
-    await require('.')
-      .createLoadingWindow()
+    if (windowName === WINDOW_NAMES.LOADING_WINDOW) {
+      await require('.').createLoadingWindow()
+    }
+    if (windowName === WINDOW_NAMES.STARTUP_LOADING_WINDOW) {
+      await require('.').createStartupLoadingWindow()
+    }
   }
-
-  setParentToStartupLoadingWindow(isRequiredToCloseAllWins || noParent)
+  if (windowName === WINDOW_NAMES.STARTUP_LOADING_WINDOW) {
+    setParentToLoadingWindow({
+      windowName: WINDOW_NAMES.STARTUP_LOADING_WINDOW,
+      noParent: isRequiredToCloseAllWins || noParent
+    })
+  }
 
   const _progress = Number.isFinite(progress)
     ? Math.floor(progress * 100) / 100
@@ -231,26 +257,41 @@ const showLoadingWindow = async (opts) => {
     !isNotRunProgressLoaderRequired ||
     Number.isFinite(progress)
   ) {
-    _runProgressLoader({ progress: _progress, isIndeterminateMode })
+    _runProgressLoader({
+      windowName,
+      progress: _progress,
+      isIndeterminateMode
+    })
   }
 
-  GeneralIpcChannelHandlers
-    .sendLoadingBtnStates(wins.loadingWindow, {
-      shouldCloseBtnBeShown: shouldCloseBtnBeShown ?? false,
-      shouldMinimizeBtnBeShown: shouldMinimizeBtnBeShown ?? false
-    })
-  await setLoadingDescription({ progress: _progress, description })
+  const btnOpts = {
+    shouldCloseBtnBeShown: shouldCloseBtnBeShown ?? false,
+    shouldMinimizeBtnBeShown: shouldMinimizeBtnBeShown ?? false
+  }
 
-  if (!wins.loadingWindow.isVisible()) {
-    centerWindow(wins.loadingWindow)
+  if (windowName === WINDOW_NAMES.LOADING_WINDOW) {
+    GeneralIpcChannelHandlers.sendLoadingBtnStates(win, btnOpts)
+  }
+  if (windowName === WINDOW_NAMES.STARTUP_LOADING_WINDOW) {
+    GeneralIpcChannelHandlers.sendStartupLoadingBtnStates(win, btnOpts)
+  }
 
-    await showWindow(wins.loadingWindow)
+  await setLoadingDescription({
+    windowName,
+    progress: _progress,
+    description
+  })
+
+  if (!win.isVisible()) {
+    centerWindow(win)
+
+    await showWindow(win)
   }
   if (!isRequiredToCloseAllWins) {
     return
   }
 
-  await _closeAllWindows()
+  await _closeAllWindows({ excepedWindowName: windowName })
 }
 
 const hideLoadingWindow = async (opts) => {
@@ -286,5 +327,5 @@ module.exports = {
   showLoadingWindow,
   hideLoadingWindow,
   setLoadingDescription,
-  setParentToStartupLoadingWindow
+  setParentToLoadingWindow
 }
