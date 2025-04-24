@@ -53,10 +53,6 @@ const manageWorkerMessages = require(
 )
 const printToPDF = require('./print-to-pdf')
 
-const pathToLayouts = path.join(__dirname, 'window-creators/layouts')
-const pathToLayoutAppInitErr = path
-  .join(pathToLayouts, 'app-init-error.html')
-
 const { rule: schedulerRule } = require(
   '../bfx-reports-framework/config/schedule.json'
 )
@@ -225,7 +221,7 @@ module.exports = async () => {
     printToPDF()
   } catch (err) {
     await app.whenReady()
-    await createErrorWindow(pathToLayoutAppInitErr)
+    await createErrorWindow()
 
     throw err
   }
