@@ -296,29 +296,31 @@ const showLoadingWindow = async (opts) => {
 
 const hideLoadingWindow = async (opts) => {
   const {
+    windowName = WINDOW_NAMES.STARTUP_LOADING_WINDOW,
     isRequiredToShowMainWin = false
   } = opts ?? {}
+  const win = wins[windowName]
 
   // need to empty description
-  await setLoadingDescription({ description: '' })
-  _stopProgressLoader()
+  await setLoadingDescription({ windowName, description: '' })
+  _stopProgressLoader({ windowName })
 
   if (isRequiredToShowMainWin) {
     await showWindow(
-      wins.mainWindow,
+      wins[WINDOW_NAMES.MAIN_WINDOW],
       { shouldWinBeFocused: true }
     )
 
     if (appStates.isMainWinMaximized) {
-      wins.mainWindow.maximize()
+      wins[WINDOW_NAMES.MAIN_WINDOW].maximize()
     }
     if (appStates.isMainWinFullScreen) {
-      wins.mainWindow.setFullScreen(true)
+      wins[WINDOW_NAMES.MAIN_WINDOW].setFullScreen(true)
     }
   }
 
   return hideWindow(
-    wins.loadingWindow,
+    win,
     { shouldWinBeBlurred: true }
   )
 }
