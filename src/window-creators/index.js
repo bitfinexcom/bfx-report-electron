@@ -392,7 +392,8 @@ const createErrorWindow = async () => {
     }
   )
 
-  await hideLoadingWindow()
+  await hideLoadingWindow({ windowName: WINDOW_NAMES.LOADING_WINDOW })
+  await hideLoadingWindow({ windowName: WINDOW_NAMES.STARTUP_LOADING_WINDOW })
   await hideWindow(wins[WINDOW_NAMES.MAIN_WINDOW])
 
   return winProps
