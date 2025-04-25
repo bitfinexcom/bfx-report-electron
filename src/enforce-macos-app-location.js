@@ -8,6 +8,7 @@ const {
   showLoadingWindow,
   hideLoadingWindow
 } = require('./window-creators/change-loading-win-visibility-state')
+const WINDOW_NAMES = require('./window-creators/window.names')
 
 module.exports = async () => {
   if (
@@ -47,6 +48,7 @@ module.exports = async () => {
   }
 
   await showLoadingWindow({
+    windowName: WINDOW_NAMES.STARTUP_LOADING_WINDOW,
     description: i18next
       .t('enforceMacOSAppLocation.loadingWindow.description'),
     isRequiredToCloseAllWins: true,
