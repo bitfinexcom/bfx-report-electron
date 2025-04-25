@@ -29,9 +29,9 @@
     --btnPrimaryHoverColor: #102331;
     --btnHoverBg: #19354a;
     --btnPrimaryHoverBg: #4c88c8;
-    --btnMinimizeBg: var(--bgColor);
-    --btnMinimizeAfterBg: #9b9a9a;
-    --btnMinimizeHoverBg: #19354a;
+    --btnWindowBg: var(--bgColor);
+    --btnWindowAfterBg: #9b9a9a;
+    --btnWindowHoverBg: #19354a;
 
     /* radio */
     --radioInputBorder: #334A59;
@@ -72,9 +72,9 @@
     --btnPrimaryHoverColor: #ffffff;
     --btnHoverBg: #d8ecfb;
     --btnPrimaryHoverBg: #4c88c8;
-    --btnMinimizeBg: var(--bgColor);
-    --btnMinimizeAfterBg: #9b9a9a;
-    --btnMinimizeHoverBg: #e5e5e5;
+    --btnWindowBg: var(--bgColor);
+    --btnWindowAfterBg: #9b9a9a;
+    --btnWindowHoverBg: #e5e5e5;
     
     /* radio */
     --radioInputBorder: #102331;

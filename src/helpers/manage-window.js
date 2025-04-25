@@ -13,7 +13,10 @@ const hideWindow = (win, opts) => {
         !win ||
         typeof win !== 'object' ||
         win.isDestroyed() ||
-        !win.isVisible()
+        (
+          !win.isVisible() &&
+          !win.isMinimized()
+        )
       ) {
         resolve()
 
@@ -24,6 +27,9 @@ const hideWindow = (win, opts) => {
 
       if (shouldWinBeBlurred) {
         win.blur()
+      }
+      if (win.isMinimized()) {
+        win.restore()
       }
 
       win.hide()
@@ -45,7 +51,10 @@ const showWindow = (win, opts) => {
         !win ||
         typeof win !== 'object' ||
         win.isDestroyed() ||
-        win.isVisible()
+        (
+          win.isVisible() &&
+          !win.isMinimized()
+        )
       ) {
         resolve()
 
@@ -60,6 +69,9 @@ const showWindow = (win, opts) => {
         resolve()
       })
 
+      if (win.isMinimized()) {
+        win.restore()
+      }
       if (shouldWinBeShownInactive) {
         win.showInactive()
 

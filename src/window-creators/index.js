@@ -16,7 +16,8 @@ const windowStateKeeper = require('./window-state-keeper')
 const createMenu = require('../create-menu')
 const {
   showLoadingWindow,
-  hideLoadingWindow
+  hideLoadingWindow,
+  setParentToLoadingWindow
 } = require('./change-loading-win-visibility-state')
 const {
   showWindow,
@@ -176,8 +177,12 @@ const _createWindow = async (
   }
 
   if (!pathname) {
-    const props = await createLoadingWindow()
-    props.win.setAlwaysOnTop(true)
+    await showLoadingWindow({
+      shouldCloseBtnBeShown: true,
+      shouldMinimizeBtnBeShown: true,
+      noParent: true
+    })
+    wins.loadingWindow.setAlwaysOnTop(true)
 
     return res
   }
@@ -185,6 +190,7 @@ const _createWindow = async (
     centerWindow(wins[winName])
   }
 
+  setParentToLoadingWindow()
   await showWindow(wins[winName])
 
   return res
@@ -197,7 +203,8 @@ const _createChildWindow = async (
 ) => {
   const {
     width = 500,
-    height = 500
+    height = 500,
+    noParent
   } = { ...opts }
 
   const point = electron.screen.getCursorScreenPoint()
@@ -224,7 +231,12 @@ const _createChildWindow = async (
       // TODO: The reason for it related to the electronjs issue:
       // `[Bug]: Wrong main window hidden state on macOS when using 'parent' option`
       // https://github.com/electron/electron/issues/29732
-      parent: isMac ? null : wins.mainWindow,
+      parent: (
+        isMac ||
+        noParent
+      )
+        ? null
+        : wins.mainWindow,
       alwaysOnTop: isMac,
 
       ...opts
@@ -317,16 +329,6 @@ const createMainWindow = async ({
 }
 
 const createLoadingWindow = async () => {
-  if (
-    wins.loadingWindow &&
-    typeof wins.loadingWindow === 'object' &&
-    !wins.loadingWindow.isDestroyed()
-  ) {
-    await showLoadingWindow()
-
-    return { win: wins.loadingWindow }
-  }
-
   const winProps = await _createChildWindow(
     pathToLayoutAppInit,
     'loadingWindow',
@@ -334,7 +336,8 @@ const createLoadingWindow = async () => {
       width: 350,
       height: 350,
       maximizable: false,
-      fullscreenable: false
+      fullscreenable: false,
+      noParent: true
     }
   )
 

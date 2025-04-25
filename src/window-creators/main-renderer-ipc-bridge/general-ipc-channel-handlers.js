@@ -6,23 +6,16 @@ const wins = require('../windows')
 const IpcChannelHandlers = require('./ipc.channel.handlers')
 
 class GeneralIpcChannelHandlers extends IpcChannelHandlers {
-  #hideLoadingWindow = null
-
-  constructor (...args) {
-    super(...args)
-
-    // Resolve circular dependency issue
-    this.#hideLoadingWindow = require(
-      '../change-loading-win-visibility-state'
-    ).hideLoadingWindow
-  }
-
   async exitHandler (event, args) {
     return app.exit(args?.code ?? 0)
   }
 
-  async hideLoadingWindowHandler (event, args) {
-    await this.#hideLoadingWindow()
+  async minimizeLoadingWindowHandler (event, args) {
+    await wins.loadingWindow?.minimize()
+  }
+
+  async closeLoadingWindowHandler (event, args) {
+    await wins.loadingWindow?.close()
   }
 
   async getTitleHandler (event, args) {
@@ -35,6 +28,10 @@ class GeneralIpcChannelHandlers extends IpcChannelHandlers {
 
   static sendLoadingDescription (win, args) {
     return this.sendToRenderer(this.sendLoadingDescription, win, args)
+  }
+
+  static sendLoadingBtnStates (win, args) {
+    return this.sendToRenderer(this.sendLoadingBtnStates, win, args)
   }
 }
 
