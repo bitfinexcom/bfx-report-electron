@@ -78,5 +78,7 @@ module.exports = async () => {
     }
   })
 
-  await hideLoadingWindow()
+  await hideLoadingWindow({
+    windowName: WINDOW_NAMES.STARTUP_LOADING_WINDOW
+  })
 }
