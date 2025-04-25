@@ -105,7 +105,9 @@ module.exports = ({
         dbWalPath,
         secretKeyPath
       ], { progressHandler })
-      await hideLoadingWindow()
+      await hideLoadingWindow({
+        windowName: WINDOW_NAMES.LOADING_WINDOW
+      })
 
       await showMessageModalDialog(win, {
         buttons: [
@@ -117,7 +119,9 @@ module.exports = ({
       })
     } catch (err) {
       try {
-        await hideLoadingWindow()
+        await hideLoadingWindow({
+          windowName: WINDOW_NAMES.LOADING_WINDOW
+        })
         await showErrorModalDialog(
           win,
           i18next.t('exportDB.modalDialog.title'),
