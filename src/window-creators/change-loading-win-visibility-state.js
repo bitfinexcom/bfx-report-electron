@@ -228,12 +228,11 @@ const showLoadingWindow = async (opts) => {
     shouldMinimizeBtnBeShown,
     windowName = WINDOW_NAMES.STARTUP_LOADING_WINDOW
   } = opts ?? {}
-  const win = wins[windowName]
 
   if (
-    !win ||
-    typeof win !== 'object' ||
-    win.isDestroyed()
+    !wins[windowName] ||
+    typeof wins[windowName] !== 'object' ||
+    wins[windowName].isDestroyed()
   ) {
     if (windowName === WINDOW_NAMES.LOADING_WINDOW) {
       await require('.').createLoadingWindow()
@@ -249,6 +248,7 @@ const showLoadingWindow = async (opts) => {
     })
   }
 
+  const win = wins[windowName]
   const _progress = Number.isFinite(progress)
     ? Math.floor(progress * 100) / 100
     : progress
