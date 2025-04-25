@@ -70,6 +70,7 @@ module.exports = ({
       }
 
       await showLoadingWindow({
+        windowName: WINDOW_NAMES.LOADING_WINDOW,
         description: i18next
           .t('exportDB.loadingWindow.description')
       })
