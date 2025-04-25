@@ -18,6 +18,7 @@ const isMac = process.platform === 'darwin'
 const log = require('../error-manager/log')
 const BfxMacUpdater = require('./bfx.mac.updater')
 const wins = require('../window-creators/windows')
+const WINDOW_NAMES = require('../window-creators/window.names')
 const {
   showLoadingWindow,
   hideLoadingWindow
@@ -291,6 +292,7 @@ const _autoUpdaterFactory = () => {
 
     autoUpdater.addInstallingUpdateEventHandler(() => {
       return showLoadingWindow({
+        windowName: WINDOW_NAMES.LOADING_WINDOW,
         description: i18next.t('autoUpdater.loadingWindow.description'),
         isRequiredToCloseAllWins: true
       })
