@@ -332,7 +332,10 @@ const _autoUpdaterFactory = () => {
 
       isProgressToastEnabled = false
 
-      await hideLoadingWindow({ isRequiredToShowMainWin: false })
+      await hideLoadingWindow({
+        windowName: WINDOW_NAMES.LOADING_WINDOW,
+        isRequiredToShowMainWin: false
+      })
 
       _switchMenuItem({
         isCheckMenuItemDisabled: false,
