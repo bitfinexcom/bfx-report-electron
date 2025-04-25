@@ -4,6 +4,7 @@ const ipcs = require('./ipcs')
 const {
   showLoadingWindow
 } = require('./window-creators/change-loading-win-visibility-state')
+const WINDOW_NAMES = require('./window-creators/window.names')
 
 const _closeServer = () => {
   return new Promise((resolve, reject) => {
@@ -35,6 +36,7 @@ module.exports = async (opts) => {
   } = opts ?? {}
 
   await showLoadingWindow({
+    windowName: WINDOW_NAMES.LOADING_WINDOW,
     isRequiredToCloseAllWins: true,
     ...loadingWinParams
   })
