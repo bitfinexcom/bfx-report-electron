@@ -28,6 +28,7 @@ const {
 const {
   hideLoadingWindow
 } = require('./window-creators/change-loading-win-visibility-state')
+const WINDOW_NAMES = require('./window-creators/window.names')
 const makeOrReadSecretKey = require('./make-or-read-secret-key')
 const {
   configsKeeperFactory
@@ -214,7 +215,10 @@ module.exports = async () => {
     manageWorkerMessages(ipc)
     await isServerReadyPromise
     await triggerSyncAfterUpdates()
-    await hideLoadingWindow({ isRequiredToShowMainWin: true })
+    await hideLoadingWindow({
+      windowName: WINDOW_NAMES.STARTUP_LOADING_WINDOW,
+      isRequiredToShowMainWin: true
+    })
     await triggerElectronLoad(portsMap)
     await checkForUpdatesAndNotify()
 
