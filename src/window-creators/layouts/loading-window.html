@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <script defer src="./loading-window.js"></script>
   <link rel="shortcut icon" href="../../../bfx-report-ui/build/favicon.ico">
   <link href="../../../bfx-report-ui/build/fonts/inter.css" rel="stylesheet">
   <link href="./themes.css" rel="stylesheet">
@@ -34,69 +35,7 @@
 
 <script>
   window.addEventListener('load', () => {
-    const rollers = document.getElementsByClassName('lds-roller')
-    const descriptionElem = document.getElementById('description')
-    const minBtnElem = document.getElementById('minBtn')
-    const closeBtnElem = document.getElementById('closeBtn')
-
-    minBtnElem.onclick = async () => {
-      try {
-        await window.bfxReportElectronApi?.minimizeLoadingWindow()
-      } catch (err) {
-        console.error(err)
-      }
-    }
-    closeBtnElem.onclick = async () => {
-      try {
-        await window.bfxReportElectronApi?.closeLoadingWindow()
-      } catch (err) {
-        console.error(err)
-      }
-    }
-
-    setTimeout(() => {
-      for (const roller of rollers) {
-        roller.classList.add("show-roller")
-      }
-    }, 2500)
-
-    window.bfxReportElectronApi?.onLoadingBtnStates((args) => {
-      try {
-        if (args?.shouldMinimizeBtnBeShown) {
-          minBtnElem.classList.remove('window-btn--disabled')
-        } else {
-          minBtnElem.classList.add('window-btn--disabled')
-        }
-        if (args?.shouldCloseBtnBeShown) {
-          closeBtnElem.classList.remove('window-btn--disabled')
-        } else {
-          closeBtnElem.classList.add('window-btn--disabled')
-        }
-      } catch (err) {
-        console.debug(err)
-      }
-    })
-    window.bfxReportElectronApi?.onLoadingDescription((args) => {
-      try {
-        if (typeof args?.description !== 'string') {
-          window.bfxReportElectronApi?.sendLoadingDescriptionReady()
-
-          return
-        }
-
-        descriptionElem.innerHTML = args.description
-
-        descriptionElem.style.display = args.description
-          ? 'block'
-          : 'none'
-
-        window.bfxReportElectronApi?.sendLoadingDescriptionReady()
-      } catch (err) {
-        console.error(err)
-
-        window.bfxReportElectronApi?.sendLoadingDescriptionReady({ err })
-      }
-    })
+    window.initLoadingWindow()
   })
 </script>
 </html>
