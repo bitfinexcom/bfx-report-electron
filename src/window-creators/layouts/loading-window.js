@@ -2,9 +2,11 @@ window.initLoadingWindow = (opts) => {
   const apiMethodPrefix = opts?.apiMethodPrefix ?? ''
 
   const rollers = document.getElementsByClassName('lds-roller')
+  const logoElem = document.getElementById('logo')
   const descriptionElem = document.getElementById('description')
   const minBtnElem = document.getElementById('minBtn')
   const closeBtnElem = document.getElementById('closeBtn')
+  let timeout = null
 
   minBtnElem.onclick = async () => {
     try {
@@ -21,7 +23,7 @@ window.initLoadingWindow = (opts) => {
     }
   }
 
-  setTimeout(() => {
+  timeout = setTimeout(() => {
     for (const roller of rollers) {
       roller.classList.add('show-roller')
     }
@@ -49,6 +51,17 @@ window.initLoadingWindow = (opts) => {
         window.bfxReportElectronApi?.[`send${apiMethodPrefix}LoadingDescriptionReady`]()
 
         return
+      }
+      if (args?.isIndeterminateMode) {
+        clearTimeout(timeout)
+
+        for (const roller of rollers) {
+          roller.classList.remove('show-roller')
+        }
+
+        logoElem.classList.add('logo--show-constantly')
+      } else {
+        logoElem.classList.remove('logo--show-constantly')
       }
 
       descriptionElem.innerHTML = args.description

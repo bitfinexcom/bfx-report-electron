@@ -201,6 +201,11 @@ body {
   background-color: var(--bgColor, #172d3e);
 }
 
+.logo--show-constantly {
+  animation: none;
+  opacity: 1;
+}
+
 .description {
   display: none;
   color: var(--color, #172d3e);

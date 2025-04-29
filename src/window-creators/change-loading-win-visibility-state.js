@@ -160,7 +160,8 @@ const setLoadingDescription = async (params) => {
     const {
       windowName = WINDOW_NAMES.STARTUP_LOADING_WINDOW,
       progress,
-      description = ''
+      description = '',
+      isIndeterminateMode = false
     } = params ?? {}
     const win = wins[windowName]
 
@@ -193,22 +194,39 @@ const setLoadingDescription = async (params) => {
       : '<p></p>'
     const _description = `${progressChunk}${descriptionChunk}`
 
-    const loadingDescReadyPromise = windowName === WINDOW_NAMES.LOADING_WINDOW
+    const loadingDescReadyPromise = (
+      !isIndeterminateMode &&
+      windowName === WINDOW_NAMES.LOADING_WINDOW
+    )
       ? GeneralIpcChannelHandlers.onLoadingDescriptionReady()
-      : GeneralIpcChannelHandlers.onStartupLoadingDescriptionReady()
+      : null
+    const startupLoadingDescReadyPromise = (
+      !isIndeterminateMode &&
+      windowName === WINDOW_NAMES.STARTUP_LOADING_WINDOW
+    )
+      ? GeneralIpcChannelHandlers.onStartupLoadingDescriptionReady()
+      : null
 
     if (windowName === WINDOW_NAMES.LOADING_WINDOW) {
-      GeneralIpcChannelHandlers
-        .sendLoadingDescription(win, { description: _description })
+      GeneralIpcChannelHandlers.sendLoadingDescription(win, {
+        description: _description,
+        isIndeterminateMode
+      })
     }
     if (windowName === WINDOW_NAMES.STARTUP_LOADING_WINDOW) {
-      GeneralIpcChannelHandlers
-        .sendStartupLoadingDescription(win, { description: _description })
+      GeneralIpcChannelHandlers.sendStartupLoadingDescription(win, {
+        description: _description,
+        isIndeterminateMode
+      })
     }
 
     const loadingRes = await loadingDescReadyPromise
+    const startupLoadingRes = await startupLoadingDescReadyPromise
 
     if (loadingRes?.err) {
+      console.error(loadingRes?.err)
+    }
+    if (startupLoadingRes?.err) {
       console.error(loadingRes?.err)
     }
   } catch (err) {
@@ -279,7 +297,8 @@ const showLoadingWindow = async (opts) => {
   await setLoadingDescription({
     windowName,
     progress: _progress,
-    description
+    description,
+    isIndeterminateMode
   })
 
   if (!win.isVisible()) {
