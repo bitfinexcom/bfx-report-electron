@@ -12,19 +12,27 @@ const {
 const GeneralIpcChannelHandlers = require(
   './main-renderer-ipc-bridge/general-ipc-channel-handlers'
 )
+const WINDOW_NAMES = require('./window.names')
 
-let intervalMarker
+const intervalMap = new Map()
 
-const _closeAllWindows = () => {
+const _closeAllWindows = (opts) => {
+  const excepedWindowName = opts?.excepedWindowName ?? WINDOW_NAMES.STARTUP_LOADING_WINDOW
+  const excepedWin = wins[excepedWindowName]
   const _wins = BrowserWindow.getAllWindows()
-    .filter((win) => win !== wins.loadingWindow)
+    .filter((win) => win !== excepedWin)
 
   const promises = _wins.map((win) => hideWindow(win))
 
   return Promise.all(promises)
 }
 
-const setParentToLoadingWindow = (noParent) => {
+const setParentToLoadingWindow = (opts) => {
+  const {
+    windowName = WINDOW_NAMES.STARTUP_LOADING_WINDOW,
+    noParent
+  } = opts ?? {}
+
   // TODO: The reason for it related to the electronjs issue:
   // `[Bug]: Wrong main window hidden state on macOS when using 'parent' option`
   // https://github.com/electron/electron/issues/29732
@@ -32,39 +40,41 @@ const setParentToLoadingWindow = (noParent) => {
     return
   }
 
-  if (wins.loadingWindow.isFocused()) {
+  if (wins[windowName].isFocused()) {
     return
   }
 
   const win = BrowserWindow.getFocusedWindow()
 
   if (noParent) {
-    wins.loadingWindow.setParentWindow(null)
+    wins[windowName].setParentWindow(null)
 
     return
   }
   if (
     Object.values(wins).every((w) => w !== win) ||
-    win === wins.loadingWindow
+    win === wins[windowName]
   ) {
-    const mainWindow = !wins.mainWindow?.isDestroyed()
-      ? wins.mainWindow
+    const mainWindow = !wins[WINDOW_NAMES.MAIN_WINDOW]?.isDestroyed()
+      ? wins[WINDOW_NAMES.MAIN_WINDOW]
       : null
 
-    wins.loadingWindow.setParentWindow(mainWindow)
+    wins[windowName]
+      .setParentWindow(mainWindow)
 
     return
   }
 
-  wins.loadingWindow.setParentWindow(win)
+  wins[windowName].setParentWindow(win)
 }
 
 const _runProgressLoader = (opts) => {
   const {
-    win = wins.loadingWindow,
+    windowName = WINDOW_NAMES.STARTUP_LOADING_WINDOW,
     isIndeterminateMode = false,
     progress
   } = opts ?? {}
+  const win = wins[windowName]
 
   if (
     !win ||
@@ -100,7 +110,7 @@ const _runProgressLoader = (opts) => {
   const step = 1 / (duration / interval)
   let _progress = 0
 
-  intervalMarker = setInterval(() => {
+  const intervalMarker = setInterval(() => {
     if (_progress >= 1) {
       _progress = 0
     }
@@ -112,6 +122,7 @@ const _runProgressLoader = (opts) => {
       typeof win !== 'object' ||
       win.isDestroyed()
     ) {
+      const intervalMarker = intervalMap.get(windowName)
       clearInterval(intervalMarker)
 
       return
@@ -119,11 +130,17 @@ const _runProgressLoader = (opts) => {
 
     win.setProgressBar(_progress)
   }, interval).unref()
+
+  intervalMap.set(windowName, intervalMarker)
 }
 
-const _stopProgressLoader = (
-  win = wins.loadingWindow
-) => {
+const _stopProgressLoader = (opts) => {
+  const {
+    windowName = WINDOW_NAMES.STARTUP_LOADING_WINDOW
+  } = opts ?? {}
+  const win = wins[windowName]
+  const intervalMarker = intervalMap.get(windowName)
+
   clearInterval(intervalMarker)
 
   if (
@@ -141,10 +158,12 @@ const _stopProgressLoader = (
 const setLoadingDescription = async (params) => {
   try {
     const {
-      win = wins.loadingWindow,
+      windowName = WINDOW_NAMES.STARTUP_LOADING_WINDOW,
       progress,
-      description = ''
+      description = '',
+      isIndeterminateMode = false
     } = params ?? {}
+    const win = wins[windowName]
 
     if (
       !win ||
@@ -175,15 +194,39 @@ const setLoadingDescription = async (params) => {
       : '<p></p>'
     const _description = `${progressChunk}${descriptionChunk}`
 
-    const loadingDescReadyPromise = GeneralIpcChannelHandlers
-      .onLoadingDescriptionReady()
+    const loadingDescReadyPromise = (
+      !isIndeterminateMode &&
+      windowName === WINDOW_NAMES.LOADING_WINDOW
+    )
+      ? GeneralIpcChannelHandlers.onLoadingDescriptionReady()
+      : null
+    const startupLoadingDescReadyPromise = (
+      !isIndeterminateMode &&
+      windowName === WINDOW_NAMES.STARTUP_LOADING_WINDOW
+    )
+      ? GeneralIpcChannelHandlers.onStartupLoadingDescriptionReady()
+      : null
 
-    GeneralIpcChannelHandlers
-      .sendLoadingDescription(win, { description: _description })
+    if (windowName === WINDOW_NAMES.LOADING_WINDOW) {
+      GeneralIpcChannelHandlers.sendLoadingDescription(win, {
+        description: _description,
+        isIndeterminateMode
+      })
+    }
+    if (windowName === WINDOW_NAMES.STARTUP_LOADING_WINDOW) {
+      GeneralIpcChannelHandlers.sendStartupLoadingDescription(win, {
+        description: _description,
+        isIndeterminateMode
+      })
+    }
 
     const loadingRes = await loadingDescReadyPromise
+    const startupLoadingRes = await startupLoadingDescReadyPromise
 
     if (loadingRes?.err) {
+      console.error(loadingRes?.err)
+    }
+    if (startupLoadingRes?.err) {
       console.error(loadingRes?.err)
     }
   } catch (err) {
@@ -200,20 +243,30 @@ const showLoadingWindow = async (opts) => {
     isIndeterminateMode = false,
     noParent = false,
     shouldCloseBtnBeShown,
-    shouldMinimizeBtnBeShown
+    shouldMinimizeBtnBeShown,
+    windowName = WINDOW_NAMES.STARTUP_LOADING_WINDOW
   } = opts ?? {}
 
   if (
-    !wins.loadingWindow ||
-    typeof wins.loadingWindow !== 'object' ||
-    wins.loadingWindow.isDestroyed()
+    !wins[windowName] ||
+    typeof wins[windowName] !== 'object' ||
+    wins[windowName].isDestroyed()
   ) {
-    await require('.')
-      .createLoadingWindow()
+    if (windowName === WINDOW_NAMES.LOADING_WINDOW) {
+      await require('.').createLoadingWindow()
+    }
+    if (windowName === WINDOW_NAMES.STARTUP_LOADING_WINDOW) {
+      await require('.').createStartupLoadingWindow()
+    }
+  }
+  if (windowName === WINDOW_NAMES.STARTUP_LOADING_WINDOW) {
+    setParentToLoadingWindow({
+      windowName: WINDOW_NAMES.STARTUP_LOADING_WINDOW,
+      noParent: isRequiredToCloseAllWins || noParent
+    })
   }
 
-  setParentToLoadingWindow(isRequiredToCloseAllWins || noParent)
-
+  const win = wins[windowName]
   const _progress = Number.isFinite(progress)
     ? Math.floor(progress * 100) / 100
     : progress
@@ -222,53 +275,71 @@ const showLoadingWindow = async (opts) => {
     !isNotRunProgressLoaderRequired ||
     Number.isFinite(progress)
   ) {
-    _runProgressLoader({ progress: _progress, isIndeterminateMode })
+    _runProgressLoader({
+      windowName,
+      progress: _progress,
+      isIndeterminateMode
+    })
   }
 
-  GeneralIpcChannelHandlers
-    .sendLoadingBtnStates(wins.loadingWindow, {
-      shouldCloseBtnBeShown: shouldCloseBtnBeShown ?? false,
-      shouldMinimizeBtnBeShown: shouldMinimizeBtnBeShown ?? false
-    })
-  await setLoadingDescription({ progress: _progress, description })
+  const btnOpts = {
+    shouldCloseBtnBeShown: shouldCloseBtnBeShown ?? false,
+    shouldMinimizeBtnBeShown: shouldMinimizeBtnBeShown ?? false
+  }
 
-  if (!wins.loadingWindow.isVisible()) {
-    centerWindow(wins.loadingWindow)
+  if (windowName === WINDOW_NAMES.LOADING_WINDOW) {
+    GeneralIpcChannelHandlers.sendLoadingBtnStates(win, btnOpts)
+  }
+  if (windowName === WINDOW_NAMES.STARTUP_LOADING_WINDOW) {
+    GeneralIpcChannelHandlers.sendStartupLoadingBtnStates(win, btnOpts)
+  }
 
-    await showWindow(wins.loadingWindow)
+  await setLoadingDescription({
+    windowName,
+    progress: _progress,
+    description,
+    isIndeterminateMode
+  })
+
+  if (!win.isVisible()) {
+    centerWindow(win)
+
+    await showWindow(win)
   }
   if (!isRequiredToCloseAllWins) {
     return
   }
 
-  await _closeAllWindows()
+  await _closeAllWindows({ excepedWindowName: windowName })
 }
 
 const hideLoadingWindow = async (opts) => {
   const {
+    windowName = WINDOW_NAMES.STARTUP_LOADING_WINDOW,
     isRequiredToShowMainWin = false
   } = opts ?? {}
+  const win = wins[windowName]
 
   // need to empty description
-  await setLoadingDescription({ description: '' })
-  _stopProgressLoader()
+  await setLoadingDescription({ windowName, description: '' })
+  _stopProgressLoader({ windowName })
 
   if (isRequiredToShowMainWin) {
     await showWindow(
-      wins.mainWindow,
+      wins[WINDOW_NAMES.MAIN_WINDOW],
       { shouldWinBeFocused: true }
     )
 
     if (appStates.isMainWinMaximized) {
-      wins.mainWindow.maximize()
+      wins[WINDOW_NAMES.MAIN_WINDOW].maximize()
     }
     if (appStates.isMainWinFullScreen) {
-      wins.mainWindow.setFullScreen(true)
+      wins[WINDOW_NAMES.MAIN_WINDOW].setFullScreen(true)
     }
   }
 
   return hideWindow(
-    wins.loadingWindow,
+    win,
     { shouldWinBeBlurred: true }
   )
 }

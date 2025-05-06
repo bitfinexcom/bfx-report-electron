@@ -14,6 +14,7 @@ const {
   setLoadingDescription
 } = require('./window-creators/change-loading-win-visibility-state')
 const wins = require('./window-creators/windows')
+const WINDOW_NAMES = require('./window-creators/window.names')
 const isMainWinAvailable = require('./helpers/is-main-win-available')
 const {
   DEFAULT_ARCHIVE_DB_FILE_NAME,
@@ -39,8 +40,8 @@ module.exports = ({
   const secretKeyPath = path.join(pathToUserData, SECRET_KEY_FILE_NAME)
 
   return async () => {
-    const win = isMainWinAvailable(wins.mainWindow)
-      ? wins.mainWindow
+    const win = isMainWinAvailable(wins[WINDOW_NAMES.MAIN_WINDOW])
+      ? wins[WINDOW_NAMES.MAIN_WINDOW]
       : BrowserWindow.getFocusedWindow()
 
     try {
@@ -69,6 +70,7 @@ module.exports = ({
       }
 
       await showLoadingWindow({
+        windowName: WINDOW_NAMES.LOADING_WINDOW,
         description: i18next
           .t('exportDB.loadingWindow.description')
       })
@@ -90,7 +92,11 @@ module.exports = ({
           : ''
         const description = `${_description}${archived}`
 
-        await setLoadingDescription({ progress, description })
+        await setLoadingDescription({
+          windowName: WINDOW_NAMES.LOADING_WINDOW,
+          progress,
+          description
+        })
       }
 
       await zip(filePath, [
@@ -99,7 +105,9 @@ module.exports = ({
         dbWalPath,
         secretKeyPath
       ], { progressHandler })
-      await hideLoadingWindow()
+      await hideLoadingWindow({
+        windowName: WINDOW_NAMES.LOADING_WINDOW
+      })
 
       await showMessageModalDialog(win, {
         buttons: [
@@ -111,7 +119,9 @@ module.exports = ({
       })
     } catch (err) {
       try {
-        await hideLoadingWindow()
+        await hideLoadingWindow({
+          windowName: WINDOW_NAMES.LOADING_WINDOW
+        })
         await showErrorModalDialog(
           win,
           i18next.t('exportDB.modalDialog.title'),

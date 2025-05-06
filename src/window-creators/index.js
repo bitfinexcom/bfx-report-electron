@@ -8,6 +8,7 @@ const { BrowserWindow } = electron
 const isDevEnv = process.env.NODE_ENV === 'development'
 const isMac = process.platform === 'darwin'
 
+const WINDOW_NAMES = require('./window.names')
 const wins = require('./windows')
 const ipcs = require('../ipcs')
 const serve = require('../serve')
@@ -48,7 +49,12 @@ const publicDir = path.join(__dirname, '../../bfx-report-ui/build')
 const loadURL = serve({ directory: publicDir })
 
 const pathToLayouts = path.join(__dirname, 'layouts')
-const pathToLayoutAppInit = path.join(pathToLayouts, 'app-init.html')
+const pathToLoadingLayout = path
+  .join(pathToLayouts, 'loading-window.html')
+const pathToStartupLoadingLayout = path
+  .join(pathToLayouts, 'startup-loading-window.html')
+const pathToAppInitErrorLayout = path
+  .join(pathToLayouts, 'app-init-error.html')
 
 const _getFileURL = (params) => {
   const {
@@ -95,7 +101,7 @@ const _createWindow = async (
 ) => {
   const {
     pathname = null,
-    winName = 'mainWindow'
+    winName = WINDOW_NAMES.MAIN_WINDOW
   } = params ?? {}
 
   const point = electron.screen.getCursorScreenPoint()
@@ -107,7 +113,7 @@ const _createWindow = async (
     width: defaultWidth,
     height: defaultHeight
   } = workAreaSize
-  const isMainWindow = winName === 'mainWindow'
+  const isMainWindow = winName === WINDOW_NAMES.MAIN_WINDOW
   const {
     width = defaultWidth,
     height = defaultHeight,
@@ -176,21 +182,26 @@ const _createWindow = async (
     win: wins[winName]
   }
 
-  if (!pathname) {
+  if (isMainWindow) {
     await showLoadingWindow({
       shouldCloseBtnBeShown: true,
       shouldMinimizeBtnBeShown: true,
-      noParent: true
+      noParent: true,
+      windowName: WINDOW_NAMES.STARTUP_LOADING_WINDOW
     })
-    wins.loadingWindow.setAlwaysOnTop(true)
+    wins[WINDOW_NAMES.STARTUP_LOADING_WINDOW].setAlwaysOnTop(true)
 
     return res
   }
   if (props.center) {
     centerWindow(wins[winName])
   }
+  if (winName === WINDOW_NAMES.STARTUP_LOADING_WINDOW) {
+    setParentToLoadingWindow({
+      windowName: WINDOW_NAMES.STARTUP_LOADING_WINDOW
+    })
+  }
 
-  setParentToLoadingWindow()
   await showWindow(wins[winName])
 
   return res
@@ -236,7 +247,7 @@ const _createChildWindow = async (
         noParent
       )
         ? null
-        : wins.mainWindow,
+        : wins[WINDOW_NAMES.MAIN_WINDOW],
       alwaysOnTop: isMac,
 
       ...opts
@@ -245,10 +256,10 @@ const _createChildWindow = async (
 
   winProps.win.on('closed', () => {
     if (wins.mainWindow) {
-      wins.mainWindow.close()
+      wins[WINDOW_NAMES.MAIN_WINDOW].close()
     }
 
-    wins.mainWindow = null
+    wins[WINDOW_NAMES.MAIN_WINDOW] = null
   })
 
   return winProps
@@ -285,14 +296,22 @@ const createMainWindow = async ({
 
   win.on('closed', () => {
     if (
-      wins.loadingWindow &&
-      typeof wins.loadingWindow === 'object' &&
-      !wins.loadingWindow.isDestroyed()
+      wins[WINDOW_NAMES.LOADING_WINDOW] &&
+      typeof wins[WINDOW_NAMES.LOADING_WINDOW] === 'object' &&
+      !wins[WINDOW_NAMES.LOADING_WINDOW].isDestroyed()
     ) {
-      wins.loadingWindow.close()
+      wins[WINDOW_NAMES.LOADING_WINDOW].close()
+    }
+    if (
+      wins[WINDOW_NAMES.STARTUP_LOADING_WINDOW] &&
+      typeof wins[WINDOW_NAMES.STARTUP_LOADING_WINDOW] === 'object' &&
+      !wins[WINDOW_NAMES.STARTUP_LOADING_WINDOW].isDestroyed()
+    ) {
+      wins[WINDOW_NAMES.STARTUP_LOADING_WINDOW].close()
     }
 
-    wins.loadingWindow = null
+    wins[WINDOW_NAMES.LOADING_WINDOW] = null
+    wins[WINDOW_NAMES.STARTUP_LOADING_WINDOW] = null
   })
 
   if (
@@ -310,12 +329,14 @@ const createMainWindow = async ({
   }
 
   if (isDevEnv) {
-    wins.mainWindow.webContents.openDevTools({ mode: 'right' })
+    wins[WINDOW_NAMES.MAIN_WINDOW].webContents
+      .openDevTools({ mode: 'right' })
   }
   if (isBfxApiStaging()) {
-    const title = wins.mainWindow.getTitle()
+    const title = wins[WINDOW_NAMES.MAIN_WINDOW].getTitle()
 
-    wins.mainWindow.setTitle(`${title} - BFX API STAGING USED`)
+    wins[WINDOW_NAMES.MAIN_WINDOW]
+      .setTitle(`${title} - BFX API STAGING USED`)
   }
 
   createMenu({ pathToUserData, pathToUserDocuments })
@@ -330,8 +351,25 @@ const createMainWindow = async ({
 
 const createLoadingWindow = async () => {
   const winProps = await _createChildWindow(
-    pathToLayoutAppInit,
-    'loadingWindow',
+    pathToLoadingLayout,
+    WINDOW_NAMES.LOADING_WINDOW,
+    {
+      width: 350,
+      height: 350,
+      maximizable: false,
+      fullscreenable: false,
+      parent: wins[WINDOW_NAMES.MAIN_WINDOW],
+      modal: true
+    }
+  )
+
+  return winProps
+}
+
+const createStartupLoadingWindow = async () => {
+  const winProps = await _createChildWindow(
+    pathToStartupLoadingLayout,
+    WINDOW_NAMES.STARTUP_LOADING_WINDOW,
     {
       width: 350,
       height: 350,
@@ -344,18 +382,19 @@ const createLoadingWindow = async () => {
   return winProps
 }
 
-const createErrorWindow = async (pathname) => {
+const createErrorWindow = async () => {
   const winProps = await _createChildWindow(
-    pathname,
-    'errorWindow',
+    pathToAppInitErrorLayout,
+    WINDOW_NAMES.ERROR_WINDOW,
     {
       height: 300,
       frame: false
     }
   )
 
-  await hideLoadingWindow()
-  await hideWindow(wins.mainWindow)
+  await hideLoadingWindow({ windowName: WINDOW_NAMES.LOADING_WINDOW })
+  await hideLoadingWindow({ windowName: WINDOW_NAMES.STARTUP_LOADING_WINDOW })
+  await hideWindow(wins[WINDOW_NAMES.MAIN_WINDOW])
 
   return winProps
 }
@@ -363,5 +402,6 @@ const createErrorWindow = async (pathname) => {
 module.exports = {
   createMainWindow,
   createErrorWindow,
-  createLoadingWindow
+  createLoadingWindow,
+  createStartupLoadingWindow
 }
