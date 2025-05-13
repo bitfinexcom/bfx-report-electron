@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.36.0] - 2025-05-14
+
+### Added
+
+- Added `package-lock` file, bumped dev dependencies and bumped up `NODEJS` to `v20` for the `GH Actions`. PR: [bfx-facs-db-better-sqlite#12](https://github.com/bitfinexcom/bfx-facs-db-better-sqlite/pull/12)
+- Implemented user notifications about inaccurate `Tax Report` calculations due to `delisted` tokens. PR: [bfx-report-ui#926](https://github.com/bitfinexcom/bfx-report-ui/pull/926)
+- Implemented the possibility to `Deduct Fees` in the `Tax Report`. PR: [bfx-report-ui#928](https://github.com/bitfinexcom/bfx-report-ui/pull/928)
+
+### Changed
+
+- Made two loading windows for a startup without a parent window independently and for common purposes as a modal window with a parent window to prevent the main window interaction when showing the loading window for some sensitive cases such as import/export DB. PR: [bfx-report-electron#535](https://github.com/bitfinexcom/bfx-report-electron/pull/535)
+- Disabled `Loan Report` refresh button during initial synchronization to prevent report generation errors. Added a corresponding notice to communicate this to the user. PR: [bfx-report-ui#927](https://github.com/bitfinexcom/bfx-report-ui/pull/927)
+
+### Fixed
+
+- Fixed the sync requested by the user via the UI button in case the sync was added by the scheduler and the app was closed before completing earlier. PR: [bfx-reports-framework#454](https://github.com/bitfinexcom/bfx-reports-framework/pull/454)
+
 ## [4.35.0] - 2025-04-23
 
 ### Added
