@@ -12,14 +12,19 @@ const CHANNEL_NAMES = {
 
 const GENERAL_INVOKE_METHOD_NAMES = {
   EXIT: 'exit',
+  GET_TITLE: 'getTitle',
   MINIMIZE_LOADING_WINDOW: 'minimizeLoadingWindow',
   CLOSE_LOADING_WINDOW: 'closeLoadingWindow',
-  GET_TITLE: 'getTitle'
+  MINIMIZE_STARTUP_LOADING_WINDOW: 'minimizeStartupLoadingWindow',
+  CLOSE_STARTUP_LOADING_WINDOW: 'closeStartupLoadingWindow'
 }
 const GENERAL_EVENT_METHOD_NAMES = {
   ON_LOADING_DESCRIPTION: 'onLoadingDescription',
   ON_LOADING_BTN_STATES: 'onLoadingBtnStates',
-  SEND_LOADING_DESCRIPTION_READY: 'sendLoadingDescriptionReady'
+  SEND_LOADING_DESCRIPTION_READY: 'sendLoadingDescriptionReady',
+  ON_STARTUP_LOADING_DESCRIPTION: 'onStartupLoadingDescription',
+  ON_STARTUP_LOADING_BTN_STATES: 'onStartupLoadingBtnStates',
+  SEND_STARTUP_LOADING_DESCRIPTION_READY: 'sendStartupLoadingDescriptionReady'
 }
 const TRANSLATIONS_INVOKE_METHOD_NAMES = {
   SET_LANGUAGE: 'setLanguage',
