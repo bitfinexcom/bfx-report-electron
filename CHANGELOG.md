@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.36.1] - 2025-05-28
+
+### Added
+
+- Added `isUserMerchant` flag into user info model. PR: [bfx-api-node-models#89](https://github.com/bitfinexcom/bfx-api-node-models/pull/89)
+- Added `isUserMerchant` flag into the response of `verifyUser` endpoint. PR: [bfx-report#432](https://github.com/bitfinexcom/bfx-report/pull/432)
+- Added `isUserMerchant` flag into the response of the `signUp` and `signIn` endpoints for the UI to remove `Merchant` nav item for non merchant users. PR: [bfx-reports-framework#457](https://github.com/bitfinexcom/bfx-reports-framework/pull/457)
+
+### Changed
+
+- Implemented redirection to the main platform login page (only for web production) on logout or in cases where there is no auth available. PR: [bfx-report-ui#932](https://github.com/bitfinexcom/bfx-report-ui/pull/932)
+- Improved currency formatting in the `Trading fees charged in the last 30 days` section. PR: [bfx-report-ui#931](https://github.com/bitfinexcom/bfx-report-ui/pull/931)
+- Disabled `Fees Report` refresh button during initial synchronization to prevent report generation errors. Added a corresponding notice to communicate this to the user. PR: [bfx-report-ui#933](https://github.com/bitfinexcom/bfx-report-ui/pull/933)
+
 ## [4.36.0] - 2025-05-14
 
 ### Added
