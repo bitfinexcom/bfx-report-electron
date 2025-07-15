@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.36.2] - 2025-07-16
+
+### Added
+
+- Implemented a class for the sync schema models to typify and unify model objects. PR: [bfx-reports-framework#459](https://github.com/bitfinexcom/bfx-reports-framework/pull/459)
+
+### Changed
+
+- Reworked sync schema model usage to use the new model interface implemented in the previous PR #459. It speeded up the work by avoiding the usage of `cloneDeep` fn based on `JSON.parse(JSON.stringify(obj))` for the models. PR: [bfx-reports-framework#461](https://github.com/bitfinexcom/bfx-reports-framework/pull/461)
+- Improved the `isUserMerchant` checking flow and hides the `Merchant History` section(Invoices) for non-merchant users. Removed the outdated `NonMerchant` screen and related unused handlers. PR: [bfx-report-ui#936](https://github.com/bitfinexcom/bfx-report-ui/pull/936)
+- Disabled `Snapshots` refresh button during initial synchronization to prevent report generation errors. Added a corresponding notice to communicate this to the user. PR: [bfx-report-ui#937](https://github.com/bitfinexcom/bfx-report-ui/pull/937)
+- Improved currency and fees formatting in the `Movements` details modal. PR: [bfx-report-ui#939](https://github.com/bitfinexcom/bfx-report-ui/pull/939)
+
+### Fixed
+
+- Fixed symbols/pairs duplication. When sync data is moved from the temp tables to the main ones it's needed to remove previous data for the updatable collections such as symbols, etc to prevent deleted currencies from getting stuck. PR: [bfx-reports-framework#463](https://github.com/bitfinexcom/bfx-reports-framework/pull/463)
+- Prevented duplication possibility for selectors items noted in some cases.PR: [bfx-report-ui#940](https://github.com/bitfinexcom/bfx-report-ui/pull/940)
+- Hidden the `Export` from the header and account menu for the `Summary` as we currently don't support exporting for this page. PR: [bfx-report-ui#941](https://github.com/bitfinexcom/bfx-report-ui/pull/941)
+
+### Security
+
+- Updated `Grenache` dependencies due to the last Grenache updates, removed unsupported `request` lib, fixed high severity vulnerabilities by `npm audit`. PRs: [bfx-report-express#49](https://github.com/bitfinexcom/bfx-report-express/pull/49), [bfx-report#435](https://github.com/bitfinexcom/bfx-report/pull/435), [bfx-reports-framework#462](https://github.com/bitfinexcom/bfx-reports-framework/pull/462), [bfx-report-electron#541](https://github.com/bitfinexcom/bfx-report-electron/pull/541)
+
 ## [4.36.1] - 2025-05-28
 
 ### Added
