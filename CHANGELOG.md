@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.36.3] - 2025-07-30
+
+### Changed
+
+- Reworked query param validation schemas. PR: [bfx-report#438](https://github.com/bitfinexcom/bfx-report/pull/438)
+  - Brings the JSON schemas of query params to common consistent form for easier support
+  - Disables the ability to pass undeclared params to improve understanding of what is being passed and increase the security and durability of the system
+  - Splits the schemas into separate files for better readability
+  - Uses JSON schema compilation on the initialization stage before validation (when module loading) to increase performance
+  - Adds official ajv-formats lib to have extra formats of validation like email
+  - Makes corresponding minor changes due to adding the restriction of passing undeclared params
+- Brought adjustments due to reworking query param schemas of bfx-report. PR: [bfx-reports-framework#466](https://github.com/bitfinexcom/bfx-reports-framework/pull/466)
+- Disabled wallets `Balances` refresh button during initial synchronization to prevent report generation errors. Added a corresponding notice to communicate this to the user. PR: [bfx-report-ui#944](https://github.com/bitfinexcom/bfx-report-ui/pull/944)
+
+### Fixed
+
+- Removed redundant (start, end, limit) params for the `getActivePositionsFile` request. PR: [bfx-report-ui#943](https://github.com/bitfinexcom/bfx-report-ui/pull/943)
+- Fixed `id` param type (should be an array of numbers) for the `getPositionsAuditFile` request. PR: [bfx-report-ui#945](https://github.com/bitfinexcom/bfx-report-ui/pull/945)
+
 ## [4.36.2] - 2025-07-16
 
 ### Added
