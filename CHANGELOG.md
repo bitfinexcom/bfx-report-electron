@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.36.4] - 2025-08-27
+
+### Changed
+
+- Reworked `filter` query param validation schemas. PR: [bfx-report#441](https://github.com/bitfinexcom/bfx-report/pull/441)
+  - Brings the JSON schemas of query params to common consistent form for easier support
+  - Disables the ability to pass undeclared params to improve understanding of what is being passed and increase the security and durability of the system
+  - Splits the schemas into separate files for better readability
+  - Uses JSON schema compilation on the initialization stage before validation (when module loading) to increase performance
+  - Makes corresponding minor changes
+- Brought adjustments due to reworking `filter` query param schemas of bfx-report. PR: [bfx-reports-framework#470](https://github.com/bitfinexcom/bfx-reports-framework/pull/470)
+- Reworked query param validation schemas for the report framework. PR: [bfx-reports-framework#471](https://github.com/bitfinexcom/bfx-reports-framework/pull/471)
+  - Brings the JSON schemas of query params to common consistent form for easier support
+  - Disables the ability to pass undeclared params to improve understanding of what is being passed and increase the security and durability of the system
+  - Splits the schemas into separate files for better readability
+  - Uses JSON schema compilation on the initialization stage before validation (when module loading) to increase performance
+  - Makes corresponding minor changes due to adding the restriction of passing undeclared params
+  - Removes the old validation module and JSON schemas
+- Brought adjustments due to reworking query param schemas of bfx-reports-framework. PR: [bfx-report#442](https://github.com/bitfinexcom/bfx-report/pull/442)
+- Reworked `ColumnsFilterDialog` in a more performant way and improved props linting. PR: [bfx-report-ui#948](https://github.com/bitfinexcom/bfx-report-ui/pull/948)
+- Reworked and optimized `SideSelector` in a more performant way. PR: [bfx-report-ui#950](https://github.com/bitfinexcom/bfx-report-ui/pull/950)
+- Reworked `NoData` section in a more performant way, actualized prop-types and improved props linting. PR: [bfx-report-ui#951](https://github.com/bitfinexcom/bfx-report-ui/pull/951)
+
+### Fixed
+
+- Removed redundant `limit` param for the `getTransactionTaxReportFile` request according to the latest backend validation changes. PR: [bfx-report-ui#952](https://github.com/bitfinexcom/bfx-report-ui/pull/952)
+
+### Security
+
+- Updated UI dependencies to fix a critical vulnerability. PR: [bfx-report-ui#949](https://github.com/bitfinexcom/bfx-report-ui/pull/949)
+
 ## [4.36.3] - 2025-07-30
 
 ### Changed
