@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.37.0] - 2025-09-24
+
+### Added
+
+- Implemented `USDT0ARB`, `USDT0INK` and `USDT0OPX` support in the symbols filters. PR: [bfx-report-ui#958](https://github.com/bitfinexcom/bfx-report-ui/pull/958)
+- Added network to `Tether` ccy for movement export similar to the UI representation. Added a similar approach as on the UI side. PR: [bfx-report#446](https://github.com/bitfinexcom/bfx-report/pull/446)
+- Showed `mtsStarted` instead of `mtsUpdated` timestamp in the `Date` column of the `Movements` report. PR: [bfx-report-ui#960](https://github.com/bitfinexcom/bfx-report-ui/pull/960)
+- Added `created` and `updated` timestamp for movements export. PR: [bfx-report#448](https://github.com/bitfinexcom/bfx-report/pull/448)
+
+### Changed
+
+- Reworked and optimized `WalletSelector` in a more performant way. PR: [bfx-report-ui#955](https://github.com/bitfinexcom/bfx-report-ui/pull/955)
+- Reworked `SectionSwitch` in a more performant way and reduced redundant code. PR: [bfx-report-ui#956](https://github.com/bitfinexcom/bfx-report-ui/pull/956)
+- Removed the filter normalizer to speed up requests, as it is not being used. PRs: [bfx-report#445](https://github.com/bitfinexcom/bfx-report/pull/445), [bfx-reports-framework#473](https://github.com/bitfinexcom/bfx-reports-framework/pull/473)
+
+### Fixed
+
+- Hid the `Invoices` report due to unannounced removal of the `payInvoiceList` endpoint from the `BFX API`. PR: [bfx-report-ui#961](https://github.com/bitfinexcom/bfx-report-ui/pull/961)
+- Removed `payInvoiceList` endpoint support due to unannounced removal from the `BFX API`. PRs: [bfx-report#449](https://github.com/bitfinexcom/bfx-report/pull/449), [bfx-reports-framework#479](https://github.com/bitfinexcom/bfx-reports-framework/pull/479)
+
+### Security
+
+- Showed npm lib scripts output to the foreground due to security reasons, disabled npm lib scripts where it's possible. PRs: [bfx-report-express#51](https://github.com/bitfinexcom/bfx-report-express/pull/51), [bfx-report-ui#959](https://github.com/bitfinexcom/bfx-report-ui/pull/959), [bfx-report-electron#551](https://github.com/bitfinexcom/bfx-report-electron/pull/551), [bfx-report#447](https://github.com/bitfinexcom/bfx-report/pull/447), [bfx-reports-framework#478](https://github.com/bitfinexcom/bfx-reports-framework/pull/478)
+
 ## [4.36.4] - 2025-08-27
 
 ### Changed
