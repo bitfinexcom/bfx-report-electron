@@ -28,7 +28,7 @@
     "i18next-fs-backend": "2.3.2",
     "js-yaml": "4.1.0",
     "lib-js-util-base": "git+https://github.com/bitfinexcom/lib-js-util-base.git",
-    "new-github-issue-url": "0.2.1",
+    "new-github-issue-url": "1.1.0",
     "showdown": "2.0.3",
     "truncate-utf8-bytes": "1.0.2",
     "yauzl": "3.2.0"
