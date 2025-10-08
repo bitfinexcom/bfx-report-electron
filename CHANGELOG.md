@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.38.0] - 2025-10-08
+
+### Added
+
+- Added `Summary Statistics` info into the `getSummaryByAsset` endpoint. PR: [bfx-reports-framework#485](https://github.com/bitfinexcom/bfx-reports-framework/pull/485)
+- Implemented the possibility to login via `__bfx_token` cookie from the main platform for the `Reports` web in production. PR: [bfx-report-ui#968](https://github.com/bitfinexcom/bfx-report-ui/pull/968)
+- Implemented auto-refreshing possibility for the currently opened report after the regular/scheduled synchronization for represented data actualization. PR: [bfx-report-ui#969](https://github.com/bitfinexcom/bfx-report-ui/pull/969)
+
+### Changed
+
+- Disabled `Account Balance` refresh button during initial synchronization to prevent report generation errors possibility. PR: [bfx-report-ui#967](https://github.com/bitfinexcom/bfx-report-ui/pull/967)
+- Removed ivoices-related logic due to the removal of the `payInvoiceList` endpoint from the BFX API. PR: [bfx-report-ui#970](https://github.com/bitfinexcom/bfx-report-ui/pull/970)
+
 ## [4.37.0] - 2025-09-24
 
 ### Added
