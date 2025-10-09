@@ -11,7 +11,7 @@ const { unzip } = require('./archiver')
 const showErrorModalDialog = require('./show-error-modal-dialog')
 const pauseApp = require('./pause-app')
 const relaunch = require('./relaunch')
-const { rm, isMainWinAvailable } = require('./helpers')
+const { isMainWinAvailable } = require('./helpers')
 const wins = require('./window-creators/windows')
 const WINDOW_NAMES = require('./window-creators/window.names')
 const {
@@ -23,22 +23,6 @@ const {
   DB_WAL_FILE_NAME,
   SECRET_KEY_FILE_NAME
 } = require('./const')
-
-const _rmDbExcludeMain = async (folderPath, dbFileName) => {
-  try {
-    await rm(
-      folderPath,
-      {
-        exclude: [dbFileName],
-        include: ['.db', '.db-shm', '.db-wal']
-      }
-    )
-
-    return true
-  } catch (err) {
-    return false
-  }
-}
 
 module.exports = ({
   pathToUserData,
@@ -113,7 +97,6 @@ module.exports = ({
             .t('importDB.loadingWindow.description')
         }
       })
-      await _rmDbExcludeMain(pathToUserData, DB_FILE_NAME)
       const extractedfileNames = await unzip(
         filePaths[0],
         pathToUserData,
