@@ -15,7 +15,8 @@ const { DbRemovingError } = require('./errors')
 const {
   DB_FILE_NAME,
   DB_SHM_FILE_NAME,
-  DB_WAL_FILE_NAME
+  DB_WAL_FILE_NAME,
+  SECRET_KEY_FILE_NAME
 } = require('./const')
 
 const PROCESS_MESSAGES = require(
@@ -33,7 +34,8 @@ const _rmDb = async (pathToUserData) => {
         include: [
           DB_FILE_NAME,
           DB_SHM_FILE_NAME,
-          DB_WAL_FILE_NAME
+          DB_WAL_FILE_NAME,
+          SECRET_KEY_FILE_NAME
         ]
       }
     )
