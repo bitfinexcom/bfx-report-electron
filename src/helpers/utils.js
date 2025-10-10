@@ -67,13 +67,13 @@ const rm = async (
   const promisesArr = files.map(async (file) => {
     if (
       Array.isArray(exclude) &&
-      exclude.some(exFile => new RegExp(exFile).test(file))
+      exclude.some(exFile => exFile === file)
     ) {
       return
     }
     if (
       Array.isArray(include) &&
-      include.every(inFile => !(new RegExp(inFile).test(file)))
+      include.every(inFile => inFile !== file)
     ) {
       return
     }
