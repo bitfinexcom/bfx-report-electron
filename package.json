@@ -6,7 +6,7 @@
   "author": "bitfinex.com",
   "main": "index.js",
   "engine": {
-    "node": ">=20.18.1"
+    "node": ">=22.19.0"
   },
   "license": "Apache-2.0",
   "dependencies": {
