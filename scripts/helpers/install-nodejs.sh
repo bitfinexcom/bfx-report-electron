@@ -13,7 +13,7 @@ script as required NodeJS version!${COLOR_NORMAL}" >&2
   exit 1
 fi
 
-version="${1:-"20.18.1"}"
+version="${1:-"22.19.0"}"
 
 echo -e "\n${COLOR_BLUE}Installing the NodeJS v$version...${COLOR_NORMAL}"
 
