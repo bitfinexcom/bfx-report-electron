@@ -43,7 +43,7 @@
     "cross-env": "7.0.3",
     "dotenv": "16.3.1",
     "electron": "38.1.2",
-    "electron-builder": "24.13.3",
+    "electron-builder": "26.0.12",
     "mocha": "11.1.0",
     "standard": "17.1.0",
     "wdio-electron-service": "8.0.2"
