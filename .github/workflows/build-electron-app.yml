@@ -185,6 +185,8 @@ jobs:
         CSC_KEY_PASSWORD: ${{ secrets.BFX_APPLE_BUILD_CERTIFICATE_PASSWORD }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         ELECTRON_CACHE: ${{ runner.temp }}/.cache/electron
+        # https://github.com/electron-userland/electron-builder/issues/3179
+        USE_HARD_LINKS: false
       with:
         timeout_minutes: 40
         retry_wait_seconds: 10
