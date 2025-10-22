@@ -167,7 +167,6 @@ module.exports = {
       'dir',
       'nsis'
     ],
-    publisherName: 'Bitfinex Report',
     verifyUpdateCodeSignature: false
   },
   mac: {
