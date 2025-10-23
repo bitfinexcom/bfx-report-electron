@@ -5,6 +5,7 @@ const { rootPath: appDir } = require('electron-root-path')
 const fs = require('fs')
 const path = require('path')
 const {
+  DebUpdater,
   AppImageUpdater,
   NsisUpdater,
   AppUpdater
@@ -299,7 +300,12 @@ const _autoUpdaterFactory = () => {
     })
   }
   if (process.platform === 'linux') {
-    autoUpdater = new AppImageUpdater()
+    autoUpdater = (
+      process.env.APPIMAGE ||
+      process.env.IS_AUTO_UPDATE_BEING_TESTED
+    )
+      ? new AppImageUpdater()
+      : new DebUpdater()
 
     // An option to debug the auto-update flow non-packaged build
     if (
