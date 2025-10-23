@@ -119,6 +119,13 @@ module.exports = (eol = os.EOL) => {
   const bfxApiStagingDetail = isBfxApiStagingUsed
     ? `${eol}Is BFX API Staging used: Yes`
     : ''
+  const isAppImageUsed = !!process.env.APPIMAGE
+  const isAppImageUsedStr = isAppImageUsed
+    ? 'Yes'
+    : 'No'
+  const linuxReleaseType = process.platform === 'linux'
+    ? `${eol}Is AppImage used: ${isAppImageUsedStr}`
+    : ''
 
   const detail = `\
 Version: ${version}${eol}\
@@ -130,7 +137,8 @@ Node.js: ${nodeVersion}${eol}\
 V8: ${v8Version}${eol}\
 OS version: ${osVersion}${eol}\
 OS release: ${osType} ${osArch} ${osRelease}\
-${bfxApiStagingDetail}
+${bfxApiStagingDetail}\
+${linuxReleaseType}
 `
 
   return {
@@ -157,6 +165,7 @@ ${bfxApiStagingDetail}
     cpuModel,
     cpuCount,
     isBfxApiStagingUsed,
+    isAppImageUsed,
     detail
   }
 }
