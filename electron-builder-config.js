@@ -159,7 +159,8 @@ module.exports = {
     category: 'Network',
     target: [
       'dir',
-      'AppImage'
+      'AppImage',
+      'deb'
     ]
   },
   win: {
