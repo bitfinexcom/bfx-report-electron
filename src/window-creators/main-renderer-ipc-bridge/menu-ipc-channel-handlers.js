@@ -116,6 +116,10 @@ class MenuIpcChannelHandlers extends IpcChannelHandlers {
   static sendHideMenuEvent (win, args) {
     return this.sendToRenderer(this.sendHideMenuEvent, win, args)
   }
+
+  static sendRerenderMenuEvent (win, args) {
+    return this.sendToRenderer(this.sendRerenderMenuEvent, win, args)
+  }
 }
 
 module.exports = MenuIpcChannelHandlers
