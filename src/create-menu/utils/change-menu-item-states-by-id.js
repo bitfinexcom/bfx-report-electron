@@ -13,20 +13,35 @@ const isMainWinAvailable = require(
 
 module.exports = (menuItemId, opts) => {
   const menu = Menu.getApplicationMenu()
+  const args = Array.isArray(menuItemId)
+    ? menuItemId
+    : [{ menuItemId, opts }]
 
   if (
     !(menu instanceof Menu) ||
-    !menuItemId
+    args.length === 0
   ) {
     return
   }
 
-  const menuItem = menuItemId instanceof MenuItem
-    ? menuItemId
-    : menu.getMenuItemById(menuItemId)
+  for (const item of args) {
+    const id = item?.menuItemId
+    const props = {
+      ...item?.opts,
+      ...opts
+    }
 
-  for (const [name, val] of Object.entries(opts ?? {})) {
-    menuItem[name] = val
+    if (!id) {
+      continue
+    }
+
+    const menuItem = id instanceof MenuItem
+      ? id
+      : menu.getMenuItemById(id)
+
+    for (const [name, val] of Object.entries(props)) {
+      menuItem[name] = val
+    }
   }
 
   if (!isMainWinAvailable()) {
