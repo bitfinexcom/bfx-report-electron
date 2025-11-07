@@ -186,6 +186,9 @@ const _fireToast = (
     didOpen: () => {
       didOpen(alert)
 
+      if (opts?.shouldLoadingBeShown) {
+        alert?.showLoading()
+      }
       if (
         !alert ||
         !alert.browserWindow
@@ -365,11 +368,8 @@ const _autoUpdaterFactory = () => {
       await _fireToast(
         {
           title: i18next.t('autoUpdater.checkingForUpdateToast.title'),
-          type: 'warning',
+          shouldLoadingBeShown: true,
           timer: 10000
-        },
-        {
-          didOpen: (alert) => alert.showLoading()
         }
       )
 
@@ -389,7 +389,6 @@ const _autoUpdaterFactory = () => {
             { version }
           ),
           text: i18next.t('autoUpdater.updateAvailableToast.description'),
-          icon: 'info',
           timer: 10000
         }
       )
@@ -447,12 +446,11 @@ const _autoUpdaterFactory = () => {
       await _fireToast(
         {
           title: i18next.t('autoUpdater.downloadProgressToast.title'),
-          icon: 'info'
+          shouldLoadingBeShown: true
         },
         {
           didOpen: (alert) => {
             _sendProgress(percent)
-            alert.showLoading()
           },
           didClose: () => {
             isProgressToastEnabled = false
