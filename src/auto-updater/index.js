@@ -89,6 +89,14 @@ const _sendProgress = (progress) => {
   if (!Number.isFinite(progress)) {
     return
   }
+  if (shouldMainUIAutoUpdateToastBeUsed) {
+    const mainWindow = wins?.[WINDOW_NAMES.MAIN_WINDOW]
+    AutoUpdateIpcChannelHandlers.sendProgressToastEvent(mainWindow, {
+      progress
+    })
+
+    return
+  }
 
   toast?.browserWindow?.webContents.send(
     'progress',
