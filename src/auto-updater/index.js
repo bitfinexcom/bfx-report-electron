@@ -59,7 +59,7 @@ let toast
 let autoUpdater
 let uCheckInterval
 let isIntervalUpdate = false
-let isProgressToastEnabled = false
+let isProgressToastEmittingUnlocked = false
 let electronBuilderConfig = {}
 
 try {
@@ -326,7 +326,7 @@ const _autoUpdaterFactory = () => {
         return
       }
 
-      isProgressToastEnabled = false
+      isProgressToastEmittingUnlocked = false
 
       await hideLoadingWindow({
         windowName: WINDOW_NAMES.LOADING_WINDOW,
@@ -435,13 +435,13 @@ const _autoUpdaterFactory = () => {
     try {
       const { percent } = progressObj ?? {}
 
-      if (isProgressToastEnabled) {
+      if (isProgressToastEmittingUnlocked) {
         _sendProgress(percent)
 
         return
       }
 
-      isProgressToastEnabled = true
+      isProgressToastEmittingUnlocked = true
 
       await _fireToast(
         {
@@ -451,13 +451,14 @@ const _autoUpdaterFactory = () => {
         {
           didOpen: (alert) => {
             _sendProgress(percent)
-          },
-          didClose: () => {
-            isProgressToastEnabled = false
           }
         }
       )
+
+      isProgressToastEmittingUnlocked = false
     } catch (err) {
+      isProgressToastEmittingUnlocked = false
+
       console.error(err)
     }
   })
@@ -472,7 +473,7 @@ const _autoUpdaterFactory = () => {
         autoUpdater.setDownloadedFilePath(downloadedFile)
       }
 
-      isProgressToastEnabled = false
+      isProgressToastEmittingUnlocked = false
 
       const { value } = await _fireToast(
         {
