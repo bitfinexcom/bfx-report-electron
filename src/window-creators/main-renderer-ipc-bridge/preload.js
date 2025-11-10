@@ -46,7 +46,8 @@ const THEME_INVOKE_METHOD_NAMES = {
   GET_THEME: 'getTheme'
 }
 const AUTO_UPDATE_EVENT_METHOD_NAMES = {
-  ON_FIRE_TOAST_EVENT: 'onFireToastEvent'
+  ON_FIRE_TOAST_EVENT: 'onFireToastEvent',
+  ON_PROGRESS_TOAST_EVENT: 'onProgressToastEvent'
 }
 
 const INVOKE_CHANNEL_MAP = new Map([
