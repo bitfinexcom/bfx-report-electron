@@ -38,6 +38,9 @@ const getUIFontsAsCSSString = require(
 const ThemeIpcChannelHandlers = require(
   '../window-creators/main-renderer-ipc-bridge/theme-ipc-channel-handlers'
 )
+const AutoUpdateIpcChannelHandlers = require(
+  '../window-creators/main-renderer-ipc-bridge/auto-update-ipc-channel-handlers'
+)
 
 const MENU_ITEM_IDS = require('../create-menu/menu.item.ids')
 const { changeMenuItemStatesById } = require('../create-menu/utils')
@@ -115,9 +118,23 @@ const _fireToast = (
     return { value: false }
   }
   if (shouldMainUIAutoUpdateToastBeUsed) {
-    // TODO:
+    AutoUpdateIpcChannelHandlers.sendFireToastEvent(mainWindow, {
+      icon: 'info',
+      title: i18next.t('autoUpdater.title'),
+      text: null,
+      showConfirmButton: true,
+      showCancelButton: false,
+      confirmButtonText: i18next.t('common.confirmButtonText'),
+      cancelButtonText: i18next.t('common.cancelButtonText'),
+      timer: null,
+      shouldLoadingBeShown: false,
+      loadingPercentage: null,
 
-    return
+      ...opts
+    })
+
+    // TODO: need to handle it
+    return { value: false }
   }
 
   const {
@@ -457,7 +474,8 @@ const _autoUpdaterFactory = () => {
       await _fireToast(
         {
           title: i18next.t('autoUpdater.downloadProgressToast.title'),
-          shouldLoadingBeShown: true
+          shouldLoadingBeShown: true,
+          loadingPercentage: percent
         },
         {
           didOpen: (alert) => {
