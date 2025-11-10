@@ -42,7 +42,17 @@ const ThemeIpcChannelHandlers = require(
 const MENU_ITEM_IDS = require('../create-menu/menu.item.ids')
 const { changeMenuItemStatesById } = require('../create-menu/utils')
 
-const isAutoUpdateDisabled = parseEnvValToBool(process.env.IS_AUTO_UPDATE_DISABLED)
+const isAutoUpdateDisabled = parseEnvValToBool(
+  process.env.IS_AUTO_UPDATE_DISABLED
+)
+/*
+ * TODO: This is a temporary flag for dev to avoid breaking
+ * the workflow and should be removed after the implementation
+ * of UI along with the old toast implementation
+ */
+const shouldMainUIAutoUpdateToastBeUsed = parseEnvValToBool(
+  process.env.SHOULD_MAIN_UI_AUTO_UPDATE_TOAST_BE_USED
+)
 
 const fontsStyle = getUIFontsAsCSSString()
 const themesStyle = fs.readFileSync(path.join(
@@ -97,23 +107,24 @@ const _fireToast = (
   opts = {},
   hooks = {}
 ) => {
+  closeAlert(toast)
+
+  const mainWindow = wins?.[WINDOW_NAMES.MAIN_WINDOW]
+
+  if (mainWindow?.isDestroyed?.()) {
+    return { value: false }
+  }
+  if (shouldMainUIAutoUpdateToastBeUsed) {
+    // TODO:
+
+    return
+  }
+
   const {
     didOpen = () => {},
     didClose = () => {}
-  } = { ...hooks }
-
-  closeAlert(toast)
-
+  } = hooks ?? {}
   const height = 44
-  const win = wins.mainWindow
-
-  if (
-    !win ||
-    typeof win !== 'object' ||
-    win.isDestroyed()
-  ) {
-    return { value: false }
-  }
 
   const alert = new Alert([fonts, themes, style, script])
   toast = alert
@@ -132,7 +143,7 @@ const _fireToast = (
       ? 0
       : 28
     const heightOffset = isMac ? macOffset : 40
-    const { x, y, width } = win.getContentBounds()
+    const { x, y, width } = mainWindow.getContentBounds()
     const { width: alWidth } = alert.browserWindow.getContentBounds()
 
     const boundsOpts = {
@@ -154,7 +165,7 @@ const _fireToast = (
     darkTheme: false,
     height,
     width: opts?.width ?? 1000,
-    parent: win,
+    parent: mainWindow,
     modal: false,
     webPreferences: {
       contextIsolation: false
