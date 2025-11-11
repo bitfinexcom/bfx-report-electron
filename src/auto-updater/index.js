@@ -126,23 +126,23 @@ const _fireToast = (
     return { value: false }
   }
   if (shouldMainUIAutoUpdateToastBeUsed) {
-    AutoUpdateIpcChannelHandlers.sendFireToastEvent(mainWindow, {
-      icon: 'info',
-      title: i18next.t('autoUpdater.title'),
-      text: null,
-      showConfirmButton: true,
-      showCancelButton: false,
-      confirmButtonText: i18next.t('common.confirmButtonText'),
-      cancelButtonText: i18next.t('common.cancelButtonText'),
-      timer: null,
-      shouldLoadingBeShown: false,
-      loadingPercentage: null,
+    return AutoUpdateIpcChannelHandlers.sendFireToastEvent(
+      mainWindow,
+      {
+        icon: 'info',
+        title: i18next.t('autoUpdater.title'),
+        text: null,
+        showConfirmButton: true,
+        showCancelButton: false,
+        confirmButtonText: i18next.t('common.confirmButtonText'),
+        cancelButtonText: i18next.t('common.cancelButtonText'),
+        timer: null,
+        shouldLoadingBeShown: false,
+        loadingPercentage: null,
 
-      ...opts
-    })
-
-    // TODO: need to handle it
-    return { value: false }
+        ...opts
+      }
+    )
   }
 
   const {
