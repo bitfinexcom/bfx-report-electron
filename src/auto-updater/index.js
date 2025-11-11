@@ -1,6 +1,6 @@
 'use strict'
 
-const { app, ipcMain, Menu } = require('electron')
+const { app, ipcMain } = require('electron')
 const { rootPath: appDir } = require('electron-root-path')
 const fs = require('fs')
 const path = require('path')
@@ -40,6 +40,7 @@ const ThemeIpcChannelHandlers = require(
 )
 
 const MENU_ITEM_IDS = require('../create-menu/menu.item.ids')
+const { changeMenuItemStatesById } = require('../create-menu/utils')
 
 const isAutoUpdateDisabled = parseEnvValToBool(process.env.IS_AUTO_UPDATE_DISABLED)
 
@@ -231,46 +232,32 @@ const _fireToast = (
   return res
 }
 
-const _getUpdateMenuItemById = (id) => {
-  const menu = Menu.getApplicationMenu()
-
-  if (
-    !menu ||
-    !id ||
-    typeof id !== 'string'
-  ) {
-    return
-  }
-
-  return menu.getMenuItemById(id)
-}
-
-const _switchMenuItem = (opts = {}) => {
+const _switchMenuItem = (opts) => {
   const {
     isCheckMenuItemDisabled,
     isInstallMenuItemVisible
-  } = { ...opts }
-  const checkMenuItem = _getUpdateMenuItemById(
-    MENU_ITEM_IDS.CHECK_UPDATE_MENU_ITEM
-  )
-  const installMenuItem = _getUpdateMenuItemById(
-    MENU_ITEM_IDS.INSTALL_UPDATE_MENU_ITEM
-  )
-
-  if (
-    !checkMenuItem ||
-    !installMenuItem
-  ) {
-    return
-  }
+  } = opts ?? {}
+  const checkMenuItemOpts = {}
+  const installMenuItemOpts = {}
 
   if (typeof isCheckMenuItemDisabled === 'boolean') {
-    checkMenuItem.enabled = !isCheckMenuItemDisabled
+    checkMenuItemOpts.enabled = !isCheckMenuItemDisabled
   }
   if (typeof isInstallMenuItemVisible === 'boolean') {
-    checkMenuItem.visible = !isInstallMenuItemVisible
-    installMenuItem.visible = isInstallMenuItemVisible
+    checkMenuItemOpts.visible = !isInstallMenuItemVisible
+    installMenuItemOpts.visible = isInstallMenuItemVisible
   }
+
+  changeMenuItemStatesById([
+    {
+      menuItemId: MENU_ITEM_IDS.CHECK_UPDATE_MENU_ITEM,
+      opts: checkMenuItemOpts
+    },
+    {
+      menuItemId: MENU_ITEM_IDS.INSTALL_UPDATE_MENU_ITEM,
+      opts: installMenuItemOpts
+    }
+  ])
 }
 
 const _reinitInterval = () => {

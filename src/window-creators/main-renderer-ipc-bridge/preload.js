@@ -37,7 +37,8 @@ const MENU_INVOKE_METHOD_NAMES = {
   EXEC_MENU_CMD: 'execMenuCmd'
 }
 const MENU_EVENT_METHOD_NAMES = {
-  ON_HIDE_MENU_EVENT: 'onHideMenuEvent'
+  ON_HIDE_MENU_EVENT: 'onHideMenuEvent',
+  ON_RERENDER_MENU_EVENT: 'onRerenderMenuEvent'
 }
 const THEME_INVOKE_METHOD_NAMES = {
   SET_THEME: 'setTheme',

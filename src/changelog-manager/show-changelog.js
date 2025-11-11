@@ -1,6 +1,5 @@
 'use strict'
 
-const { Menu } = require('electron')
 const path = require('path')
 const parseChangelog = require('changelog-parser')
 const { rootPath } = require('electron-root-path')
@@ -9,14 +8,15 @@ const getDebugInfo = require('../helpers/get-debug-info')
 const showDocs = require('../show-docs')
 
 const MENU_ITEM_IDS = require('../create-menu/menu.item.ids')
+const { changeMenuItemStatesById } = require('../create-menu/utils')
 
 const changelogPath = path.join(rootPath, 'CHANGELOG.md')
 
 const disableShowChangelogMenuItem = () => {
-  const menuItem = Menu.getApplicationMenu()
-    ?.getMenuItemById(MENU_ITEM_IDS.SHOW_CHANGE_LOG_MENU_ITEM) ?? {}
-
-  menuItem.enabled = false
+  changeMenuItemStatesById(
+    MENU_ITEM_IDS.SHOW_CHANGE_LOG_MENU_ITEM,
+    { enabled: false }
+  )
 }
 
 module.exports = async (params = {}) => {
