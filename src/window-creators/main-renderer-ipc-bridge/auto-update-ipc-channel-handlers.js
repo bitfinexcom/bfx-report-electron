@@ -39,6 +39,9 @@ class AutoUpdateIpcChannelHandlers extends IpcChannelHandlers {
         if (args?.toastId !== toastId) {
           return
         }
+
+        this.toastClosedEventHandlerSet.delete(handler)
+
         if (args?.error) {
           // `args.error` can't be instance of Error
           reject(new Error(args.error))
@@ -58,7 +61,6 @@ class AutoUpdateIpcChannelHandlers extends IpcChannelHandlers {
 
       this.onToastClosedEvent((event, args) => {
         for (const handler of this.toastClosedEventHandlerSet) {
-          this.toastClosedEventHandlerSet.delete(handler)
           handler(event, args)
         }
       })
