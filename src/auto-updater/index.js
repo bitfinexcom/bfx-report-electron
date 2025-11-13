@@ -137,8 +137,7 @@ const _fireToast = (
         confirmButtonText: i18next.t('common.confirmButtonText'),
         cancelButtonText: i18next.t('common.cancelButtonText'),
         timer: null,
-        shouldLoadingBeShown: false,
-        loadingPercentage: null,
+        progress: null,
 
         ...opts
       }
@@ -201,7 +200,6 @@ const _fireToast = (
     position: 'top-end',
     allowOutsideClick: false,
 
-    icon: 'info',
     title: i18next.t('autoUpdater.title'),
     showConfirmButton: true,
     showCancelButton: false,
@@ -210,6 +208,15 @@ const _fireToast = (
     timerProgressBar: false,
 
     ...opts,
+
+    // This is for the transition to a new implementation
+    // since the library does not support loading icon
+    icon: (
+      !opts?.icon ||
+      opts.icon === 'loading'
+    )
+      ? 'info'
+      : opts.icon,
 
     willOpen: () => {
       if (
@@ -222,7 +229,7 @@ const _fireToast = (
     didOpen: () => {
       didOpen(alert)
 
-      if (opts?.shouldLoadingBeShown) {
+      if (opts?.icon === 'loading') {
         alert?.showLoading()
       }
       if (
@@ -403,8 +410,8 @@ const _autoUpdaterFactory = () => {
 
       await _fireToast(
         {
+          icon: 'loading',
           title: i18next.t('autoUpdater.checkingForUpdateToast.title'),
-          shouldLoadingBeShown: true,
           timer: 10000
         }
       )
@@ -481,9 +488,9 @@ const _autoUpdaterFactory = () => {
 
       await _fireToast(
         {
+          icon: 'loading',
           title: i18next.t('autoUpdater.downloadProgressToast.title'),
-          shouldLoadingBeShown: true,
-          loadingPercentage: percent
+          progress: percent
         },
         {
           didOpen: (alert) => {
