@@ -114,7 +114,7 @@ const _sendUid = (alert) => {
   )
 }
 
-const _fireToast = (
+const _fireToast = async (
   opts = {},
   hooks = {}
 ) => {
@@ -123,10 +123,10 @@ const _fireToast = (
   const mainWindow = wins?.[WINDOW_NAMES.MAIN_WINDOW]
 
   if (mainWindow?.isDestroyed?.()) {
-    return { value: false }
+    return { dismiss: 'close' }
   }
   if (shouldMainUIAutoUpdateToastBeUsed) {
-    return AutoUpdateIpcChannelHandlers.sendFireToastEvent(
+    return await AutoUpdateIpcChannelHandlers.sendFireToastEvent(
       mainWindow,
       {
         icon: 'info',
@@ -262,7 +262,7 @@ const _fireToast = (
     }
   }
 
-  const res = alert.fire(
+  const promise = alert.fire(
     swalOptions,
     bwOptions,
     null,
@@ -275,7 +275,12 @@ const _fireToast = (
   ipcMain.on(`${alert.uid}auto-update-toast:width`, autoUpdateToastWidthHandler)
   ipcMain.on(`${alert.uid}reposition`, autoUpdateToastRepositionHandler)
 
-  return res
+  const res = await promise
+  const dismiss = res?.value
+    ? 'confirm'
+    : res?.dismiss
+
+  return { dismiss }
 }
 
 const _switchMenuItem = (opts) => {
@@ -425,7 +430,7 @@ const _autoUpdaterFactory = () => {
     try {
       const { version } = { ...info }
 
-      const { value, dismiss } = await _fireToast(
+      const { dismiss } = await _fireToast(
         {
           title: i18next.t(
             'autoUpdater.updateAvailableToast.title',
@@ -437,7 +442,7 @@ const _autoUpdaterFactory = () => {
       )
 
       if (
-        !value &&
+        dismiss !== 'confirm' &&
         dismiss !== 'timer'
       ) {
         _switchMenuItem({
@@ -519,7 +524,7 @@ const _autoUpdaterFactory = () => {
 
       isProgressToastEmittingUnlocked = false
 
-      const { value } = await _fireToast(
+      const { dismiss } = await _fireToast(
         {
           title: i18next.t(
             'autoUpdater.updateDownloadedToast.title',
@@ -532,7 +537,7 @@ const _autoUpdaterFactory = () => {
         }
       )
 
-      if (!value) {
+      if (dismiss !== 'confirm') {
         _switchMenuItem({
           isCheckMenuItemDisabled: false,
           isInstallMenuItemVisible: true
