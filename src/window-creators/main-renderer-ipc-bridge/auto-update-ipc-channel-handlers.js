@@ -43,8 +43,11 @@ class AutoUpdateIpcChannelHandlers extends IpcChannelHandlers {
         this.toastClosedEventHandlerSet.delete(handler)
 
         if (args?.error) {
-          // `args.error` can't be instance of Error
-          reject(new Error(args.error))
+          const err = args.error instanceof Error
+            ? args.error
+            : new Error(args.error)
+
+          reject(err)
 
           return
         }
