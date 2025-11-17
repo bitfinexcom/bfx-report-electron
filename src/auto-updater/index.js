@@ -122,7 +122,10 @@ const _fireToast = async (
 
   const mainWindow = wins?.[WINDOW_NAMES.MAIN_WINDOW]
 
-  if (mainWindow?.isDestroyed?.()) {
+  if (
+    !mainWindow ||
+    mainWindow?.isDestroyed?.()
+  ) {
     return { dismiss: 'close' }
   }
   if (shouldMainUIAutoUpdateToastBeUsed) {
