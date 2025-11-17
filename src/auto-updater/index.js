@@ -38,11 +38,24 @@ const getUIFontsAsCSSString = require(
 const ThemeIpcChannelHandlers = require(
   '../window-creators/main-renderer-ipc-bridge/theme-ipc-channel-handlers'
 )
+const AutoUpdateIpcChannelHandlers = require(
+  '../window-creators/main-renderer-ipc-bridge/auto-update-ipc-channel-handlers'
+)
 
 const MENU_ITEM_IDS = require('../create-menu/menu.item.ids')
 const { changeMenuItemStatesById } = require('../create-menu/utils')
 
-const isAutoUpdateDisabled = parseEnvValToBool(process.env.IS_AUTO_UPDATE_DISABLED)
+const isAutoUpdateDisabled = parseEnvValToBool(
+  process.env.IS_AUTO_UPDATE_DISABLED
+)
+/*
+ * TODO: This is a temporary flag for dev to avoid breaking
+ * the workflow and should be removed after the implementation
+ * of UI along with the old toast implementation
+ */
+const shouldMainUIAutoUpdateToastBeUsed = parseEnvValToBool(
+  process.env.SHOULD_MAIN_UI_AUTO_UPDATE_TOAST_BE_USED
+)
 
 const fontsStyle = getUIFontsAsCSSString()
 const themesStyle = fs.readFileSync(path.join(
@@ -59,7 +72,7 @@ let toast
 let autoUpdater
 let uCheckInterval
 let isIntervalUpdate = false
-let isProgressToastEnabled = false
+let isProgressToastEmittingUnlocked = false
 let electronBuilderConfig = {}
 
 try {
@@ -74,6 +87,14 @@ const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
 
 const _sendProgress = (progress) => {
   if (!Number.isFinite(progress)) {
+    return
+  }
+  if (shouldMainUIAutoUpdateToastBeUsed) {
+    const mainWindow = wins?.[WINDOW_NAMES.MAIN_WINDOW]
+    AutoUpdateIpcChannelHandlers.sendProgressToastEvent(mainWindow, {
+      progress
+    })
+
     return
   }
 
@@ -93,27 +114,44 @@ const _sendUid = (alert) => {
   )
 }
 
-const _fireToast = (
+const _fireToast = async (
   opts = {},
   hooks = {}
 ) => {
+  closeAlert(toast)
+
+  const mainWindow = wins?.[WINDOW_NAMES.MAIN_WINDOW]
+
+  if (
+    !mainWindow ||
+    mainWindow?.isDestroyed?.()
+  ) {
+    return { dismiss: 'close' }
+  }
+  if (shouldMainUIAutoUpdateToastBeUsed) {
+    return await AutoUpdateIpcChannelHandlers.sendFireToastEvent(
+      mainWindow,
+      {
+        icon: 'info',
+        title: i18next.t('autoUpdater.title'),
+        text: null,
+        showConfirmButton: true,
+        showCancelButton: false,
+        confirmButtonText: i18next.t('common.confirmButtonText'),
+        cancelButtonText: i18next.t('common.cancelButtonText'),
+        timer: null,
+        progress: null,
+
+        ...opts
+      }
+    )
+  }
+
   const {
     didOpen = () => {},
     didClose = () => {}
-  } = { ...hooks }
-
-  closeAlert(toast)
-
+  } = hooks ?? {}
   const height = 44
-  const win = wins.mainWindow
-
-  if (
-    !win ||
-    typeof win !== 'object' ||
-    win.isDestroyed()
-  ) {
-    return { value: false }
-  }
 
   const alert = new Alert([fonts, themes, style, script])
   toast = alert
@@ -132,7 +170,7 @@ const _fireToast = (
       ? 0
       : 28
     const heightOffset = isMac ? macOffset : 40
-    const { x, y, width } = win.getContentBounds()
+    const { x, y, width } = mainWindow.getContentBounds()
     const { width: alWidth } = alert.browserWindow.getContentBounds()
 
     const boundsOpts = {
@@ -154,7 +192,7 @@ const _fireToast = (
     darkTheme: false,
     height,
     width: opts?.width ?? 1000,
-    parent: win,
+    parent: mainWindow,
     modal: false,
     webPreferences: {
       contextIsolation: false
@@ -165,7 +203,6 @@ const _fireToast = (
     position: 'top-end',
     allowOutsideClick: false,
 
-    icon: 'info',
     title: i18next.t('autoUpdater.title'),
     showConfirmButton: true,
     showCancelButton: false,
@@ -174,6 +211,15 @@ const _fireToast = (
     timerProgressBar: false,
 
     ...opts,
+
+    // This is for the transition to a new implementation
+    // since the library does not support loading icon
+    icon: (
+      !opts?.icon ||
+      opts.icon === 'loading'
+    )
+      ? 'info'
+      : opts.icon,
 
     willOpen: () => {
       if (
@@ -186,6 +232,9 @@ const _fireToast = (
     didOpen: () => {
       didOpen(alert)
 
+      if (opts?.icon === 'loading') {
+        alert?.showLoading()
+      }
       if (
         !alert ||
         !alert.browserWindow
@@ -216,7 +265,7 @@ const _fireToast = (
     }
   }
 
-  const res = alert.fire(
+  const promise = alert.fire(
     swalOptions,
     bwOptions,
     null,
@@ -229,7 +278,12 @@ const _fireToast = (
   ipcMain.on(`${alert.uid}auto-update-toast:width`, autoUpdateToastWidthHandler)
   ipcMain.on(`${alert.uid}reposition`, autoUpdateToastRepositionHandler)
 
-  return res
+  const res = await promise
+  const dismiss = res?.value
+    ? 'confirm'
+    : res?.dismiss
+
+  return { dismiss }
 }
 
 const _switchMenuItem = (opts) => {
@@ -323,7 +377,7 @@ const _autoUpdaterFactory = () => {
         return
       }
 
-      isProgressToastEnabled = false
+      isProgressToastEmittingUnlocked = false
 
       await hideLoadingWindow({
         windowName: WINDOW_NAMES.LOADING_WINDOW,
@@ -364,12 +418,9 @@ const _autoUpdaterFactory = () => {
 
       await _fireToast(
         {
+          icon: 'loading',
           title: i18next.t('autoUpdater.checkingForUpdateToast.title'),
-          type: 'warning',
           timer: 10000
-        },
-        {
-          didOpen: (alert) => alert.showLoading()
         }
       )
 
@@ -382,20 +433,19 @@ const _autoUpdaterFactory = () => {
     try {
       const { version } = { ...info }
 
-      const { value, dismiss } = await _fireToast(
+      const { dismiss } = await _fireToast(
         {
           title: i18next.t(
             'autoUpdater.updateAvailableToast.title',
             { version }
           ),
           text: i18next.t('autoUpdater.updateAvailableToast.description'),
-          icon: 'info',
           timer: 10000
         }
       )
 
       if (
-        !value &&
+        dismiss !== 'confirm' &&
         dismiss !== 'timer'
       ) {
         _switchMenuItem({
@@ -436,30 +486,31 @@ const _autoUpdaterFactory = () => {
     try {
       const { percent } = progressObj ?? {}
 
-      if (isProgressToastEnabled) {
+      if (isProgressToastEmittingUnlocked) {
         _sendProgress(percent)
 
         return
       }
 
-      isProgressToastEnabled = true
+      isProgressToastEmittingUnlocked = true
 
       await _fireToast(
         {
+          icon: 'loading',
           title: i18next.t('autoUpdater.downloadProgressToast.title'),
-          icon: 'info'
+          progress: percent
         },
         {
           didOpen: (alert) => {
             _sendProgress(percent)
-            alert.showLoading()
-          },
-          didClose: () => {
-            isProgressToastEnabled = false
           }
         }
       )
+
+      isProgressToastEmittingUnlocked = false
     } catch (err) {
+      isProgressToastEmittingUnlocked = false
+
       console.error(err)
     }
   })
@@ -474,9 +525,9 @@ const _autoUpdaterFactory = () => {
         autoUpdater.setDownloadedFilePath(downloadedFile)
       }
 
-      isProgressToastEnabled = false
+      isProgressToastEmittingUnlocked = false
 
-      const { value } = await _fireToast(
+      const { dismiss } = await _fireToast(
         {
           title: i18next.t(
             'autoUpdater.updateDownloadedToast.title',
@@ -489,7 +540,7 @@ const _autoUpdaterFactory = () => {
         }
       )
 
-      if (!value) {
+      if (dismiss !== 'confirm') {
         _switchMenuItem({
           isCheckMenuItemDisabled: false,
           isInstallMenuItemVisible: true
