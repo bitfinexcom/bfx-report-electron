@@ -159,7 +159,8 @@ module.exports = {
     category: 'Network',
     target: [
       'dir',
-      'AppImage'
+      'AppImage',
+      'deb'
     ]
   },
   win: {
@@ -167,7 +168,6 @@ module.exports = {
       'dir',
       'nsis'
     ],
-    publisherName: 'Bitfinex Report',
     verifyUpdateCodeSignature: false
   },
   mac: {

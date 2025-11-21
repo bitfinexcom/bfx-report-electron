@@ -17,6 +17,7 @@ ${description}
 | RAM | ${totalRamGb}GB (${freeRamGb}GB free) |
 | App RAM limit | ${ramLimitMb}Mb (${usedRamMb}MB used) |
 | Is BFX API Staging used | ${isBfxApiStagingUsed} |
+| Is AppImage used | ${isAppImageUsed} |
 
 <details>
 

@@ -62,6 +62,12 @@ class IpcChannelHandlers {
       : method
     const eventName = this.getEventName(methodName)
 
+    if (
+      !win?.webContents ||
+      win?.webContents?.isDestroyed()) {
+      return
+    }
+
     return win.webContents.send(eventName, args)
   }
 }

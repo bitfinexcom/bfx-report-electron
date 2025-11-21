@@ -7,7 +7,8 @@ const CHANNEL_NAMES = {
   GENERAL: 'general',
   TRANSLATIONS: 'translations',
   MENU: 'menu',
-  THEME: 'theme'
+  THEME: 'theme',
+  AUTO_UPDATE: 'autoUpdate'
 }
 
 const GENERAL_INVOKE_METHOD_NAMES = {
@@ -37,11 +38,17 @@ const MENU_INVOKE_METHOD_NAMES = {
   EXEC_MENU_CMD: 'execMenuCmd'
 }
 const MENU_EVENT_METHOD_NAMES = {
-  ON_HIDE_MENU_EVENT: 'onHideMenuEvent'
+  ON_HIDE_MENU_EVENT: 'onHideMenuEvent',
+  ON_RERENDER_MENU_EVENT: 'onRerenderMenuEvent'
 }
 const THEME_INVOKE_METHOD_NAMES = {
   SET_THEME: 'setTheme',
   GET_THEME: 'getTheme'
+}
+const AUTO_UPDATE_EVENT_METHOD_NAMES = {
+  ON_FIRE_TOAST_EVENT: 'onFireToastEvent',
+  ON_PROGRESS_TOAST_EVENT: 'onProgressToastEvent',
+  SEND_TOAST_CLOSED_EVENT: 'sendToastClosedEvent'
 }
 
 const INVOKE_CHANNEL_MAP = new Map([
@@ -52,7 +59,8 @@ const INVOKE_CHANNEL_MAP = new Map([
 ])
 const EVENT_CHANNEL_MAP = new Map([
   [CHANNEL_NAMES.GENERAL, GENERAL_EVENT_METHOD_NAMES],
-  [CHANNEL_NAMES.MENU, MENU_EVENT_METHOD_NAMES]
+  [CHANNEL_NAMES.MENU, MENU_EVENT_METHOD_NAMES],
+  [CHANNEL_NAMES.AUTO_UPDATE, AUTO_UPDATE_EVENT_METHOD_NAMES]
 ])
 
 const getEventName = (channel, method) => {

@@ -1,6 +1,6 @@
 'use strict'
 
-const { app, Menu } = require('electron')
+const { app } = require('electron')
 const os = require('os')
 const cleanStack = require('clean-stack')
 const i18next = require('i18next')
@@ -20,6 +20,7 @@ const collectLogs = require('./collect-logs')
 const getDebugInfo = require('../helpers/get-debug-info')
 
 const MENU_ITEM_IDS = require('../create-menu/menu.item.ids')
+const { changeMenuItemStatesById } = require('../create-menu/utils')
 
 let _isLocked = false
 let _isIssueAutoManagerLocked = false
@@ -97,24 +98,22 @@ const _isLogSkipped = (log) => {
   )
 }
 
-const _getReportBugMenuItem = () => {
-  const menu = Menu.getApplicationMenu()
-
-  if (!menu) {
-    return {}
-  }
-
-  return menu.getMenuItemById(MENU_ITEM_IDS.REPORT_BUG_MENU_ITEM) || {}
-}
-
 const _lockIssueManager = () => {
   _isLocked = true
-  _getReportBugMenuItem().enabled = false
+
+  changeMenuItemStatesById(
+    MENU_ITEM_IDS.REPORT_BUG_MENU_ITEM,
+    { enabled: false }
+  )
 }
 
 const _unlockIssueManager = () => {
   _isLocked = false
-  _getReportBugMenuItem().enabled = true
+
+  changeMenuItemStatesById(
+    MENU_ITEM_IDS.REPORT_BUG_MENU_ITEM,
+    { enabled: true }
+  )
 }
 
 const manageNewGithubIssue = async (params) => {

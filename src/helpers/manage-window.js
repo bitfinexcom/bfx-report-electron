@@ -123,10 +123,21 @@ const centerWindow = (win, workArea) => {
   win.setBounds(boundsOpts)
 }
 
-const isWindowInvisible = (win) => {
+const isWindowInvisible = (win, opts) => {
+  const {
+    shouldChildWinsBeChecked
+  } = opts ?? {}
+  const childWins = shouldChildWinsBeChecked
+    ? win.getChildWindows()
+    : []
+  const isFocused = (
+    win?.isFocused() ||
+    childWins.some((w) => w?.isFocused())
+  )
+
   return (
     !win?.isVisible() ||
-    !win?.isFocused()
+    !isFocused
   )
 }
 

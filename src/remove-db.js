@@ -14,6 +14,8 @@ const { rm } = require('./helpers')
 const { DbRemovingError } = require('./errors')
 const {
   DB_FILE_NAME,
+  DB_SHM_FILE_NAME,
+  DB_WAL_FILE_NAME,
   SECRET_KEY_FILE_NAME
 } = require('./const')
 
@@ -31,10 +33,9 @@ const _rmDb = async (pathToUserData) => {
       {
         include: [
           DB_FILE_NAME,
-          SECRET_KEY_FILE_NAME,
-          '.db',
-          '.db-shm',
-          '.db-wal'
+          DB_SHM_FILE_NAME,
+          DB_WAL_FILE_NAME,
+          SECRET_KEY_FILE_NAME
         ]
       }
     )

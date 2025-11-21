@@ -31,7 +31,10 @@ module.exports = (mess) => {
     data = {}
   } = mess ?? {}
 
-  if (!isWindowInvisible(wins?.mainWindow)) {
+  if (!isWindowInvisible(
+    wins?.mainWindow,
+    { shouldChildWinsBeChecked: true }
+  )) {
     return
   }
 
