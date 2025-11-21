@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.39.0] - 2025-11-19
+
+### Added
+
+- Added `summary statistics` info into `getSummaryByAsset` endpoint. PR: [bfx-reports-framework#485](https://github.com/bitfinexcom/bfx-reports-framework/pull/485)
+- Added ability to send event to UI to refresh menu states and rerender to be able to show/hide/enable/disable the menu items dynamically, eg menu items like changelog or update. PR: [bfx-report-electron#565](https://github.com/bitfinexcom/bfx-report-electron/pull/565)
+- Provided `DEB` installable package for `Linux` for better UX giving more native behavior. PR: [bfx-report-electron#564](https://github.com/bitfinexcom/bfx-report-electron/pull/564)
+- Implemented the `Statistics` section for the app `Summary` page and predefined `unrealized` profits accounting (should always be included) for the summary by assets and statistics calculations. PR: [bfx-report-ui#977](https://github.com/bitfinexcom/bfx-report-ui/pull/977)
+
+### Changed
+
+- Updated `better-sqlite3` version up to `12.4.1` to have the last binary prebuild and be able to launch the driver under `electron` `v38`. PR: [bfx-facs-db-better-sqlite#13](https://github.com/bitfinexcom/bfx-facs-db-better-sqlite/pull/13)
+- Reduced WS connection frequency to avoid overloading the backend, added a small `300ms` delay to help balance the amount of reconnection instead of the forward recursion. PR: [bfx-report-ui#983](https://github.com/bitfinexcom/bfx-report-ui/pull/983)
+- Separated DB files for the `prod` and `staging` to prevent mixing data when testing. In general the issue is in the candles table. It's a public endpoint, and we don't associate it with a specific user id. And it means we can sync staging candles and mix them up with prod candles. As a good solution would be better to separate DB files for prod and staging. PRs: [bfx-reports-framework#488](https://github.com/bitfinexcom/bfx-reports-framework/pull/488), [bfx-report-electron#562](https://github.com/bitfinexcom/bfx-report-electron/pull/562)
+- Moved `auto-update` toast UI under main UI control instead of creating new windows using `electron-alert` lib. PR: [bfx-report-electron#566](https://github.com/bitfinexcom/bfx-report-electron/pull/566)
+- Enabled login via `__bfx_token` possibility for all environments and adjusted login type priority. PR: [bfx-report-ui#974](https://github.com/bitfinexcom/bfx-report-ui/pull/974)
+- Predefined the timeframe as a `day` and included `unrealized` profits as a default for the `Account Balance` section, like we already had for other sections, for represented data consistency. Removed the unused selectors and the `Filter` button, also implemented an auto-refreshing for all sections on the `Date` range changes for a cleaner UI and intuitive UX. PR: [bfx-report-ui#978](https://github.com/bitfinexcom/bfx-report-ui/pull/978)
+- Removed the `Filter` button from the `Account Balance` report and implemented an auto-refreshing on each parameter change for a cleaner UI and intuitive UX. PR: [bfx-report-ui#980](https://github.com/bitfinexcom/bfx-report-ui/pull/980)
+- Removed the `Filter` button from the `Analysis & Statistics` sections (Weighted Averages, Traded Volume, Average Win/Loss, Concentration Risk, Loan Report, Fees Report) and implemented an auto-refreshing on each parameter change for a cleaner UI and intuitive UX. PR: [bfx-report-ui#982](https://github.com/bitfinexcom/bfx-report-ui/pull/982)
+- Removed the `Generate` button from the `Tax Report` and implemented an auto-refreshing on each parameter change for a cleaner UI and intuitive UX. Prevented changing the params possibility(auto-refresh) during the report generation and initial sync to avoid errors. PR: [bfx-report-ui#984](https://github.com/bitfinexcom/bfx-report-ui/pull/984)
+- Removed the `Filter` button from the `Snapshots` sections (Positions, Tickers, Wallets) and implemented an auto-refreshing on each parameter change for a cleaner UI and intuitive UX. Prevented changing the params possibility(auto-refresh) during the report loading and initial sync to avoid errors. PR: [bfx-report-ui#985](https://github.com/bitfinexcom/bfx-report-ui/pull/985)
+- Changed the link for the `Bitfinex` logo from https://www.bitfinex.com to https://trading.bitfinex.com/t. PR: [bfx-report-ui#986](https://github.com/bitfinexcom/bfx-report-ui/pull/986)
+- Removed the `Filter` button from the `My History` reports(Ledgers, Movements, Balances, Earnings sections, Trades sections, Orders, Positions sections, Funding sections) and implemented an auto-refreshing on each parameter change for a cleaner UI and intuitive UX. PR: [bfx-report-ui#987](https://github.com/bitfinexcom/bfx-report-ui/pull/987)
+- Removed the `Filter` button from the Public Trades, Public Funding, Spot, Derivatives, Login History, Change Logs reports and implemented an auto-refreshing on each parameter change. PR: [bfx-report-ui#988](https://github.com/bitfinexcom/bfx-report-ui/pull/988)
+
+### Fixed
+
+- Fixed `winston` write stream issue in hot reload dev mode. PRs: [bfx-report-express#54](https://github.com/bitfinexcom/bfx-report-express/pull/54), [bfx-report#453](https://github.com/bitfinexcom/bfx-report/pull/453)
+- Fixed `database is locked` issue after DB driver update for the `updateSubAccount` endpoint. PR: [bfx-reports-framework#489](https://github.com/bitfinexcom/bfx-reports-framework/pull/489)
+- Fixed `symbol` params mapping for the test pairs (should be `tTESTBTC:TESTUSD` instead of `tBTC:TESTUSD` etc.) that cause errors. PR: [bfx-report-ui#973](https://github.com/bitfinexcom/bfx-report-ui/pull/973)
+
+### Security
+
+- Migrated `electron-updater` from `v5` to `v6`. This is necessary to add `DEB` release as a new version of lib supports it (it adds the installable experience for Linux users and fixes the missing app icon), and also fixed the high-severity [vulnerability](https://github.com/advisories/GHSA-9jxc-qjr9-vjxq) of the electron app
+
 ## [4.38.0] - 2025-10-08
 
 ### Added
