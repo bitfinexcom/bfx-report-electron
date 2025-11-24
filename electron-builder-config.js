@@ -75,17 +75,6 @@ const appOutDirs = new Map()
 const isNotarize = parseEnvValToBool(process.env.NOTARIZE)
 const arch = process.env.ARCH ?? 'x64'
 
-// Notarize can be done only on MacOS
-const macNotarize = (
-  process.platform === 'darwin' &&
-  isNotarize
-)
-  ? {
-      notarize: {
-        teamId: process.env.APPLE_TEAM_ID
-      }
-    }
-  : {}
 // DMG can be built only on MacOS
 const macSpecificTargets = process.platform === 'darwin'
   ? ['dmg', 'zip']
@@ -179,7 +168,10 @@ module.exports = {
     category: 'public.app-category.finance',
     minimumSystemVersion: '11',
     darkModeSupport: true,
-    ...macNotarize,
+    notarize: !!(
+      process.platform === 'darwin' &&
+      isNotarize
+    ),
     target: [
       'dir',
       ...macSpecificTargets
