@@ -1,0 +1,26 @@
+html {
+  height: 100%;
+  background-color: var(--bgColor, #172d3e);
+}
+
+body {
+  position: relative;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  background-color: var(--bgColor, #172d3e);
+  font-family: "Inter", sans-serif;
+  font-feature-settings: 'tnum';
+}
+
+.content {
+  display: block;
+  color: var(--color, #172d3e);
+  position: fixed;
+  text-align: center;
+  margin: 0;
+  width: 100%;
+  padding: 20px 0;
+  bottom: 0;
+}
