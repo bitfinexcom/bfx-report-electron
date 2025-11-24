@@ -55,6 +55,8 @@ const pathToStartupLoadingLayout = path
   .join(pathToLayouts, 'startup-loading-window.html')
 const pathToAppInitErrorLayout = path
   .join(pathToLayouts, 'app-init-error.html')
+const pathToModalLayout = path
+  .join(pathToLayouts, 'modal-window.html')
 
 const _getFileURL = (params) => {
   const {
@@ -382,6 +384,32 @@ const createStartupLoadingWindow = async () => {
   return winProps
 }
 
+const createModalWindow = async () => {
+  const parentWin = (
+    !wins?.[WINDOW_NAMES.MAIN_WINDOW] ||
+    wins[WINDOW_NAMES.MAIN_WINDOW].isDestroyed()
+  )
+    ? null
+    : wins[WINDOW_NAMES.MAIN_WINDOW]
+
+  const winProps = await _createChildWindow(
+    pathToModalLayout,
+    WINDOW_NAMES.MODAL_WINDOW,
+    {
+      width: null,
+      height: null,
+      minWidth: 500,
+      minHeight: 500,
+      maximizable: false,
+      fullscreenable: false,
+      parent: parentWin,
+      modal: !!parentWin
+    }
+  )
+
+  return winProps
+}
+
 const createErrorWindow = async () => {
   const winProps = await _createChildWindow(
     pathToAppInitErrorLayout,
@@ -403,5 +431,6 @@ module.exports = {
   createMainWindow,
   createErrorWindow,
   createLoadingWindow,
-  createStartupLoadingWindow
+  createStartupLoadingWindow,
+  createModalWindow
 }
