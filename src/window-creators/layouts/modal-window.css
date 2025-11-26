@@ -4,6 +4,7 @@ html {
 }
 
 body {
+  display: flex;
   position: relative;
   height: 100%;
   padding: 0;
@@ -12,10 +13,11 @@ body {
   background-color: var(--bgColor, #172d3e);
   font-family: "Inter", sans-serif;
   font-feature-settings: 'tnum';
+  font-size: 16px;
 }
 
-.content {
-  display: block;
+.modal {
+  display: none;
   color: var(--color, #172d3e);
   position: fixed;
   text-align: center;
@@ -23,4 +25,96 @@ body {
   width: 100%;
   padding: 20px 0;
   bottom: 0;
+}
+
+.modal__icon {
+  padding: 5px;
+  margin: 4px 10px;
+  font-size: 20px;
+}
+
+.modal__icon--error {
+  color: #fc7777;
+}
+
+.modal__icon--loading {
+  padding: 0px;
+  margin: 12px 10px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.modal__icon--success {
+  color: #239d23;
+}
+
+.modal__icon--info {
+  color: #3498db;
+}
+
+.modal__icon--question {
+  color: #eded50;
+}
+
+.modal__title {
+  font-weight: bold;
+  margin: 2px 10px 2px 0;
+  padding: 11px 0;
+}
+
+.modal__text {
+  font-weight: lighter;
+  margin: 2px 10px 2px 0;
+  padding: 11px 0;
+}
+
+.modal__confirm-btn {
+  padding: 5px;
+  margin: 8px 10px 8px 0;
+  border-radius: 2px;
+  background-color: #82baf6;
+  border: 1px solid #82baf6;
+  color: #102331;
+  transition: all 0.3s;
+  box-shadow: none;
+  background-image: none;
+  cursor: pointer;
+}
+
+.modal__confirm-btn:hover,
+.modal__confirm-btn:focus,
+.modal__confirm-btn:active {
+  background-color: #4c88c8;
+  border: 1px solid #4c88c8;
+  color: #102331;
+  box-shadow: none;
+}
+
+.modal__cancel-btn {
+  padding: 5px;
+  margin: 8px 10px 8px 0;
+  border-radius: 2px;
+  background-color: #0B1923;
+  border: 1px solid #334A59;
+  color: #ffffff;
+  box-shadow: none;
+  background-image: none;
+  cursor: pointer;
+}
+
+.modal__cancel-btn:hover,
+.modal__cancel-btn:focus,
+.modal__cancel-btn:active {
+  background-color: #19354a;
+  border: 1px solid #334A59;
+  box-shadow: none;
 }
