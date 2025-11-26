@@ -103,7 +103,8 @@ const _createWindow = async (
 ) => {
   const {
     pathname = null,
-    winName = WINDOW_NAMES.MAIN_WINDOW
+    winName = WINDOW_NAMES.MAIN_WINDOW,
+    didFinishLoadHook
   } = params ?? {}
 
   const point = electron.screen.getCursorScreenPoint()
@@ -176,6 +177,10 @@ const _createWindow = async (
     didFinishLoadPromise
   ])
 
+  if (typeof didFinishLoadHook === 'function') {
+    await didFinishLoadHook()
+  }
+
   const res = {
     isMaximized,
     isFullScreen,
@@ -210,15 +215,19 @@ const _createWindow = async (
 }
 
 const _createChildWindow = async (
-  pathname,
-  winName,
-  opts = {}
+  params,
+  opts
 ) => {
+  const {
+    pathname,
+    winName,
+    didFinishLoadHook
+  } = params ?? {}
   const {
     width = 500,
     height = 500,
     noParent
-  } = { ...opts }
+  } = opts ?? {}
 
   const point = electron.screen.getCursorScreenPoint()
   const { bounds } = electron.screen.getDisplayNearestPoint(point)
@@ -228,7 +237,8 @@ const _createChildWindow = async (
   const winProps = await _createWindow(
     {
       pathname,
-      winName
+      winName,
+      didFinishLoadHook
     },
     {
       width,
@@ -353,8 +363,10 @@ const createMainWindow = async ({
 
 const createLoadingWindow = async () => {
   const winProps = await _createChildWindow(
-    pathToLoadingLayout,
-    WINDOW_NAMES.LOADING_WINDOW,
+    {
+      pathname: pathToLoadingLayout,
+      winName: WINDOW_NAMES.LOADING_WINDOW
+    },
     {
       width: 350,
       height: 350,
@@ -370,8 +382,10 @@ const createLoadingWindow = async () => {
 
 const createStartupLoadingWindow = async () => {
   const winProps = await _createChildWindow(
-    pathToStartupLoadingLayout,
-    WINDOW_NAMES.STARTUP_LOADING_WINDOW,
+    {
+      pathname: pathToStartupLoadingLayout,
+      winName: WINDOW_NAMES.STARTUP_LOADING_WINDOW
+    },
     {
       width: 350,
       height: 350,
@@ -384,7 +398,7 @@ const createStartupLoadingWindow = async () => {
   return winProps
 }
 
-const createModalWindow = async () => {
+const createModalWindow = async (args) => {
   const parentWin = (
     !wins?.[WINDOW_NAMES.MAIN_WINDOW] ||
     wins[WINDOW_NAMES.MAIN_WINDOW].isDestroyed()
@@ -393,8 +407,11 @@ const createModalWindow = async () => {
     : wins[WINDOW_NAMES.MAIN_WINDOW]
 
   const winProps = await _createChildWindow(
-    pathToModalLayout,
-    WINDOW_NAMES.MODAL_WINDOW,
+    {
+      pathname: pathToModalLayout,
+      winName: WINDOW_NAMES.MODAL_WINDOW,
+      didFinishLoadHook: async () => {} // TODO:
+    },
     {
       width: null,
       height: null,
@@ -412,8 +429,10 @@ const createModalWindow = async () => {
 
 const createErrorWindow = async () => {
   const winProps = await _createChildWindow(
-    pathToAppInitErrorLayout,
-    WINDOW_NAMES.ERROR_WINDOW,
+    {
+      pathname: pathToAppInitErrorLayout,
+      winName: WINDOW_NAMES.ERROR_WINDOW
+    },
     {
       height: 300,
       frame: false
