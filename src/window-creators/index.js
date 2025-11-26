@@ -14,7 +14,6 @@ const ipcs = require('../ipcs')
 const serve = require('../serve')
 const appStates = require('../app-states')
 const windowStateKeeper = require('./window-state-keeper')
-const createMenu = require('../create-menu')
 const {
   showLoadingWindow,
   hideLoadingWindow,
@@ -35,6 +34,9 @@ const MenuIpcChannelHandlers = require(
 )
 const ThemeIpcChannelHandlers = require(
   './main-renderer-ipc-bridge/theme-ipc-channel-handlers'
+)
+const ModalIpcChannelHandlers = require(
+  './main-renderer-ipc-bridge/modal-ipc-channel-handlers'
 )
 
 const shouldLocalhostBeUsedForLoadingUIInDevMode = parseEnvValToBool(
@@ -160,6 +162,7 @@ const _createWindow = async (
     wins[winName] = null
 
     if (
+      !winProps?.modal &&
       ipcs.serverIpc &&
       typeof ipcs.serverIpc === 'object'
     ) {
@@ -178,7 +181,7 @@ const _createWindow = async (
   ])
 
   if (typeof didFinishLoadHook === 'function') {
-    await didFinishLoadHook()
+    await didFinishLoadHook(wins[winName])
   }
 
   const res = {
@@ -267,7 +270,13 @@ const _createChildWindow = async (
   )
 
   winProps.win.on('closed', () => {
-    if (wins.mainWindow) {
+    if (opts?.modal) {
+      return
+    }
+    if (
+      wins[WINDOW_NAMES.MAIN_WINDOW] &&
+      !wins[WINDOW_NAMES.MAIN_WINDOW].isDestroyed()
+    ) {
       wins[WINDOW_NAMES.MAIN_WINDOW].close()
     }
 
@@ -281,6 +290,7 @@ const createMainWindow = async ({
   pathToUserData,
   pathToUserDocuments
 }) => {
+  const createMenu = require('../create-menu')
   const titleBarOverlayOpt = isMac
     ? { titleBarOverlay: { height: 26 } }
     : {
@@ -406,11 +416,15 @@ const createModalWindow = async (args) => {
     ? null
     : wins[WINDOW_NAMES.MAIN_WINDOW]
 
+  let closedEventPromise = null
   const winProps = await _createChildWindow(
     {
       pathname: pathToModalLayout,
       winName: WINDOW_NAMES.MODAL_WINDOW,
-      didFinishLoadHook: async () => {} // TODO:
+      didFinishLoadHook: (win) => {
+        closedEventPromise = ModalIpcChannelHandlers
+          .sendFireModalEvent(win, args)
+      }
     },
     {
       width: null,
@@ -423,8 +437,20 @@ const createModalWindow = async (args) => {
       modal: !!parentWin
     }
   )
+  const modalRes = await closedEventPromise
 
-  return winProps
+  if (
+    winProps.win &&
+    !winProps.win.isDestroyed()
+  ) {
+    winProps.win.hide()
+    winProps.win.close()
+  }
+
+  return {
+    winProps,
+    modalRes
+  }
 }
 
 const createErrorWindow = async () => {
