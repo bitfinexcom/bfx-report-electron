@@ -413,8 +413,9 @@ const createStartupLoadingWindow = async () => {
   return winProps
 }
 
-const createModalWindow = async (args) => {
+const createModalWindow = async (args, opts) => {
   const parentWin = (
+    opts?.hasNoParentWin ||
     !wins?.[WINDOW_NAMES.MAIN_WINDOW] ||
     wins[WINDOW_NAMES.MAIN_WINDOW].isDestroyed()
   )
