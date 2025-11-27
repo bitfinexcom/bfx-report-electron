@@ -54,6 +54,8 @@ body::-webkit-scrollbar-thumb,
 .modal__icon {
   font-size: 20px;
   line-height: 1;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .modal__icon--error {
@@ -61,11 +63,11 @@ body::-webkit-scrollbar-thumb,
 }
 
 .modal__icon--loading {
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid #3498db;
+  border: 3px solid var(--color, #ffffff);
+  border-top: 3px solid var(--activeColor, #82baf6);
   border-radius: 50%;
-  width: 20px;
-  height: 20px;
+  width: 74px;
+  min-height: 74px;
   animation: spin 2s linear infinite;
 }
 
