@@ -37,7 +37,8 @@ window.addEventListener('load', async () => {
         showCancelButton = false,
         confirmButtonText = 'OK',
         cancelButtonText = 'Cancel',
-        containerClassName = ''
+        containerClassName = '',
+        textClassName = ''
       } = args ?? {}
       const elems = []
       const btnElems = []
@@ -81,7 +82,14 @@ window.addEventListener('load', async () => {
         elems.push(`<div class="modal__title">${title}</div>`)
       }
       if (text) {
-        elems.push(`<div class="modal__text">${text}</div>`)
+        const className = (
+          textClassName &&
+          typeof textClassName === 'string'
+        )
+          ? ` ${textClassName}`
+          : ''
+
+        elems.push(`<div class="modal__text${className}">${text}</div>`)
       }
       if (showConfirmButton) {
         btnElems.push(`<button id="confirmBtn" class="modal__btn modal__btn--confirm">${confirmButtonText}</button>`)
