@@ -106,7 +106,8 @@ const _createWindow = async (
   const {
     pathname = null,
     winName = WINDOW_NAMES.MAIN_WINDOW,
-    didFinishLoadHook
+    didFinishLoadHook,
+    shouldDevToolsBeShown
   } = params ?? {}
 
   const point = electron.screen.getCursorScreenPoint()
@@ -183,6 +184,9 @@ const _createWindow = async (
   if (typeof didFinishLoadHook === 'function') {
     await didFinishLoadHook(wins[winName])
   }
+  if (shouldDevToolsBeShown) {
+    wins[winName].webContents.openDevTools({ mode: 'right' })
+  }
 
   const res = {
     isMaximized,
@@ -224,7 +228,8 @@ const _createChildWindow = async (
   const {
     pathname,
     winName,
-    didFinishLoadHook
+    didFinishLoadHook,
+    shouldDevToolsBeShown
   } = params ?? {}
   const {
     width = 500,
@@ -241,7 +246,8 @@ const _createChildWindow = async (
     {
       pathname,
       winName,
-      didFinishLoadHook
+      didFinishLoadHook,
+      shouldDevToolsBeShown
     },
     {
       width,
@@ -308,7 +314,10 @@ const createMainWindow = async ({
         titleBarStyle: 'hidden',
         ...titleBarOverlayOpt
       }
-  const winProps = await _createWindow(null, titleBarOpts)
+  const winProps = await _createWindow(
+    { shouldDevToolsBeShown: isDevEnv },
+    titleBarOpts
+  )
   const {
     win,
     manage,
@@ -350,10 +359,6 @@ const createMainWindow = async ({
     })
   }
 
-  if (isDevEnv) {
-    wins[WINDOW_NAMES.MAIN_WINDOW].webContents
-      .openDevTools({ mode: 'right' })
-  }
   if (isBfxApiStaging()) {
     const title = wins[WINDOW_NAMES.MAIN_WINDOW].getTitle()
 
