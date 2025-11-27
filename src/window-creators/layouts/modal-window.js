@@ -30,23 +30,32 @@ window.addEventListener('load', async () => {
     }
     const renderModal = (args) => {
       const {
-        icon = 'info', // it can be one of ['error', 'loading', 'success', 'info', 'question']
+        icon = 'info',
         title = null,
         text = null,
         showConfirmButton = true,
         showCancelButton = false,
         confirmButtonText = 'OK',
-        cancelButtonText = 'Cancel'
+        cancelButtonText = 'Cancel',
+        containerClassName = ''
       } = args ?? {}
       const elems = []
+      const btnElems = []
+
+      if (
+        containerClassName &&
+        typeof containerClassName === 'string'
+      ) {
+        modalElem.classList.add(containerClassName)
+      }
 
       // TODO:
       const iconMap = {
-        error: '<span class="modal__icon modal__icon--error">X</span>',
-        loading: '<span class="modal__icon modal__icon--loading"></span>',
-        success: '<span class="modal__icon modal__icon--success">V</span>',
-        info: '<span class="modal__icon modal__icon--info">i</span>',
-        question: '<span class="modal__icon modal__icon--question">?</span>'
+        error: '<div class="modal__icon modal__icon--error">X</div>',
+        loading: '<div class="modal__icon modal__icon--loading"></div>',
+        success: '<div class="modal__icon modal__icon--success">V</div>',
+        info: '<div class="modal__icon modal__icon--info">i</div>',
+        question: '<div class="modal__icon modal__icon--question">?</div>'
       }
       const iconHTML = iconMap[icon]
 
@@ -54,16 +63,19 @@ window.addEventListener('load', async () => {
         elems.push(iconHTML)
       }
       if (title) {
-        elems.push(`<span class="modal__title">${title}</span>`)
+        elems.push(`<div class="modal__title">${title}</div>`)
       }
       if (text) {
-        elems.push(`<span class="modal__text">${text}</span>`)
+        elems.push(`<div class="modal__text">${text}</div>`)
       }
       if (showConfirmButton) {
-        elems.push(`<button id="confirmBtn" class="modal__confirm-btn">${confirmButtonText}</button>`)
+        btnElems.push(`<button id="confirmBtn" class="modal__btn modal__btn--confirm">${confirmButtonText}</button>`)
       }
       if (showCancelButton) {
-        elems.push(`<button id="cancelBtn" class="modal__cancel-btn">${cancelButtonText}</button>`)
+        btnElems.push(`<button id="cancelBtn" class="modal__btn modal__btn--cancel">${cancelButtonText}</button>`)
+      }
+      if (btnElems.length > 0) {
+        elems.push(`<div class="modal__btns">${btnElems.join('\n')}</div>`)
       }
 
       modalElem.innerHTML = elems.join('\n')
