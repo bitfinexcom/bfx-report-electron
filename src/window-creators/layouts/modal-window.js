@@ -34,7 +34,9 @@ window.addEventListener('load', async () => {
         title = null,
         text = null,
         showConfirmButton = true,
+        focusConfirm = true,
         showCancelButton = false,
+        focusCancel = false,
         confirmButtonText = 'OK',
         cancelButtonText = 'Cancel',
         containerClassName = '',
@@ -50,7 +52,6 @@ window.addEventListener('load', async () => {
         modalElem.classList.add(containerClassName)
       }
 
-      // TODO:
       const iconMap = {
         error: `\
 <div class="modal__icon modal__icon--error">
@@ -98,10 +99,16 @@ window.addEventListener('load', async () => {
         elems.push(`<div class="modal__text${className}">${text}</div>`)
       }
       if (showConfirmButton) {
-        btnElems.push(`<button id="confirmBtn" class="modal__btn modal__btn--confirm">${confirmButtonText}</button>`)
+        btnElems.push(`<button\
+${focusConfirm ? ' autofocus' : ''} \
+id="confirmBtn" \
+class="modal__btn modal__btn--confirm">${confirmButtonText}</button>`)
       }
       if (showCancelButton) {
-        btnElems.push(`<button id="cancelBtn" class="modal__btn modal__btn--cancel">${cancelButtonText}</button>`)
+        btnElems.push(`<button\
+${focusCancel ? ' autofocus' : ''} \
+id="cancelBtn" \
+class="modal__btn modal__btn--cancel">${cancelButtonText}</button>`)
       }
       if (btnElems.length > 0) {
         elems.push(`<div class="modal__btns">${btnElems.join('\n')}</div>`)
