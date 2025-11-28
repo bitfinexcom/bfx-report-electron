@@ -28,22 +28,38 @@ window.addEventListener('load', async () => {
     const showModal = () => {
       modalElem.style.display = 'flex'
     }
+    const finalizeModalWindow = (e, args) => {
+      e.preventDefault()
+
+      clearTimeout(timeout)
+      hideModal()
+      sendModalClosedEvent(args)
+    }
     const renderModal = (args) => {
       const {
         icon = 'info',
         title = null,
         text = null,
         showConfirmButton = true,
-        focusConfirm = true,
+        focusConfirm = false,
         showCancelButton = false,
         focusCancel = false,
         confirmButtonText = 'OK',
         cancelButtonText = 'Cancel',
+        confirmHotkey = 'Enter',
         containerClassName = '',
         textClassName = ''
       } = args ?? {}
       const elems = []
       const btnElems = []
+      const _confirmHotkey = (
+        confirmHotkey &&
+        typeof confirmHotkey === 'string' &&
+        !focusConfirm &&
+        !focusCancel
+      )
+        ? confirmHotkey
+        : ''
 
       if (
         containerClassName &&
@@ -116,32 +132,52 @@ class="modal__btn modal__btn--cancel">${cancelButtonText}</button>`)
 
       modalElem.innerHTML = elems.join('\n')
 
-      if (showConfirmButton) {
-        const confirmBtnElem = document.getElementById('confirmBtn')
-        confirmBtnElem.addEventListener('click', (e) => {
-          e.preventDefault()
+      const confirmBtnElem = document.getElementById('confirmBtn')
+      const cancelBtnElem = document.getElementById('cancelBtn')
 
-          clearTimeout(timeout)
-          hideModal()
-          sendModalClosedEvent({
+      if (showConfirmButton) {
+        confirmBtnElem.addEventListener('click', (e) => {
+          finalizeModalWindow(e, {
             dismiss: DISMISS_REASONS.CONFIRM,
             toastId: args?.toastId
           })
-        }, false)
+        })
       }
       if (showCancelButton) {
-        const cancelBtnElem = document.getElementById('cancelBtn')
         cancelBtnElem.addEventListener('click', (e) => {
-          e.preventDefault()
-
-          clearTimeout(timeout)
-          hideModal()
-          sendModalClosedEvent({
+          finalizeModalWindow(e, {
             dismiss: DISMISS_REASONS.CANCEL,
             toastId: args?.toastId
           })
-        }, false)
+        })
       }
+
+      document.addEventListener('keydown', (e) => {
+        if (
+          (
+            e.key !== _confirmHotkey &&
+            e.key !== 'Escape'
+          ) ||
+          (
+            e.key === _confirmHotkey &&
+            !showConfirmButton
+          )
+        ) {
+          return
+        }
+
+        const dismiss = (
+          e.key === _confirmHotkey &&
+          showConfirmButton
+        )
+          ? DISMISS_REASONS.CONFIRM
+          : DISMISS_REASONS.CANCEL
+
+        finalizeModalWindow(e, {
+          dismiss,
+          toastId: args?.toastId
+        })
+      })
     }
 
     window.bfxReportElectronApi?.onFireModalEvent((args) => {
