@@ -74,6 +74,11 @@ body::-webkit-scrollbar-thumb,
 
 .modal__icon--info {
   color: var(--activeColor, #82baf6);
+  width: 68px;
+  min-height: 68px;
+  line-height: 68px;
+  border: 3px solid var(--color, #ffffff);
+  border-radius: 50%;
 }
 
 .modal__icon--question {
