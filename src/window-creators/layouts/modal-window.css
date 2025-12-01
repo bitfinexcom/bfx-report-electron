@@ -14,7 +14,6 @@ body {
 }
 
 body::-webkit-scrollbar,
-.swal2-container::-webkit-scrollbar,
 .markdown-body pre::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -22,16 +21,13 @@ body::-webkit-scrollbar,
 }
 
 body::-webkit-scrollbar-corner,
-.swal2-container::-webkit-scrollbar-corner,
 .markdown-body pre::-webkit-scrollbar-corner,
 body::-webkit-scrollbar-thumb,
-.markdown-body pre::-webkit-scrollbar-thumb,
-.swal2-container::-webkit-scrollbar-thumb {
+.markdown-body pre::-webkit-scrollbar-thumb {
   background-color: var(--tableScrollThumbBg, #2a3f4d);
 }
 
 body::-webkit-scrollbar-thumb,
-.swal2-container::-webkit-scrollbar-thumb,
 .markdown-body pre::-webkit-scrollbar-thumb {
   border-radius: 2px;
 }
