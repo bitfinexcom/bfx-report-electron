@@ -1,5 +1,8 @@
-html, body, .modal {
+html, body {
   height: 100%;
+}
+
+html, body, .modal {
   background-color: var(--bgColor, #172d3e);
 }
 
