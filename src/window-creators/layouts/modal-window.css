@@ -146,6 +146,7 @@ body::-webkit-scrollbar-thumb,
   font-family: "Inter", sans-serif;
   padding: 1em;
   background-color: var(--bgColor2, #0B1923);
+  font-size: 14px;
 }
 
 .markdown-body table {
