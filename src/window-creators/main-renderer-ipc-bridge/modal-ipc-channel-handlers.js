@@ -1,7 +1,12 @@
 'use strict'
 
+const { screen } = require('electron')
+
 const IpcChannelHandlers = require('./ipc.channel.handlers')
 const { initClosedEventListener } = require('./helpers')
+
+const wins = require('../windows')
+const WINDOW_NAMES = require('../window.names')
 
 class ModalIpcChannelHandlers extends IpcChannelHandlers {
   static channelName = 'modal'
@@ -34,6 +39,26 @@ class ModalIpcChannelHandlers extends IpcChannelHandlers {
     })
 
     return await closedEventPromise
+  }
+
+  setWindowHeightHandler (event, args) {
+    const win = wins[WINDOW_NAMES.MODAL_WINDOW]
+    const height = args?.height
+
+    if (
+      !win ||
+      !Number.isInteger(height)
+    ) {
+      return
+    }
+
+    const point = screen.getCursorScreenPoint()
+    const { workArea } = screen.getDisplayNearestPoint(point)
+    const { height: screenHeight } = workArea
+    const maxHeight = Math.floor(screenHeight * 0.90)
+
+    win.setBounds({ height: Math.min(height, maxHeight) })
+    win.center()
   }
 }
 
