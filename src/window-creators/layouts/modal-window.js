@@ -198,6 +198,11 @@ class="modal__btn modal__btn--cancel">${cancelButtonText}</button>`)
       toastId = args?.toastId
       renderModal(args)
       showModal()
+      setTimeout(() => {
+        window.bfxReportElectronApi?.setWindowHeight({
+          height: modalElem.scrollHeight
+        })
+      }, 100)
 
       if (!Number.isInteger(args?.timer)) {
         return
