@@ -184,7 +184,7 @@ const _createWindow = async (
     await didFinishLoadHook(wins[winName])
   }
   if (shouldDevToolsBeShown) {
-    wins[winName].webContents.openDevTools({ mode: 'right' })
+    wins[winName].webContents.openDevTools({ mode: 'detach' })
   }
 
   const res = {
