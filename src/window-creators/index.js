@@ -1,10 +1,9 @@
 'use strict'
 
-const electron = require('electron')
+const { BrowserWindow, screen } = require('electron')
 const path = require('path')
 const { URL } = require('url')
 
-const { BrowserWindow } = electron
 const isDevEnv = process.env.NODE_ENV === 'development'
 const isMac = process.platform === 'darwin'
 
@@ -110,11 +109,11 @@ const _createWindow = async (
     shouldDevToolsBeShown
   } = params ?? {}
 
-  const point = electron.screen.getCursorScreenPoint()
+  const point = screen.getCursorScreenPoint()
   const {
     bounds,
     workAreaSize
-  } = electron.screen.getDisplayNearestPoint(point)
+  } = screen.getDisplayNearestPoint(point)
   const {
     width: defaultWidth,
     height: defaultHeight
@@ -237,8 +236,8 @@ const _createChildWindow = async (
     noParent
   } = opts ?? {}
 
-  const point = electron.screen.getCursorScreenPoint()
-  const { bounds } = electron.screen.getDisplayNearestPoint(point)
+  const point = screen.getCursorScreenPoint()
+  const { bounds } = screen.getDisplayNearestPoint(point)
   const x = Math.ceil(bounds.x + ((bounds.width - width) / 2))
   const y = Math.ceil(bounds.y + ((bounds.height - height) / 2))
 
@@ -252,8 +251,8 @@ const _createChildWindow = async (
     {
       width,
       height,
-      minWidth: width,
-      minHeight: height,
+      minWidth: 300,
+      minHeight: 300,
       x,
       y,
       resizable: false,
@@ -422,6 +421,12 @@ const createModalWindow = async (args, opts) => {
     ? null
     : wins[WINDOW_NAMES.MAIN_WINDOW]
 
+  const point = screen.getCursorScreenPoint()
+  const { workArea } = screen.getDisplayNearestPoint(point)
+  const { height: screenHeight } = workArea
+  const maxHeight = Math.floor(screenHeight * 0.90)
+  const width = 600
+
   let closedEventPromise = null
   const winProps = await _createChildWindow(
     {
@@ -433,10 +438,10 @@ const createModalWindow = async (args, opts) => {
       }
     },
     {
-      width: null,
-      height: null,
-      minWidth: 500,
-      minHeight: 500,
+      width,
+      height: 200,
+      minHeight: 200,
+      maxHeight,
       maximizable: false,
       fullscreenable: false,
       parent: parentWin,
@@ -466,6 +471,7 @@ const createErrorWindow = async () => {
       winName: WINDOW_NAMES.ERROR_WINDOW
     },
     {
+      width: 500,
       height: 300,
       frame: false
     }
