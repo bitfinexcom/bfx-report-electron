@@ -23,13 +23,15 @@ class ModalIpcChannelHandlers extends IpcChannelHandlers {
   }
 
   static async sendFireModalEvent (win, args) {
-    this.isModalReadyToBeShownControlObj
-      .promise = new Promise((resolve) => {
-        this.isModalReadyToBeShownControlObj.resolve = () => {
-          this.isModalReadyToBeShownControlObj.resolve = () => {}
-          resolve()
-        }
-      })
+    if (!args?.preventSettingHeightToContent) {
+      this.isModalReadyToBeShownControlObj
+        .promise = new Promise((resolve) => {
+          this.isModalReadyToBeShownControlObj.resolve = () => {
+            this.isModalReadyToBeShownControlObj.resolve = () => {}
+            resolve()
+          }
+        })
+    }
 
     const {
       closedEventPromise,

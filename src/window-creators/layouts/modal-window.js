@@ -200,7 +200,9 @@ class="modal__btn modal__btn--cancel">${cancelButtonText}</button>`)
       showModal()
       setTimeout(() => {
         window.bfxReportElectronApi?.setWindowHeight({
-          height: modalElem.scrollHeight
+          height: args?.preventSettingHeightToContent
+            ? null
+            : modalElem.scrollHeight
         })
       }, 100)
 
