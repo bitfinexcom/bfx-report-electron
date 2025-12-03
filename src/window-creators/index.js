@@ -425,7 +425,7 @@ const createModalWindow = async (args, opts) => {
   const { workArea } = screen.getDisplayNearestPoint(point)
   const { height: screenHeight } = workArea
   const maxHeight = Math.floor(screenHeight * 0.90)
-  const width = 600
+  const width = opts?.width ?? 600
 
   let closedEventPromise = null
   const winProps = await _createChildWindow(
@@ -441,7 +441,7 @@ const createModalWindow = async (args, opts) => {
     },
     {
       width,
-      height: 200,
+      height: opts?.height ?? 200,
       minHeight: 200,
       maxHeight,
       maximizable: false,
