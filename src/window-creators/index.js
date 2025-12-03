@@ -427,7 +427,7 @@ const createModalWindow = async (args, opts) => {
   const maxHeight = Math.floor(screenHeight * 0.90)
   const width = opts?.width ?? 600
 
-  let closedEventPromise = null
+  let closedEventPromise = {}
   const winProps = await _createChildWindow(
     {
       pathname: pathToModalLayout,

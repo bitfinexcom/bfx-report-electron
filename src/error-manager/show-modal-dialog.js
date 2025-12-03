@@ -40,7 +40,7 @@ const _fireAlert = async (params) => {
     cancelButtonText: i18next.t('common.cancelButtonText')
   }, { hasNoParentWin, height: 600 })
 
-  return res
+  return res?.modalRes ?? {}
 }
 
 module.exports = async (params) => {
