@@ -13,12 +13,24 @@ class ModalIpcChannelHandlers extends IpcChannelHandlers {
 
   static isModalClosedEventListenerInited = false
   static modalClosedEventHandlerSet = new Set()
+  static isModalReadyToBeShownControlObj = {
+    promise: Promise.resolve(),
+    resolve: () => {}
+  }
 
   static onModalClosedEvent (cb) {
     return this.handleListener(this.onModalClosedEvent, cb)
   }
 
   static async sendFireModalEvent (win, args) {
+    this.isModalReadyToBeShownControlObj
+      .promise = new Promise((resolve) => {
+        this.isModalReadyToBeShownControlObj.resolve = () => {
+          this.isModalReadyToBeShownControlObj.resolve = () => {}
+          resolve()
+        }
+      })
+
     const {
       closedEventPromise,
       toastId
@@ -57,8 +69,9 @@ class ModalIpcChannelHandlers extends IpcChannelHandlers {
     const { height: screenHeight } = workArea
     const maxHeight = Math.floor(screenHeight * 0.90)
 
-    win.setBounds({ height: Math.min(height, maxHeight) })
+    win.setBounds({ height: Math.min(height, maxHeight) }, true)
     win.center()
+    this.constructor.isModalReadyToBeShownControlObj.resolve()
   }
 }
 

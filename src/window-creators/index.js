@@ -432,9 +432,11 @@ const createModalWindow = async (args, opts) => {
     {
       pathname: pathToModalLayout,
       winName: WINDOW_NAMES.MODAL_WINDOW,
-      didFinishLoadHook: (win) => {
+      didFinishLoadHook: async (win) => {
         closedEventPromise = ModalIpcChannelHandlers
           .sendFireModalEvent(win, args)
+        await ModalIpcChannelHandlers
+          .isModalReadyToBeShownControlObj.promise
       }
     },
     {
