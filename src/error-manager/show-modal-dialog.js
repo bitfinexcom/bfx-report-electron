@@ -38,7 +38,7 @@ const _fireAlert = async (params) => {
       .t('errorManager.errorModalDialog.confirmButtonText'),
     showCancelButton: true,
     cancelButtonText: i18next.t('common.cancelButtonText')
-  }, { hasNoParentWin })
+  }, { hasNoParentWin, height: 600 })
 
   return res
 }
