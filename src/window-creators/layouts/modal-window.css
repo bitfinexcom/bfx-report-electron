@@ -1,0 +1,204 @@
+html, body {
+  height: 100%;
+}
+
+html, body, .modal {
+  background-color: var(--bgColor, #172d3e);
+}
+
+body {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  font-family: "Inter", sans-serif;
+  font-feature-settings: 'tnum';
+  font-size: 16px;
+}
+
+body::-webkit-scrollbar,
+.markdown-body pre::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: var(--tableScrollBg, #0c1a25);
+}
+
+body::-webkit-scrollbar-corner,
+.markdown-body pre::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-thumb,
+.markdown-body pre::-webkit-scrollbar-thumb {
+  background-color: var(--tableScrollThumbBg, #2a3f4d);
+}
+
+body::-webkit-scrollbar-thumb,
+.markdown-body pre::-webkit-scrollbar-thumb {
+  border-radius: 2px;
+}
+
+.modal {
+  display: none; /* flex */
+  flex-direction: column;
+  color: var(--color, #172d3e);
+  position: relative;
+  text-align: center;
+  margin: 0;
+  padding: 10px;
+}
+
+.modal > * {
+  margin: 10px;
+  padding: 0;
+}
+
+.modal__icon {
+  font-size: 40px;
+  line-height: 1;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.modal__icon--loading {
+  border: 3px solid var(--color, #ffffff);
+  border-top: 3px solid var(--activeColor, #82baf6);
+  border-radius: 50%;
+  width: 68px;
+  min-height: 68px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.modal__icon--info {
+  color: var(--activeColor, #82baf6);
+  width: 68px;
+  min-height: 68px;
+  line-height: 68px;
+  border: 3px solid var(--color, #ffffff);
+  border-radius: 50%;
+}
+
+.modal__icon--question {
+  color: var(--activeColor, #82baf6);
+  width: 68px;
+  min-height: 68px;
+  line-height: 68px;
+  border: 3px solid var(--color, #ffffff);
+  border-radius: 50%;
+}
+
+.modal__title {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--activeColor, #82baf6);
+}
+
+.modal__text {
+  font-weight: lighter;
+  color: var(--color, #ffffff);
+}
+
+.modal__btns .modal__btn {
+  margin-right: 10px;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 2px;
+  box-shadow: none;
+  background-image: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.modal__btns .modal__btn:last-of-type {
+  margin-right: 0;
+}
+
+.modal__btn--confirm {
+  background-color: var(--btnBg, #82baf6);
+  border: 1px solid var(--btnBg, #82baf6);
+  color: var(--btnPrimaryColor, #102331);
+}
+
+.modal__btn--confirm:hover,
+.modal__btn--confirm:focus,
+.modal__btn--confirm:active {
+  background-color: var(--btnPrimaryHoverBg, #4c88c8);
+  border: 1px solid var(--btnPrimaryHoverBg, #4c88c8);
+  color: var(--btnPrimaryHoverColor, #102331);
+}
+
+.modal__btn--cancel {
+  background-color: var(--bgColor, #172d3e);
+  border: 1px solid var(--borderColor, #334A59);
+  color: var(--btnColor, #ffffff);
+}
+
+.modal__btn--cancel:hover,
+.modal__btn--cancel:focus,
+.modal__btn--cancel:active {
+  background-color: var(--btnHoverBg, #19354a);
+  border: 1px solid var(--borderColor, #334A59);
+}
+
+.markdown-body {
+  font-family: "Inter", sans-serif;
+  padding: 1em;
+  background-color: var(--bgColor2, #0B1923);
+  font-size: 14px;
+}
+
+.markdown-body table {
+  color: var(--tableColor, #f5f8fa);
+  overflow: unset;
+}
+
+.markdown-body table tr {
+  background-color: var(--tableOddBg, #0B1923);
+}
+
+.markdown-body table thead tr {
+  background-color: var(--thBg, #0B1923);
+  color: var(--thColor, #82baf6);
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background-color: var(--tableEvenBg, #0B1923);
+}
+
+.markdown-body .highlight pre,
+.markdown-body pre {
+  background-color: var(--bgColor, #172d3e);
+}
+
+.markdown-body table td,
+.markdown-body table th {
+  border: 1px solid var(--tableBorder, #334A59);
+}
+
+.markdown-body details,
+.markdown-body pre,
+.markdown-body p,
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6,
+.markdown-body ul {
+  text-align: left;
+}
+
+.markdown-body hr {
+  background-color: rgba(255,255,255,0.1);
+}
+
+.markdown-body h1,
+.markdown-body h2 {
+  border-bottom: 1px solid var(--tableBorder, #334A59);
+}
+
+.markdown-body blockquote {
+  border-left: .25em solid var(--tableBorder, #334A59);
+}
