@@ -1,8 +1,10 @@
 'use strict'
 
 const path = require('path')
+const fs = require('fs')
 const parseChangelog = require('changelog-parser')
 const { rootPath } = require('electron-root-path')
+const i18next = require('i18next')
 
 const getDebugInfo = require('../helpers/get-debug-info')
 const showDocs = require('../show-docs')
@@ -11,6 +13,7 @@ const MENU_ITEM_IDS = require('../create-menu/menu.item.ids')
 const { changeMenuItemStatesById } = require('../create-menu/utils')
 
 const changelogPath = path.join(rootPath, 'CHANGELOG.md')
+const changelog = fs.readFileSync(changelogPath, 'utf8')
 
 const disableShowChangelogMenuItem = () => {
   changeMenuItemStatesById(
@@ -24,7 +27,7 @@ module.exports = async (params = {}) => {
     const version = params?.version ?? getDebugInfo()?.version
 
     const mdEntries = await parseChangelog({
-      filePath: changelogPath,
+      text: changelog,
       removeMarkdown: false
     })
 
@@ -60,10 +63,21 @@ module.exports = async (params = {}) => {
     const versionTitle = `## ${mdEntry.title}`
     const mdDoc = `${mdTitle}\n\n${versionTitle}\n\n${mdEntry.body}`
 
-    await showDocs({
-      title: mdEntries.title,
-      mdDoc
+    const res = await showDocs({
+      title: i18next.t('changelog.modalDialog.title', { version }),
+      mdDoc,
+      showConfirmButton: true,
+      confirmButtonText: i18next
+        .t('changelog.modalDialog.confirmButtonText')
     })
+
+    if (res?.dismiss === 'confirm') {
+      await showDocs({
+        title: i18next
+          .t('changelog.modalDialog.fullChangelogTitle'),
+        mdDoc: changelog
+      })
+    }
 
     return {
       error: null,
