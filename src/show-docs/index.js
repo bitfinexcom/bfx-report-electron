@@ -23,7 +23,9 @@ const converter = new Converter({
 const _fireAlert = async (params) => {
   const {
     title = i18next.t('showDocs.modalDialog.title'),
-    html = ''
+    html = '',
+    showConfirmButton = false,
+    confirmButtonText = i18next.t('common.confirmButtonText')
   } = params ?? {}
 
   const res = await createModalWindow({
@@ -31,7 +33,8 @@ const _fireAlert = async (params) => {
     title,
     text: html,
     textClassName: 'markdown-body',
-    showConfirmButton: false,
+    showConfirmButton,
+    confirmButtonText,
     showCancelButton: true,
     cancelButtonText: i18next
       .t('showDocs.modalDialog.cancelButtonText')
@@ -45,7 +48,9 @@ module.exports = async (params) => {
     const {
       icon,
       title,
-      mdDoc = i18next.t('mdDocs:userManual')
+      mdDoc = i18next.t('mdDocs:userManual'),
+      showConfirmButton,
+      confirmButtonText
     } = params ?? {}
 
     if (
@@ -57,7 +62,13 @@ module.exports = async (params) => {
 
     const html = converter.makeHtml(mdDoc)
 
-    await _fireAlert({ icon, title, html })
+    return await _fireAlert({
+      icon,
+      title,
+      html,
+      showConfirmButton,
+      confirmButtonText
+    })
   } catch (err) {
     console.error(err)
   }
