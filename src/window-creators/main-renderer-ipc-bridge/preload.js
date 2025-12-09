@@ -56,6 +56,7 @@ const MODAL_INVOKE_METHOD_NAMES = {
 }
 const MODAL_EVENT_METHOD_NAMES = {
   ON_FIRE_TOAST_EVENT: 'onFireModalEvent',
+  ON_CLOSE_MODAL_EVENT: 'onCloseModalEvent',
   SEND_TOAST_CLOSED_EVENT: 'sendModalClosedEvent'
 }
 
