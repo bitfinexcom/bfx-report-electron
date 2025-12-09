@@ -28,17 +28,23 @@ const _fireAlert = async (params) => {
     confirmButtonText = i18next.t('common.confirmButtonText')
   } = params ?? {}
 
-  const res = await createModalWindow({
-    icon: 'info',
-    title,
-    text: html,
-    textClassName: 'markdown-body',
-    showConfirmButton,
-    confirmButtonText,
-    showCancelButton: true,
-    cancelButtonText: i18next
-      .t('showDocs.modalDialog.cancelButtonText')
-  }, { width: 1000, height: 600 })
+  const res = await createModalWindow(
+    {
+      icon: 'info',
+      title,
+      text: html,
+      textClassName: 'markdown-body',
+      showConfirmButton,
+      confirmButtonText,
+      showCancelButton: true,
+      cancelButtonText: i18next
+        .t('showDocs.modalDialog.cancelButtonText')
+    },
+    {
+      width: 1000,
+      height: 600,
+      shouldWinBeClosedIfClickingOutside: true
+    })
 
   return res?.modalRes ?? {}
 }
