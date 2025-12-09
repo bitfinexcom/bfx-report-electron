@@ -426,6 +426,10 @@ const createModalWindow = async (args, opts) => {
   const { height: screenHeight } = workArea
   const maxHeight = Math.floor(screenHeight * 0.90)
   const width = opts?.width ?? 600
+  const shouldWinBeClosedIfClickingOutside = (
+    parentWin &&
+    opts?.shouldWinBeClosedIfClickingOutside
+  )
 
   let closedEventPromise = {}
   const winProps = await _createChildWindow(
@@ -433,6 +437,12 @@ const createModalWindow = async (args, opts) => {
       pathname: pathToModalLayout,
       winName: WINDOW_NAMES.MODAL_WINDOW,
       didFinishLoadHook: async (win) => {
+        if (shouldWinBeClosedIfClickingOutside) {
+          win.once('blur', () => {
+            ModalIpcChannelHandlers.sendCloseModalEvent(win)
+          })
+        }
+
         closedEventPromise = ModalIpcChannelHandlers
           .sendFireModalEvent(win, args)
         await ModalIpcChannelHandlers
