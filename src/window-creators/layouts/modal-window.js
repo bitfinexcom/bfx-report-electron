@@ -187,6 +187,16 @@ class="modal__btn modal__btn--cancel">${cancelButtonText}</button>`)
       })
     }
 
+    window.bfxReportElectronApi?.onCloseModalEvent(() => {
+      if (!toastId) {
+        return
+      }
+
+      sendModalClosedEvent({
+        dismiss: DISMISS_REASONS.CLOSE,
+        toastId
+      })
+    })
     window.bfxReportElectronApi?.onFireModalEvent((args) => {
       if (toastId) {
         sendModalClosedEvent({
