@@ -63,8 +63,8 @@ window.addEventListener('load', async () => {
     const showModal = () => {
       modalElem.style.display = 'flex'
     }
-    const finalizeModalWindow = (e, args) => {
-      e.preventDefault()
+    const finalizeModalWindow = (args, e) => {
+      e?.preventDefault?.()
 
       clearTimeout(timeout)
       hideModal()
@@ -144,18 +144,18 @@ class="modal__btn modal__btn--cancel">${cancelButtonText}</button>`)
 
       if (showConfirmButton) {
         confirmBtnElem.addEventListener('click', (e) => {
-          finalizeModalWindow(e, {
+          finalizeModalWindow({
             dismiss: DISMISS_REASONS.CONFIRM,
             toastId: args?.toastId
-          })
+          }, e)
         })
       }
       if (showCancelButton) {
         cancelBtnElem.addEventListener('click', (e) => {
-          finalizeModalWindow(e, {
+          finalizeModalWindow({
             dismiss: DISMISS_REASONS.CANCEL,
             toastId: args?.toastId
-          })
+          }, e)
         })
       }
 
@@ -180,10 +180,10 @@ class="modal__btn modal__btn--cancel">${cancelButtonText}</button>`)
           ? DISMISS_REASONS.CONFIRM
           : DISMISS_REASONS.CANCEL
 
-        finalizeModalWindow(e, {
+        finalizeModalWindow({
           dismiss,
           toastId: args?.toastId
-        })
+        }, e)
       })
     }
 
@@ -192,7 +192,7 @@ class="modal__btn modal__btn--cancel">${cancelButtonText}</button>`)
         return
       }
 
-      sendModalClosedEvent({
+      finalizeModalWindow({
         dismiss: DISMISS_REASONS.CLOSE,
         toastId
       })
