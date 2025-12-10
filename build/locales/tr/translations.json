@@ -154,6 +154,13 @@
       "cancelButtonText": "Kapat"
     }
   },
+  "changelog": {
+    "modalDialog": {
+      "title": "Değişiklik günlüğü v{{version}}",
+      "fullChangelogTitle": "Tam değişiklik günlüğü",
+      "confirmButtonText": "Tam değişiklik günlüğünü göster"
+    }
+  },
   "printToPDF": {
     "defaultTemplate": "Veri yok",
     "pagination": {
