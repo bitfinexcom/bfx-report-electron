@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.40.0] - 2025-12-17
+
+### Added
+
+- Implemented its own solution for alert windows for the electron app instead of the `electron-alert` lib usage for cases where we can't delegate alert maintenance to the main UI. PR: [bfx-report-electron#572](https://github.com/bitfinexcom/bfx-report-electron/pull/572)
+- Added `USDT0 (Plasma)` and `USDT0 (Polygon)` support in the `Symbol` filters and enhanced mapping flow to show all `active` currencies (even not presented in pairs) instead of the fixed exception list. PR: [bfx-report-ui#992](https://github.com/bitfinexcom/bfx-report-ui/pull/992)
+- Implemented `mtsUpdated` value representation in the `Updated At` column for the `Movements` report and also added this column support to the filters. PR: [bfx-report-ui#995](https://github.com/bitfinexcom/bfx-report-ui/pull/995)
+
+### Changed
+
+- Moved report emailing from `rest:ext:sendgrid` to `rest:core:mail` service. PRs: [bfx-report#456](https://github.com/bitfinexcom/bfx-report/pull/456), [bfx-report#457](https://github.com/bitfinexcom/bfx-report/pull/457)
+- Excluded 2FA login and password from the error report modal window for the electron app in case the bfx api is not available. PR: [bfx-report#458](https://github.com/bitfinexcom/bfx-report/pull/458)
+- Prevented changing params possibility (and related auto-refresh) during the initial sync for the complex reports that require synced data for calculation to avoid generation errors. PR: [bfx-report-ui#994](https://github.com/bitfinexcom/bfx-report-ui/pull/994)
+- Prevented `authToken` from being removed from the `URL` if it was available initially after the redirection, according to the specialized needs of the `Customer` Support team. PR: [bfx-report-ui#996](https://github.com/bitfinexcom/bfx-report-ui/pull/996)
+- Changed column filter title from `Columns` to `Columns Filter` for more clarity to the users. PR: [bfx-report-ui#997](https://github.com/bitfinexcom/bfx-report-ui/pull/997)
+- Removed fees sections from the web and app `Summary` due to deprecation. PR: [bfx-report-ui#998](https://github.com/bitfinexcom/bfx-report-ui/pull/998)
+
+### Fixed
+
+- Excluded current value from language dropdown. PR: [bfx-report-ui#991](https://github.com/bitfinexcom/bfx-report-ui/pull/991)
+- Fixed currently selected language displaying issue noted after the recent updates. PR: [bfx-report-ui#993](https://github.com/bitfinexcom/bfx-report-ui/pull/993)
+
 ## [4.39.0] - 2025-11-19
 
 ### Added
