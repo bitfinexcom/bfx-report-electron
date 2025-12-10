@@ -1,10 +1,9 @@
 'use strict'
 
-const electron = require('electron')
+const { BrowserWindow, screen } = require('electron')
 const path = require('path')
 const { URL } = require('url')
 
-const { BrowserWindow } = electron
 const isDevEnv = process.env.NODE_ENV === 'development'
 const isMac = process.platform === 'darwin'
 
@@ -14,7 +13,6 @@ const ipcs = require('../ipcs')
 const serve = require('../serve')
 const appStates = require('../app-states')
 const windowStateKeeper = require('./window-state-keeper')
-const createMenu = require('../create-menu')
 const {
   showLoadingWindow,
   hideLoadingWindow,
@@ -36,6 +34,9 @@ const MenuIpcChannelHandlers = require(
 const ThemeIpcChannelHandlers = require(
   './main-renderer-ipc-bridge/theme-ipc-channel-handlers'
 )
+const ModalIpcChannelHandlers = require(
+  './main-renderer-ipc-bridge/modal-ipc-channel-handlers'
+)
 
 const shouldLocalhostBeUsedForLoadingUIInDevMode = parseEnvValToBool(
   process.env.SHOULD_LOCALHOST_BE_USED_FOR_LOADING_UI_IN_DEV_MODE
@@ -55,6 +56,8 @@ const pathToStartupLoadingLayout = path
   .join(pathToLayouts, 'startup-loading-window.html')
 const pathToAppInitErrorLayout = path
   .join(pathToLayouts, 'app-init-error.html')
+const pathToModalLayout = path
+  .join(pathToLayouts, 'modal-window.html')
 
 const _getFileURL = (params) => {
   const {
@@ -101,14 +104,16 @@ const _createWindow = async (
 ) => {
   const {
     pathname = null,
-    winName = WINDOW_NAMES.MAIN_WINDOW
+    winName = WINDOW_NAMES.MAIN_WINDOW,
+    didFinishLoadHook,
+    shouldDevToolsBeShown
   } = params ?? {}
 
-  const point = electron.screen.getCursorScreenPoint()
+  const point = screen.getCursorScreenPoint()
   const {
     bounds,
     workAreaSize
-  } = electron.screen.getDisplayNearestPoint(point)
+  } = screen.getDisplayNearestPoint(point)
   const {
     width: defaultWidth,
     height: defaultHeight
@@ -157,6 +162,7 @@ const _createWindow = async (
     wins[winName] = null
 
     if (
+      !winProps?.modal &&
       ipcs.serverIpc &&
       typeof ipcs.serverIpc === 'object'
     ) {
@@ -173,6 +179,13 @@ const _createWindow = async (
     isReadyToShowPromise,
     didFinishLoadPromise
   ])
+
+  if (typeof didFinishLoadHook === 'function') {
+    await didFinishLoadHook(wins[winName])
+  }
+  if (shouldDevToolsBeShown) {
+    wins[winName].webContents.openDevTools({ mode: 'detach' })
+  }
 
   const res = {
     isMaximized,
@@ -208,31 +221,38 @@ const _createWindow = async (
 }
 
 const _createChildWindow = async (
-  pathname,
-  winName,
-  opts = {}
+  params,
+  opts
 ) => {
+  const {
+    pathname,
+    winName,
+    didFinishLoadHook,
+    shouldDevToolsBeShown
+  } = params ?? {}
   const {
     width = 500,
     height = 500,
     noParent
-  } = { ...opts }
+  } = opts ?? {}
 
-  const point = electron.screen.getCursorScreenPoint()
-  const { bounds } = electron.screen.getDisplayNearestPoint(point)
+  const point = screen.getCursorScreenPoint()
+  const { bounds } = screen.getDisplayNearestPoint(point)
   const x = Math.ceil(bounds.x + ((bounds.width - width) / 2))
   const y = Math.ceil(bounds.y + ((bounds.height - height) / 2))
 
   const winProps = await _createWindow(
     {
       pathname,
-      winName
+      winName,
+      didFinishLoadHook,
+      shouldDevToolsBeShown
     },
     {
       width,
       height,
-      minWidth: width,
-      minHeight: height,
+      minWidth: 300,
+      minHeight: 300,
       x,
       y,
       resizable: false,
@@ -255,7 +275,13 @@ const _createChildWindow = async (
   )
 
   winProps.win.on('closed', () => {
-    if (wins.mainWindow) {
+    if (opts?.modal) {
+      return
+    }
+    if (
+      wins[WINDOW_NAMES.MAIN_WINDOW] &&
+      !wins[WINDOW_NAMES.MAIN_WINDOW].isDestroyed()
+    ) {
       wins[WINDOW_NAMES.MAIN_WINDOW].close()
     }
 
@@ -269,6 +295,7 @@ const createMainWindow = async ({
   pathToUserData,
   pathToUserDocuments
 }) => {
+  const createMenu = require('../create-menu')
   const titleBarOverlayOpt = isMac
     ? { titleBarOverlay: { height: 26 } }
     : {
@@ -286,7 +313,10 @@ const createMainWindow = async ({
         titleBarStyle: 'hidden',
         ...titleBarOverlayOpt
       }
-  const winProps = await _createWindow(null, titleBarOpts)
+  const winProps = await _createWindow(
+    { shouldDevToolsBeShown: isDevEnv },
+    titleBarOpts
+  )
   const {
     win,
     manage,
@@ -328,10 +358,6 @@ const createMainWindow = async ({
     })
   }
 
-  if (isDevEnv) {
-    wins[WINDOW_NAMES.MAIN_WINDOW].webContents
-      .openDevTools({ mode: 'right' })
-  }
   if (isBfxApiStaging()) {
     const title = wins[WINDOW_NAMES.MAIN_WINDOW].getTitle()
 
@@ -351,8 +377,10 @@ const createMainWindow = async ({
 
 const createLoadingWindow = async () => {
   const winProps = await _createChildWindow(
-    pathToLoadingLayout,
-    WINDOW_NAMES.LOADING_WINDOW,
+    {
+      pathname: pathToLoadingLayout,
+      winName: WINDOW_NAMES.LOADING_WINDOW
+    },
     {
       width: 350,
       height: 350,
@@ -368,8 +396,10 @@ const createLoadingWindow = async () => {
 
 const createStartupLoadingWindow = async () => {
   const winProps = await _createChildWindow(
-    pathToStartupLoadingLayout,
-    WINDOW_NAMES.STARTUP_LOADING_WINDOW,
+    {
+      pathname: pathToStartupLoadingLayout,
+      winName: WINDOW_NAMES.STARTUP_LOADING_WINDOW
+    },
     {
       width: 350,
       height: 350,
@@ -382,11 +412,68 @@ const createStartupLoadingWindow = async () => {
   return winProps
 }
 
+const createModalWindow = async (args, opts) => {
+  const parentWin = (
+    opts?.hasNoParentWin ||
+    !wins?.[WINDOW_NAMES.MAIN_WINDOW] ||
+    wins[WINDOW_NAMES.MAIN_WINDOW].isDestroyed()
+  )
+    ? null
+    : wins[WINDOW_NAMES.MAIN_WINDOW]
+
+  const point = screen.getCursorScreenPoint()
+  const { workArea } = screen.getDisplayNearestPoint(point)
+  const { height: screenHeight } = workArea
+  const maxHeight = Math.floor(screenHeight * 0.90)
+  const width = opts?.width ?? 600
+
+  let closedEventPromise = {}
+  const winProps = await _createChildWindow(
+    {
+      pathname: pathToModalLayout,
+      winName: WINDOW_NAMES.MODAL_WINDOW,
+      didFinishLoadHook: async (win) => {
+        closedEventPromise = ModalIpcChannelHandlers
+          .sendFireModalEvent(win, args)
+        await ModalIpcChannelHandlers
+          .isModalReadyToBeShownControlObj.promise
+      }
+    },
+    {
+      width,
+      height: opts?.height ?? 200,
+      minHeight: 200,
+      maxHeight,
+      maximizable: false,
+      fullscreenable: false,
+      parent: parentWin,
+      modal: !!parentWin
+    }
+  )
+  const modalRes = await closedEventPromise
+
+  if (
+    winProps.win &&
+    !winProps.win.isDestroyed()
+  ) {
+    winProps.win.hide()
+    winProps.win.close()
+  }
+
+  return {
+    winProps,
+    modalRes
+  }
+}
+
 const createErrorWindow = async () => {
   const winProps = await _createChildWindow(
-    pathToAppInitErrorLayout,
-    WINDOW_NAMES.ERROR_WINDOW,
     {
+      pathname: pathToAppInitErrorLayout,
+      winName: WINDOW_NAMES.ERROR_WINDOW
+    },
+    {
+      width: 500,
       height: 300,
       frame: false
     }
@@ -403,5 +490,6 @@ module.exports = {
   createMainWindow,
   createErrorWindow,
   createLoadingWindow,
-  createStartupLoadingWindow
+  createStartupLoadingWindow,
+  createModalWindow
 }

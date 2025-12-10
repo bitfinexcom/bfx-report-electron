@@ -1,55 +1,17 @@
 'use strict'
 
-const { app, dialog, screen } = require('electron')
-const fs = require('fs')
-const path = require('path')
+const { app, dialog } = require('electron')
 const { Converter } = require('showdown')
-const Alert = require('electron-alert')
-const { rootPath } = require('electron-root-path')
 const i18next = require('i18next')
 
+const {
+  createModalWindow
+} = require('../window-creators')
 const wins = require('../window-creators/windows')
 const spawn = require('../helpers/spawn')
-const getAlertCustomClassObj = require(
-  '../helpers/get-alert-custom-class-obj'
-)
 const isMainWinAvailable = require(
   '../helpers/is-main-win-available'
 )
-const {
-  closeAlert
-} = require('../modal-dialog-src/utils')
-const {
-  WINDOW_EVENT_NAMES,
-  addOnceProcEventHandler
-} = require('../window-creators/window-event-manager')
-const getUIFontsAsCSSString = require(
-  '../helpers/get-ui-fonts-as-css-string'
-)
-const ThemeIpcChannelHandlers = require(
-  '../window-creators/main-renderer-ipc-bridge/theme-ipc-channel-handlers'
-)
-
-const mdStyle = fs.readFileSync(path.join(
-  rootPath, 'node_modules', 'github-markdown-css/github-markdown.css'
-))
-const fontsStyle = getUIFontsAsCSSString()
-const themesStyle = fs.readFileSync(path.join(
-  __dirname, '../window-creators/layouts/themes.css'
-))
-const alertStyle = fs.readFileSync(path.join(
-  __dirname, '../modal-dialog-src/modal-dialog.css'
-))
-const alertScript = fs.readFileSync(path.join(
-  __dirname, '../modal-dialog-src/modal-dialog.js'
-))
-
-const fonts = `<style>${fontsStyle}</style>`
-const themes = `<style>${themesStyle}</style>`
-const mdS = `<style>${mdStyle}</style>`
-const style = `<style>${alertStyle}</style>`
-const script = `<script type="text/javascript">${alertScript}</script>`
-const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
 
 const converter = new Converter({
   tables: true,
@@ -59,120 +21,26 @@ const converter = new Converter({
   requireSpaceBeforeHeadingText: true
 })
 
-const _fireAlert = (params) => {
+const _fireAlert = async (params) => {
   const {
     title = i18next.t('errorManager.errorModalDialog.title'),
     html = '',
-    parentWin,
     hasNoParentWin
   } = params ?? {}
-  const win = parentWin ?? wins.mainWindow
 
-  if (
-    !hasNoParentWin &&
-    !isMainWinAvailable(win)
-  ) {
-    return { value: false }
-  }
-
-  const {
-    getCursorScreenPoint,
-    getDisplayNearestPoint
-  } = screen
-  const {
-    workArea
-  } = getDisplayNearestPoint(getCursorScreenPoint())
-  const { height: screenHeight } = workArea
-  const maxHeight = Math.floor(screenHeight * 0.90)
-
-  const alert = new Alert([mdS, fonts, themes, style, script])
-
-  const eventHandlerCtx = addOnceProcEventHandler(
-    WINDOW_EVENT_NAMES.CLOSED,
-    () => closeAlert(alert),
-    win
-  )
-
-  const bwOptions = {
-    frame: false,
-    transparent: false,
-    thickFrame: false,
-    closable: false,
-    hasShadow: false,
-    backgroundColor: ThemeIpcChannelHandlers.getWindowBackgroundColor(),
-    darkTheme: false,
-    parent: win,
-    modal: true,
-    width: 600,
-    webPreferences: {
-      contextIsolation: false
-    }
-  }
-  const swalOptions = {
-    position: 'center',
-    allowOutsideClick: false,
-    customClass: getAlertCustomClassObj({
-      htmlContainer: 'markdown-body'
-    }),
-
-    icon: 'question',
-    focusConfirm: true,
-    showConfirmButton: true,
-    confirmButtonText: i18next.t('errorManager.errorModalDialog.confirmButtonText'),
-    showCancelButton: true,
-    cancelButtonText: i18next.t('common.cancelButtonText'),
-    timerProgressBar: false,
-
-    ...params,
+  const res = await createModalWindow({
+    icon: 'error',
     title,
-    html,
+    text: html,
+    textClassName: 'markdown-body',
+    showConfirmButton: true,
+    confirmButtonText: i18next
+      .t('errorManager.errorModalDialog.confirmButtonText'),
+    showCancelButton: true,
+    cancelButtonText: i18next.t('common.cancelButtonText')
+  }, { hasNoParentWin, height: 600 })
 
-    willOpen: () => {
-      if (
-        !alert ||
-        !alert.browserWindow
-      ) return
-
-      alert.browserWindow.hide()
-    },
-    didOpen: () => {
-      if (
-        !alert ||
-        !alert.browserWindow
-      ) return
-
-      alert.browserWindow.show()
-      const { height } = alert.browserWindow
-        .getContentBounds()
-      alert.browserWindow.setBounds({
-        height: height > maxHeight
-          ? maxHeight
-          : height
-      })
-    },
-    willClose: () => {
-      if (
-        !alert ||
-        !alert.browserWindow
-      ) return
-
-      alert.browserWindow.hide()
-    },
-    didClose: () => {
-      eventHandlerCtx.removeListener()
-    }
-  }
-
-  const res = alert.fire(
-    swalOptions,
-    bwOptions,
-    null,
-    true,
-    false,
-    sound
-  )
-
-  return res
+  return res?.modalRes ?? {}
 }
 
 module.exports = async (params) => {
@@ -207,13 +75,11 @@ module.exports = async (params) => {
   ) {
     const html = converter.makeHtml(mdIssue)
 
-    const {
-      value
-    } = await _fireAlert({ html, ...alertOpts })
+    const res = await _fireAlert({ html, ...alertOpts })
 
     return {
       isExit: false,
-      isReported: value
+      isReported: res?.dismiss === 'confirm'
     }
   }
 
