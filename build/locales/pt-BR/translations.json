@@ -154,6 +154,13 @@
       "cancelButtonText": "Fechar"
     }
   },
+  "changelog": {
+    "modalDialog": {
+      "title": "Registro de alterações v{{version}}",
+      "fullChangelogTitle": "Registro de alterações completo",
+      "confirmButtonText": "Mostrar registro de alterações completo"
+    }
+  },
   "printToPDF": {
     "defaultTemplate": "Sem dados",
     "pagination": {
