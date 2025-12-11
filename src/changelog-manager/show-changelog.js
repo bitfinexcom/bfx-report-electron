@@ -75,6 +75,7 @@ module.exports = async (params = {}) => {
       await showDocs({
         title: i18next
           .t('changelog.modalDialog.fullChangelogTitle'),
+        showWinCloseButton: true,
         mdDoc: changelog
       })
     }
