@@ -25,6 +25,7 @@ const _fireAlert = async (params) => {
     title = i18next.t('showDocs.modalDialog.title'),
     html = '',
     showConfirmButton = false,
+    showWinCloseButton = false,
     confirmButtonText = i18next.t('common.confirmButtonText')
   } = params ?? {}
 
@@ -37,6 +38,7 @@ const _fireAlert = async (params) => {
       showConfirmButton,
       confirmButtonText,
       showCancelButton: true,
+      showWinCloseButton,
       cancelButtonText: i18next
         .t('showDocs.modalDialog.cancelButtonText')
     },
@@ -56,7 +58,8 @@ module.exports = async (params) => {
       title,
       mdDoc = i18next.t('mdDocs:userManual'),
       showConfirmButton,
-      confirmButtonText
+      confirmButtonText,
+      showWinCloseButton
     } = params ?? {}
 
     if (
@@ -73,7 +76,8 @@ module.exports = async (params) => {
       title,
       html,
       showConfirmButton,
-      confirmButtonText
+      confirmButtonText,
+      showWinCloseButton
     })
   } catch (err) {
     console.error(err)
