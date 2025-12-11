@@ -16,6 +16,58 @@ body {
   font-size: 16px;
 }
 
+.window-control-btns {
+  z-index: 9;
+  position: fixed;
+  top: 0;
+  right: 0;
+  display: block;
+  margin: 0;
+  padding: 5px;
+  font-size: 0px;
+}
+
+.window-btn {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: var(--bgColor, #172d3e);
+  transition: background-color .3s;
+  cursor: pointer;
+}
+
+.window-btn__close::before,
+.window-btn__close::after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 17px; /* sqrt(12^2 + 12^2) where 12px width */
+  height: 1px;
+  background-color: var(--btnWindowAfterBg, #9b9a9a);
+  bottom: calc((11px / 2) + 9px);
+  left: calc((30px - 17px) / 2);
+}
+
+.window-btn__close::before {
+  transform: rotate(45deg);
+}
+
+.window-btn__close::after {
+  transform: rotate(-45deg);
+}
+
+.window-btn:hover,
+.window-btn:active,
+.window-btn:focus {
+  background-color: var(--btnWindowHoverBg, #9b9a9a);
+}
+
+.window-btn--disabled {
+  display: none;
+}
+
 body::-webkit-scrollbar,
 .markdown-body pre::-webkit-scrollbar {
   width: 8px;
