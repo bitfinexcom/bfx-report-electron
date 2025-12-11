@@ -413,6 +413,7 @@ const createStartupLoadingWindow = async () => {
 }
 
 const createModalWindow = async (args, opts) => {
+  const shouldDevToolsBeShown = opts?.shouldDevToolsBeShown
   const parentWin = (
     opts?.hasNoParentWin ||
     !wins?.[WINDOW_NAMES.MAIN_WINDOW] ||
@@ -428,12 +429,14 @@ const createModalWindow = async (args, opts) => {
   const width = opts?.width ?? 600
   const shouldWinBeClosedIfClickingOutside = (
     parentWin &&
-    opts?.shouldWinBeClosedIfClickingOutside
+    opts?.shouldWinBeClosedIfClickingOutside &&
+    !shouldDevToolsBeShown
   )
 
   let closedEventPromise = {}
   const winProps = await _createChildWindow(
     {
+      shouldDevToolsBeShown,
       pathname: pathToModalLayout,
       winName: WINDOW_NAMES.MODAL_WINDOW,
       didFinishLoadHook: async (win) => {
