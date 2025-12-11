@@ -459,6 +459,7 @@ const createModalWindow = async (args, opts) => {
       maxHeight,
       maximizable: false,
       fullscreenable: false,
+      minimizable: false,
       parent: parentWin,
       modal: !!parentWin
     }
