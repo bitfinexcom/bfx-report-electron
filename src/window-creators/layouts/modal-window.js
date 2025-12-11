@@ -47,6 +47,7 @@ window.addEventListener('load', async () => {
 
   try {
     const modalElem = document.getElementById('modal')
+    const closeBtnElem = document.getElementById('closeBtn')
     let toastId = null
     let timeout = null
 
@@ -83,7 +84,8 @@ window.addEventListener('load', async () => {
         cancelButtonText = 'Cancel',
         confirmHotkey = 'Enter',
         containerClassName = '',
-        textClassName = ''
+        textClassName = '',
+        showWinCloseButton = false
       } = args ?? {}
       const elems = []
       const btnElems = []
@@ -101,6 +103,18 @@ window.addEventListener('load', async () => {
         typeof containerClassName === 'string'
       ) {
         modalElem.classList.add(containerClassName)
+      }
+      if (showWinCloseButton) {
+        closeBtnElem.addEventListener('click', (e) => {
+          finalizeModalWindow({
+            dismiss: DISMISS_REASONS.CANCEL,
+            toastId: args?.toastId
+          }, e)
+        })
+
+        closeBtnElem.classList.remove('window-btn--disabled')
+      } else {
+        closeBtnElem.classList.add('window-btn--disabled')
       }
 
       const iconHTML = iconMap[icon]
