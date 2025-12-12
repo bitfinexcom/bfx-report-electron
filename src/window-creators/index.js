@@ -474,7 +474,7 @@ const createModalWindow = async (args, opts) => {
       winProps.win.once('closed', resolve)
     })
     winProps.win.hide()
-    winProps.win.close()
+    winProps.win.destroy()
     await closedWinPromise
   }
 
