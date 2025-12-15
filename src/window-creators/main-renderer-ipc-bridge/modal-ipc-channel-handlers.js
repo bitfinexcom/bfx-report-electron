@@ -22,6 +22,10 @@ class ModalIpcChannelHandlers extends IpcChannelHandlers {
     return this.handleListener(this.onModalClosedEvent, cb)
   }
 
+  static sendCloseModalEvent (win, args) {
+    return this.sendToRenderer(this.sendCloseModalEvent, win, args)
+  }
+
   static async sendFireModalEvent (win, args) {
     if (!args?.preventSettingHeightToContent) {
       this.isModalReadyToBeShownControlObj

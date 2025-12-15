@@ -413,6 +413,7 @@ const createStartupLoadingWindow = async () => {
 }
 
 const createModalWindow = async (args, opts) => {
+  const shouldDevToolsBeShown = opts?.shouldDevToolsBeShown
   const parentWin = (
     opts?.hasNoParentWin ||
     !wins?.[WINDOW_NAMES.MAIN_WINDOW] ||
@@ -426,13 +427,25 @@ const createModalWindow = async (args, opts) => {
   const { height: screenHeight } = workArea
   const maxHeight = Math.floor(screenHeight * 0.90)
   const width = opts?.width ?? 600
+  const shouldWinBeClosedIfClickingOutside = (
+    parentWin &&
+    opts?.shouldWinBeClosedIfClickingOutside &&
+    !shouldDevToolsBeShown
+  )
 
   let closedEventPromise = {}
   const winProps = await _createChildWindow(
     {
+      shouldDevToolsBeShown,
       pathname: pathToModalLayout,
       winName: WINDOW_NAMES.MODAL_WINDOW,
       didFinishLoadHook: async (win) => {
+        if (shouldWinBeClosedIfClickingOutside) {
+          win.once('blur', () => {
+            ModalIpcChannelHandlers.sendCloseModalEvent(win)
+          })
+        }
+
         closedEventPromise = ModalIpcChannelHandlers
           .sendFireModalEvent(win, args)
         await ModalIpcChannelHandlers
@@ -446,6 +459,7 @@ const createModalWindow = async (args, opts) => {
       maxHeight,
       maximizable: false,
       fullscreenable: false,
+      minimizable: false,
       parent: parentWin,
       modal: !!parentWin
     }
@@ -456,8 +470,12 @@ const createModalWindow = async (args, opts) => {
     winProps.win &&
     !winProps.win.isDestroyed()
   ) {
+    const closedWinPromise = new Promise((resolve) => {
+      winProps.win.once('closed', resolve)
+    })
     winProps.win.hide()
-    winProps.win.close()
+    winProps.win.destroy()
+    await closedWinPromise
   }
 
   return {

@@ -154,6 +154,13 @@
       "cancelButtonText": "關閉"
     }
   },
+  "changelog": {
+    "modalDialog": {
+      "title": "更新日誌 v{{version}}",
+      "fullChangelogTitle": "完整更新日誌",
+      "confirmButtonText": "顯示完整更新日誌"
+    }
+  },
   "printToPDF": {
     "defaultTemplate": "無資料",
     "pagination": {

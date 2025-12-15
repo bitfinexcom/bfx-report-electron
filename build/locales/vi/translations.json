@@ -154,6 +154,13 @@
       "cancelButtonText": "Đóng"
     }
   },
+  "changelog": {
+    "modalDialog": {
+      "title": "Nhật ký thay đổi v{{version}}",
+      "fullChangelogTitle": "Nhật ký thay đổi đầy đủ",
+      "confirmButtonText": "Hiển thị nhật ký thay đổi đầy đủ"
+    }
+  },
   "printToPDF": {
     "defaultTemplate": "Không có dữ liệu",
     "pagination": {
