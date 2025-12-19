@@ -154,6 +154,13 @@
       "cancelButtonText": "Close"
     }
   },
+  "changelog": {
+    "modalDialog": {
+      "title": "Changelog v{{version}}",
+      "fullChangelogTitle": "Full Changelog",
+      "confirmButtonText": "Show Full Changelog"
+    }
+  },
   "printToPDF": {
     "defaultTemplate": "No data",
     "pagination": {

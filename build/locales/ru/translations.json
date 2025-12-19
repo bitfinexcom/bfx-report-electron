@@ -154,6 +154,13 @@
       "cancelButtonText": "Закрыть"
     }
   },
+  "changelog": {
+    "modalDialog": {
+      "title": "Журнал Изменений v{{version}}",
+      "fullChangelogTitle": "Полный Журнал Изменений",
+      "confirmButtonText": "Показать Полный Журнал"
+    }
+  },
   "printToPDF": {
     "defaultTemplate": "Нет данных",
     "pagination": {
