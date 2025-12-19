@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.40.1] - 2025-12-19
+
+### Changed
+
+- Used and adapted the implemented modal window for the `show-docs` module instead of the `electron-alert` library. This module is used for showing the `changelog` and the `user manual`. PR: [bfx-report-electron#575](https://github.com/bitfinexcom/bfx-report-electron/pull/575)
+- Reworked and optimized `BalancePrecisionSelector` in a more performant way. PR: [bfx-report-ui#1001](https://github.com/bitfinexcom/bfx-report-ui/pull/1001)
+
+### Fixed
+
+- Reverted [(improvements) USDT0 support and currencies mapping flow](https://github.com/bitfinexcom/bfx-report-ui/pull/992) as a quick fix for the `USDt` mapping flow issues noted after this update. PR: [bfx-report-ui#1002](https://github.com/bitfinexcom/bfx-report-ui/pull/1002)
+
 ## [4.40.0] - 2025-12-17
 
 ### Added
