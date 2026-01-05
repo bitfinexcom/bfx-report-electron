@@ -12,7 +12,7 @@ const DB_FILE_NAME = `db-sqlite_sync${stagingLabel}_m0.db`
 const DB_SHM_FILE_NAME = `${DB_FILE_NAME}-shm`
 const DB_WAL_FILE_NAME = `${DB_FILE_NAME}-wal`
 const SECRET_KEY_FILE_NAME = `secret-key${stagingLabel}`
-const REPORT_FILES_PATH_VERSION = 1
+const REPORT_FILES_PATH_VERSION = 2
 
 module.exports = {
   CONFIGS_FILE_NAME,
