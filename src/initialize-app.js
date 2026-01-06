@@ -75,8 +75,7 @@ const _resetReportFilesPath = async (
 
   // Need to use a new report folder path for export
   const reportFilesPathVersion = configsKeeper
-    .getConfigByName('reportFilesPathVersion') ??
-    configsKeeper.getConfigByName('csvPathVersion') // For back compatibility
+    .getConfigByName('reportFilesPathVersion')
 
   if (reportFilesPathVersion === REPORT_FILES_PATH_VERSION) {
     return
