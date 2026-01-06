@@ -4,6 +4,7 @@ const { app } = require('electron')
 const path = require('path')
 const i18next = require('i18next')
 
+const isMac = process.platform === 'darwin'
 const { REPORT_FILES_PATH_VERSION } = require('./const')
 
 const TranslationIpcChannelHandlers = require(
@@ -74,8 +75,7 @@ const _resetReportFilesPath = async (
 
   // Need to use a new report folder path for export
   const reportFilesPathVersion = configsKeeper
-    .getConfigByName('reportFilesPathVersion') ??
-    configsKeeper.getConfigByName('csvPathVersion') // For back compatibility
+    .getConfigByName('reportFilesPathVersion')
 
   if (reportFilesPathVersion === REPORT_FILES_PATH_VERSION) {
     return
@@ -135,16 +135,19 @@ const _ipcMessToPromise = (ipc) => {
   })
 }
 
-const _manageConfigs = (params = {}) => {
+const _manageConfigs = (params) => {
   const {
     pathToUserData,
-    pathToUserDocuments
-  } = params
-
-  const pathToUserReportFiles = path.join(
     pathToUserDocuments,
-    'bitfinex/reports'
-  )
+    pathToUserDownloads
+  } = params ?? {}
+
+  const pathToUserReportFiles = isMac
+    ? pathToUserDownloads
+    : path.join(
+      pathToUserDocuments,
+      'bitfinex/reports'
+    )
 
   const configsKeeper = configsKeeperFactory(
     { pathToUserData },
@@ -190,10 +193,12 @@ module.exports = async () => {
 
     const pathToUserData = getUserDataPath()
     const pathToUserDocuments = app.getPath('documents')
+    const pathToUserDownloads = app.getPath('downloads')
 
     const configsKeeper = _manageConfigs({
       pathToUserData,
-      pathToUserDocuments
+      pathToUserDocuments,
+      pathToUserDownloads
     })
     const savedTheme = configsKeeper.getConfigByName('theme')
     const savedLanguage = configsKeeper.getConfigByName('language')

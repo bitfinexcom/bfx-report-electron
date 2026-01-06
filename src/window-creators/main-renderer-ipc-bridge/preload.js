@@ -18,7 +18,8 @@ const GENERAL_INVOKE_METHOD_NAMES = {
   MINIMIZE_LOADING_WINDOW: 'minimizeLoadingWindow',
   CLOSE_LOADING_WINDOW: 'closeLoadingWindow',
   MINIMIZE_STARTUP_LOADING_WINDOW: 'minimizeStartupLoadingWindow',
-  CLOSE_STARTUP_LOADING_WINDOW: 'closeStartupLoadingWindow'
+  CLOSE_STARTUP_LOADING_WINDOW: 'closeStartupLoadingWindow',
+  SHOW_ITEM_IN_FOLDER: 'showItemInFolder'
 }
 const GENERAL_EVENT_METHOD_NAMES = {
   ON_LOADING_DESCRIPTION: 'onLoadingDescription',

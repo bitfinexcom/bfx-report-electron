@@ -1,6 +1,7 @@
 'use strict'
 
-const { app } = require('electron')
+const { app, shell } = require('electron')
+const fs = require('node:fs/promises')
 
 const wins = require('../windows')
 const WINDOW_NAMES = require('../window.names')
@@ -53,6 +54,32 @@ class GeneralIpcChannelHandlers extends IpcChannelHandlers {
 
   static sendStartupLoadingBtnStates (win, args) {
     return this.sendToRenderer(this.sendStartupLoadingBtnStates, win, args)
+  }
+
+  async showItemInFolderHandler (event, args) {
+    const { fullPath } = args ?? {}
+
+    if (
+      !fullPath ||
+      typeof fullPath !== 'string'
+    ) {
+      return false
+    }
+
+    const stat = await fs.stat(fullPath)
+
+    if (stat.isFile()) {
+      shell.showItemInFolder(fullPath)
+
+      return true
+    }
+    if (stat.isDirectory()) {
+      await shell.openPath(fullPath)
+
+      return true
+    }
+
+    return false
   }
 }
 
