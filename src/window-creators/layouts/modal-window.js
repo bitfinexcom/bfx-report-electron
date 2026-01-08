@@ -85,7 +85,8 @@ window.addEventListener('load', async () => {
         confirmHotkey = 'Enter',
         containerClassName = '',
         textClassName = '',
-        showWinCloseButton = false
+        showWinCloseButton = false,
+        inputRadioOptions = []
       } = args ?? {}
       const elems = []
       const btnElems = []
@@ -134,6 +135,29 @@ window.addEventListener('load', async () => {
           : ''
 
         elems.push(`<div class="modal__text${className}">${text}</div>`)
+      }
+      if (
+        Array.isArray(inputRadioOptions) &&
+        inputRadioOptions.length > 0
+      ) {
+        for (const inputRadioOpt of inputRadioOptions) {
+          if (
+            !inputRadioOpt ||
+            typeof inputRadioOpt !== 'object' ||
+            (
+              typeof inputRadioOpt.value !== 'string' &&
+              !Number.isFinite(inputRadioOpt.value)
+            )
+          ) {
+            continue
+          }
+
+          elems.push(`<label class="input-radio"><input\
+${inputRadioOpt?.checked ? ' checked' : ''} \
+value="${inputRadioOpt?.value}" \
+type="radio" \
+name="input-radio">${inputRadioOpt?.label ?? inputRadioOpt?.value}</label>`)
+        }
       }
       if (showConfirmButton) {
         btnElems.push(`<button\
