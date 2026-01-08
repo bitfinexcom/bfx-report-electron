@@ -51,9 +51,24 @@ window.addEventListener('load', async () => {
     let toastId = null
     let timeout = null
 
+    const getInputRadioValue = () => {
+      const radioElems = document.getElementsByName('input-radio')
+
+      for (const radioElem of radioElems) {
+        if (!radioElem.checked) {
+          continue
+        }
+
+        return radioElem.value
+      }
+
+      return null
+    }
+
     const sendModalClosedEvent = (args) => {
       window.bfxReportElectronApi?.sendModalClosedEvent({
         dismiss: DISMISS_REASONS.CANCEL,
+        inputRadioValue: getInputRadioValue(),
 
         ...args
       })
