@@ -194,12 +194,22 @@ body::-webkit-scrollbar-thumb,
   border: 1px solid var(--borderColor, #334A59);
 }
 
+.modal__radio-inputs {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal__radio-inputs--inline {
+  flex-direction: row;
+}
+
 .modal__input {
   background: none;
   line-height: 1;
   display: flex ;
   justify-content: center;
   align-items: center;
+  margin: 10px;
 }
 
 .modal__input:has(input[type=radio]) {
