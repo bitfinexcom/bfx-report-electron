@@ -50,7 +50,7 @@ const _fireAlert = async (params) => {
       inputRadioOptions
     },
     {
-      width: 1000,
+      width: 600,
       height: 600,
       shouldWinBeClosedIfClickingOutside: true
     }
