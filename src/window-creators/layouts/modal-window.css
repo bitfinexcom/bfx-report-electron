@@ -194,6 +194,43 @@ body::-webkit-scrollbar-thumb,
   border: 1px solid var(--borderColor, #334A59);
 }
 
+.modal__input {
+  background: none;
+  line-height: 1;
+  display: flex ;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal__input:has(input[type=radio]) {
+  cursor: pointer;
+}
+
+.modal__input input[type=radio] {
+  appearance: none;
+  line-height: 1;
+  margin: 0 10px 0 0;
+  border: 2px solid var(--radioInputBorder, #f5f2f2);
+  background-color: transparent;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  border-radius: 14px;
+  transition: all 0.3s;
+}
+
+.modal__input input[type=radio]:focus {
+  outline: none;
+}
+
+.modal__input input[type=radio]:hover {
+  background-color: var(--radioInputBgHover, #19354a);
+}
+
+.modal__input input[type=radio]:checked {
+  background-color: var(--radioInputBgActive, #82baf6);
+}
+
 .markdown-body {
   font-family: "Inter", sans-serif;
   padding: 1em;
