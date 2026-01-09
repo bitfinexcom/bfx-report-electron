@@ -101,10 +101,12 @@ window.addEventListener('load', async () => {
         containerClassName = '',
         textClassName = '',
         showWinCloseButton = false,
-        inputRadioOptions = []
+        inputRadioOptions = [],
+        makeInputRadioInline = false
       } = args ?? {}
       const elems = []
       const btnElems = []
+      const inputRadioElems = []
       const _confirmHotkey = (
         confirmHotkey &&
         typeof confirmHotkey === 'string' &&
@@ -167,7 +169,7 @@ window.addEventListener('load', async () => {
             continue
           }
 
-          elems.push(`<label class="modal__input"><input\
+          inputRadioElems.push(`<label class="modal__input"><input\
 ${inputRadioOpt?.checked ? ' checked' : ''} \
 value="${inputRadioOpt?.value}" \
 type="radio" \
@@ -185,6 +187,11 @@ class="modal__btn modal__btn--confirm">${confirmButtonText}</button>`)
 ${focusCancel ? ' autofocus' : ''} \
 id="cancelBtn" \
 class="modal__btn modal__btn--cancel">${cancelButtonText}</button>`)
+      }
+      if (inputRadioElems.length > 0) {
+        elems.push(`<div \
+class="modal__radio-inputs${makeInputRadioInline ? ' modal__radio-inputs--inline' : ''}">\
+${inputRadioElems.join('\n')}</div>`)
       }
       if (btnElems.length > 0) {
         elems.push(`<div class="modal__btns">${btnElems.join('\n')}</div>`)
