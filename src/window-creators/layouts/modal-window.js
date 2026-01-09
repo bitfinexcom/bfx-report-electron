@@ -167,7 +167,7 @@ window.addEventListener('load', async () => {
             continue
           }
 
-          elems.push(`<label class="input-radio"><input\
+          elems.push(`<label class="modal__input"><input\
 ${inputRadioOpt?.checked ? ' checked' : ''} \
 value="${inputRadioOpt?.value}" \
 type="radio" \
