@@ -65,10 +65,26 @@ window.addEventListener('load', async () => {
       return null
     }
 
+    const getInputCheckboxValue = () => {
+      const radioElems = document.getElementsByName('input-checkbox')
+      const res = []
+
+      for (const radioElem of radioElems) {
+        if (!radioElem.checked) {
+          continue
+        }
+
+        res.push(radioElem.value)
+      }
+
+      return res
+    }
+
     const sendModalClosedEvent = (args) => {
       window.bfxReportElectronApi?.sendModalClosedEvent({
         dismiss: DISMISS_REASONS.CANCEL,
         inputRadioValue: getInputRadioValue(),
+        inputCheckboxValue: getInputCheckboxValue(),
 
         ...args
       })
@@ -102,11 +118,14 @@ window.addEventListener('load', async () => {
         textClassName = '',
         showWinCloseButton = false,
         inputRadioOptions = [],
-        makeInputRadioInline = false
+        makeInputRadioInline = false,
+        inputCheckboxOptions = [],
+        makeInputCheckboxInline = false
       } = args ?? {}
       const elems = []
       const btnElems = []
       const inputRadioElems = []
+      const inputCheckboxElems = []
       const _confirmHotkey = (
         confirmHotkey &&
         typeof confirmHotkey === 'string' &&
@@ -176,6 +195,29 @@ type="radio" \
 name="input-radio">${inputRadioOpt?.label ?? inputRadioOpt?.value}</label>`)
         }
       }
+      if (
+        Array.isArray(inputCheckboxOptions) &&
+        inputCheckboxOptions.length > 0
+      ) {
+        for (const inputCheckboxOpt of inputCheckboxOptions) {
+          if (
+            !inputCheckboxOpt ||
+            typeof inputCheckboxOpt !== 'object' ||
+            (
+              typeof inputCheckboxOpt.value !== 'string' &&
+              !Number.isFinite(inputCheckboxOpt.value)
+            )
+          ) {
+            continue
+          }
+
+          inputCheckboxElems.push(`<label class="modal__input"><input\
+${inputCheckboxOpt?.checked ? ' checked' : ''} \
+value="${inputCheckboxOpt?.value}" \
+type="checkbox" \
+name="input-checkbox">${inputCheckboxOpt?.label ?? inputCheckboxOpt?.value}</label>`)
+        }
+      }
       if (showConfirmButton) {
         btnElems.push(`<button\
 ${focusConfirm ? ' autofocus' : ''} \
@@ -192,6 +234,11 @@ class="modal__btn modal__btn--cancel">${cancelButtonText}</button>`)
         elems.push(`<div \
 class="modal__radio-inputs${makeInputRadioInline ? ' modal__radio-inputs--inline' : ''}">\
 ${inputRadioElems.join('\n')}</div>`)
+      }
+      if (inputCheckboxElems.length > 0) {
+        elems.push(`<div \
+class="modal__checkbox-inputs${makeInputCheckboxInline ? ' modal__checkbox-inputs--inline' : ''}">\
+${inputCheckboxElems.join('\n')}</div>`)
       }
       if (btnElems.length > 0) {
         elems.push(`<div class="modal__btns">${btnElems.join('\n')}</div>`)
