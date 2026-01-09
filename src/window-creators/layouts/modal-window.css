@@ -194,12 +194,14 @@ body::-webkit-scrollbar-thumb,
   border: 1px solid var(--borderColor, #334A59);
 }
 
-.modal__radio-inputs {
+.modal__radio-inputs,
+.modal__checkbox-inputs {
   display: flex;
   flex-direction: column;
 }
 
-.modal__radio-inputs--inline {
+.modal__radio-inputs--inline,
+.modal__checkbox-inputs--inline {
   flex-direction: row;
 }
 
@@ -212,11 +214,13 @@ body::-webkit-scrollbar-thumb,
   margin: 10px;
 }
 
-.modal__input:has(input[type=radio]) {
+.modal__input:has(input[type=radio]),
+.modal__input:has(input[type=checkbox]) {
   cursor: pointer;
 }
 
-.modal__input input[type=radio] {
+.modal__input input[type=radio],
+.modal__input input[type=checkbox] {
   appearance: none;
   line-height: 1;
   margin: 0 10px 0 0;
@@ -229,15 +233,22 @@ body::-webkit-scrollbar-thumb,
   transition: all 0.3s;
 }
 
-.modal__input input[type=radio]:focus {
+.modal__input input[type=checkbox] {
+  border-radius: 4px;
+}
+
+.modal__input input[type=radio]:focus,
+.modal__input input[type=checkbox]:focus {
   outline: none;
 }
 
-.modal__input input[type=radio]:hover {
+.modal__input input[type=radio]:hover,
+.modal__input input[type=checkbox]:hover {
   background-color: var(--radioInputBgHover, #19354a);
 }
 
-.modal__input input[type=radio]:checked {
+.modal__input input[type=radio]:checked,
+.modal__input input[type=checkbox]:checked {
   background-color: var(--radioInputBgActive, #82baf6);
 }
 
