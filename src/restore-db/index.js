@@ -36,7 +36,7 @@ const _fireAlert = async (params) => {
       value: item?.name,
       checked: i === 0
     }
-  }, [])
+  })
 
   const res = await createModalWindow(
     {
