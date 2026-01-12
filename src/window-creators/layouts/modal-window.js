@@ -188,11 +188,16 @@ window.addEventListener('load', async () => {
             continue
           }
 
-          inputRadioElems.push(`<label class="modal__input"><input\
-${inputRadioOpt?.checked ? ' checked' : ''} \
-value="${inputRadioOpt?.value}" \
-type="radio" \
-name="input-radio">${inputRadioOpt?.label ?? inputRadioOpt?.value}</label>`)
+          inputRadioElems.push(`
+            <label class="modal__input">
+              <input
+                ${inputRadioOpt?.checked ? ' checked' : ''}
+                value="${inputRadioOpt?.value}"
+                type="radio"
+                name="input-radio">
+              ${inputRadioOpt?.label ?? inputRadioOpt?.value}
+            </label>
+          `)
         }
       }
       if (
@@ -211,11 +216,16 @@ name="input-radio">${inputRadioOpt?.label ?? inputRadioOpt?.value}</label>`)
             continue
           }
 
-          inputCheckboxElems.push(`<label class="modal__input"><input\
-${inputCheckboxOpt?.checked ? ' checked' : ''} \
-value="${inputCheckboxOpt?.value}" \
-type="checkbox" \
-name="input-checkbox">${inputCheckboxOpt?.label ?? inputCheckboxOpt?.value}</label>`)
+          inputCheckboxElems.push(`
+            <label class="modal__input">
+              <input
+                ${inputCheckboxOpt?.checked ? ' checked' : ''}
+                value="${inputCheckboxOpt?.value}"
+                type="checkbox"
+                name="input-checkbox">
+              ${inputCheckboxOpt?.label ?? inputCheckboxOpt?.value}
+            </label>
+          `)
         }
       }
       if (showConfirmButton) {
