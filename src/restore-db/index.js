@@ -1,52 +1,25 @@
 'use strict'
 
-const { app, screen, remote } = require('electron')
-const fs = require('fs')
-const path = require('path')
-const Alert = require('electron-alert')
+const { app } = require('electron')
 const i18next = require('i18next')
 
 const ipcs = require('../ipcs')
 const wins = require('../window-creators/windows')
+const {
+  createModalWindow
+} = require('../window-creators')
 const {
   deserializeError
 } = require('../helpers/utils')
 const isMainWinAvailable = require(
   '../helpers/is-main-win-available'
 )
-const getAlertCustomClassObj = require(
-  '../helpers/get-alert-custom-class-obj'
-)
-const getUIFontsAsCSSString = require(
-  '../helpers/get-ui-fonts-as-css-string'
-)
 const showMessageModalDialog = require(
   '../show-message-modal-dialog'
 )
 const {
-  closeAlert
-} = require('../modal-dialog-src/utils')
-const {
   DbRestoringError
 } = require('../errors')
-const {
-  WINDOW_EVENT_NAMES,
-  addOnceProcEventHandler
-} = require('../window-creators/window-event-manager')
-const ThemeIpcChannelHandlers = require(
-  '../window-creators/main-renderer-ipc-bridge/theme-ipc-channel-handlers'
-)
-
-const fontsStyle = getUIFontsAsCSSString()
-const themesStyle = fs.readFileSync(path.join(
-  __dirname, '../window-creators/layouts/themes.css'
-))
-const alertStyle = fs.readFileSync(path.join(
-  __dirname, '../modal-dialog-src/modal-dialog.css'
-))
-const alertScript = fs.readFileSync(path.join(
-  __dirname, '../modal-dialog-src/modal-dialog.js'
-))
 
 const PROCESS_MESSAGES = require(
   '../../bfx-reports-framework/workers/loc.api/process.message.manager/process.messages'
@@ -55,130 +28,35 @@ const PROCESS_STATES = require(
   '../../bfx-reports-framework/workers/loc.api/process.message.manager/process.states'
 )
 
-const fonts = `<style>${fontsStyle}</style>`
-const themes = `<style>${themesStyle}</style>`
-const style = `<style>${alertStyle}</style>`
-const script = `<script type="text/javascript">${alertScript}</script>`
-const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
-
-const _fireAlert = (params) => {
-  const {
-    title = i18next.t('restoreDB.modalDialog.title'),
-    backupFilesMetadata
-  } = params
-  const win = wins.mainWindow
-
-  if (!isMainWinAvailable()) {
-    return { value: false }
-  }
-
-  const inputOptions = backupFilesMetadata.reduce((accum, item) => {
-    accum[item?.name] = item?.name
-
-    return accum
-  }, {})
-  const inputValue = backupFilesMetadata[0]?.name
-
-  const _screen = screen || remote.screen
-  const {
-    getCursorScreenPoint,
-    getDisplayNearestPoint
-  } = _screen
-  const {
-    workArea
-  } = getDisplayNearestPoint(getCursorScreenPoint())
-  const { height: screenHeight } = workArea
-  const maxHeight = Math.floor(screenHeight * 0.90)
-
-  const alert = new Alert([fonts, themes, style, script])
-
-  const eventHandlerCtx = addOnceProcEventHandler(
-    WINDOW_EVENT_NAMES.CLOSED,
-    () => closeAlert(alert)
-  )
-
-  const bwOptions = {
-    resizable: true,
-    frame: false,
-    transparent: false,
-    thickFrame: false,
-    closable: false,
-    hasShadow: false,
-    backgroundColor: ThemeIpcChannelHandlers.getWindowBackgroundColor(),
-    darkTheme: false,
-    parent: win,
-    modal: true,
-    minWidth: 1000
-  }
-  const swalOptions = {
-    position: 'center',
-    allowOutsideClick: false,
-    customClass: getAlertCustomClassObj({
-      title: 'titleColor',
-      container: 'textColor',
-      htmlContainer: 'select-db-backup ',
-      input: 'textColor radioInput'
-    }),
-
-    icon: 'question',
-    title,
-    showConfirmButton: true,
-    focusCancel: true,
-    showCancelButton: true,
-    confirmButtonText: i18next.t('common.confirmButtonText'),
-    cancelButtonText: i18next.t('common.cancelButtonText'),
-    timerProgressBar: false,
-
-    input: 'radio',
-    inputValue,
-    inputOptions,
-
-    willOpen: () => {
-      if (
-        !alert ||
-        !alert.browserWindow
-      ) return
-
-      alert.browserWindow.hide()
-    },
-    didOpen: () => {
-      if (
-        !alert ||
-        !alert.browserWindow
-      ) return
-
-      alert.browserWindow.show()
-      const { height } = alert.browserWindow
-        .getContentBounds()
-      alert.browserWindow.setBounds({
-        height: height > maxHeight
-          ? maxHeight
-          : height
-      })
-    },
-    willClose: () => {
-      if (
-        !alert ||
-        !alert.browserWindow
-      ) return
-
-      alert.browserWindow.hide()
-    },
-    didClose: () => {
-      eventHandlerCtx.removeListener()
+const _fireAlert = async (params) => {
+  const { backupFilesMetadata } = params ?? {}
+  const inputRadioOptions = backupFilesMetadata.map((item, i) => {
+    return {
+      label: item?.name,
+      value: item?.name,
+      checked: i === 0
     }
-  }
+  })
 
-  const res = alert.fire(
-    swalOptions,
-    bwOptions,
-    null,
-    true,
-    false,
-    sound
+  const res = await createModalWindow(
+    {
+      icon: 'question',
+      title: i18next.t('restoreDB.modalDialog.title'),
+      showConfirmButton: true,
+      confirmButtonText: i18next.t('common.confirmButtonText'),
+      showCancelButton: true,
+      cancelButtonText: i18next.t('common.cancelButtonText'),
+      focusCancel: true,
+      inputRadioOptions
+    },
+    {
+      width: 600,
+      height: 600,
+      shouldWinBeClosedIfClickingOutside: true
+    }
   )
 
-  return res
+  return res?.modalRes ?? {}
 }
 
 const _getBackupFilesMetadata = (ipc) => {
@@ -255,16 +133,13 @@ module.exports = () => {
 
       const res = await _fireAlert({ backupFilesMetadata })
 
-      if (
-        !res?.value ||
-        typeof res?.value !== 'string'
-      ) {
+      if (res?.dismiss !== 'confirm') {
         return
       }
 
       ipcs.serverIpc.send({
         state: PROCESS_STATES.RESTORE_DB,
-        data: { name: res.value }
+        data: { name: res.inputRadioValue }
       })
     } catch (err) {
       console.error(err)
