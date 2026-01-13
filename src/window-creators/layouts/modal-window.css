@@ -195,13 +195,16 @@ body::-webkit-scrollbar-thumb,
 }
 
 .modal__radio-inputs,
-.modal__checkbox-inputs {
+.modal__checkbox-inputs,
+.modal__range-inputs {
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 
 .modal__radio-inputs--inline,
-.modal__checkbox-inputs--inline {
+.modal__checkbox-inputs--inline,
+.modal__range-inputs--inline {
   flex-direction: row;
 }
 
@@ -212,6 +215,7 @@ body::-webkit-scrollbar-thumb,
   justify-content: center;
   align-items: center;
   margin: 10px;
+  width: -webkit-fill-available;
 }
 
 .modal__input:has(input[type=radio]),
@@ -233,12 +237,43 @@ body::-webkit-scrollbar-thumb,
   transition: all 0.3s;
 }
 
+.modal__input input[type=range] {
+  margin: 0 10px 0 0;
+  background-color: transparent;
+  border: 0.2px solid var(--rangeInputBorder, #334A59);
+  border-radius: 1.3px;
+  height: 6.4px;
+  width: -webkit-fill-available;
+  appearance: none;
+}
+
+.modal__input input[type=range]::-webkit-slider-runnable-track {
+  background-color: transparent;
+  width: 100%;
+  height: 6.4px;
+  cursor: pointer;
+  appearance: none;
+}
+
+.modal__input input[type=range]::-webkit-slider-thumb {
+  margin-top: -10.8px;
+  width: 28px;
+  height: 28px;
+  background-color: var(--rangeInputBgActive, #3085d6);
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  appearance: none;
+  box-shadow: -800px 0 0 -10.8px var(--rangeInputBgActive, #82baf6);
+}
+
 .modal__input input[type=checkbox] {
   border-radius: 4px;
 }
 
 .modal__input input[type=radio]:focus,
-.modal__input input[type=checkbox]:focus {
+.modal__input input[type=checkbox]:focus,
+.modal__input input[type=range]:focus {
   outline: none;
 }
 
