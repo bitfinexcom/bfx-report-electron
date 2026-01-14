@@ -129,7 +129,9 @@ window.addEventListener('load', async () => {
         inputCheckboxOptions = [],
         makeInputCheckboxInline = false,
         inputRangeOptions = [],
-        makeInputRangeInline = false
+        makeInputRangeInline = false,
+        progressSteps = [],
+        currentProgressStep = 0
       } = args ?? {}
       const elems = []
       const btnElems = []
@@ -166,6 +168,32 @@ window.addEventListener('load', async () => {
 
       const iconHTML = iconMap[icon]
 
+      if (
+        Array.isArray(progressSteps) &&
+        progressSteps.length > 0
+      ) {
+        const progressStepElems = []
+        const currStep = Number.isInteger(currentProgressStep)
+          ? currentProgressStep
+          : 0
+
+        for (const [i, progressStep] of progressSteps.entries()) {
+          const isActive = i <= currStep
+
+          progressStepElems.push(`
+            <div class="modal__progress-step${isActive ? ' modal__progress-step--active' : ''}">
+              <span class="modal__progress-step-separator"></span>
+              <span class="modal__progress-step-number">${progressStep}</span>
+            </div>
+          `)
+        }
+
+        elems.push(`
+          <div class="modal__progress-steps">
+            ${progressStepElems.join('\n')}
+          </div>
+        `)
+      }
       if (iconHTML) {
         elems.push(iconHTML)
       }
