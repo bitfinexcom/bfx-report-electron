@@ -178,10 +178,12 @@ window.addEventListener('load', async () => {
           : 0
 
         for (const [i, progressStep] of progressSteps.entries()) {
-          const isActive = i <= currStep
+          const activeClassName = i <= currStep
+            ? ' modal__progress-step--active'
+            : ''
 
           progressStepElems.push(`
-            <div class="modal__progress-step${isActive ? ' modal__progress-step--active' : ''}">
+            <div class="modal__progress-step${activeClassName}">
               <span class="modal__progress-step-separator"></span>
               <span class="modal__progress-step-number">${progressStep}</span>
             </div>
