@@ -259,7 +259,7 @@ body::-webkit-scrollbar-thumb,
   margin-top: -10.8px;
   width: 28px;
   height: 28px;
-  background-color: var(--rangeInputBgActive, #3085d6);
+  background-color: var(--rangeInputBgActive, #82baf6);
   border: none;
   border-radius: 14px;
   cursor: pointer;
@@ -285,6 +285,56 @@ body::-webkit-scrollbar-thumb,
 .modal__input input[type=radio]:checked,
 .modal__input input[type=checkbox]:checked {
   background-color: var(--radioInputBgActive, #82baf6);
+}
+
+.modal__progress-steps {
+  background: none;
+  line-height: 1;
+  display: flex ;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 10px 10px 40px;
+  width: -webkit-fill-available;
+}
+
+.modal__progress-step {
+  background: none;
+  line-height: 1;
+  display: flex ;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+.modal__progress-step-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 14px;
+}
+
+.modal__progress-step-separator {
+  width: 30px;
+  height: 6px;
+}
+
+.modal__progress-step-number,
+.modal__progress-step-separator {
+  margin: 0;
+  background-color: var(--progressStep, #add8e6);
+}
+
+.modal__progress-step--active .modal__progress-step-number,
+.modal__progress-step--active .modal__progress-step-separator {
+  background-color: var(--progressStepActive, #4c88c8);
+}
+
+.modal__progress-step:first-child .modal__progress-step-separator {
+  display: none;
 }
 
 .markdown-body {
