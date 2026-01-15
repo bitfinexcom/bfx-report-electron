@@ -90,6 +90,7 @@ body::-webkit-scrollbar-thumb,
 .modal {
   display: none; /* flex */
   flex-direction: column;
+  box-sizing: border-box;
   color: var(--color, #172d3e);
   position: relative;
   text-align: center;
@@ -152,6 +153,12 @@ body::-webkit-scrollbar-thumb,
   color: var(--color, #ffffff);
 }
 
+.modal__btns {
+  display: flex;
+  align-self: center;
+  align-items: end;
+}
+
 .modal__btns .modal__btn {
   margin-right: 10px;
   padding: 10px;
@@ -161,6 +168,7 @@ body::-webkit-scrollbar-thumb,
   background-image: none;
   cursor: pointer;
   transition: all 0.3s;
+  height: fit-content;
 }
 
 .modal__btns .modal__btn:last-of-type {
@@ -200,6 +208,12 @@ body::-webkit-scrollbar-thumb,
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-self: center;
+  align-items: end;
+}
+
+.modal__range-inputs {
+  width: -webkit-fill-available;
 }
 
 .modal__radio-inputs--inline,
@@ -212,10 +226,10 @@ body::-webkit-scrollbar-thumb,
   background: none;
   line-height: 1;
   display: flex ;
-  justify-content: center;
   align-items: center;
   margin: 10px;
   width: -webkit-fill-available;
+  height: fit-content;
 }
 
 .modal__input:has(input[type=radio]),
@@ -293,7 +307,7 @@ body::-webkit-scrollbar-thumb,
   display: flex ;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+  align-items: start;
   margin: 10px 10px 40px;
   width: -webkit-fill-available;
 }
