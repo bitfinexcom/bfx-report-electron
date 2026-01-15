@@ -410,6 +410,11 @@ ${inputRangeElems.join('\n')}</div>`)
       renderModal(args)
       showModal()
       setTimeout(() => {
+        if (args?.preventSettingHeightToContent) {
+          modalElem.style.height = '100%'
+          modalElem.lastElementChild.style.flex = '1 1 auto'
+        }
+
         window.bfxReportElectronApi?.setWindowHeight({
           height: args?.preventSettingHeightToContent
             ? null
