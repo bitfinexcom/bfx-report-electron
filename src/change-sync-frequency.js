@@ -7,6 +7,10 @@ const path = require('path')
 const fs = require('fs')
 const i18next = require('i18next')
 
+const {
+  createModalWindow
+} = require('./window-creators')
+
 const getUIFontsAsCSSString = require(
   './helpers/get-ui-fonts-as-css-string'
 )
@@ -112,6 +116,42 @@ const _fireFrameless = (alert, opts) => {
   )
 }
 
+const _fireAlert = async (params) => {
+  const {
+    title = '',
+    text = '',
+    currentProgressStep = 0,
+    inputRadioOptions = [],
+    inputRangeOptions = []
+  } = params ?? {}
+
+  const res = await createModalWindow(
+    {
+      icon: 'question',
+      title,
+      text,
+      textClassName: 'markdown-body',
+      showConfirmButton: true,
+      confirmButtonText: i18next.t('common.confirmButtonText'),
+      showCancelButton: true,
+      cancelButtonText: i18next.t('common.cancelButtonText'),
+      progressSteps: [1, 2],
+      currentProgressStep,
+      inputRadioOptions,
+      makeInputRadioInline: true,
+      inputRangeOptions,
+      preventSettingHeightToContent: true
+    },
+    {
+      width: 500,
+      height: 400,
+      shouldWinBeClosedIfClickingOutside: true,
+      shouldDevToolsBeShown: true
+    })
+
+  return res?.modalRes ?? {}
+}
+
 const fonts = `<style>${fontsStyle}</style>`
 const themes = `<style>${themesStyle}</style>`
 const style = `<style>${modalDialogStyle}</style>`
@@ -120,52 +160,14 @@ const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
 
 module.exports = () => {
   const configsKeeper = getConfigsKeeperByName('main')
-  const timeFormatAlert = new Alert([fonts, themes, style])
   const alert = new Alert([fonts, themes, style, script])
 
-  const closeTimeFormatAlert = () => {
-    if (!timeFormatAlert.browserWindow) return
-
-    timeFormatAlert.browserWindow.close()
-  }
   const closeAlert = () => {
     if (!alert.browserWindow) return
 
     alert.browserWindow.close()
   }
 
-  const timeFormatAlertOptions = {
-    title: i18next.t('changeSyncFrequency.timeFormatModalDialog.title'),
-    icon: 'question',
-    customClass: getAlertCustomClassObj({
-      title: 'titleColor',
-      container: 'textColor',
-      input: 'textColor radioInput'
-    }),
-    focusConfirm: true,
-    showCancelButton: true,
-    confirmButtonText: i18next
-      .t('common.confirmButtonText'),
-    cancelButtonText: i18next
-      .t('common.cancelButtonText'),
-    progressSteps: [1, 2],
-    currentProgressStep: 0,
-    input: 'radio',
-    inputValue: 'hours',
-    inputOptions: {
-      mins: i18next
-        .t('changeSyncFrequency.timeFormatModalDialog.inputOptions.mins'),
-      hours: i18next
-        .t('changeSyncFrequency.timeFormatModalDialog.inputOptions.hours'),
-      days: i18next
-        .t('changeSyncFrequency.timeFormatModalDialog.inputOptions.days')
-    },
-    willOpen: () => {
-      if (!timeFormatAlert.browserWindow) return
-
-      timeFormatAlert.browserWindow.once('blur', closeTimeFormatAlert)
-    }
-  }
   const alertOptions = {
     title: i18next.t('changeSyncFrequency.timeModalDialog.title'),
     icon: 'question',
@@ -191,14 +193,21 @@ module.exports = () => {
   }
 
   const getAlertOpts = (timeFormat, timeData) => {
-    const { inputOptions } = timeFormatAlertOptions
-    const text = inputOptions[timeFormat.value]
+    const timeFormatMap = {
+      mins: i18next
+        .t('changeSyncFrequency.timeFormatModalDialog.inputOptions.mins'),
+      hours: i18next
+        .t('changeSyncFrequency.timeFormatModalDialog.inputOptions.hours'),
+      days: i18next
+        .t('changeSyncFrequency.timeFormatModalDialog.inputOptions.days')
+    }
+    const text = timeFormatMap[timeFormat] ?? timeFormat ?? ''
 
-    if (timeFormat.value === 'days') {
+    if (timeFormat === 'days') {
       return {
         ...alertOptions,
         text,
-        inputValue: timeFormat.value === timeData.timeFormat
+        inputValue: timeFormat === timeData.timeFormat
           ? timeData.value
           : 1,
         inputAttributes: {
@@ -208,11 +217,11 @@ module.exports = () => {
         }
       }
     }
-    if (timeFormat.value === 'hours') {
+    if (timeFormat === 'hours') {
       return {
         ...alertOptions,
         text,
-        inputValue: timeFormat.value === timeData.timeFormat
+        inputValue: timeFormat === timeData.timeFormat
           ? timeData.value
           : 2,
         inputAttributes: {
@@ -226,7 +235,7 @@ module.exports = () => {
     return {
       ...alertOptions,
       text,
-      inputValue: timeFormat.value === timeData.timeFormat
+      inputValue: timeFormat === timeData.timeFormat
         ? timeData.value
         : 20,
       inputAttributes: {
@@ -239,11 +248,7 @@ module.exports = () => {
 
   return async () => {
     const win = electron.BrowserWindow.getFocusedWindow()
-    const timeFormatAlertEventHandlerCtx = addOnceProcEventHandler(
-      WINDOW_EVENT_NAMES.CLOSED,
-      closeTimeFormatAlert,
-      win
-    )
+
     const alertEventHandlerCtx = addOnceProcEventHandler(
       WINDOW_EVENT_NAMES.CLOSED,
       closeAlert,
@@ -255,22 +260,50 @@ module.exports = () => {
         .getConfigByName('schedulerRule')
       const timeData = _getTimeDataFromRule(savedSchedulerRule)
 
-      const timeFormat = await _fireFrameless(
-        timeFormatAlert,
-        {
-          ...timeFormatAlertOptions,
-          inputValue: timeData.timeFormat
-        }
-      )
-      timeFormatAlertEventHandlerCtx.removeListener()
+      const timeFormatRes = await _fireAlert({
+        title: i18next
+          .t('changeSyncFrequency.timeFormatModalDialog.title'),
+        currentProgressStep: 0,
+        inputRadioOptions: [
+          {
+            label: i18next
+              .t('changeSyncFrequency.timeFormatModalDialog.inputOptions.mins'),
+            value: 'mins'
+          },
+          {
+            label: i18next
+              .t('changeSyncFrequency.timeFormatModalDialog.inputOptions.hours'),
+            value: 'hours',
+            checked: true
+          },
+          {
+            label: i18next
+              .t('changeSyncFrequency.timeFormatModalDialog.inputOptions.days'),
+            value: 'days'
+          }
+        ].map((opt) => {
+          if (!timeData?.timeFormat) {
+            return opt
+          }
+          if (opt.value === timeData.timeFormat) {
+            opt.checked = true
 
-      if (timeFormat.dismiss) {
+            return opt
+          }
+
+          opt.checked = false
+
+          return opt
+        })
+      })
+
+      if (timeFormatRes?.dismiss !== 'confirm') {
         return
       }
 
       const alertRes = await _fireFrameless(
         alert,
-        getAlertOpts(timeFormat, timeData)
+        getAlertOpts(timeFormatRes.inputRadioValue, timeData)
       )
       alertEventHandlerCtx.removeListener()
 
@@ -279,7 +312,7 @@ module.exports = () => {
       }
 
       const schedulerRule = _getSchedulerRule(
-        timeFormat,
+        timeFormatRes.inputRadioValue,
         alertRes
       )
 
