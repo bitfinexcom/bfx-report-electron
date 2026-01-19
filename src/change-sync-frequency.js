@@ -91,8 +91,7 @@ const _fireAlert = async (params) => {
     {
       width: 500,
       height: 400,
-      shouldWinBeClosedIfClickingOutside: true,
-      shouldDevToolsBeShown: true
+      shouldWinBeClosedIfClickingOutside: true
     })
 
   return res?.modalRes ?? {}
