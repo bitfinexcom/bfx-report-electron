@@ -11,9 +11,6 @@ const showErrorModalDialog = require('./show-error-modal-dialog')
 const pauseApp = require('./pause-app')
 const relaunch = require('./relaunch')
 const { getConfigsKeeperByName } = require('./configs-keeper')
-const getAlertCustomClassObj = require(
-  './helpers/get-alert-custom-class-obj'
-)
 
 const _getSchedulerRule = (timeFormat, timeValue) => {
   if (timeFormat === 'days') {
@@ -100,25 +97,6 @@ const _fireAlert = async (params) => {
 module.exports = () => {
   const configsKeeper = getConfigsKeeperByName('main')
 
-  const alertOptions = {
-    title: i18next.t('changeSyncFrequency.timeModalDialog.title'),
-    icon: 'question',
-    customClass: getAlertCustomClassObj({
-      title: 'titleColor',
-      container: 'textColor',
-      input: 'textColor rangeInput'
-    }),
-    focusConfirm: true,
-    showCancelButton: true,
-    confirmButtonText: i18next
-      .t('common.confirmButtonText'),
-    cancelButtonText: i18next
-      .t('common.cancelButtonText'),
-    progressSteps: [1, 2],
-    currentProgressStep: 1,
-    input: 'range'
-  }
-
   const getAlertOpts = (timeFormat, timeData) => {
     const timeFormatMap = {
       mins: i18next
@@ -145,7 +123,6 @@ module.exports = () => {
     }
     if (timeFormat === 'hours') {
       return {
-        ...alertOptions,
         text,
         inputRangeOptions: [{
           value: timeFormat === timeData.timeFormat
@@ -159,7 +136,6 @@ module.exports = () => {
     }
 
     return {
-      ...alertOptions,
       text,
       inputRangeOptions: [{
         value: timeFormat === timeData.timeFormat
