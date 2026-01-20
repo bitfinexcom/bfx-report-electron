@@ -1,7 +1,6 @@
 'use strict'
 
 const { app, ipcMain } = require('electron')
-const { rootPath: appDir } = require('electron-root-path')
 const fs = require('fs')
 const path = require('path')
 const {
@@ -27,6 +26,7 @@ const {
 const {
   closeAlert
 } = require('../modal-dialog-src/utils')
+const { rootPath } = require('../helpers/root-path')
 const parseEnvValToBool = require('../helpers/parse-env-val-to-bool')
 const {
   WINDOW_EVENT_NAMES,
@@ -76,7 +76,7 @@ let isProgressToastEmittingUnlocked = false
 let electronBuilderConfig = {}
 
 try {
-  electronBuilderConfig = require(path.join(appDir, 'electron-builder-config'))
+  electronBuilderConfig = require(path.join(rootPath, 'electron-builder-config'))
 } catch (err) {}
 
 const fonts = `<style>${fontsStyle}</style>`

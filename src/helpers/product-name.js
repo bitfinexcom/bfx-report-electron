@@ -1,12 +1,13 @@
 'use strict'
 
 const path = require('path')
-const { rootPath: appDir } = require('electron-root-path')
+
+const { rootPath } = require('./root-path')
 
 let electronBuilderConfig = {}
 
 try {
-  electronBuilderConfig = require(path.join(appDir, 'electron-builder-config'))
+  electronBuilderConfig = require(path.join(rootPath, 'electron-builder-config'))
 } catch (err) {}
 
 const productName = electronBuilderConfig

@@ -3,9 +3,9 @@
 const path = require('path')
 const fs = require('fs')
 const parseChangelog = require('changelog-parser')
-const { rootPath } = require('electron-root-path')
 const i18next = require('i18next')
 
+const { rootPath } = require('../helpers/root-path')
 const getDebugInfo = require('../helpers/get-debug-info')
 const showDocs = require('../show-docs')
 

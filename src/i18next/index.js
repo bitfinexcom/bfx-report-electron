@@ -5,7 +5,8 @@ const i18next = require('i18next')
 const Backend = require('i18next-fs-backend')
 const path = require('path')
 const fs = require('fs')
-const { rootPath } = require('electron-root-path')
+
+const { rootPath } = require('../helpers/root-path')
 
 const transPath = path.join(rootPath, 'build/locales')
 const allFileNames = fs.readdirSync(transPath)
