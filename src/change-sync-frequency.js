@@ -203,13 +203,8 @@ module.exports = () => {
           if (!timeData?.timeFormat) {
             return opt
           }
-          if (opt.value === timeData.timeFormat) {
-            opt.checked = true
 
-            return opt
-          }
-
-          opt.checked = false
+          opt.checked = opt.value === timeData.timeFormat
 
           return opt
         })
