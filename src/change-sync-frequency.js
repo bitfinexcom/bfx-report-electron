@@ -1,27 +1,9 @@
 'use strict'
 
-const electron = require('electron')
-const Alert = require('electron-alert')
 const cronValidate = require('cron-validate')
-const path = require('path')
-const fs = require('fs')
 const i18next = require('i18next')
 
-const getUIFontsAsCSSString = require(
-  './helpers/get-ui-fonts-as-css-string'
-)
-
-const fontsStyle = getUIFontsAsCSSString()
-const themesStyle = fs.readFileSync(path.join(
-  __dirname, './window-creators/layouts/themes.css'
-))
-const modalDialogStyle = fs.readFileSync(path.join(
-  __dirname, 'modal-dialog-src/modal-dialog.css'
-))
-const modalDialogScript = fs.readFileSync(path.join(
-  __dirname, 'modal-dialog-src/modal-dialog.js'
-))
-
+const { createModalWindow } = require('./window-creators')
 const {
   SyncFrequencyChangingError
 } = require('./errors')
@@ -29,26 +11,16 @@ const showErrorModalDialog = require('./show-error-modal-dialog')
 const pauseApp = require('./pause-app')
 const relaunch = require('./relaunch')
 const { getConfigsKeeperByName } = require('./configs-keeper')
-const getAlertCustomClassObj = require(
-  './helpers/get-alert-custom-class-obj'
-)
-const {
-  WINDOW_EVENT_NAMES,
-  addOnceProcEventHandler
-} = require('./window-creators/window-event-manager')
-const ThemeIpcChannelHandlers = require(
-  './window-creators/main-renderer-ipc-bridge/theme-ipc-channel-handlers'
-)
 
-const _getSchedulerRule = (timeFormat, alertRes) => {
-  if (timeFormat.value === 'days') {
-    return `0 0 */${alertRes.value} * *`
+const _getSchedulerRule = (timeFormat, timeValue) => {
+  if (timeFormat === 'days') {
+    return `0 0 */${timeValue} * *`
   }
-  if (timeFormat.value === 'hours') {
-    return `0 */${alertRes.value} * * *`
+  if (timeFormat === 'hours') {
+    return `0 */${timeValue} * * *`
   }
 
-  return `*/${alertRes.value} * * * *`
+  return `*/${timeValue} * * * *`
 }
 
 const _testTime = (time) => {
@@ -62,7 +34,7 @@ const _testTime = (time) => {
 const _getTime = (timeFormat, time) => {
   return {
     timeFormat,
-    value: time.replace('*/', '')
+    timeValue: time.replace('*/', '')
   }
 }
 
@@ -70,7 +42,7 @@ const _getTimeDataFromRule = (rule) => {
   const cronResult = cronValidate(rule)
 
   if (!cronResult.isValid()) {
-    return { timeFormat: 'hours', value: 2 }
+    return { timeFormat: 'hours', timeValue: 2 }
   }
 
   const value = cronResult.getValue()
@@ -85,202 +57,153 @@ const _getTimeDataFromRule = (rule) => {
     return _getTime('mins', value.minutes)
   }
 
-  return { timeFormat: 'hours', value: 2 }
+  return { timeFormat: 'hours', timeValue: 2 }
 }
 
-const _fireFrameless = (alert, opts) => {
-  const bwOptions = {
-    frame: false,
-    transparent: true,
-    thickFrame: false,
-    closable: false,
-    backgroundColor: ThemeIpcChannelHandlers.getWindowBackgroundColor(),
-    hasShadow: false
-  }
-  const swalOptions = {
-    allowOutsideClick: false,
-    ...opts
-  }
+const _fireAlert = async (params) => {
+  const {
+    title = '',
+    text = '',
+    currentProgressStep = 0,
+    inputRadioOptions = [],
+    inputRangeOptions = []
+  } = params ?? {}
 
-  return alert.fire(
-    swalOptions,
-    bwOptions,
-    null,
-    true,
-    false,
-    sound
-  )
+  const res = await createModalWindow(
+    {
+      icon: 'question',
+      title,
+      text,
+      showConfirmButton: true,
+      confirmButtonText: i18next.t('common.confirmButtonText'),
+      showCancelButton: true,
+      cancelButtonText: i18next.t('common.cancelButtonText'),
+      progressSteps: [1, 2],
+      currentProgressStep,
+      inputRadioOptions,
+      makeInputRadioInline: true,
+      inputRangeOptions,
+      preventSettingHeightToContent: true
+    },
+    {
+      width: 500,
+      height: 400,
+      shouldWinBeClosedIfClickingOutside: true
+    })
+
+  return res?.modalRes ?? {}
 }
-
-const fonts = `<style>${fontsStyle}</style>`
-const themes = `<style>${themesStyle}</style>`
-const style = `<style>${modalDialogStyle}</style>`
-const script = `<script type="text/javascript">${modalDialogScript}</script>`
-const sound = { freq: 'F2', type: 'triange', duration: 1.5 }
 
 module.exports = () => {
   const configsKeeper = getConfigsKeeperByName('main')
-  const timeFormatAlert = new Alert([fonts, themes, style])
-  const alert = new Alert([fonts, themes, style, script])
 
-  const closeTimeFormatAlert = () => {
-    if (!timeFormatAlert.browserWindow) return
-
-    timeFormatAlert.browserWindow.close()
-  }
-  const closeAlert = () => {
-    if (!alert.browserWindow) return
-
-    alert.browserWindow.close()
-  }
-
-  const timeFormatAlertOptions = {
-    title: i18next.t('changeSyncFrequency.timeFormatModalDialog.title'),
-    icon: 'question',
-    customClass: getAlertCustomClassObj({
-      title: 'titleColor',
-      container: 'textColor',
-      input: 'textColor radioInput'
-    }),
-    focusConfirm: true,
-    showCancelButton: true,
-    confirmButtonText: i18next
-      .t('common.confirmButtonText'),
-    cancelButtonText: i18next
-      .t('common.cancelButtonText'),
-    progressSteps: [1, 2],
-    currentProgressStep: 0,
-    input: 'radio',
-    inputValue: 'hours',
-    inputOptions: {
+  const getAlertOpts = (timeFormat, timeData) => {
+    const timeFormatMap = {
       mins: i18next
         .t('changeSyncFrequency.timeFormatModalDialog.inputOptions.mins'),
       hours: i18next
         .t('changeSyncFrequency.timeFormatModalDialog.inputOptions.hours'),
       days: i18next
         .t('changeSyncFrequency.timeFormatModalDialog.inputOptions.days')
-    },
-    willOpen: () => {
-      if (!timeFormatAlert.browserWindow) return
-
-      timeFormatAlert.browserWindow.once('blur', closeTimeFormatAlert)
     }
-  }
-  const alertOptions = {
-    title: i18next.t('changeSyncFrequency.timeModalDialog.title'),
-    icon: 'question',
-    customClass: getAlertCustomClassObj({
-      title: 'titleColor',
-      container: 'textColor',
-      input: 'textColor rangeInput'
-    }),
-    focusConfirm: true,
-    showCancelButton: true,
-    confirmButtonText: i18next
-      .t('common.confirmButtonText'),
-    cancelButtonText: i18next
-      .t('common.cancelButtonText'),
-    progressSteps: [1, 2],
-    currentProgressStep: 1,
-    input: 'range',
-    willOpen: () => {
-      if (!alert.browserWindow) return
+    const text = timeFormatMap[timeFormat] ?? timeFormat ?? ''
 
-      alert.browserWindow.once('blur', closeAlert)
-    }
-  }
-
-  const getAlertOpts = (timeFormat, timeData) => {
-    const { inputOptions } = timeFormatAlertOptions
-    const text = inputOptions[timeFormat.value]
-
-    if (timeFormat.value === 'days') {
+    if (timeFormat === 'days') {
       return {
-        ...alertOptions,
         text,
-        inputValue: timeFormat.value === timeData.timeFormat
-          ? timeData.value
-          : 1,
-        inputAttributes: {
+        inputRangeOptions: [{
+          value: timeFormat === timeData.timeFormat
+            ? timeData.timeValue
+            : 1,
           min: 1,
           max: 31,
           step: 1
-        }
+        }]
       }
     }
-    if (timeFormat.value === 'hours') {
+    if (timeFormat === 'hours') {
       return {
-        ...alertOptions,
         text,
-        inputValue: timeFormat.value === timeData.timeFormat
-          ? timeData.value
-          : 2,
-        inputAttributes: {
+        inputRangeOptions: [{
+          value: timeFormat === timeData.timeFormat
+            ? timeData.timeValue
+            : 2,
           min: 1,
           max: 23,
           step: 1
-        }
+        }]
       }
     }
 
     return {
-      ...alertOptions,
       text,
-      inputValue: timeFormat.value === timeData.timeFormat
-        ? timeData.value
-        : 20,
-      inputAttributes: {
+      inputRangeOptions: [{
+        value: timeFormat === timeData.timeFormat
+          ? timeData.timeValue
+          : 20,
         min: 10,
         max: 59,
         step: 1
-      }
+      }]
     }
   }
 
   return async () => {
-    const win = electron.BrowserWindow.getFocusedWindow()
-    const timeFormatAlertEventHandlerCtx = addOnceProcEventHandler(
-      WINDOW_EVENT_NAMES.CLOSED,
-      closeTimeFormatAlert,
-      win
-    )
-    const alertEventHandlerCtx = addOnceProcEventHandler(
-      WINDOW_EVENT_NAMES.CLOSED,
-      closeAlert,
-      win
-    )
-
     try {
       const savedSchedulerRule = await configsKeeper
         .getConfigByName('schedulerRule')
       const timeData = _getTimeDataFromRule(savedSchedulerRule)
 
-      const timeFormat = await _fireFrameless(
-        timeFormatAlert,
-        {
-          ...timeFormatAlertOptions,
-          inputValue: timeData.timeFormat
-        }
-      )
-      timeFormatAlertEventHandlerCtx.removeListener()
+      const timeFormatRes = await _fireAlert({
+        title: i18next
+          .t('changeSyncFrequency.timeFormatModalDialog.title'),
+        currentProgressStep: 0,
+        inputRadioOptions: [
+          {
+            label: i18next
+              .t('changeSyncFrequency.timeFormatModalDialog.inputOptions.mins'),
+            value: 'mins'
+          },
+          {
+            label: i18next
+              .t('changeSyncFrequency.timeFormatModalDialog.inputOptions.hours'),
+            value: 'hours',
+            checked: true
+          },
+          {
+            label: i18next
+              .t('changeSyncFrequency.timeFormatModalDialog.inputOptions.days'),
+            value: 'days'
+          }
+        ].map((opt) => {
+          if (!timeData?.timeFormat) {
+            return opt
+          }
 
-      if (timeFormat.dismiss) {
+          opt.checked = opt.value === timeData.timeFormat
+
+          return opt
+        })
+      })
+
+      if (timeFormatRes?.dismiss !== 'confirm') {
         return
       }
 
-      const alertRes = await _fireFrameless(
-        alert,
-        getAlertOpts(timeFormat, timeData)
-      )
-      alertEventHandlerCtx.removeListener()
+      const alertRes = await _fireAlert({
+        title: i18next
+          .t('changeSyncFrequency.timeModalDialog.title'),
+        currentProgressStep: 1,
+        ...getAlertOpts(timeFormatRes.inputRadioValue, timeData)
+      })
 
-      if (alertRes.dismiss) {
+      if (alertRes?.dismiss !== 'confirm') {
         return
       }
 
       const schedulerRule = _getSchedulerRule(
-        timeFormat,
-        alertRes
+        timeFormatRes.inputRadioValue,
+        alertRes.inputRangeValue
       )
 
       if (savedSchedulerRule === schedulerRule) {
@@ -299,7 +222,7 @@ module.exports = () => {
     } catch (err) {
       try {
         await showErrorModalDialog(
-          win,
+          null,
           i18next.t('changeSyncFrequency.title'),
           err
         )

@@ -42,6 +42,10 @@
     --rangeInputBorder: #334A59;
     --rangeInputBgActive: #82baf6;
     --rangeInputStripBg: #172d3e;
+
+    /* progress-step */
+    --progressStep: #add8e6;
+    --progressStepActive: #4c88c8;
   }
 }
 
@@ -85,5 +89,9 @@
     --rangeInputBorder: #102331;
     --rangeInputBgActive: #6fa8e5;
     --rangeInputStripBg: #ffffff;
+
+    /* progress-step */
+    --progressStep: #add8e6;
+    --progressStepActive: #4c88c8;
   }
 }

@@ -90,6 +90,7 @@ body::-webkit-scrollbar-thumb,
 .modal {
   display: none; /* flex */
   flex-direction: column;
+  box-sizing: border-box;
   color: var(--color, #172d3e);
   position: relative;
   text-align: center;
@@ -152,6 +153,12 @@ body::-webkit-scrollbar-thumb,
   color: var(--color, #ffffff);
 }
 
+.modal__btns {
+  display: flex;
+  align-self: center;
+  align-items: end;
+}
+
 .modal__btns .modal__btn {
   margin-right: 10px;
   padding: 10px;
@@ -161,6 +168,7 @@ body::-webkit-scrollbar-thumb,
   background-image: none;
   cursor: pointer;
   transition: all 0.3s;
+  height: fit-content;
 }
 
 .modal__btns .modal__btn:last-of-type {
@@ -195,13 +203,22 @@ body::-webkit-scrollbar-thumb,
 }
 
 .modal__radio-inputs,
-.modal__checkbox-inputs {
+.modal__checkbox-inputs,
+.modal__range-inputs {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-self: center;
+  align-items: end;
+}
+
+.modal__range-inputs {
+  width: -webkit-fill-available;
 }
 
 .modal__radio-inputs--inline,
-.modal__checkbox-inputs--inline {
+.modal__checkbox-inputs--inline,
+.modal__range-inputs--inline {
   flex-direction: row;
 }
 
@@ -209,9 +226,10 @@ body::-webkit-scrollbar-thumb,
   background: none;
   line-height: 1;
   display: flex ;
-  justify-content: center;
   align-items: center;
   margin: 10px;
+  width: -webkit-fill-available;
+  height: fit-content;
 }
 
 .modal__input:has(input[type=radio]),
@@ -233,12 +251,43 @@ body::-webkit-scrollbar-thumb,
   transition: all 0.3s;
 }
 
+.modal__input input[type=range] {
+  margin: 0 10px 0 0;
+  background-color: transparent;
+  border: 1px solid var(--rangeInputBorder, #334A59);
+  border-radius: 1px;
+  height: 6px;
+  width: -webkit-fill-available;
+  appearance: none;
+}
+
+.modal__input input[type=range]::-webkit-slider-runnable-track {
+  background-color: transparent;
+  width: 100%;
+  height: 6px;
+  cursor: pointer;
+  appearance: none;
+}
+
+.modal__input input[type=range]::-webkit-slider-thumb {
+  margin-top: -10px;
+  width: 28px;
+  height: 28px;
+  background-color: var(--rangeInputBgActive, #82baf6);
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  appearance: none;
+  box-shadow: -800px 0 0 -10px var(--rangeInputBgActive, #82baf6);
+}
+
 .modal__input input[type=checkbox] {
   border-radius: 4px;
 }
 
 .modal__input input[type=radio]:focus,
-.modal__input input[type=checkbox]:focus {
+.modal__input input[type=checkbox]:focus,
+.modal__input input[type=range]:focus {
   outline: none;
 }
 
@@ -250,6 +299,56 @@ body::-webkit-scrollbar-thumb,
 .modal__input input[type=radio]:checked,
 .modal__input input[type=checkbox]:checked {
   background-color: var(--radioInputBgActive, #82baf6);
+}
+
+.modal__progress-steps {
+  background: none;
+  line-height: 1;
+  display: flex ;
+  flex-direction: row;
+  justify-content: center;
+  align-items: start;
+  margin: 10px 10px 40px;
+  width: -webkit-fill-available;
+}
+
+.modal__progress-step {
+  background: none;
+  line-height: 1;
+  display: flex ;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+.modal__progress-step-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 14px;
+}
+
+.modal__progress-step-separator {
+  width: 30px;
+  height: 6px;
+}
+
+.modal__progress-step-number,
+.modal__progress-step-separator {
+  margin: 0;
+  background-color: var(--progressStep, #add8e6);
+}
+
+.modal__progress-step--active .modal__progress-step-number,
+.modal__progress-step--active .modal__progress-step-separator {
+  background-color: var(--progressStepActive, #4c88c8);
+}
+
+.modal__progress-step:first-child .modal__progress-step-separator {
+  display: none;
 }
 
 .markdown-body {
