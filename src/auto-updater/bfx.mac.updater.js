@@ -7,7 +7,7 @@ const { spawn } = require('child_process')
 const { MacUpdater } = require('electron-updater')
 const extract = require('extract-zip')
 
-const { rootPath: appDir } = require('electron-root-path')
+const { rootPath } = require('../helpers/root-path')
 
 class BfxMacUpdater extends MacUpdater {
   constructor (...args) {
@@ -51,7 +51,7 @@ class BfxMacUpdater extends MacUpdater {
 
       const downloadedFilePath = this.getDownloadedFilePath()
 
-      const root = path.join(appDir, '../../..')
+      const root = path.join(rootPath, '../../..')
       const dist = path.join(root, '..')
       const exec = path.join(root, 'Contents/MacOS/Bitfinex Report')
 

@@ -1,8 +1,8 @@
 'use strict'
 
-const { rootPath } = require('electron-root-path')
 const path = require('path')
 
+const { rootPath } = require('./root-path')
 const reportServiceConfig = require(path.join(
   rootPath,
   'bfx-reports-framework/config/service.report.json'

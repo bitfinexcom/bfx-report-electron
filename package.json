@@ -18,7 +18,6 @@
     "cron-validate": "1.4.3",
     "electron-alert": "0.1.20",
     "electron-log": "4.4.8",
-    "electron-root-path": "1.0.16",
     "electron-updater": "6.7.0",
     "extract-zip": "2.0.1",
     "get-port": "7.0.0",

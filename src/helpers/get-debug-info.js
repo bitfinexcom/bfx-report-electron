@@ -1,13 +1,13 @@
 'use strict'
 
-const { rootPath: appDir } = require('electron-root-path')
 const path = require('path')
 const os = require('os')
 const v8 = require('v8')
 
 const { getAppUpdateConfigSync } = require('../auto-updater')
 
-const packageJson = require(path.join(appDir, 'package.json'))
+const { rootPath } = require('./root-path')
+const packageJson = require(path.join(rootPath, 'package.json'))
 const productName = require('./product-name')
 const isBfxApiStaging = require('./is-bfx-api-staging')
 
@@ -16,7 +16,7 @@ let lastCommit = { hash: '-', date: '-' }
 const appUpdateConfig = getAppUpdateConfigSync()
 
 try {
-  lastCommit = require(path.join(appDir, 'lastCommit.json'))
+  lastCommit = require(path.join(rootPath, 'lastCommit.json'))
 } catch (err) {
   console.error(err)
 }
