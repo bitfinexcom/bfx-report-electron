@@ -332,6 +332,10 @@ const _autoUpdaterFactory = () => {
   if (process.platform === 'darwin') {
     autoUpdater = new BfxMacUpdater()
 
+    if (process.env.IS_AUTO_UPDATE_BEING_TESTED) {
+      autoUpdater.forceDevUpdateConfig = true
+    }
+
     autoUpdater.addInstallingUpdateEventHandler(() => {
       return showLoadingWindow({
         windowName: WINDOW_NAMES.LOADING_WINDOW,
