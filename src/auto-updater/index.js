@@ -363,14 +363,7 @@ const _autoUpdaterFactory = () => {
       )
 
       fs.closeSync(fs.openSync(process.env.APPIMAGE, 'w'))
-      Object.defineProperty(autoUpdater.app, 'isPackaged', {
-        get () { return true }
-      })
-      Object.defineProperty(autoUpdater.app, 'appUpdateConfigPath', {
-        get () {
-          return path.join(this.app.getAppPath(), 'dev-app-update.yml')
-        }
-      })
+      autoUpdater.forceDevUpdateConfig = true
     }
   }
 
