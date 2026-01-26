@@ -12,5 +12,6 @@ dist/*
 lastCommit.json
 electronEnv.json
 stub.AppImage
+stub.mac-release
 e2e-test-report.xml
 test-report.json

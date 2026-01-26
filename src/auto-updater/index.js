@@ -332,6 +332,10 @@ const _autoUpdaterFactory = () => {
   if (process.platform === 'darwin') {
     autoUpdater = new BfxMacUpdater()
 
+    if (process.env.IS_AUTO_UPDATE_BEING_TESTED) {
+      autoUpdater.forceDevUpdateConfig = true
+    }
+
     autoUpdater.addInstallingUpdateEventHandler(() => {
       return showLoadingWindow({
         windowName: WINDOW_NAMES.LOADING_WINDOW,
@@ -359,14 +363,7 @@ const _autoUpdaterFactory = () => {
       )
 
       fs.closeSync(fs.openSync(process.env.APPIMAGE, 'w'))
-      Object.defineProperty(autoUpdater.app, 'isPackaged', {
-        get () { return true }
-      })
-      Object.defineProperty(autoUpdater.app, 'appUpdateConfigPath', {
-        get () {
-          return path.join(this.app.getAppPath(), 'dev-app-update.yml')
-        }
-      })
+      autoUpdater.forceDevUpdateConfig = true
     }
   }
 
