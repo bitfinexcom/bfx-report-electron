@@ -5,6 +5,9 @@ const fs = require('fs/promises')
 const path = require('path')
 const i18next = require('i18next')
 
+const {
+  PdfCreationTimeoutError
+} = require('../errors')
 const ipcs = require('../ipcs')
 const wins = require('../window-creators/windows')
 
@@ -18,6 +21,8 @@ const PROCESS_STATES = require(
 module.exports = () => {
   ipcs.serverIpc.on('message', async (mess) => {
     let templateFilePathForRm = null
+    let timeoutRef = null
+    let win = null
 
     try {
       if (mess?.state !== PROCESS_MESSAGES.REQUEST_PDF_CREATION) {
@@ -29,7 +34,8 @@ module.exports = () => {
         template = i18next.t('printToPDF.defaultTemplate'),
         format = 'portrait',
         orientation = 'Letter',
-        uid = null
+        uid = null,
+        timeout = 10 * 60 * 1000
       } = mess?.data ?? {}
 
       const isTemplateFilePathUsed = (
@@ -40,7 +46,13 @@ module.exports = () => {
         ? templateFilePath
         : null
 
-      const win = new BrowserWindow({
+      const timeoutPromise = new Promise((resolve, reject) => {
+        timeoutRef = setTimeout(() => {
+          reject(new PdfCreationTimeoutError())
+        }, timeout).unref()
+      })
+
+      win = new BrowserWindow({
         show: false,
         parent: wins.mainWindow,
         webPreferences: {
@@ -54,9 +66,9 @@ module.exports = () => {
         ? win.loadFile(templateFilePath)
         : win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(template)}`)
 
-      await loadPromise
+      await Promise.race([loadPromise, timeoutPromise])
 
-      const buffer = await win.webContents.printToPDF({
+      const bufferPromise = win.webContents.printToPDF({
         landscape: format !== 'portrait',
         pageSize: orientation,
         margins: {
@@ -77,6 +89,12 @@ module.exports = () => {
   ${i18next.t('printToPDF.pagination.page')} <span class=pageNumber></span> ${i18next.t('printToPDF.pagination.from')} <span class=totalPages></span>
 </span>`
       })
+
+      const buffer = await Promise.race([
+        bufferPromise,
+        timeoutPromise
+      ])
+      clearTimeout(timeoutRef)
 
       win.close()
       await closedEventPromise
@@ -102,6 +120,14 @@ module.exports = () => {
         data: { buffer, uid }
       })
     } catch (err) {
+      clearTimeout(timeoutRef)
+
+      if (
+        win &&
+        !win.isDestroyed()
+      ) {
+        win.destroy()
+      }
       if (templateFilePathForRm) {
         fs.rm(templateFilePathForRm, { force: true, maxRetries: 3 })
           .then(() => {}, (err) => { console.debug(err) })
@@ -111,6 +137,10 @@ module.exports = () => {
         state: PROCESS_STATES.RESPONSE_PDF_CREATION,
         data: { err: err.stack ?? err, uid: mess?.data?.uid ?? null }
       })
+
+      if (err instanceof PdfCreationTimeoutError) {
+        return
+      }
 
       console.error(err)
     }
