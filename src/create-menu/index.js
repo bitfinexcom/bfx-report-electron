@@ -20,7 +20,10 @@ const {
 } = require('../auto-updater')
 const { manageNewGithubIssue } = require('../error-manager')
 const showDocs = require('../show-docs')
-const { showChangelog } = require('../changelog-manager')
+const {
+  initChangelog,
+  showChangelog
+} = require('../changelog-manager')
 const parseEnvValToBool = require('../helpers/parse-env-val-to-bool')
 const isMainWinAvailable = require('../helpers/is-main-win-available')
 const {
@@ -70,7 +73,7 @@ const _getPrevMenuItemPropsById = (id, params) => {
   return res
 }
 
-module.exports = (params) => {
+module.exports = async (params) => {
   pathToUserData = params?.pathToUserData ?? pathToUserData
   pathToUserDocuments = params?.pathToUserDocuments ?? pathToUserDocuments
 
@@ -506,5 +509,6 @@ module.exports = (params) => {
   ]
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate))
+  await initChangelog()
   isMenuInitialized = true
 }
