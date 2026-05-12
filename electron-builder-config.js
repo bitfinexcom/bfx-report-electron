@@ -133,6 +133,9 @@ module.exports = {
   asarUnpack: [
     '**/bfx-reports-framework/node_modules/better-sqlite3/**/*'
   ],
+  electronFuses: {
+    onlyLoadAppFromAsar: true
+  },
   productName: 'Bitfinex Report',
   artifactName: 'BitfinexReport-${version}-' + arch + '-${os}.${ext}',
   appId: 'com.bitfinex.report',
