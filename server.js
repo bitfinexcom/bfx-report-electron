@@ -6,7 +6,7 @@ const path = require('path')
 const EventEmitter = require('events')
 const { grapes: createGrapes } = require('@bitfinex/bfx-svc-test-helper')
 
-const { rootPath, unpackedPath } = require('./src/helpers/root-path')
+const { rootPath } = require('./src/helpers/root-path')
 
 const root = path.join(rootPath, 'bfx-reports-framework')
 const expressRoot = path.join(rootPath, 'bfx-report-ui/bfx-report-express')
@@ -168,7 +168,7 @@ const allowedProcessStatesSet = _getAllowedStatesSet({
     await grapes.start()
 
     const modulePath = path.join(
-      unpackedPath,
+      rootPath,
       'bfx-reports-framework/worker.js')
 
     const ipc = fork(modulePath, [
@@ -191,7 +191,8 @@ const allowedProcessStatesSet = _getAllowedStatesSet({
     ], {
       env,
       cwd: process.cwd(),
-      silent: false
+      silent: false,
+      execPath: process.execPath
     })
     ipc.on('close', () => {
       grapes.stop(() => {

@@ -131,11 +131,16 @@ module.exports = {
   extends: null,
   asar: true,
   asarUnpack: [
-    '**/bfx-reports-framework/node_modules/better-sqlite3/**/*',
-    'bfx-reports-framework/worker.js',
-    'server.js',
-    'src/helpers/root-path.js'
+    '**/bfx-reports-framework/node_modules/better-sqlite3/**/*'
   ],
+  electronFuses: {
+    enableCookieEncryption: true,
+    enableNodeOptionsEnvironmentVariable: false,
+    enableNodeCliInspectArguments: false,
+    enableEmbeddedAsarIntegrityValidation: true,
+    onlyLoadAppFromAsar: true,
+    loadBrowserProcessSpecificV8Snapshot: false
+  },
   productName: 'Bitfinex Report',
   artifactName: 'BitfinexReport-${version}-' + arch + '-${os}.${ext}',
   appId: 'com.bitfinex.report',

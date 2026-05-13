@@ -5,10 +5,10 @@ const path = require('path')
 
 const ipcs = require('./ipcs')
 const { getConfigsKeeperByName } = require('./configs-keeper')
-const { rootPath, unpackedPath, serverCwd } = require('./helpers/root-path')
+const { rootPath, serverCwd } = require('./helpers/root-path')
 
 const serverPath = path.join(
-  unpackedPath,
+  rootPath,
   'server.js'
 )
 
@@ -48,7 +48,8 @@ module.exports = ({
   const ipc = fork(serverPath, [], {
     env,
     cwd: serverCwd,
-    silent: false
+    silent: false,
+    execPath: process.execPath
   })
 
   ipcs.serverIpc = ipc
