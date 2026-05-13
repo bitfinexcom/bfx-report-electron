@@ -46,7 +46,7 @@
     "cross-env": "7.0.3",
     "dotenv": "16.3.1",
     "electron": "40.8.0",
-    "electron-builder": "26.8.1",
+    "electron-builder": "26.10.0",
     "electron-chromedriver": "40.8.2",
     "eslint": "8.57.0",
     "eslint-config-standard": "17.1.0",
