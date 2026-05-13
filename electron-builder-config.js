@@ -134,7 +134,12 @@ module.exports = {
     '**/bfx-reports-framework/node_modules/better-sqlite3/**/*'
   ],
   electronFuses: {
-    onlyLoadAppFromAsar: true
+    enableCookieEncryption: true,
+    enableNodeOptionsEnvironmentVariable: false,
+    enableNodeCliInspectArguments: false,
+    enableEmbeddedAsarIntegrityValidation: true,
+    onlyLoadAppFromAsar: true,
+    loadBrowserProcessSpecificV8Snapshot: false
   },
   productName: 'Bitfinex Report',
   artifactName: 'BitfinexReport-${version}-' + arch + '-${os}.${ext}',
