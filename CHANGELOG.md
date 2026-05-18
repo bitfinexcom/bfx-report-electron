@@ -2,10 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [4.45.0] - 2026-05-20
+
+### Added
+
+- Implemented the possibility to refetch `Electron` menu states/rerender when `onRerenderMenuEvent` is emitted and added menus/items visibility state handling. PR: [bfx-report-ui#1072](https://github.com/bitfinexcom/bfx-report-ui/pull/1072)
+- Implementув timeout handling for printing PDF under the framework. That's important for large reports. PRs: [bfx-report#477](https://github.com/bitfinexcom/bfx-report/pull/477), [bfx-reports-framework#513](https://github.com/bitfinexcom/bfx-reports-framework/pull/513)
+- Implemented timeout handling for printing PDF under the electron app as native api doesn't support it. That's important for large reports. PR: [bfx-report-electron#624](https://github.com/bitfinexcom/bfx-report-electron/pull/624)
+- Implemented `orderBy` util to remove `lodash` totally. PR: [bfx-reports-framework#508](https://github.com/bitfinexcom/bfx-reports-framework/pull/508)
+
+### Changed
+
+- Refactored the `Derivatives` report as a functional, implemented a unified  `usePairFilter` hook that will replace legacy (tightly coupled to class components) helpers and fixed a minor legacy bug with the selected pairs hydration noted in some scenarios. PR: [bfx-report-ui#1071](https://github.com/bitfinexcom/bfx-report-ui/pull/1071)
+- Refactored the `Affiliates Earnings` report as a functional and implemented a unified `useSymbolFilter` hook that will replace legacy (tightly coupled to class components) helpers to be widely reused in further step-by-step reports refactoring. PR: [bfx-report-ui#1073](https://github.com/bitfinexcom/bfx-report-ui/pull/1073)
+- Adjusted authentication failed notification to be more user-readable and implements redirection to the Bitfinex login page for the hosted Reports version. PR: [bfx-report-ui#1074](https://github.com/bitfinexcom/bfx-report-ui/pull/1074)
+- Enhanced changelog menu item initialization as ui has the implemented capability for it. If a changelog is available for the corresponding app version, show the menu item as active, otherwise as inactive. PR: [bfx-report-electron#625](https://github.com/bitfinexcom/bfx-report-electron/pull/625)
+
+### Security
+
+- Configured `Electron Fuses` to improve application safety. PR: [bfx-report-electron#626](https://github.com/bitfinexcom/bfx-report-electron/pull/626)
+- Used `grenache-grape` dep from `npm` repository. Also, used `bfx-api-mock-srv` and `grenache-nodejs-ws` from npm repo. PRs: [bfx-report#476](https://github.com/bitfinexcom/bfx-report/pull/476), [bfx-report-express#64](https://github.com/bitfinexcom/bfx-report-express/pull/64), [bfx-reports-framework#512](https://github.com/bitfinexcom/bfx-reports-framework/pull/512), [bfx-report-electron#623](https://github.com/bitfinexcom/bfx-report-electron/pull/623)
 
 ## [4.44.0] - 2026-04-29
 

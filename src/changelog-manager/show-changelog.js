@@ -1,58 +1,21 @@
 'use strict'
 
-const path = require('path')
-const fs = require('fs')
-const parseChangelog = require('changelog-parser')
 const i18next = require('i18next')
 
-const { rootPath } = require('../helpers/root-path')
-const getDebugInfo = require('../helpers/get-debug-info')
 const showDocs = require('../show-docs')
-
-const MENU_ITEM_IDS = require('../create-menu/menu.item.ids')
-const { changeMenuItemStatesById } = require('../create-menu/utils')
-
-const changelogPath = path.join(rootPath, 'CHANGELOG.md')
-const changelog = fs.readFileSync(changelogPath, 'utf8')
-
-const disableShowChangelogMenuItem = () => {
-  changeMenuItemStatesById(
-    MENU_ITEM_IDS.SHOW_CHANGE_LOG_MENU_ITEM,
-    { enabled: false }
-  )
-}
+const initChangelog = require('./init-changelog')
 
 module.exports = async (params = {}) => {
   try {
-    const version = params?.version ?? getDebugInfo()?.version
+    const {
+      shouldBeShown,
+      version,
+      changelog,
+      mdEntries,
+      mdEntry
+    } = await initChangelog(params)
 
-    const mdEntries = await parseChangelog({
-      text: changelog,
-      removeMarkdown: false
-    })
-
-    if (
-      !mdEntries?.title ||
-      !Array.isArray(mdEntries?.versions) ||
-      mdEntries?.versions.length === 0
-    ) {
-      disableShowChangelogMenuItem()
-
-      return {
-        error: null,
-        isShown: false
-      }
-    }
-
-    const mdEntry = mdEntries.versions
-      .find((item) => item?.version === version)
-
-    if (
-      !mdEntry?.title ||
-      !mdEntry?.body
-    ) {
-      disableShowChangelogMenuItem()
-
+    if (!shouldBeShown) {
       return {
         error: null,
         isShown: false

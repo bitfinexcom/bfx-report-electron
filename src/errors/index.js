@@ -168,6 +168,12 @@ class AbsoluteUnzipDestinationPathError extends BaseError {
   }
 }
 
+class PdfCreationTimeoutError extends BaseError {
+  constructor (message = 'ERR_PDF_CREATION_TIMEOUT') {
+    super(message)
+  }
+}
+
 module.exports = {
   BaseError,
   InvalidFilePathError,
@@ -191,5 +197,6 @@ module.exports = {
   DataValidationError,
   DataValidationSchemaDefError,
   OutOfZipBoundPathError,
-  AbsoluteUnzipDestinationPathError
+  AbsoluteUnzipDestinationPathError,
+  PdfCreationTimeoutError
 }

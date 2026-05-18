@@ -25,7 +25,7 @@ class TranslationIpcChannelHandlers extends IpcChannelHandlers {
     const language = i18next.resolvedLanguage
 
     if (prevLanguage !== language) {
-      createMenu()
+      await createMenu()
     }
 
     const configsKeeper = getConfigsKeeperByName()

@@ -421,7 +421,7 @@ const createMainWindow = async ({
       .setTitle(`${title} - BFX API STAGING USED`)
   }
 
-  createMenu({
+  await createMenu({
     pathToUserData,
     pathToUserDocuments: IS_MAC
       ? pathToUserDownloads
