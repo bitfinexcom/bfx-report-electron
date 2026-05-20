@@ -22,11 +22,6 @@ const shouldLocalhostBeUsedForLoadingUIInDevMode = parseEnvValToBool(
   process.env.SHOULD_LOCALHOST_BE_USED_FOR_LOADING_UI_IN_DEV_MODE
 )
 const uiPort = process.env.UI_PORT ?? 3000
-const uiSubModulePubDir = 'bfx-report-ui/build'
-const electronPubDir = 'build'
-const ghMarkdownCssPubDir = 'node_modules/github-markdown-css'
-const reactUIPubDir = path.join(rootPath, uiSubModulePubDir)
-const pathToLayouts = path.join(__dirname, 'layouts')
 
 const SCHEME_NAME = 'app'
 const HOSTS = {
@@ -42,6 +37,24 @@ const MIME_TYPES = {
   '.svg': 'image/svg+xml',
   '.json': 'application/json'
 }
+const STATIC_PUB_DIR_REGISTER_IN_ROOT = {
+  UI_SUB_MODULE_STATICS: 'bfx-report-ui/build',
+  ELECTRON_STATICS: 'build',
+  GH_MARKDOWN_STYLES: 'node_modules/github-markdown-css',
+  WIN_LAYOUTS: 'src/window-creators/layouts'
+}
+const STATIC_PUB_DIR_SET_IN_ROOT = Object.values(
+  STATIC_PUB_DIR_REGISTER_IN_ROOT
+)
+
+const reactUIPubDir = path.join(
+  rootPath,
+  STATIC_PUB_DIR_REGISTER_IN_ROOT.UI_SUB_MODULE_STATICS
+)
+const winLayoutsPubDir = path.join(
+  rootPath,
+  STATIC_PUB_DIR_REGISTER_IN_ROOT.WIN_LAYOUTS
+)
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -54,6 +67,12 @@ protocol.registerSchemesAsPrivileged([
     }
   }
 ])
+
+const isPubDirAllowedInRootForStaticHost = (path) => {
+  return STATIC_PUB_DIR_SET_IN_ROOT.some((dir) => (
+    path.startsWith(dir)
+  ))
+}
 
 const getMimeType = (filePath) => {
   const ext = path.extname(filePath).toLowerCase()
@@ -84,23 +103,11 @@ const getFilePath = async (parsedUrl) => {
   if (parsedUrl.host !== HOSTS.STATIC) {
     return
   }
-
-  const isReactUIStaticFileRequested = relativePath
-    .startsWith(uiSubModulePubDir)
-  const isElectronStaticFileRequested = relativePath
-    .startsWith(electronPubDir)
-  const isGHMarkdownStaticFileRequested = relativePath
-    .startsWith(ghMarkdownCssPubDir)
-
-  if (
-    isReactUIStaticFileRequested ||
-    isElectronStaticFileRequested ||
-    isGHMarkdownStaticFileRequested
-  ) {
+  if (isPubDirAllowedInRootForStaticHost(relativePath)) {
     return path.join(rootPath, relativePath)
   }
 
-  return path.join(pathToLayouts, relativePath)
+  return path.join(winLayoutsPubDir, relativePath)
 }
 
 const handleAppProtocol = async () => {
