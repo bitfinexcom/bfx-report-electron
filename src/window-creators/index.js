@@ -10,6 +10,7 @@ const {
   HOSTS,
   handleAppProtocol
 } = require('./handle-app-protocol')
+const WIN_LAYOUT_REGISTER = require('./layouts/win.layout.register')
 const appStates = require('../app-states')
 const windowStateKeeper = require('./window-state-keeper')
 const {
@@ -395,7 +396,7 @@ const createMainWindow = async ({
 const createLoadingWindow = async () => {
   const winProps = await _createChildWindow(
     {
-      layout: 'loading-window.html', // TODO:
+      layout: WIN_LAYOUT_REGISTER.LOADING_WINDOW,
       winName: WINDOW_NAMES.LOADING_WINDOW
     },
     {
@@ -414,7 +415,7 @@ const createLoadingWindow = async () => {
 const createStartupLoadingWindow = async () => {
   const winProps = await _createChildWindow(
     {
-      layout: 'startup-loading-window.html', // TODO:
+      layout: WIN_LAYOUT_REGISTER.STARTUP_LOADING_WINDOW,
       winName: WINDOW_NAMES.STARTUP_LOADING_WINDOW
     },
     {
@@ -454,7 +455,7 @@ const createModalWindow = async (args, opts) => {
   const winProps = await _createChildWindow(
     {
       shouldDevToolsBeShown,
-      layout: 'modal-window.html', // TODO:
+      layout: WIN_LAYOUT_REGISTER.MODAL_WINDOW,
       winName: WINDOW_NAMES.MODAL_WINDOW,
       didFinishLoadHook: async (win) => {
         if (shouldWinBeClosedIfClickingOutside) {
@@ -504,7 +505,7 @@ const createModalWindow = async (args, opts) => {
 const createErrorWindow = async () => {
   const winProps = await _createChildWindow(
     {
-      layout: 'app-init-error.html', // TODO:
+      layout: WIN_LAYOUT_REGISTER.APP_INIT_ERROR,
       winName: WINDOW_NAMES.ERROR_WINDOW
     },
     {
