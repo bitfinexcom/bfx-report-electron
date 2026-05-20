@@ -103,7 +103,7 @@ const getFilePath = async (parsedUrl) => {
   return path.join(pathToLayouts, relativePath)
 }
 
-module.exports = async () => {
+const handleAppProtocol = async () => {
   await app.whenReady()
 
   protocol.handle(SCHEME_NAME, async (request) => {
@@ -157,4 +157,9 @@ module.exports = async () => {
 
     await win.loadURL(url)
   }
+}
+
+module.exports = {
+  HOSTS,
+  handleAppProtocol
 }
