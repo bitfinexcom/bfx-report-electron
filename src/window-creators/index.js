@@ -6,7 +6,10 @@ const path = require('path')
 const WINDOW_NAMES = require('./window.names')
 const wins = require('./windows')
 const ipcs = require('../ipcs')
-const handleAppProtocol = require('./handle-app-protocol')
+const {
+  HOSTS,
+  handleAppProtocol
+} = require('./handle-app-protocol')
 const appStates = require('../app-states')
 const windowStateKeeper = require('./window-state-keeper')
 const {
@@ -247,7 +250,7 @@ const _createChildWindow = async (
 
   const winProps = await _createWindow(
     {
-      host: 'static', // TODO:
+      host: HOSTS.STATIC,
       layout,
       winName,
       didFinishLoadHook,
@@ -321,7 +324,7 @@ const createMainWindow = async ({
       }
   const winProps = await _createWindow(
     {
-      host: 'react', // TODO:
+      host: HOSTS.REACT,
       shouldDevToolsBeShown: IS_DEV
     },
     titleBarOpts
