@@ -32,7 +32,8 @@ const {
   envIdentifiers: {
     IS_DEV
   },
-  isWaylandSession
+  isWaylandSession,
+  openExternalUrl
 } = require('../helpers')
 const MenuIpcChannelHandlers = require(
   './main-renderer-ipc-bridge/menu-ipc-channel-handlers'
@@ -49,6 +50,33 @@ const showNativeTitleBar = parseEnvValToBool(
 )
 
 const loadURLPromise = handleAppProtocol()
+
+const _parseUrl = (url) => {
+  if (typeof url !== 'string') {
+    return
+  }
+
+  try {
+    return new URL(url)
+  } catch (err) {
+    console.debug('Failed to parse url:', url)
+  }
+}
+
+const _shouldUrlBeOpened = (win, url) => {
+  const parsedTargetUrl = _parseUrl(url)
+  const parsedCurrentUrl = _parseUrl(win.webContents.getURL())
+
+  if (
+    parsedTargetUrl?.protocol !== 'http:' &&
+    parsedTargetUrl?.protocol !== 'https:' &&
+    parsedTargetUrl?.host === parsedCurrentUrl?.host
+  ) {
+    return false
+  }
+
+  return true
+}
 
 const _setWinFullScreenAndMaximize = (win, opts) => {
   const {
@@ -182,6 +210,24 @@ const _createWindow = async (
     wins[winName],
     { host, layout }
   )
+
+  wins[winName].webContents.on('will-navigate', (event) => {
+    if (!_shouldUrlBeOpened(wins[winName], event.url)) {
+      return
+    }
+
+    event.preventDefault()
+    openExternalUrl(event.url)
+  })
+  wins[winName].webContents.setWindowOpenHandler(({ url }) => {
+    if (!_shouldUrlBeOpened(wins[winName], url)) {
+      return { action: 'allow' }
+    }
+
+    openExternalUrl(url)
+
+    return { action: 'deny' }
+  })
 
   await Promise.all([
     isReadyToShowPromise,
