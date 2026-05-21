@@ -35,6 +35,7 @@ const MIME_TYPES = {
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.svg': 'image/svg+xml',
+  '.ico': 'image/vnd.microsoft.icon',
   '.json': 'application/json'
 }
 const STATIC_PUB_DIR_REGISTER_IN_ROOT = {
