@@ -24,6 +24,7 @@ const envIdentifiers = require('./env-identifiers')
 const isWaylandSession = require('./is-wayland-session')
 const forceX11OnWayland = require('./force-x11-on-wayland')
 const migrateDbFilesToSandboxOnMacOS = require('./migrate-db-files-to-sandbox-on-macos')
+const openExternalUrl = require('./open-external-url')
 
 module.exports = {
   getFreePort,
@@ -43,5 +44,6 @@ module.exports = {
   envIdentifiers,
   isWaylandSession,
   forceX11OnWayland,
-  migrateDbFilesToSandboxOnMacOS
+  migrateDbFilesToSandboxOnMacOS,
+  openExternalUrl
 }
