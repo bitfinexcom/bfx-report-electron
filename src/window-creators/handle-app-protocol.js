@@ -36,7 +36,8 @@ const MIME_TYPES = {
   '.jpg': 'image/jpeg',
   '.svg': 'image/svg+xml',
   '.ico': 'image/vnd.microsoft.icon',
-  '.json': 'application/json'
+  '.json': 'application/json',
+  '.map': 'text/plain'
 }
 const STATIC_PUB_DIR_REGISTER_IN_ROOT = {
   UI_SUB_MODULE_STATICS: 'bfx-report-ui/build',
