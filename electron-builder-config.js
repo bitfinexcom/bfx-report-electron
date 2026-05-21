@@ -139,7 +139,8 @@ module.exports = {
     enableNodeCliInspectArguments: false,
     enableEmbeddedAsarIntegrityValidation: true,
     onlyLoadAppFromAsar: true,
-    loadBrowserProcessSpecificV8Snapshot: false
+    loadBrowserProcessSpecificV8Snapshot: false,
+    grantFileProtocolExtraPrivileges: false
   },
   productName: 'Bitfinex Report',
   artifactName: 'BitfinexReport-${version}-' + arch + '-${os}.${ext}',
