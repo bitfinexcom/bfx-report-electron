@@ -36,7 +36,8 @@ const {
   openExternalUrl
 } = require('../helpers')
 const {
-  shouldUrlBeOpened
+  shouldUrlBeOpened,
+  setWinFullScreenAndMaximize
 } = require('./helpers')
 const MenuIpcChannelHandlers = require(
   './main-renderer-ipc-bridge/menu-ipc-channel-handlers'
@@ -53,40 +54,6 @@ const showNativeTitleBar = parseEnvValToBool(
 )
 
 const loadURLPromise = handleAppProtocol()
-
-const _setWinFullScreenAndMaximize = (win, opts) => {
-  const {
-    show,
-    isFullScreen,
-    isMaximized
-  } = opts ?? {}
-
-  if (show) {
-    win.setFullScreen(isFullScreen)
-
-    if (isMaximized) {
-      win.maximize()
-
-      return
-    }
-
-    win.unmaximize()
-
-    return
-  }
-
-  win.once('show', () => {
-    win.setFullScreen(isFullScreen)
-
-    if (isMaximized) {
-      win.maximize()
-
-      return
-    }
-
-    win.unmaximize()
-  })
-}
 
 const _createWindow = async (
   params,
@@ -152,7 +119,7 @@ const _createWindow = async (
     } = windowState ?? {}
 
     wins[winName].setBounds({ x, y, width, height })
-    _setWinFullScreenAndMaximize(wins[winName], {
+    setWinFullScreenAndMaximize(wins[winName], {
       show: props.show,
       isFullScreen,
       isMaximized
