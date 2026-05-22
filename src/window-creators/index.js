@@ -1,7 +1,7 @@
 'use strict'
 
 const { BrowserWindow, screen } = require('electron')
-const path = require('path')
+const path = require('node:path')
 
 const WINDOW_NAMES = require('./window.names')
 const wins = require('./windows')
@@ -35,6 +35,9 @@ const {
   isWaylandSession,
   openExternalUrl
 } = require('../helpers')
+const {
+  parseUrl
+} = require('./helpers')
 const MenuIpcChannelHandlers = require(
   './main-renderer-ipc-bridge/menu-ipc-channel-handlers'
 )
@@ -51,21 +54,9 @@ const showNativeTitleBar = parseEnvValToBool(
 
 const loadURLPromise = handleAppProtocol()
 
-const _parseUrl = (url) => {
-  if (typeof url !== 'string') {
-    return
-  }
-
-  try {
-    return new URL(url)
-  } catch (err) {
-    console.debug('Failed to parse url:', url)
-  }
-}
-
 const _shouldUrlBeOpened = (win, url) => {
-  const parsedTargetUrl = _parseUrl(url)
-  const parsedCurrentUrl = _parseUrl(win.webContents.getURL())
+  const parsedTargetUrl = parseUrl(url)
+  const parsedCurrentUrl = parseUrl(win.webContents.getURL())
 
   if (
     parsedTargetUrl?.protocol !== 'http:' &&
