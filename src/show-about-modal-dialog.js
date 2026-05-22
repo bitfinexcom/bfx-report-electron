@@ -2,19 +2,16 @@
 
 const {
   dialog,
-  remote,
-  shell,
   clipboard,
   BrowserWindow
 } = require('electron')
-const path = require('path')
+const path = require('node:path')
 const i18next = require('i18next')
 
 const getDebugInfo = require('./helpers/get-debug-info')
+const openExternalUrl = require('./helpers/open-external-url')
 
 module.exports = () => {
-  const _dialog = dialog || remote.dialog
-
   return async () => {
     try {
       const win = BrowserWindow.getFocusedWindow()
@@ -26,7 +23,7 @@ module.exports = () => {
 
       const {
         response: btnId
-      } = await _dialog.showMessageBox(
+      } = await dialog.showMessageBox(
         win,
         {
           type: 'info',
@@ -48,7 +45,7 @@ module.exports = () => {
         return
       }
       if (btnId === 1) {
-        shell.openExternal(repositoryUrl)
+        await openExternalUrl(repositoryUrl)
       }
 
       clipboard.writeText(detail)
