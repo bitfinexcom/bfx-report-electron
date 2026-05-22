@@ -17,6 +17,9 @@ const {
   }
 } = require('../helpers')
 const { rootPath } = require('../helpers/root-path')
+const {
+  parseUrl
+} = require('./helpers')
 
 const shouldLocalhostBeUsedForLoadingUIInDevMode = parseEnvValToBool(
   process.env.SHOULD_LOCALHOST_BE_USED_FOR_LOADING_UI_IN_DEV_MODE
@@ -117,24 +120,29 @@ const handleAppProtocol = async () => {
 
   protocol.handle(SCHEME_NAME, async (request) => {
     // parsedUrl.host === 'react' or 'static' (from URL like app://react/..)
-    const parsedUrl = new URL(request.url)
+    const parsedUrl = parseUrl(request.url)
 
+    if (!parsedUrl) {
+      return new Response('Not Found', { status: 404 })
+    }
     if (
       parsedUrl.host === HOSTS.REACT &&
       IS_DEV &&
       shouldLocalhostBeUsedForLoadingUIInDevMode
     ) {
-      const uiHost = 'localhost'
-      const devServerUrl = `http://${uiHost}:${uiPort}${parsedUrl.pathname}${parsedUrl.search}`
-      await waitPort({ host: uiHost, port: uiPort })
-
       try {
+        const uiHost = 'localhost'
+        const devServerUrl = `http://${uiHost}:${uiPort}${parsedUrl.pathname}${parsedUrl.search}`
+        await waitPort({ host: uiHost, port: uiPort })
+
         return await net.fetch(devServerUrl, {
           method: request.method,
           headers: request.headers,
           body: request.body
         })
       } catch (err) {
+        console.debug(err)
+
         return new Response('DevServer Error', { status: 502 })
       }
     }
@@ -154,7 +162,9 @@ const handleAppProtocol = async () => {
         status: 200,
         headers: { 'content-type': mimeType }
       })
-    } catch (error) {
+    } catch (err) {
+      console.debug(err)
+
       return new Response('Internal Error', { status: 500 })
     }
   })
