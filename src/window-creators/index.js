@@ -36,7 +36,7 @@ const {
   openExternalUrl
 } = require('../helpers')
 const {
-  parseUrl
+  shouldUrlBeOpened
 } = require('./helpers')
 const MenuIpcChannelHandlers = require(
   './main-renderer-ipc-bridge/menu-ipc-channel-handlers'
@@ -53,21 +53,6 @@ const showNativeTitleBar = parseEnvValToBool(
 )
 
 const loadURLPromise = handleAppProtocol()
-
-const _shouldUrlBeOpened = (win, url) => {
-  const parsedTargetUrl = parseUrl(url)
-  const parsedCurrentUrl = parseUrl(win.webContents.getURL())
-
-  if (
-    parsedTargetUrl?.protocol !== 'http:' &&
-    parsedTargetUrl?.protocol !== 'https:' &&
-    parsedTargetUrl?.host === parsedCurrentUrl?.host
-  ) {
-    return false
-  }
-
-  return true
-}
 
 const _setWinFullScreenAndMaximize = (win, opts) => {
   const {
@@ -203,7 +188,7 @@ const _createWindow = async (
   )
 
   wins[winName].webContents.on('will-navigate', (event) => {
-    if (!_shouldUrlBeOpened(wins[winName], event.url)) {
+    if (!shouldUrlBeOpened(wins[winName], event.url)) {
       return
     }
 
@@ -211,7 +196,7 @@ const _createWindow = async (
     openExternalUrl(event.url)
   })
   wins[winName].webContents.setWindowOpenHandler(({ url }) => {
-    if (!_shouldUrlBeOpened(wins[winName], url)) {
+    if (!shouldUrlBeOpened(wins[winName], url)) {
       return { action: 'allow' }
     }
 
