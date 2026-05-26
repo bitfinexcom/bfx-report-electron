@@ -1,13 +1,16 @@
 'use strict'
 
 const { BrowserWindow, screen } = require('electron')
-const path = require('path')
-const { URL } = require('url')
+const path = require('node:path')
 
 const WINDOW_NAMES = require('./window.names')
 const wins = require('./windows')
 const ipcs = require('../ipcs')
-const serve = require('../serve')
+const {
+  HOSTS,
+  handleAppProtocol
+} = require('./handle-app-protocol')
+const WIN_LAYOUT_REGISTER = require('./layouts/win.layout.register')
 const appStates = require('../app-states')
 const windowStateKeeper = require('./window-state-keeper')
 const {
@@ -23,15 +26,19 @@ const {
 const {
   isBfxApiStaging,
   parseEnvValToBool,
-  waitPort,
   platformIdentifiers: {
     IS_MAC
   },
   envIdentifiers: {
     IS_DEV
   },
-  isWaylandSession
+  isWaylandSession,
+  openExternalUrl
 } = require('../helpers')
+const {
+  shouldUrlBeOpened,
+  setWinFullScreenAndMaximize
+} = require('./helpers')
 const MenuIpcChannelHandlers = require(
   './main-renderer-ipc-bridge/menu-ipc-channel-handlers'
 )
@@ -42,106 +49,19 @@ const ModalIpcChannelHandlers = require(
   './main-renderer-ipc-bridge/modal-ipc-channel-handlers'
 )
 
-const shouldLocalhostBeUsedForLoadingUIInDevMode = parseEnvValToBool(
-  process.env.SHOULD_LOCALHOST_BE_USED_FOR_LOADING_UI_IN_DEV_MODE
-)
-const uiPort = process.env.UI_PORT ?? 3000
 const showNativeTitleBar = parseEnvValToBool(
   process.env.SHOW_NATIVE_TITLE_BAR
 )
 
-const publicDir = path.join(__dirname, '../../bfx-report-ui/build')
-const loadURL = serve({ directory: publicDir })
-
-const pathToLayouts = path.join(__dirname, 'layouts')
-const pathToLoadingLayout = path
-  .join(pathToLayouts, 'loading-window.html')
-const pathToStartupLoadingLayout = path
-  .join(pathToLayouts, 'startup-loading-window.html')
-const pathToAppInitErrorLayout = path
-  .join(pathToLayouts, 'app-init-error.html')
-const pathToModalLayout = path
-  .join(pathToLayouts, 'modal-window.html')
-
-const _getFileURL = (params) => {
-  const {
-    protocol = 'file',
-    hostname = '',
-    pathname = ''
-  } = params ?? {}
-
-  const fileURL = new URL('file://./')
-
-  fileURL.protocol = protocol
-  fileURL.hostname = hostname
-  fileURL.pathname = pathname
-
-  return fileURL.toString()
-}
-
-const _loadUI = async (params) => {
-  const {
-    winName,
-    pathname
-  } = params ?? {}
-
-  if (
-    !pathname &&
-    IS_DEV &&
-    shouldLocalhostBeUsedForLoadingUIInDevMode
-  ) {
-    const uiHost = 'localhost'
-    await waitPort({ host: uiHost, port: uiPort })
-
-    return wins[winName].loadURL(`http://${uiHost}:${uiPort}`)
-  }
-  if (pathname) {
-    return wins[winName].loadURL(_getFileURL({ pathname }))
-  }
-
-  return loadURL(wins[winName])
-}
-
-const _setWinFullScreenAndMaximize = (win, opts) => {
-  const {
-    show,
-    isFullScreen,
-    isMaximized
-  } = opts ?? {}
-
-  if (show) {
-    win.setFullScreen(isFullScreen)
-
-    if (isMaximized) {
-      win.maximize()
-
-      return
-    }
-
-    win.unmaximize()
-
-    return
-  }
-
-  win.once('show', () => {
-    win.setFullScreen(isFullScreen)
-
-    if (isMaximized) {
-      win.maximize()
-
-      return
-    }
-
-    win.unmaximize()
-  })
-}
+const loadURLPromise = handleAppProtocol()
 
 const _createWindow = async (
   params,
   winProps
 ) => {
   const {
-    pathname = null,
+    host,
+    layout,
     winName = WINDOW_NAMES.MAIN_WINDOW,
     didFinishLoadHook,
     shouldDevToolsBeShown
@@ -199,7 +119,7 @@ const _createWindow = async (
     } = windowState ?? {}
 
     wins[winName].setBounds({ x, y, width, height })
-    _setWinFullScreenAndMaximize(wins[winName], {
+    setWinFullScreenAndMaximize(wins[winName], {
       show: props.show,
       isFullScreen,
       isMaximized
@@ -228,7 +148,29 @@ const _createWindow = async (
       wins[winName].once('ready-to-show', resolve)
     })
 
-  const didFinishLoadPromise = _loadUI({ winName, pathname })
+  const loadURL = await loadURLPromise
+  const didFinishLoadPromise = loadURL(
+    wins[winName],
+    { host, layout }
+  )
+
+  wins[winName].webContents.on('will-navigate', (event) => {
+    if (!shouldUrlBeOpened(wins[winName], event.url)) {
+      return
+    }
+
+    event.preventDefault()
+    openExternalUrl(event.url)
+  })
+  wins[winName].webContents.setWindowOpenHandler(({ url }) => {
+    if (!shouldUrlBeOpened(wins[winName], url)) {
+      return { action: 'allow' }
+    }
+
+    openExternalUrl(url)
+
+    return { action: 'deny' }
+  })
 
   await Promise.all([
     isReadyToShowPromise,
@@ -280,7 +222,7 @@ const _createChildWindow = async (
   opts
 ) => {
   const {
-    pathname,
+    layout,
     winName,
     didFinishLoadHook,
     shouldDevToolsBeShown
@@ -298,7 +240,8 @@ const _createChildWindow = async (
 
   const winProps = await _createWindow(
     {
-      pathname,
+      host: HOSTS.STATIC,
+      layout,
       winName,
       didFinishLoadHook,
       shouldDevToolsBeShown
@@ -370,7 +313,10 @@ const createMainWindow = async ({
         ...titleBarOverlayOpt
       }
   const winProps = await _createWindow(
-    { shouldDevToolsBeShown: IS_DEV },
+    {
+      host: HOSTS.REACT,
+      shouldDevToolsBeShown: IS_DEV
+    },
     titleBarOpts
   )
   const {
@@ -439,7 +385,7 @@ const createMainWindow = async ({
 const createLoadingWindow = async () => {
   const winProps = await _createChildWindow(
     {
-      pathname: pathToLoadingLayout,
+      layout: WIN_LAYOUT_REGISTER.LOADING_WINDOW,
       winName: WINDOW_NAMES.LOADING_WINDOW
     },
     {
@@ -458,7 +404,7 @@ const createLoadingWindow = async () => {
 const createStartupLoadingWindow = async () => {
   const winProps = await _createChildWindow(
     {
-      pathname: pathToStartupLoadingLayout,
+      layout: WIN_LAYOUT_REGISTER.STARTUP_LOADING_WINDOW,
       winName: WINDOW_NAMES.STARTUP_LOADING_WINDOW
     },
     {
@@ -498,7 +444,7 @@ const createModalWindow = async (args, opts) => {
   const winProps = await _createChildWindow(
     {
       shouldDevToolsBeShown,
-      pathname: pathToModalLayout,
+      layout: WIN_LAYOUT_REGISTER.MODAL_WINDOW,
       winName: WINDOW_NAMES.MODAL_WINDOW,
       didFinishLoadHook: async (win) => {
         if (shouldWinBeClosedIfClickingOutside) {
@@ -548,7 +494,7 @@ const createModalWindow = async (args, opts) => {
 const createErrorWindow = async () => {
   const winProps = await _createChildWindow(
     {
-      pathname: pathToAppInitErrorLayout,
+      layout: WIN_LAYOUT_REGISTER.APP_INIT_ERROR,
       winName: WINDOW_NAMES.ERROR_WINDOW
     },
     {
