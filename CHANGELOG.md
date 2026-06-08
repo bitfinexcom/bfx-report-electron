@@ -7,6 +7,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.46.0] - 2026-06-10
+
+### Added
+
+- Extended `USDT0` and `XAUT0` currencies (not presented in pairs) support in the `symbol` filters. PR: [bfx-report-ui#1080](https://github.com/bitfinexcom/bfx-report-ui/pull/1080)
+
+### Changed
+
+- Reworked the `Concentration Risk` section more concisely and optimally to reduce technical debt and redundant code, also added minor styling tweaks for better UX. PR: [bfx-report-ui#1077](https://github.com/bitfinexcom/bfx-report-ui/pull/1077)
+- Reworked the `Traded Volume` report more concisely and optimally to reduce technical debt and redundant code. PR: [bfx-report-ui#1079](https://github.com/bitfinexcom/bfx-report-ui/pull/1079)
+
+### Fixed
+
+- Fixed cyclic unauth error for `authToken` when generating report files. PR: [bfx-report#480](https://github.com/bitfinexcom/bfx-report/pull/480)
+- Fixed currency conversion data finding error related to this issue: [bfx-report-electron#630](https://github.com/bitfinexcom/bfx-report-electron/issues/630). PR: [bfx-reports-framework#516](https://github.com/bitfinexcom/bfx-reports-framework/pull/516)
+
+### Security
+
+- Configured `Electron Fuse`: `grantFileProtocolExtraPrivileges: false` to improve application safety. PR: [bfx-report-electron#631](https://github.com/bitfinexcom/bfx-report-electron/pull/631)
+- Updated dependencies, fixed high vulnerabilities, and pined to exact versions. PR: [bfx-report-ui#1078](https://github.com/bitfinexcom/bfx-report-ui/pull/1078)
+
 ## [4.45.0] - 2026-05-20
 
 ### Added

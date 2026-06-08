@@ -1,6 +1,6 @@
 {
   "name": "bfx-report-electron",
-  "version": "4.45.0",
+  "version": "4.46.0",
   "repository": "https://github.com/bitfinexcom/bfx-report-electron",
   "description": "Reporting tool",
   "author": "bitfinex.com",
@@ -64,7 +64,7 @@
   },
   "scripts": {
     "start": "cross-env NODE_ENV=development DEBUG=* electron . --ozone-platform=x11",
-    "startWithUIOnPort": "concurrently -ki -c green,blue -n UI,ELECTRON \"npm run startUI\" \"cross-env NODE_ENV=development DEBUG=* SHOULD_LOCALHOST_BE_USED_FOR_LOADING_UI_IN_DEV_MODE=1 electron .\"",
+    "startWithUIOnPort": "concurrently -ki -c green,blue -n UI,ELECTRON \"npm run startUI\" \"cross-env NODE_ENV=development DEBUG=* SHOULD_LOCALHOST_BE_USED_FOR_LOADING_UI_IN_DEV_MODE=1 electron . --ozone-platform=x11\"",
     "test": "standard && npm run unit",
     "unit": "cross-env NODE_ENV=test mocha './src/**/__test__/*.spec.js' --config .mocharc.json",
     "setup": "./scripts/setup.sh",
