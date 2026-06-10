@@ -276,12 +276,8 @@ module.exports = async (params) => {
               ? wins.mainWindow
               : focusedWindow
 
-            if (!win) {
-              return
-            }
-
-            win.reload()
-            triggerElectronLoad()
+            triggerElectronLoad({ win, reload: true })
+              .catch((err) => console.error(err))
           }
         },
         {
@@ -293,12 +289,8 @@ module.exports = async (params) => {
               ? wins.mainWindow
               : focusedWindow
 
-            if (!win) {
-              return
-            }
-
-            win.webContents.reloadIgnoringCache()
-            triggerElectronLoad()
+            triggerElectronLoad({ win, forceReload: true })
+              .catch((err) => console.error(err))
           }
         },
         {
