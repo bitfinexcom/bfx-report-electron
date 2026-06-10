@@ -21,6 +21,7 @@ const GENERAL_INVOKE_METHOD_NAMES = {
   SHOW_ITEM_IN_FOLDER: 'showItemInFolder'
 }
 const GENERAL_EVENT_METHOD_NAMES = {
+  ON_TRIGGER_ELECTRON_LOAD: 'onTriggerElectronLoad',
   ON_LOADING_DESCRIPTION: 'onLoadingDescription',
   ON_LOADING_BTN_STATES: 'onLoadingBtnStates',
   SEND_LOADING_DESCRIPTION_READY: 'sendLoadingDescriptionReady',
