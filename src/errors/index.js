@@ -162,7 +162,7 @@ class OutOfZipBoundPathError extends BaseError {
 class AbsoluteUnzipDestinationPathError extends BaseError {
   constructor (args) {
     super(
-      args?.message ?? 'ERR_DESTINATION_DIR_OF_UNZIP_IS EXPECTED_TO_BE_ABSOLUTE',
+      args?.message ?? 'ERR_DESTINATION_DIR_OF_UNZIP_IS_EXPECTED_TO_BE_ABSOLUTE',
       args?.data
     )
   }
@@ -171,6 +171,15 @@ class AbsoluteUnzipDestinationPathError extends BaseError {
 class PdfCreationTimeoutError extends BaseError {
   constructor (message = 'ERR_PDF_CREATION_TIMEOUT') {
     super(message)
+  }
+}
+
+class WebContentReloadError extends BaseError {
+  constructor (args) {
+    super(
+      args?.message ?? 'ERR_FAILED_TO_RELOAD_WEB_CONTENT',
+      args?.data
+    )
   }
 }
 
@@ -198,5 +207,6 @@ module.exports = {
   DataValidationSchemaDefError,
   OutOfZipBoundPathError,
   AbsoluteUnzipDestinationPathError,
-  PdfCreationTimeoutError
+  PdfCreationTimeoutError,
+  WebContentReloadError
 }
