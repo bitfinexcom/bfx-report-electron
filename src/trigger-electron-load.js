@@ -8,6 +8,9 @@ const GeneralIpcChannelHandlers = require(
   './window-creators/main-renderer-ipc-bridge/general-ipc-channel-handlers'
 )
 const isMainWinAvailable = require('./helpers/is-main-win-available')
+const {
+  WebContentReloadError
+} = require('./errors')
 
 const pathToTriggerElectronLoad = path.join(
   __dirname,
@@ -46,7 +49,10 @@ const reloadWindow = (win, opts) => {
       win.webContents
         .removeListener('did-finish-load', handleSuccess)
 
-      reject(new Error(`Reload failed with code ${errCode}: ${errDescr}`))
+      reject(new WebContentReloadError({
+        code: errCode,
+        description: errDescr
+      }))
     }
 
     win.webContents.once('did-finish-load', handleSuccess)
