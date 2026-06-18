@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.46.1] - 2026-06-18
+
+### Added
+
+- Added endpoints for recaptcha to overcome cors on framework. PR: [bfx-reports-framework#520](https://github.com/bitfinexcom/bfx-reports-framework/pull/520)
+
+### Changed
+
+- Allowed mocking of non-array data to add endpoint tests for recaptcha. PR: [bfx-report#484](https://github.com/bitfinexcom/bfx-report/pull/484)
+- Made refactoring to dedicate a separate file for report queue event names. PRs: [bfx-report#483](https://github.com/bitfinexcom/bfx-report/pull/483), [bfx-reports-framework#519](https://github.com/bitfinexcom/bfx-reports-framework/pull/519)
+- Made a workaround for triggering the `electron-load` event for UI load during app initialization. This is needed to avoid js execution of injected code into ui BrowserWindow for triggering the corresponding event. PR: [bfx-report-electron#635](https://github.com/bitfinexcom/bfx-report-electron/pull/635)
+- Reworked the `Staking Earnings` section more concisely and optimally to reduce technical debt and redundant code. PR: [bfx-report-ui#1083](https://github.com/bitfinexcom/bfx-report-ui/pull/1083)
+
+### Fixed
+
+- Implemented `ReCAPTCHA` and `HCaptcha` integration support into the existing Reports app `2FA` authorization flow. PR: [bfx-report-ui#1084](https://github.com/bitfinexcom/bfx-report-ui/pull/1084)
+
 ## [4.46.0] - 2026-06-10
 
 ### Added
