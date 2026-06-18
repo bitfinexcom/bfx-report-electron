@@ -28,6 +28,10 @@ class GeneralIpcChannelHandlers extends IpcChannelHandlers {
     return this.handleListener(this.onLoadingDescriptionReady, cb)
   }
 
+  static sendTriggerElectronLoad (win, args) {
+    return this.sendToRenderer(this.sendTriggerElectronLoad, win, args)
+  }
+
   static sendLoadingDescription (win, args) {
     return this.sendToRenderer(this.sendLoadingDescription, win, args)
   }
