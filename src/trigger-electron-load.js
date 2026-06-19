@@ -1,8 +1,5 @@
 'use strict'
 
-const path = require('node:path')
-const fs = require('node:fs')
-
 const wins = require('./window-creators/windows')
 const GeneralIpcChannelHandlers = require(
   './window-creators/main-renderer-ipc-bridge/general-ipc-channel-handlers'
@@ -12,16 +9,6 @@ const {
   WebContentReloadError
 } = require('./errors')
 
-const pathToTriggerElectronLoad = path.join(
-  __dirname,
-  '../bfx-report-ui/build/triggerElectronLoad.js'
-)
-const triggerElectronLoadStr = fs.readFileSync(
-  pathToTriggerElectronLoad,
-  'utf8'
-)
-
-const placeholderPattern = /\$\{apiPort\}/
 let cachedExpressApiPort = null
 
 const reloadWindow = (win, opts) => {
@@ -78,10 +65,6 @@ module.exports = async (args) => {
   const expressApiPort = args?.expressApiPort ?? cachedExpressApiPort
 
   cachedExpressApiPort = expressApiPort
-  const scriptStr = triggerElectronLoadStr.replace(
-    placeholderPattern,
-    expressApiPort
-  )
 
   await reloadWindow(win, args)
 
@@ -89,5 +72,4 @@ module.exports = async (args) => {
     win,
     { expressApiPort }
   )
-  await win.webContents.executeJavaScript(scriptStr)
 }
