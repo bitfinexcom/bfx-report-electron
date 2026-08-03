@@ -15,10 +15,6 @@ function installBackendDeps {
   source "$ROOT/scripts/helpers/get-conf-value.sh"
   source "$ROOT/scripts/helpers/check-node-modules-dir.sh"
 
-  local ARCH=${ARCH:-"x64"}
-  local DIST_URL="https://electronjs.org/headers"
-  local ELECTRON_VER=$(getConfValue "electron" "$ROOT")
-
   local unameOut="$(uname -s)"
   local machine="${1:-"$unameOut"}"
   local targetPlatform=""
