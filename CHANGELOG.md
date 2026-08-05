@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.47.0] - 2026-08-12
+
+### Added
+
+- Added `weighted-average-report` export to PDF file for consistency with other report exports. Also, prevented skipping weighted-averages-report export test for pdf as it was added some time ago. PRs: [bfx-report#487](https://github.com/bitfinexcom/bfx-report/pull/487), [bfx-reports-framework#523](https://github.com/bitfinexcom/bfx-reports-framework/pull/523)
+- Added more efficient way to filter `ledgers` by `wallet` as the `rest_v2_api` supports it. PRs: [bfx-report-ui#1100](https://github.com/bitfinexcom/bfx-report-ui/pull/1100), [bfx-report#489](https://github.com/bitfinexcom/bfx-report/pull/489), [bfx-reports-framework#524](https://github.com/bitfinexcom/bfx-reports-framework/pull/524), [bitfinex-api-node#597](https://github.com/bitfinexcom/bitfinex-api-node/pull/597), [bfx-api-node-rest#115](https://github.com/bitfinexcom/bfx-api-node-rest/pull/115)
+- Setup GH Actions workflow to run UI tests and show the corresponding report. PR: [bfx-report-ui#1097](https://github.com/bitfinexcom/bfx-report-ui/pull/1097)
+- Added exponential backoff and jitter for WS reconnection. PRs: [bfx-report-ui#1099](https://github.com/bitfinexcom/bfx-report-ui/pull/1099), [bfx-report-ui#1101](https://github.com/bitfinexcom/bfx-report-ui/pull/1101)
+
+### Changed
+
+- Updated `api-node-rest` package. PR: [bfx-report#488](https://github.com/bitfinexcom/bfx-report/pull/488)
+- Cleaned up `triggerElectronLoad` init with bash scripts and injection via electron api after ui changes. PR: [bfx-report-electron#640](https://github.com/bitfinexcom/bfx-report-electron/pull/640)
+- Updated `electronjs` to `v43` as `v40` has reached its end of life. PR: [bfx-report-electron#641](https://github.com/bitfinexcom/bfx-report-electron/pull/641)
+- Updated `better-sqlite3` db driver up to `v13.0.1` to have the last prebuilt binaries (and removed the deprecated `prebuild-install`) and be able to launch the driver under electron `v43` as `v40` has reached its end of life. PR: [bfx-facs-db-better-sqlite#18](https://github.com/bitfinexcom/bfx-facs-db-better-sqlite/pull/18)
+- Used new method `window.bfxReportElectronApi.onTriggerElectronLoad((args) => {})` to listen for the `electron-load` event during app initialization. This is needed to avoid js execution of injected code into ui `BrowserWindow` for triggering the corresponding event. PR: [bfx-report-ui#1087](https://github.com/bitfinexcom/bfx-report-ui/pull/1087)
+- Refactored the `Weighted Averages` report as a functional and implemented a unified `useSinglePairFilter` hook. PR: [bfx-report-ui#1088](https://github.com/bitfinexcom/bfx-report-ui/pull/1088)
+- Replaced the coarse `less than an hour ago / N hours ago` last-sync label with a precise human-readable scale (just now --> less than 5/10/15/30 mins --> ~N hours --> yesterday --> N days ago --> exact date for older syncs), giving users a much clearer sense of how fresh their data is according to the UX improvement proposals. PR: [bfx-report-ui#1090](https://github.com/bitfinexcom/bfx-report-ui/pull/1090)
+- Reworked the `Funding Earnings` section more concisely and optimally to reduce technical debt and redundant code. PR: [bfx-report-ui#1091](https://github.com/bitfinexcom/bfx-report-ui/pull/1091)
+- Removed `Portuguese` language support according to the latest requirements. PR: [bfx-report-ui#1093](https://github.com/bitfinexcom/bfx-report-ui/pull/1093)
+- Reworked the `Loan report` more concisely and optimally to reduce technical debt and redundant code. PR: [bfx-report-ui#1098](https://github.com/bitfinexcom/bfx-report-ui/pull/1098)
+
+### Fixed
+
+- Fixed outdated test suites, related configurations and dependencies. PR: [bfx-report-ui#1095](https://github.com/bitfinexcom/bfx-report-ui/pull/1095)
+
+### Security
+
+- Migrated `inversifyjs` to `v7` and considered the corresponding migration guide https://inversify.io/docs/7.x/guides/migrating-from-v6/. Also updated deps and applies `npm audit fix` to fix dep vulnerabilities. Bumped `node` engine ver to `>=v22`. PRs: [bfx-report#490](https://github.com/bitfinexcom/bfx-report/pull/490), [bfx-reports-framework#525](https://github.com/bitfinexcom/bfx-reports-framework/pull/525)
+- Updated UI dependencies to fix high and critical vulnerabilities. PR: [bfx-report-ui#1089](https://github.com/bitfinexcom/bfx-report-ui/pull/1089)
+
 ## [4.46.1] - 2026-06-18
 
 ### Added
