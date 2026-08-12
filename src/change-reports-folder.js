@@ -15,6 +15,9 @@ const relaunch = require('./relaunch')
 const { getConfigsKeeperByName } = require('./configs-keeper')
 const wins = require('./window-creators/windows')
 const isMainWinAvailable = require('./helpers/is-main-win-available')
+const makeReportFolderAndShowModalIfNoWritePerm = require(
+  './make-report-folder-and-show-modal-if-no-write-perm'
+)
 
 module.exports = ({ pathToUserDocuments }) => {
   return async () => {
@@ -57,10 +60,19 @@ module.exports = ({ pathToUserDocuments }) => {
         throw new InvalidFilePathError()
       }
 
-      // TODO:
-      // await makeReportFolderAndShowModalIfNoWritePerm({
-      //   pathToUserReportFiles: newReportFilePath
-      // })
+      const {
+        invalidPath,
+        noWritePerm
+      } = await makeReportFolderAndShowModalIfNoWritePerm({
+        pathToUserReportFiles: newReportFilePath
+      })
+
+      if (invalidPath) {
+        throw new InvalidFilePathError()
+      }
+      if (noWritePerm) {
+        return
+      }
 
       await pauseApp()
       const isSaved = await mainConfsKeeper.saveConfigs({
