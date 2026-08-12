@@ -58,6 +58,9 @@ const manageWorkerMessages = require(
   './manage-worker-messages'
 )
 const printToPDF = require('./print-to-pdf')
+const makeReportFolderAndShowModalIfNoWritePerm = require(
+  './make-report-folder-and-show-modal-if-no-write-perm'
+)
 
 const _ipcMessToPromise = (ipc) => {
   return new Promise((resolve, reject) => {
@@ -178,6 +181,7 @@ module.exports = async () => {
     await checkForUpdatesAndNotify()
 
     printToPDF()
+    await makeReportFolderAndShowModalIfNoWritePerm()
   } catch (err) {
     await app.whenReady()
     await createErrorWindow()
