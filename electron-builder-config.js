@@ -176,7 +176,8 @@ module.exports = {
       'dir',
       'nsis'
     ],
-    verifyUpdateCodeSignature: false
+    verifyUpdateCodeSignature: false,
+    requestedExecutionLevel: 'requireAdministrator'
   },
   mac: {
     type: 'distribution',
