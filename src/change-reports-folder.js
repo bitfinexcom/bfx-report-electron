@@ -23,6 +23,9 @@ module.exports = ({ pathToUserDocuments }) => {
       : BrowserWindow.getFocusedWindow()
 
     try {
+      const mainConfsKeeper = getConfigsKeeperByName()
+      const pathToUserReportFiles = mainConfsKeeper
+        .getConfigByName('pathToUserReportFiles')
       const {
         filePaths,
         canceled
@@ -30,7 +33,7 @@ module.exports = ({ pathToUserDocuments }) => {
         win,
         {
           title: i18next.t('changeReportsFolder.modalDialog.title'),
-          defaultPath: pathToUserDocuments,
+          defaultPath: pathToUserReportFiles ?? pathToUserDocuments,
           buttonLabel: i18next.t('changeReportsFolder.modalDialog.buttonLabel'),
           properties: [
             'openDirectory',
@@ -41,25 +44,29 @@ module.exports = ({ pathToUserDocuments }) => {
         }
       )
 
+      const newReportFilePath = filePaths?.[0]
+
       if (
         canceled ||
-        !Array.isArray(filePaths) ||
-        filePaths.length === 0
+        !newReportFilePath ||
+        newReportFilePath === pathToUserReportFiles
       ) {
         return
       }
-      if (filePaths.some(file => (
-        !file || typeof file !== 'string'
-      ))) {
+      if (typeof newReportFilePath !== 'string') {
         throw new InvalidFilePathError()
       }
 
+      // TODO:
+      // await makeReportFolderAndShowModalIfNoWritePerm({
+      //   pathToUserReportFiles: newReportFilePath
+      // })
+
       await pauseApp()
-      const isSaved = await getConfigsKeeperByName()
-        .saveConfigs({
-          reportFilesPathVersion: REPORT_FILES_PATH_VERSION,
-          pathToUserReportFiles: filePaths[0]
-        })
+      const isSaved = await mainConfsKeeper.saveConfigs({
+        reportFilesPathVersion: REPORT_FILES_PATH_VERSION,
+        pathToUserReportFiles: newReportFilePath
+      })
 
       if (!isSaved) {
         throw new ReportsFolderChangingError()
