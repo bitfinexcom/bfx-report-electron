@@ -153,6 +153,19 @@ body::-webkit-scrollbar-thumb,
   color: var(--color, #ffffff);
 }
 
+.modal__text--warning {
+  color: var(--warningBg, #fbb13c);
+  margin-bottom: 10px;
+}
+
+.modal__text--left {
+  text-align: left;
+}
+
+.modal__text--center {
+  text-align: center;
+}
+
 .modal__btns {
   display: flex;
   align-self: center;
