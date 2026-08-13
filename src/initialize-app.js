@@ -181,7 +181,9 @@ module.exports = async () => {
     await checkForUpdatesAndNotify()
 
     printToPDF()
-    await makeReportFolderAndShowModalIfNoWritePerm()
+    // No need to wait for user actions
+    makeReportFolderAndShowModalIfNoWritePerm()
+      .catch((err) => console.error(err))
   } catch (err) {
     await app.whenReady()
     await createErrorWindow()
