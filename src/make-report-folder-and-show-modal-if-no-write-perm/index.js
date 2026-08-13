@@ -8,8 +8,10 @@ const {
     mkdir
   }
 } = require('node:fs')
+const i18next = require('i18next')
 
 const { getConfigsKeeperByName } = require('../configs-keeper')
+const { createModalWindow } = require('../window-creators')
 
 const getReportFilePath = (args) => {
   const {
@@ -26,7 +28,6 @@ const getReportFilePath = (args) => {
   return savedPathToUserReportFiles
 }
 
-// TODO:
 const showModalWindow = async (args) => {
   const {
     noModalWindow,
@@ -36,6 +37,27 @@ const showModalWindow = async (args) => {
   if (noModalWindow) {
     return
   }
+
+  await createModalWindow(
+    {
+      icon: 'warning',
+      title: i18next.t('reportFolderPerm.title'),
+      text: i18next.t('reportFolderPerm.message', {
+        reportFilePath: `<div class="modal__text--warning modal__text--center">${reportFilePath}</div>`,
+        interpolation: { escapeValue: false }
+      }),
+      textClassName: 'modal__text--left',
+      showConfirmButton: false,
+      showCancelButton: true,
+      cancelButtonText: i18next.t('common.cancelButtonText'),
+      focusCancel: true
+    },
+    {
+      width: 600,
+      height: 600,
+      shouldWinBeClosedIfClickingOutside: true
+    }
+  )
 }
 
 module.exports = async (args) => {
