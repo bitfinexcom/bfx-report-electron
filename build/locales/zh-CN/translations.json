@@ -281,5 +281,9 @@
       "restoreDBButtonText": "尝试恢复数据库",
       "removeDBButtonText": "移除数据库"
     }
+  },
+  "reportFolderPerm": {
+    "title": "访问报告导出文件夹时出现问题",
+    "message": "应用程序没有对以下报告导出文件夹的写入权限： {{reportFilePath}} 请更改系统设置，或在应用程序菜单中选择其他导出文件夹"
   }
 }
