@@ -66,6 +66,7 @@ module.exports = async (args) => {
 
   if (!path.isAbsolute(reportFilePath)) {
     return {
+      reportFilePath,
       invalidPath: true,
       noWritePerm: false
     }
@@ -78,6 +79,7 @@ module.exports = async (args) => {
       await showModalWindow({ noModalWindow, reportFilePath })
 
       return {
+        reportFilePath,
         invalidPath: false,
         noWritePerm: true
       }
@@ -89,18 +91,28 @@ module.exports = async (args) => {
         { recursive: true, mode: '766' }
       )
       await access(reportFilePath, W_OK)
-    } catch (err) {
-      await showModalWindow({ noModalWindow, reportFilePath })
 
       return {
+        reportFilePath,
         invalidPath: false,
-        noWritePerm: true
+        noWritePerm: false
       }
+    } catch (err) {
+      console.debug(err)
     }
 
+    await showModalWindow({ noModalWindow, reportFilePath })
+
     return {
+      reportFilePath,
       invalidPath: false,
-      noWritePerm: false
+      noWritePerm: true
     }
+  }
+
+  return {
+    reportFilePath,
+    invalidPath: false,
+    noWritePerm: false
   }
 }
