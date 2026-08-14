@@ -281,5 +281,9 @@
       "restoreDBButtonText": "Thử khôi phục cơ sở dữ liệu",
       "removeDBButtonText": "Xóa cơ sở dữ liệu"
     }
+  },
+  "reportFolderPerm": {
+    "title": "Sự cố khi truy cập thư mục xuất báo cáo",
+    "message": "Ứng dụng không có quyền ghi vào thư mục xuất báo cáo tại: {{reportFilePath}} Vui lòng thay đổi cài đặt hệ thống hoặc chọn một thư mục xuất khác trong menu ứng dụng"
   }
 }
