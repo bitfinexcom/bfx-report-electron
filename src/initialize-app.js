@@ -21,6 +21,9 @@ const AutoUpdateIpcChannelHandlers = require(
 const ModalIpcChannelHandlers = require(
   './window-creators/main-renderer-ipc-bridge/modal-ipc-channel-handlers'
 )
+const ReportExportIpcChannelHandlers = require(
+  './window-creators/main-renderer-ipc-bridge/report-export-ipc-channel-handlers'
+)
 const triggerSyncAfterUpdates = require('./trigger-sync-after-updates')
 const triggerElectronLoad = require('./trigger-electron-load')
 const runServer = require('./run-server')
@@ -118,7 +121,8 @@ module.exports = async () => {
       MenuIpcChannelHandlers,
       ThemeIpcChannelHandlers,
       AutoUpdateIpcChannelHandlers,
-      ModalIpcChannelHandlers
+      ModalIpcChannelHandlers,
+      ReportExportIpcChannelHandlers
     )
 
     app.disableHardwareAcceleration()
