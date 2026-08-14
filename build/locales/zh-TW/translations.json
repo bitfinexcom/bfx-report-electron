@@ -281,5 +281,9 @@
       "restoreDBButtonText": "嘗試恢復資料庫",
       "removeDBButtonText": "刪除資料庫"
     }
+  },
+  "reportFolderPerm": {
+    "title": "存取報告匯出資料夾時發生問題",
+    "message": "應用程式沒有以下報告匯出資料夾的寫入權限： {{reportFilePath}} 請變更系統設定，或在應用程式選單中選擇其他匯出資料夾"
   }
 }
