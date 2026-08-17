@@ -5,7 +5,9 @@ const {
   constants: { W_OK },
   promises: {
     access,
-    mkdir
+    mkdir,
+    writeFile,
+    rm
   }
 } = require('node:fs')
 const i18next = require('i18next')
@@ -60,6 +62,20 @@ const showModalWindow = async (args) => {
   )
 }
 
+const checkAccess = async (reportFilePath) => {
+  await access(reportFilePath, W_OK)
+
+  // Need to write to a real file to check the dynamic antivirus blocks
+  const emptyFilePath = path.join(reportFilePath, 'empty')
+
+  await writeFile(emptyFilePath, 'empty')
+  await rm(emptyFilePath, {
+    force: true,
+    maxRetries: 5,
+    recursive: true
+  })
+}
+
 module.exports = async (args) => {
   const { noModalWindow } = args ?? {}
   const reportFilePath = getReportFilePath(args)
@@ -73,7 +89,7 @@ module.exports = async (args) => {
   }
 
   try {
-    await access(reportFilePath, W_OK)
+    await checkAccess(reportFilePath)
   } catch (err) {
     if (err.code !== 'ENOENT') {
       await showModalWindow({ noModalWindow, reportFilePath })
@@ -90,7 +106,7 @@ module.exports = async (args) => {
         reportFilePath,
         { recursive: true, mode: '766' }
       )
-      await access(reportFilePath, W_OK)
+      await checkAccess(reportFilePath)
 
       return {
         reportFilePath,
