@@ -99,7 +99,6 @@ const initI18next = () => {
     initImmediate: false,
     fallbackLng: {
       es: ['es-EM', 'en'],
-      pt: ['pt-BR', 'en'],
       zh: ['zh-CN', 'en'],
       default: ['en']
     },
