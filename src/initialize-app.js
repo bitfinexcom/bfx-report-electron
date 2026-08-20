@@ -21,6 +21,9 @@ const AutoUpdateIpcChannelHandlers = require(
 const ModalIpcChannelHandlers = require(
   './window-creators/main-renderer-ipc-bridge/modal-ipc-channel-handlers'
 )
+const ReportExportIpcChannelHandlers = require(
+  './window-creators/main-renderer-ipc-bridge/report-export-ipc-channel-handlers'
+)
 const triggerSyncAfterUpdates = require('./trigger-sync-after-updates')
 const triggerElectronLoad = require('./trigger-electron-load')
 const runServer = require('./run-server')
@@ -58,6 +61,9 @@ const manageWorkerMessages = require(
   './manage-worker-messages'
 )
 const printToPDF = require('./print-to-pdf')
+const makeReportFolderAndShowModalIfNoWritePerm = require(
+  './make-report-folder-and-show-modal-if-no-write-perm'
+)
 
 const _ipcMessToPromise = (ipc) => {
   return new Promise((resolve, reject) => {
@@ -115,7 +121,8 @@ module.exports = async () => {
       MenuIpcChannelHandlers,
       ThemeIpcChannelHandlers,
       AutoUpdateIpcChannelHandlers,
-      ModalIpcChannelHandlers
+      ModalIpcChannelHandlers,
+      ReportExportIpcChannelHandlers
     )
 
     app.disableHardwareAcceleration()
@@ -178,6 +185,9 @@ module.exports = async () => {
     await checkForUpdatesAndNotify()
 
     printToPDF()
+    // No need to wait for user actions
+    makeReportFolderAndShowModalIfNoWritePerm()
+      .catch((err) => console.error(err))
   } catch (err) {
     await app.whenReady()
     await createErrorWindow()
