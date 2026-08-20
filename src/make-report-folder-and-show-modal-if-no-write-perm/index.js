@@ -11,6 +11,7 @@ const {
   }
 } = require('node:fs')
 const i18next = require('i18next')
+const { v4: uuidv4 } = require('uuid')
 
 const { getConfigsKeeperByName } = require('../configs-keeper')
 const { createModalWindow } = require('../window-creators')
@@ -66,7 +67,7 @@ const checkAccess = async (reportFilePath) => {
   await access(reportFilePath, W_OK)
 
   // Need to write to a real file to check the dynamic antivirus blocks
-  const emptyFilePath = path.join(reportFilePath, 'empty')
+  const emptyFilePath = path.join(reportFilePath, uuidv4())
 
   await writeFile(emptyFilePath, 'empty')
   await rm(emptyFilePath, {
