@@ -98,16 +98,9 @@ const getServerPromise = (srv, port) => {
   })
 }
 
-const initIpcChannelHandlers = (...ipcChannelHandlersList) => {
-  for (const IpcChannelHandlers of ipcChannelHandlersList) {
-    IpcChannelHandlers.create()
-  }
-}
-
 module.exports = {
   serializeError,
   deserializeError,
   rm,
-  getServerPromise,
-  initIpcChannelHandlers
+  getServerPromise
 }
