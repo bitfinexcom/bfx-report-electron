@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [4.47.0] - 2026-08-12
+## [4.47.0] - 2026-09-02
 
 ### Added
 
@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added more efficient way to filter `ledgers` by `wallet` as the `rest_v2_api` supports it. PRs: [bfx-report-ui#1100](https://github.com/bitfinexcom/bfx-report-ui/pull/1100), [bfx-report#489](https://github.com/bitfinexcom/bfx-report/pull/489), [bfx-reports-framework#524](https://github.com/bitfinexcom/bfx-reports-framework/pull/524), [bitfinex-api-node#597](https://github.com/bitfinexcom/bitfinex-api-node/pull/597), [bfx-api-node-rest#115](https://github.com/bitfinexcom/bfx-api-node-rest/pull/115)
 - Setup GH Actions workflow to run UI tests and show the corresponding report. PR: [bfx-report-ui#1097](https://github.com/bitfinexcom/bfx-report-ui/pull/1097)
 - Added exponential backoff and jitter for WS reconnection. PRs: [bfx-report-ui#1099](https://github.com/bitfinexcom/bfx-report-ui/pull/1099), [bfx-report-ui#1101](https://github.com/bitfinexcom/bfx-report-ui/pull/1101)
+- Added test coverage for the `Derivatives` report logic. PR: [bfx-report-ui#1105](https://github.com/bitfinexcom/bfx-report-ui/pull/1105)
+- Added test coverage for the `Account Summary` reports logic. PR: [bfx-report-ui#1103](https://github.com/bitfinexcom/bfx-report-ui/pull/1103)
+- Added ability to send an error via WS if report generation ends with an error in the `aggregator`. An error in the aggregator is possible if write access to the report folder is restricted by an antivirus. In addition to using the standard logging mechanism, we need to send the corresponding event via WS to UI to improve UX. PR: [bfx-reports-framework#528](https://github.com/bitfinexcom/bfx-reports-framework/pull/528)
+- Set `desktopName` in `package.json` to fix an important warning when building the app with the `electron-builder` tool; see doc: https://www.electron.build/docs/linux/#window-association-desktopname. PR: [bfx-report-electron#643](https://github.com/bitfinexcom/bfx-report-electron/pull/643)
+- Added ability to check write permission for the report export folder on startup and folder changes, and show a modal window to notify the user to change OS settings. PR: [bfx-report-electron#644](https://github.com/bitfinexcom/bfx-report-electron/pull/644)
 
 ### Changed
 
@@ -26,8 +31,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactored the `Weighted Averages` report as a functional and implemented a unified `useSinglePairFilter` hook. PR: [bfx-report-ui#1088](https://github.com/bitfinexcom/bfx-report-ui/pull/1088)
 - Replaced the coarse `less than an hour ago / N hours ago` last-sync label with a precise human-readable scale (just now --> less than 5/10/15/30 mins --> ~N hours --> yesterday --> N days ago --> exact date for older syncs), giving users a much clearer sense of how fresh their data is according to the UX improvement proposals. PR: [bfx-report-ui#1090](https://github.com/bitfinexcom/bfx-report-ui/pull/1090)
 - Reworked the `Funding Earnings` section more concisely and optimally to reduce technical debt and redundant code. PR: [bfx-report-ui#1091](https://github.com/bitfinexcom/bfx-report-ui/pull/1091)
-- Removed `Portuguese` language support according to the latest requirements. PR: [bfx-report-ui#1093](https://github.com/bitfinexcom/bfx-report-ui/pull/1093)
+- Removed `Portuguese` language support according to the latest requirements. PRs: [bfx-report-ui#1093](https://github.com/bitfinexcom/bfx-report-ui/pull/1093), [bfx-report#492](https://github.com/bitfinexcom/bfx-report/pull/492), [bfx-reports-framework#527](https://github.com/bitfinexcom/bfx-reports-framework/pull/527), [bfx-report-electron#646](https://github.com/bitfinexcom/bfx-report-electron/pull/646)
 - Reworked the `Loan report` more concisely and optimally to reduce technical debt and redundant code. PR: [bfx-report-ui#1098](https://github.com/bitfinexcom/bfx-report-ui/pull/1098)
+- Reworked the `Funding Bids & Offers` section more concisely and optimally to reduce technical debt and redundant code. PR: [bfx-report-ui#1104](https://github.com/bitfinexcom/bfx-report-ui/pull/1104)
+- Reworked the `Funding Loans (Unused)` section more concisely and optimally to reduce technical debt and redundant code. PR: [bfx-report-ui#1106](https://github.com/bitfinexcom/bfx-report-ui/pull/1106)
+- Brought refactoring to simplify the ipc-channel-handlers init due to the increase in their number. PR: [bfx-report-electron#645](https://github.com/bitfinexcom/bfx-report-electron/pull/645)
 
 ### Fixed
 
