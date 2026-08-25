@@ -3,6 +3,10 @@
 const { app, BrowserWindow } = require('electron')
 const i18next = require('i18next')
 
+const {
+  IpcMessageError,
+  AppInitializationError
+} = require('./errors')
 const wins = require('./window-creators/windows')
 const relaunch = require('./relaunch')
 const showMessageModalDialog = require(
@@ -11,6 +15,9 @@ const showMessageModalDialog = require(
 const isMainWinAvailable = require(
   './helpers/is-main-win-available'
 )
+const {
+  deserializeError
+} = require('./helpers/utils')
 const showTrxTaxReportNotification = require(
   './show-notification/show-trx-tax-report-notification'
 )
@@ -25,6 +32,54 @@ const PROCESS_STATES = require(
 )
 
 const modalDialogPromiseSet = new Set()
+
+const ipcReadyMessToPromise = (ipc) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const timeout = setTimeout(() => {
+        rmHandler()
+        reject(new AppInitializationError())
+      }, 30 * 60 * 1000).unref()
+
+      const rmHandler = () => {
+        ipc.off('message', handler)
+        clearTimeout(timeout)
+      }
+      const handler = (mess) => {
+        if (
+          mess ||
+          typeof mess === 'object' ||
+          typeof mess.err === 'string'
+        ) {
+          mess.err = deserializeError(mess.err)
+        }
+
+        const { state, err } = mess ?? {}
+
+        if (typeof state !== 'string') {
+          rmHandler()
+          reject(new IpcMessageError())
+
+          return
+        }
+        if (state === 'error:app-init') {
+          rmHandler()
+          reject(err || new AppInitializationError())
+
+          return
+        }
+        if (state === 'ready:server') {
+          rmHandler()
+          resolve(mess)
+        }
+      }
+
+      ipc.on('message', handler)
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
 
 const resolveModalDialogInSequence = async (asyncHandler) => {
   let resolve = () => {}
@@ -55,10 +110,12 @@ const getParentWindow = () => {
   return BrowserWindow.getFocusedWindow()
 }
 
-module.exports = (ipc) => {
+module.exports = async (ipc) => {
   if (!ipc) {
-    return
+    throw new AppInitializationError()
   }
+
+  const readyPromise = ipcReadyMessToPromise(ipc)
 
   ipc.on('message', async (mess) => {
     try {
@@ -294,4 +351,6 @@ module.exports = (ipc) => {
       console.error(err)
     }
   })
+
+  return await readyPromise
 }
