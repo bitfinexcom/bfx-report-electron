@@ -1,10 +1,9 @@
 'use strict'
 
-const { app, BrowserWindow } = require('electron')
+const { app } = require('electron')
 const i18next = require('i18next')
 
 const { AppInitializationError } = require('../errors')
-const wins = require('../window-creators/windows')
 const relaunch = require('../relaunch')
 const showMessageModalDialog = require(
   '../show-message-modal-dialog'
@@ -27,22 +26,9 @@ const PROCESS_STATES = require(
 
 const {
   ipcReadyMessToPromise,
-  resolveModalDialogInSequence
+  resolveModalDialogInSequence,
+  getParentWindow
 } = require('./helpers')
-
-const getParentWindow = () => {
-  if (isMainWinAvailable(
-    wins.mainWindow,
-    { shouldCheckVisibility: true }
-  )) {
-    return wins.mainWindow
-  }
-  if (isMainWinAvailable(wins.loadingWindow)) {
-    return wins.loadingWindow
-  }
-
-  return BrowserWindow.getFocusedWindow()
-}
 
 module.exports = async (ipc) => {
   if (!ipc) {
