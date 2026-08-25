@@ -26,25 +26,9 @@ const PROCESS_STATES = require(
 )
 
 const {
-  ipcReadyMessToPromise
+  ipcReadyMessToPromise,
+  resolveModalDialogInSequence
 } = require('./helpers')
-
-const modalDialogPromiseSet = new Set()
-
-const resolveModalDialogInSequence = async (asyncHandler) => {
-  let resolve = () => {}
-  const promise = new Promise((_resolve) => {
-    resolve = _resolve
-  })
-
-  const promisesForAwaiting = [...modalDialogPromiseSet]
-  modalDialogPromiseSet.add(promise)
-  await Promise.all(promisesForAwaiting)
-  const res = await asyncHandler()
-  resolve()
-  modalDialogPromiseSet.delete(promise)
-  return res
-}
 
 const getParentWindow = () => {
   if (isMainWinAvailable(
