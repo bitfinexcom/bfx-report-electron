@@ -11,6 +11,7 @@
     --color2: #808B93;
     --borderColor: #334A59;
     --activeColor: #82baf6;
+    --warningBg: #fbb13c;
 
     /* tables */
     --tableColor: #f5f8fa;
@@ -58,6 +59,7 @@
     --color2: #545c62;
     --borderColor: #102331;
     --activeColor: #518bc9;
+    --warningBg: #fbb13c;
 
     /* tables */
     --tableColor: #102331;

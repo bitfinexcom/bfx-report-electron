@@ -15,6 +15,9 @@ const relaunch = require('./relaunch')
 const { getConfigsKeeperByName } = require('./configs-keeper')
 const wins = require('./window-creators/windows')
 const isMainWinAvailable = require('./helpers/is-main-win-available')
+const makeReportFolderAndShowModalIfNoWritePerm = require(
+  './make-report-folder-and-show-modal-if-no-write-perm'
+)
 
 module.exports = ({ pathToUserDocuments }) => {
   return async () => {
@@ -23,6 +26,9 @@ module.exports = ({ pathToUserDocuments }) => {
       : BrowserWindow.getFocusedWindow()
 
     try {
+      const mainConfsKeeper = getConfigsKeeperByName()
+      const pathToUserReportFiles = mainConfsKeeper
+        .getConfigByName('pathToUserReportFiles')
       const {
         filePaths,
         canceled
@@ -30,7 +36,7 @@ module.exports = ({ pathToUserDocuments }) => {
         win,
         {
           title: i18next.t('changeReportsFolder.modalDialog.title'),
-          defaultPath: pathToUserDocuments,
+          defaultPath: pathToUserReportFiles ?? pathToUserDocuments,
           buttonLabel: i18next.t('changeReportsFolder.modalDialog.buttonLabel'),
           properties: [
             'openDirectory',
@@ -41,25 +47,38 @@ module.exports = ({ pathToUserDocuments }) => {
         }
       )
 
+      const newReportFilePath = filePaths?.[0]
+
       if (
         canceled ||
-        !Array.isArray(filePaths) ||
-        filePaths.length === 0
+        !newReportFilePath ||
+        newReportFilePath === pathToUserReportFiles
       ) {
         return
       }
-      if (filePaths.some(file => (
-        !file || typeof file !== 'string'
-      ))) {
+      if (typeof newReportFilePath !== 'string') {
         throw new InvalidFilePathError()
       }
 
+      const {
+        invalidPath,
+        noWritePerm
+      } = await makeReportFolderAndShowModalIfNoWritePerm({
+        pathToUserReportFiles: newReportFilePath
+      })
+
+      if (invalidPath) {
+        throw new InvalidFilePathError()
+      }
+      if (noWritePerm) {
+        return
+      }
+
       await pauseApp()
-      const isSaved = await getConfigsKeeperByName()
-        .saveConfigs({
-          reportFilesPathVersion: REPORT_FILES_PATH_VERSION,
-          pathToUserReportFiles: filePaths[0]
-        })
+      const isSaved = await mainConfsKeeper.saveConfigs({
+        reportFilesPathVersion: REPORT_FILES_PATH_VERSION,
+        pathToUserReportFiles: newReportFilePath
+      })
 
       if (!isSaved) {
         throw new ReportsFolderChangingError()

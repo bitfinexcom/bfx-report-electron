@@ -3,23 +3,8 @@
 const { app } = require('electron')
 const i18next = require('i18next')
 
-const TranslationIpcChannelHandlers = require(
-  './window-creators/main-renderer-ipc-bridge/translation-ipc-channel-handlers'
-)
-const GeneralIpcChannelHandlers = require(
-  './window-creators/main-renderer-ipc-bridge/general-ipc-channel-handlers'
-)
-const MenuIpcChannelHandlers = require(
-  './window-creators/main-renderer-ipc-bridge/menu-ipc-channel-handlers'
-)
-const ThemeIpcChannelHandlers = require(
-  './window-creators/main-renderer-ipc-bridge/theme-ipc-channel-handlers'
-)
-const AutoUpdateIpcChannelHandlers = require(
-  './window-creators/main-renderer-ipc-bridge/auto-update-ipc-channel-handlers'
-)
-const ModalIpcChannelHandlers = require(
-  './window-creators/main-renderer-ipc-bridge/modal-ipc-channel-handlers'
+const { initIpcChannelHandlers } = require(
+  './window-creators/main-renderer-ipc-bridge/utils'
 )
 const triggerSyncAfterUpdates = require('./trigger-sync-after-updates')
 const triggerElectronLoad = require('./trigger-electron-load')
@@ -40,7 +25,6 @@ const {
 const {
   deserializeError,
   getFreePort,
-  initIpcChannelHandlers,
   manageConfigs,
   platformIdentifiers: {
     IS_WIN
@@ -58,6 +42,9 @@ const manageWorkerMessages = require(
   './manage-worker-messages'
 )
 const printToPDF = require('./print-to-pdf')
+const makeReportFolderAndShowModalIfNoWritePerm = require(
+  './make-report-folder-and-show-modal-if-no-write-perm'
+)
 
 const _ipcMessToPromise = (ipc) => {
   return new Promise((resolve, reject) => {
@@ -109,14 +96,9 @@ const _ipcMessToPromise = (ipc) => {
 
 module.exports = async () => {
   try {
-    initIpcChannelHandlers(
-      GeneralIpcChannelHandlers,
-      TranslationIpcChannelHandlers,
-      MenuIpcChannelHandlers,
-      ThemeIpcChannelHandlers,
-      AutoUpdateIpcChannelHandlers,
-      ModalIpcChannelHandlers
-    )
+    const {
+      ThemeIpcChannelHandlers
+    } = initIpcChannelHandlers()
 
     app.disableHardwareAcceleration()
     app.on('window-all-closed', () => {
@@ -178,6 +160,9 @@ module.exports = async () => {
     await checkForUpdatesAndNotify()
 
     printToPDF()
+    // No need to wait for user actions
+    makeReportFolderAndShowModalIfNoWritePerm()
+      .catch((err) => console.error(err))
   } catch (err) {
     await app.whenReady()
     await createErrorWindow()

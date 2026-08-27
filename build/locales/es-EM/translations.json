@@ -281,5 +281,9 @@
       "restoreDBButtonText": "Intenta restaurar DB",
       "removeDBButtonText": "Eliminar DB"
     }
+  },
+  "reportFolderPerm": {
+    "title": "Problema al acceder a la carpeta de exportación de informes",
+    "message": "La aplicación no tiene permisos de escritura en la carpeta de exportación de informes en: {{reportFilePath}} Cambie la configuración del sistema o seleccione otra carpeta de exportación en el menú de la aplicación"
   }
 }

@@ -281,5 +281,9 @@
       "restoreDBButtonText": "Try to restore DB",
       "removeDBButtonText": "Remove DB"
     }
+  },
+  "reportFolderPerm": {
+    "title": "Issue accessing the report export folder",
+    "message": "The application does not have write access to the report export folder at: {{reportFilePath}} Please change the system settings or select a different export folder in the app menu"
   }
 }
