@@ -2,6 +2,7 @@
 
 const { app } = require('electron')
 const i18next = require('i18next')
+const escapeHtml = require('escape-html')
 
 const ipcs = require('../ipcs')
 const wins = require('../window-creators/windows')
@@ -32,7 +33,7 @@ const _fireAlert = async (params) => {
   const { backupFilesMetadata } = params ?? {}
   const inputRadioOptions = backupFilesMetadata.map((item, i) => {
     return {
-      label: item?.name,
+      label: escapeHtml(item?.name),
       value: item?.name,
       checked: i === 0
     }
