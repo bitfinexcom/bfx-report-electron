@@ -35,6 +35,9 @@ jobs:
   linux-win-docker-builder:
     timeout-minutes: 90
     runs-on: ubuntu-22.04
+    outputs:
+      linux_files: ${{ steps.linux-files.outputs.files }}
+      win_files: ${{ steps.win-files.outputs.files }}
     steps:
     - name: Checkout
       uses: actions/checkout@v6.0.2
@@ -104,24 +107,24 @@ jobs:
       with:
         name: win-unpacked
         path: dist/win-unpacked.zip
-    - if: env.REPO_OWNER != github.repository_owner
-      name: Upload Linux Dist Release
+    - name: Generate Linux file list
+      id: linux-files
+      run: |
+        FILES_JSON=$(find dist/ -type f \( -name "*-linux.AppImage" -o -name "*-linux.AppImage.zip" -o -name "*-linux.deb" -o -name "latest-linux.yml" \) | jq -R . | jq -s -c .)
+        echo "files=$FILES_JSON" >> $GITHUB_OUTPUT
+    - name: Generate Win file list
+      id: win-files
+      run: |
+        FILES_JSON=$(find dist/ -type f \( -name "*-win.exe" -o -name "*-win.exe.blockmap" -o -name "latest.yml" \) | jq -R . | jq -s -c .)
+        echo "files=$FILES_JSON" >> $GITHUB_OUTPUT
+    - name: Pack dist folder for unarchived upload
+      run: zip -r dist_linux_win.zip dist/
+    - name: Upload temporary dist archive
       uses: actions/upload-artifact@v7.0.0
       with:
-        name: linux-dist-release
-        path: |
-          dist/*-linux.AppImage
-          dist/*-linux.AppImage.zip
-          dist/latest-linux.yml
-    - if: env.REPO_OWNER != github.repository_owner
-      name: Upload Win Dist Release
-      uses: actions/upload-artifact@v7.0.0
-      with:
-        name: win-dist-release
-        path: |
-          dist/*-win.exe
-          dist/*-win.exe.blockmap
-          dist/latest.yml
+        name: temp-dist-linux-win
+        path: dist_linux_win.zip
+        retention-days: 1
     - name: Prepare cache folders
       run: |
         sudo chown -R $(id -u):$(id -g) ~/.cache/electron
@@ -130,6 +133,8 @@ jobs:
   mac-builder:
     timeout-minutes: 150
     runs-on: macos-15-intel
+    outputs:
+      mac_files: ${{ steps.mac-files.outputs.files }}
     steps:
     - name: Checkout
       uses: actions/checkout@v6.0.2
@@ -212,17 +217,67 @@ jobs:
       with:
         name: mac-unpacked
         path: dist/mac.zip
-    - if: env.REPO_OWNER != github.repository_owner
-      name: Upload Mac Dist Release
+    - name: Generate Mac file list
+      id: mac-files
+      run: |
+        FILES_JSON=$(find dist/ -type f \( -name "*-mac.zip" -o -name "*-mac.zip.blockmap" -o -name "*-mac.dmg" -o -name "*-mac.dmg.blockmap" -o -name "latest-mac.yml" \) | jq -R . | jq -s -c .)
+        echo "files=$FILES_JSON" >> $GITHUB_OUTPUT
+    - name: Pack mac dist folder for unarchived upload
+      run: zip -r dist_mac.zip dist/
+    - name: Upload temporary mac dist archive
       uses: actions/upload-artifact@v7.0.0
       with:
-        name: mac-dist-release
-        path: |
-          dist/*-mac.zip
-          dist/*-mac.zip.blockmap
-          dist/*-mac.dmg
-          dist/*-mac.dmg.blockmap
-          dist/latest-mac.yml
+        name: temp-dist-mac
+        path: dist_mac.zip
+        retention-days: 1
+
+  merge-file-lists:
+    name: Merge file lists for Artifacts section
+    needs: [linux-win-docker-builder, mac-builder]
+    runs-on: ubuntu-22.04
+    outputs:
+      all_files: ${{ steps.merge.outputs.combined }}
+    steps:
+      - name: Combine JSON arrays
+        id: merge
+        run: |
+          LIST_LINUX='${{ needs.linux-win-docker-builder.outputs.linux_files }}'
+          LIST_WIN='${{ needs.linux-win-docker-builder.outputs.win_files }}'
+          LIST_MAC='${{ needs.mac-builder.outputs.mac_files }}'
+          COMBINED=$(jq -n --argjson l1 "$LIST_LINUX" --argjson l2 "$LIST_WIN" --argjson l3 "$LIST_MAC" '$l1 + $l2 + $l3' -c)
+          echo "combined=$COMBINED" >> $GITHUB_OUTPUT
+
+  upload-unarchived-artifacts:
+    name: Upload unarchived Artifacts
+    needs: [linux-win-docker-builder, mac-builder, merge-file-lists]
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        file: ${{ fromJson(needs.merge-file-lists.outputs.all_files) }}
+    steps:
+      - name: Download temporary Linux/Win archive
+        uses: actions/download-artifact@v8.0.0
+        with:
+          name: temp-dist-linux-win
+      - name: Download temporary Mac archive
+        uses: actions/download-artifact@v8.0.0
+        with:
+          name: temp-dist-mac
+      - name: Unpack all folders
+        run: |
+          unzip -o dist_linux_win.zip
+          unzip -o dist_mac.zip
+      - name: Extract file name for artifact name
+        id: filename
+        run: |
+          echo "name=$(basename ${{ matrix.file }})" >> $GITHUB_OUTPUT
+      - name: Upload Artifact Individually
+        uses: actions/upload-artifact@v7.0.0
+        with:
+          name: ${{ steps.filename.outputs.name }}
+          path: ${{ matrix.file }}
+          archive: false
 
   put-changelog-to-release-page:
     name: Put Changelog to Release Page
