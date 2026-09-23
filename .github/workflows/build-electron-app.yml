@@ -107,23 +107,55 @@ jobs:
       with:
         name: win-unpacked
         path: dist/win-unpacked.zip
-    - name: Generate Linux file list
+    - name: Generate Linux file list and stage for upload
       id: linux-files
       run: |
-        FILES_JSON=$(find dist/ -type f \( -name "*-linux.AppImage" -o -name "*-linux.AppImage.zip" -o -name "*-linux.deb" -o -name "latest-linux.yml" \) | jq -R . | jq -s -c .)
-        echo "files=$FILES_JSON" >> $GITHUB_OUTPUT
-    - name: Generate Win file list
+        FILES_JSON=$(find dist/ -maxdepth 1 -type f \( -name "*linux*" \) | sort | jq -R . | jq -s -c .)
+
+        mkdir -p release-stage/linux
+        jq -r '.[]' <<< "$FILES_JSON" | while IFS= read -r file; do
+          cp "$file" release-stage/linux/
+        done
+
+        ENTRIES=$(jq -c --arg source release-stage-linux '
+          map({
+            source_artifact: $source,
+            file: (split("/") | last)
+          })
+        ' <<< "$FILES_JSON")
+
+        echo "files=$ENTRIES" >> "$GITHUB_OUTPUT"
+    - name: Generate Win file list and stage for upload
       id: win-files
       run: |
-        FILES_JSON=$(find dist/ -type f \( -name "*-win.exe" -o -name "*-win.exe.blockmap" -o -name "latest.yml" \) | jq -R . | jq -s -c .)
-        echo "files=$FILES_JSON" >> $GITHUB_OUTPUT
-    - name: Pack dist folder for unarchived upload
-      run: zip -r dist_linux_win.zip dist/
-    - name: Upload temporary dist archive
+        FILES_JSON=$(find dist/ -maxdepth 1 -type f \( -name "*win*" -o -name "latest.yml" \) | sort | jq -R . | jq -s -c .)
+
+        mkdir -p release-stage/win
+        jq -r '.[]' <<< "$FILES_JSON" | while IFS= read -r file; do
+          cp "$file" release-stage/win/
+        done
+
+        ENTRIES=$(jq -c --arg source release-stage-win '
+          map({
+            source_artifact: $source,
+            file: (split("/") | last)
+          })
+        ' <<< "$FILES_JSON")
+
+        echo "files=$ENTRIES" >> "$GITHUB_OUTPUT"
+    - name: Upload staged Linux release
       uses: actions/upload-artifact@v7.0.0
       with:
-        name: temp-dist-linux-win
-        path: dist_linux_win.zip
+        name: release-stage-linux
+        path: release-stage/linux/
+        compression-level: 0
+        retention-days: 1
+    - name: Upload staged Win release
+      uses: actions/upload-artifact@v7.0.0
+      with:
+        name: release-stage-win
+        path: release-stage/win/
+        compression-level: 0
         retention-days: 1
     - name: Prepare cache folders
       run: |
@@ -217,66 +249,72 @@ jobs:
       with:
         name: mac-unpacked
         path: dist/mac.zip
-    - name: Generate Mac file list
+    - name: Generate Mac file list and stage for upload
       id: mac-files
       run: |
-        FILES_JSON=$(find dist/ -type f \( -name "*-mac.zip" -o -name "*-mac.zip.blockmap" -o -name "*-mac.dmg" -o -name "*-mac.dmg.blockmap" -o -name "latest-mac.yml" \) | jq -R . | jq -s -c .)
-        echo "files=$FILES_JSON" >> $GITHUB_OUTPUT
-    - name: Pack mac dist folder for unarchived upload
-      run: zip -r dist_mac.zip dist/
-    - name: Upload temporary mac dist archive
+        FILES_JSON=$(find dist/ -maxdepth 1 -type f \( -name "*mac*" \) | sort | jq -R . | jq -s -c .)
+
+        mkdir -p release-stage/mac
+        jq -r '.[]' <<< "$FILES_JSON" | while IFS= read -r file; do
+          cp "$file" release-stage/mac/
+        done
+
+        ENTRIES=$(jq -c --arg source release-stage-mac '
+          map({
+            source_artifact: $source,
+            file: (split("/") | last)
+          })
+        ' <<< "$FILES_JSON")
+
+        echo "files=$ENTRIES" >> "$GITHUB_OUTPUT"
+    - name: Upload staged Mac release
       uses: actions/upload-artifact@v7.0.0
       with:
-        name: temp-dist-mac
-        path: dist_mac.zip
+        name: release-stage-mac
+        path: release-stage/mac/
+        compression-level: 0
         retention-days: 1
 
   merge-file-lists:
-    name: Merge file lists for Artifacts section
+    name: Merge release file lists for Artifacts section
     needs: [linux-win-docker-builder, mac-builder]
     runs-on: ubuntu-22.04
     outputs:
       all_files: ${{ steps.merge.outputs.combined }}
     steps:
-      - name: Combine JSON arrays
+      - name: Combine JSON arrays for matrix
         id: merge
+        env:
+          LINUX_FILES: ${{ needs.linux-win-docker-builder.outputs.linux_files }}
+          WIN_FILES: ${{ needs.linux-win-docker-builder.outputs.win_files }}
+          MAC_FILES: ${{ needs.mac-builder.outputs.mac_files }}
         run: |
-          LIST_LINUX='${{ needs.linux-win-docker-builder.outputs.linux_files }}'
-          LIST_WIN='${{ needs.linux-win-docker-builder.outputs.win_files }}'
-          LIST_MAC='${{ needs.mac-builder.outputs.mac_files }}'
-          COMBINED=$(jq -n --argjson l1 "$LIST_LINUX" --argjson l2 "$LIST_WIN" --argjson l3 "$LIST_MAC" '$l1 + $l2 + $l3' -c)
-          echo "combined=$COMBINED" >> $GITHUB_OUTPUT
+          COMBINED=$(jq -nc \
+            --argjson linux "$LINUX_FILES" \
+            --argjson win "$WIN_FILES" \
+            --argjson mac "$MAC_FILES" \
+            '$linux + $win + $mac')
+
+          echo "combined=$COMBINED" >> "$GITHUB_OUTPUT"
 
   upload-unarchived-artifacts:
-    name: Upload unarchived Artifacts
-    needs: [linux-win-docker-builder, mac-builder, merge-file-lists]
+    name: Upload release files to Artifacts section
+    needs: [merge-file-lists]
     runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
-        file: ${{ fromJson(needs.merge-file-lists.outputs.all_files) }}
+        include: ${{ fromJson(needs.merge-file-lists.outputs.all_files) }}
     steps:
-      - name: Download temporary Linux/Win archive
+      - name: Download staged release
         uses: actions/download-artifact@v8.0.0
         with:
-          name: temp-dist-linux-win
-      - name: Download temporary Mac archive
-        uses: actions/download-artifact@v8.0.0
-        with:
-          name: temp-dist-mac
-      - name: Unpack all folders
-        run: |
-          unzip -o dist_linux_win.zip
-          unzip -o dist_mac.zip
-      - name: Extract file name for artifact name
-        id: filename
-        run: |
-          echo "name=$(basename ${{ matrix.file }})" >> $GITHUB_OUTPUT
-      - name: Upload Artifact Individually
+          name: ${{ matrix.source_artifact }}
+          path: release-stage
+      - name: Upload release file individually
         uses: actions/upload-artifact@v7.0.0
         with:
-          name: ${{ steps.filename.outputs.name }}
-          path: ${{ matrix.file }}
+          path: release-stage/${{ matrix.file }}
           archive: false
 
   put-changelog-to-release-page:
