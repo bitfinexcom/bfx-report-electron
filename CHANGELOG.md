@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.48.0] - 2026-10-14
+
+### Added
+
+- Added corresponding changes to provide interrupt capability for the `full snapshot report` request. PRs: [bfx-report#494](https://github.com/bitfinexcom/bfx-report/pull/494), [bfx-reports-framework#531](https://github.com/bitfinexcom/bfx-reports-framework/pull/531)
+- Allowed to upload all build files to GH Actions WF Artifacts section when release is being built for pre-release checks. PR: [bfx-report-electron#650](https://github.com/bitfinexcom/bfx-report-electron/pull/650)
+- Added test coverage for the `Summary by Asset` section logic. PR: [bfx-report-ui#1108](https://github.com/bitfinexcom/bfx-report-ui/pull/1108)
+- Added GitHub pull request template. PR: [bfx-report-ui#1111](https://github.com/bitfinexcom/bfx-report-ui/pull/1111)
+- Added test coverage for the `Wallets` report logic. PR: [bfx-report-ui#1114](https://github.com/bitfinexcom/bfx-report-ui/pull/1114)
+- Added test coverage for the `Weighted Averages` report logic. PR: [bfx-report-ui#1116](https://github.com/bitfinexcom/bfx-report-ui/pull/1116)
+- Added the ability to check write permission for the target folder and notify users if not, to avoid Reports app export errors. PR: [bfx-report-ui#1117](https://github.com/bitfinexcom/bfx-report-ui/pull/1117)
+
+### Changed
+
+- Refactored ipc message management for worker to simplify the app init module. PR: [bfx-report-electron#647](https://github.com/bitfinexcom/bfx-report-electron/pull/647)
+- Reworked the `Funding Credits (Used)` section more concisely and optimally to reduce technical debt and redundant code. PR: [bfx-report-ui#1112](https://github.com/bitfinexcom/bfx-report-ui/pull/1112)
+- Used `orderBy` all across the codebase as part of the step-by-step migration to the `lib-js-util-base` helpers. PR: [bfx-report-ui#1113](https://github.com/bitfinexcom/bfx-report-ui/pull/1113)
+- Integrated code splitting to optimize bundle size for performance reasons and to prevent these kinds of potential issues in the future. PR: [bfx-report-ui#1115](https://github.com/bitfinexcom/bfx-report-ui/pull/1115)
+- Improved the `Snapshots` report according to the following way: stop starting the long snapshot generation automatically when the page opens, on each date change and after sync; bring back manual generation with the Generate button, so the whole date can be set before generation starts; add a Cancel button to stop a generation that is in progress and the corresponding interruption logic; refactor Snapshots to functional components as part of our global class-to-functional refactoring. PR: [bfx-report-ui#1118](https://github.com/bitfinexcom/bfx-report-ui/pull/1118)
+
+### Fixed
+
+- Fixed page reload feature when app is not on main page. This is necessary to correctly handle routing for the built SPA UI and serve index.html upon page refresh at various routes, rather than returning an error. PR: [bfx-report-electron#652](https://github.com/bitfinexcom/bfx-report-electron/pull/652)
+- Fixed tiny bit of vertical scroll on the reports page that serves no purpose. It should be removed on window heights that can fit the whole navigation UI. PR: [bfx-report-ui#1110](https://github.com/bitfinexcom/bfx-report-ui/pull/1110)
+
+### Security
+
+- Added data map support for radio btn values to prevent direct data setting and potential html injection from file name into a modal window of the electron app. PR: [bfx-report-electron#651](https://github.com/bitfinexcom/bfx-report-electron/pull/651)
+- Escaped HTML to prevent the folder or file name from appearing directly in a modal window. PR: [bfx-report-electron#648](https://github.com/bitfinexcom/bfx-report-electron/pull/648)
+
 ## [4.47.0] - 2026-09-02
 
 ### Added
