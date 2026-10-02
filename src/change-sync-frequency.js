@@ -35,7 +35,7 @@ const _testTime = (time) => {
 const _getTime = (timeFormat, time) => {
   return {
     timeFormat,
-    timeValue: time.replace('*/', '')
+    timeValue: Number.parseInt(time.replace('*/', ''))
   }
 }
 

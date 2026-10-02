@@ -65,33 +65,47 @@ window.addEventListener('load', async () => {
   try {
     const modalElem = document.getElementById('modal')
     const closeBtnElem = document.getElementById('closeBtn')
-    let toastId = null
+    let commonArgs = null
     let timeout = null
 
-    const getInputRadioValue = () => {
+    const getInputRadioValue = (args) => {
       const radioElems = document.getElementsByName('input-radio')
+      const inputRadioOpts = args?.inputRadioOptions
+
+      if (!Array.isArray(inputRadioOpts)) {
+        return null
+      }
 
       for (const radioElem of radioElems) {
         if (!radioElem.checked) {
           continue
         }
 
-        return radioElem.value
+        const i = Number.parseInt(radioElem.value)
+
+        return inputRadioOpts[i]?.value ?? null
       }
 
       return null
     }
 
-    const getInputCheckboxValue = () => {
+    const getInputCheckboxValue = (args) => {
       const radioElems = document.getElementsByName('input-checkbox')
+      const inputCheckboxOpts = args?.inputCheckboxOptions
       const res = []
+
+      if (!Array.isArray(inputCheckboxOpts)) {
+        return res
+      }
 
       for (const radioElem of radioElems) {
         if (!radioElem.checked) {
           continue
         }
 
-        res.push(radioElem.value)
+        const i = Number.parseInt(radioElem.value)
+
+        res.push(inputCheckboxOpts[i]?.value ?? null)
       }
 
       return res
@@ -105,13 +119,14 @@ window.addEventListener('load', async () => {
 
     const sendModalClosedEvent = (args) => {
       window.bfxReportElectronApi?.sendModalClosedEvent({
-        dismiss: DISMISS_REASONS.CANCEL,
-        inputRadioValue: getInputRadioValue(),
-        inputCheckboxValue: getInputCheckboxValue(),
-        inputRangeValue: getInputRangeValue(),
-
-        ...args
+        dismiss: args?.dismiss ?? DISMISS_REASONS.CANCEL,
+        toastId: args?.toastId,
+        inputRadioValue: getInputRadioValue(args),
+        inputCheckboxValue: getInputCheckboxValue(args),
+        inputRangeValue: getInputRangeValue(args)
       })
+
+      commonArgs = null
     }
     const hideModal = () => {
       modalElem.style.display = 'none'
@@ -173,8 +188,8 @@ window.addEventListener('load', async () => {
       if (showWinCloseButton) {
         closeBtnElem.addEventListener('click', (e) => {
           finalizeModalWindow({
-            dismiss: DISMISS_REASONS.CANCEL,
-            toastId: args?.toastId
+            ...args,
+            dismiss: DISMISS_REASONS.CANCEL
           }, e)
         })
 
@@ -233,7 +248,7 @@ window.addEventListener('load', async () => {
         Array.isArray(inputRadioOptions) &&
         inputRadioOptions.length > 0
       ) {
-        for (const inputRadioOpt of inputRadioOptions) {
+        for (const [i, inputRadioOpt] of inputRadioOptions.entries()) {
           if (
             !inputRadioOpt ||
             typeof inputRadioOpt !== 'object' ||
@@ -249,10 +264,10 @@ window.addEventListener('load', async () => {
             <label class="modal__input">
               <input
                 ${inputRadioOpt?.checked ? ' checked' : ''}
-                value="${inputRadioOpt?.value}"
+                value="${i}"
                 type="radio"
                 name="input-radio">
-              ${inputRadioOpt?.label ?? inputRadioOpt?.value}
+              ${inputRadioOpt?.label ?? i}
             </label>
           `)
         }
@@ -261,7 +276,7 @@ window.addEventListener('load', async () => {
         Array.isArray(inputCheckboxOptions) &&
         inputCheckboxOptions.length > 0
       ) {
-        for (const inputCheckboxOpt of inputCheckboxOptions) {
+        for (const [i, inputCheckboxOpt] of inputCheckboxOptions.entries()) {
           if (
             !inputCheckboxOpt ||
             typeof inputCheckboxOpt !== 'object' ||
@@ -277,10 +292,10 @@ window.addEventListener('load', async () => {
             <label class="modal__input">
               <input
                 ${inputCheckboxOpt?.checked ? ' checked' : ''}
-                value="${inputCheckboxOpt?.value}"
+                value="${i}"
                 type="checkbox"
                 name="input-checkbox">
-              ${inputCheckboxOpt?.label ?? inputCheckboxOpt?.value}
+              ${inputCheckboxOpt?.label ?? i}
             </label>
           `)
         }
@@ -293,9 +308,12 @@ window.addEventListener('load', async () => {
           if (
             !inputRangeOpt ||
             typeof inputRangeOpt !== 'object' ||
+            !Number.isFinite(inputRangeOpt.value) ||
+            !Number.isFinite(inputRangeOpt.min) ||
+            !Number.isFinite(inputRangeOpt.max) ||
             (
-              typeof inputRangeOpt.value !== 'string' &&
-              !Number.isFinite(inputRangeOpt.value)
+              inputRangeOpt.step !== undefined &&
+              !Number.isFinite(inputRangeOpt.step)
             )
           ) {
             continue
@@ -363,16 +381,16 @@ ${inputRangeElems.join('\n')}</div>`)
       if (showConfirmButton) {
         confirmBtnElem.addEventListener('click', (e) => {
           finalizeModalWindow({
-            dismiss: DISMISS_REASONS.CONFIRM,
-            toastId: args?.toastId
+            ...args,
+            dismiss: DISMISS_REASONS.CONFIRM
           }, e)
         })
       }
       if (showCancelButton) {
         cancelBtnElem.addEventListener('click', (e) => {
           finalizeModalWindow({
-            dismiss: DISMISS_REASONS.CANCEL,
-            toastId: args?.toastId
+            ...args,
+            dismiss: DISMISS_REASONS.CANCEL
           }, e)
         })
       }
@@ -399,31 +417,31 @@ ${inputRangeElems.join('\n')}</div>`)
           : DISMISS_REASONS.CANCEL
 
         finalizeModalWindow({
-          dismiss,
-          toastId: args?.toastId
+          ...args,
+          dismiss
         }, e)
       })
     }
 
     window.bfxReportElectronApi?.onCloseModalEvent(() => {
-      if (!toastId) {
+      if (!commonArgs?.toastId) {
         return
       }
 
       finalizeModalWindow({
-        dismiss: DISMISS_REASONS.CLOSE,
-        toastId
+        ...commonArgs,
+        dismiss: DISMISS_REASONS.CLOSE
       })
     })
     window.bfxReportElectronApi?.onFireModalEvent((args) => {
-      if (toastId) {
+      if (commonArgs?.toastId) {
         sendModalClosedEvent({
-          dismiss: DISMISS_REASONS.CLOSE,
-          toastId
+          ...commonArgs,
+          dismiss: DISMISS_REASONS.CLOSE
         })
       }
 
-      toastId = args?.toastId
+      commonArgs = args
       renderModal(args)
       showModal()
       setTimeout(() => {
@@ -447,10 +465,10 @@ ${inputRangeElems.join('\n')}</div>`)
       timeout = setTimeout(() => {
         hideModal()
         sendModalClosedEvent({
+          ...args,
           dismiss: args?.timer
             ? DISMISS_REASONS.TIMER
-            : DISMISS_REASONS.CLOSE,
-          toastId: args?.toastId
+            : DISMISS_REASONS.CLOSE
         })
       }, args?.timer)
     })
