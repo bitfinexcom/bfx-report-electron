@@ -31,6 +31,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed page reload feature when app is not on main page. This is necessary to correctly handle routing for the built SPA UI and serve index.html upon page refresh at various routes, rather than returning an error. PR: [bfx-report-electron#652](https://github.com/bitfinexcom/bfx-report-electron/pull/652)
 - Fixed tiny bit of vertical scroll on the reports page that serves no purpose. It should be removed on window heights that can fit the whole navigation UI. PR: [bfx-report-ui#1110](https://github.com/bitfinexcom/bfx-report-ui/pull/1110)
+- Fixed the `makeTrxTaxReportInBackground` request duplication on the initial opening of the `Tax report` and applied npm audit fixes. PR: [bfx-report-ui#1119](https://github.com/bitfinexcom/bfx-report-ui/pull/1119)
+- Fixed the redundant initial request for the `Account Balance` report. PR: [bfx-report-ui#1120](https://github.com/bitfinexcom/bfx-report-ui/pull/1120)
+- Fixed the page reload feature of the electron app menu bar when the app is not on the main page. The issue is in usage `fs.state` with `throwIfNoEntry: false` opt under `electronjs + nodejs + asar`; that opt doesn't work, but works in dev mode. PR: [bfx-report-electron#655](https://github.com/bitfinexcom/bfx-report-electron/pull/655)
 
 ### Security
 
