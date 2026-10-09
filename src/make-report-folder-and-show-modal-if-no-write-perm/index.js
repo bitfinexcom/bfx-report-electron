@@ -12,6 +12,7 @@ const {
 } = require('node:fs')
 const i18next = require('i18next')
 const { v4: uuidv4 } = require('uuid')
+const escapeHtml = require('escape-html')
 
 const { getConfigsKeeperByName } = require('../configs-keeper')
 const { createModalWindow } = require('../window-creators')
@@ -36,6 +37,7 @@ const showModalWindow = async (args) => {
     noModalWindow,
     reportFilePath
   } = args ?? {}
+  const escapedReportFilePath = escapeHtml(reportFilePath)
 
   if (noModalWindow) {
     return
@@ -46,7 +48,7 @@ const showModalWindow = async (args) => {
       icon: 'warning',
       title: i18next.t('reportFolderPerm.title'),
       text: i18next.t('reportFolderPerm.message', {
-        reportFilePath: `<div class="modal__text--warning modal__text--center">${reportFilePath}</div>`,
+        reportFilePath: `<div class="modal__text--warning modal__text--center">${escapedReportFilePath}</div>`,
         interpolation: { escapeValue: false }
       }),
       textClassName: 'modal__text--left',

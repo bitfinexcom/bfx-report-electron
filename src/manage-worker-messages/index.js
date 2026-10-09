@@ -1,64 +1,41 @@
 'use strict'
 
-const { app, BrowserWindow } = require('electron')
+const { app } = require('electron')
 const i18next = require('i18next')
 
-const wins = require('./window-creators/windows')
-const relaunch = require('./relaunch')
+const { AppInitializationError } = require('../errors')
+const relaunch = require('../relaunch')
 const showMessageModalDialog = require(
-  './show-message-modal-dialog'
+  '../show-message-modal-dialog'
 )
 const isMainWinAvailable = require(
-  './helpers/is-main-win-available'
+  '../helpers/is-main-win-available'
 )
 const showTrxTaxReportNotification = require(
-  './show-notification/show-trx-tax-report-notification'
+  '../show-notification/show-trx-tax-report-notification'
 )
 const showSyncNotification = require(
-  './show-notification/show-sync-notification'
+  '../show-notification/show-sync-notification'
 )
 const PROCESS_MESSAGES = require(
-  '../bfx-reports-framework/workers/loc.api/process.message.manager/process.messages'
+  '../../bfx-reports-framework/workers/loc.api/process.message.manager/process.messages'
 )
 const PROCESS_STATES = require(
-  '../bfx-reports-framework/workers/loc.api/process.message.manager/process.states'
+  '../../bfx-reports-framework/workers/loc.api/process.message.manager/process.states'
 )
 
-const modalDialogPromiseSet = new Set()
+const {
+  ipcReadyMessToPromise,
+  resolveModalDialogInSequence,
+  getParentWindow
+} = require('./helpers')
 
-const resolveModalDialogInSequence = async (asyncHandler) => {
-  let resolve = () => {}
-  const promise = new Promise((_resolve) => {
-    resolve = _resolve
-  })
-
-  const promisesForAwaiting = [...modalDialogPromiseSet]
-  modalDialogPromiseSet.add(promise)
-  await Promise.all(promisesForAwaiting)
-  const res = await asyncHandler()
-  resolve()
-  modalDialogPromiseSet.delete(promise)
-  return res
-}
-
-const getParentWindow = () => {
-  if (isMainWinAvailable(
-    wins.mainWindow,
-    { shouldCheckVisibility: true }
-  )) {
-    return wins.mainWindow
-  }
-  if (isMainWinAvailable(wins.loadingWindow)) {
-    return wins.loadingWindow
-  }
-
-  return BrowserWindow.getFocusedWindow()
-}
-
-module.exports = (ipc) => {
+module.exports = async (ipc) => {
   if (!ipc) {
-    return
+    throw new AppInitializationError()
   }
+
+  const readyPromise = ipcReadyMessToPromise(ipc)
 
   ipc.on('message', async (mess) => {
     try {
@@ -294,4 +271,6 @@ module.exports = (ipc) => {
       console.error(err)
     }
   })
+
+  return await readyPromise
 }

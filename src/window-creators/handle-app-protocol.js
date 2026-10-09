@@ -93,11 +93,20 @@ const getFilePath = async (parsedUrl) => {
   }
   if (parsedUrl.host === HOSTS.REACT) {
     const filePath = path.join(reactUIPubDir, relativePath)
-    const stats = await stat(filePath)
+    let stats = null
+
+    try {
+      stats = await stat(filePath)
+    } catch (err) {
+      if (err.code !== 'ENOENT') {
+        throw err
+      }
+    }
+
     const hasNoExtension = !path.extname(filePath)
 
     if (
-      !stats.isFile() ||
+      !stats?.isFile() ||
       hasNoExtension
     ) {
       return path.join(reactUIPubDir, 'index.html')

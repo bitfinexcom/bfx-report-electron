@@ -1,6 +1,6 @@
 {
   "name": "bfx-report-electron",
-  "version": "4.47.0",
+  "version": "4.48.0",
   "repository": "https://github.com/bitfinexcom/bfx-report-electron",
   "desktopName": "com.bitfinex.report",
   "description": "Reporting tool",
@@ -23,6 +23,7 @@
     "cron-validate": "1.5.3",
     "electron-log": "4.4.8",
     "electron-updater": "6.8.9",
+    "escape-html": "1.0.3",
     "get-port": "7.0.0",
     "get-stream": "9.0.1",
     "github-markdown-css": "5.8.1",

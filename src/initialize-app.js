@@ -19,11 +19,6 @@ const {
 const WINDOW_NAMES = require('./window-creators/window.names')
 const makeOrReadSecretKey = require('./make-or-read-secret-key')
 const {
-  IpcMessageError,
-  AppInitializationError
-} = require('./errors')
-const {
-  deserializeError,
   getFreePort,
   manageConfigs,
   platformIdentifiers: {
@@ -45,54 +40,6 @@ const printToPDF = require('./print-to-pdf')
 const makeReportFolderAndShowModalIfNoWritePerm = require(
   './make-report-folder-and-show-modal-if-no-write-perm'
 )
-
-const _ipcMessToPromise = (ipc) => {
-  return new Promise((resolve, reject) => {
-    try {
-      const timeout = setTimeout(() => {
-        rmHandler()
-        reject(new AppInitializationError())
-      }, 30 * 60 * 1000).unref()
-
-      const rmHandler = () => {
-        ipc.off('message', handler)
-        clearTimeout(timeout)
-      }
-      const handler = (mess) => {
-        if (
-          mess ||
-          typeof mess === 'object' ||
-          typeof mess.err === 'string'
-        ) {
-          mess.err = deserializeError(mess.err)
-        }
-
-        const { state, err } = mess ?? {}
-
-        if (typeof state !== 'string') {
-          rmHandler()
-          reject(new IpcMessageError())
-
-          return
-        }
-        if (state === 'error:app-init') {
-          rmHandler()
-          reject(err || new AppInitializationError())
-
-          return
-        }
-        if (state === 'ready:server') {
-          rmHandler()
-          resolve(mess)
-        }
-      }
-
-      ipc.on('message', handler)
-    } catch (err) {
-      reject(err)
-    }
-  })
-}
 
 module.exports = async () => {
   try {
@@ -148,9 +95,7 @@ module.exports = async () => {
       secretKey,
       portsMap
     })
-    const isServerReadyPromise = _ipcMessToPromise(ipc)
-    manageWorkerMessages(ipc)
-    await isServerReadyPromise
+    await manageWorkerMessages(ipc)
     await triggerSyncAfterUpdates()
     await hideLoadingWindow({
       windowName: WINDOW_NAMES.STARTUP_LOADING_WINDOW,
