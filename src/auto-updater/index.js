@@ -73,6 +73,7 @@ const _fireToast = async (
     return { dismiss: 'close' }
   }
 
+  // TODO:
   return await AutoUpdateIpcChannelHandlers.sendFireToastEvent(
     mainWindow,
     {
@@ -191,6 +192,7 @@ const _autoUpdaterFactory = () => {
         isInstallMenuItemVisible: false
       })
 
+      // TODO
       if (
         /ERR_INTERNET_DISCONNECTED/gi.test(err.toString())
       ) {
@@ -203,6 +205,7 @@ const _autoUpdaterFactory = () => {
         return
       }
 
+      // TODO
       await _fireToast({
         title: i18next.t('autoUpdater.errorToast.title'),
         icon: 'error',
@@ -231,6 +234,7 @@ const _autoUpdaterFactory = () => {
       console.error(err)
     }
   })
+  // TODO:
   autoUpdater.on('update-available', async (info) => {
     try {
       const { version } = { ...info }
@@ -316,6 +320,7 @@ const _autoUpdaterFactory = () => {
       console.error(err)
     }
   })
+  // TODO:
   autoUpdater.on('update-downloaded', async (info) => {
     try {
       const {
