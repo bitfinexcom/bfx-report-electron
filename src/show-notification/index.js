@@ -6,8 +6,12 @@ const showTrxTaxReportNotification = require(
 const showSyncNotification = require(
   './show-sync-notification'
 )
+const showUpdateNotification = require(
+  './show-update-notification'
+)
 
 module.exports = {
   showTrxTaxReportNotification,
-  showSyncNotification
+  showSyncNotification,
+  showUpdateNotification
 }
