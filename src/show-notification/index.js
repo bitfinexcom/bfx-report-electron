@@ -1,7 +1,7 @@
 'use strict'
 
 const showTrxTaxReportNotification = require(
-  './show-update-notification'
+  './show-trx-tax-report-notification'
 )
 const showSyncNotification = require(
   './show-sync-notification'
