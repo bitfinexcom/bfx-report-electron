@@ -7,7 +7,7 @@ const PROCESS_MESSAGES = require(
 )
 const wins = require('../window-creators/windows')
 const { isWindowInvisible } = require('../helpers/manage-window')
-const showNotification = require('./')
+const notify = require('./notify')
 
 module.exports = (mess) => {
   const {
@@ -27,5 +27,5 @@ module.exports = (mess) => {
     : i18next.t('nativeNotification.trxTaxReport.completedBody')
   const urgency = isError ? 'critical' : 'normal'
 
-  showNotification({ body, urgency })
+  notify({ body, urgency })
 }

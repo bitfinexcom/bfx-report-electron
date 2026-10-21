@@ -7,7 +7,7 @@ const PROCESS_MESSAGES = require(
 )
 const wins = require('../window-creators/windows')
 const { isWindowInvisible } = require('../helpers/manage-window')
-const showNotification = require('./')
+const notify = require('./notify')
 
 const getBody = (params) => {
   const {
@@ -44,5 +44,5 @@ module.exports = (mess) => {
   const body = getBody({ isError, isInterrupted })
   const urgency = isError ? 'critical' : 'normal'
 
-  showNotification({ body, urgency })
+  notify({ body, urgency })
 }

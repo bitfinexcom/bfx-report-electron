@@ -11,12 +11,10 @@ const showMessageModalDialog = require(
 const isMainWinAvailable = require(
   '../helpers/is-main-win-available'
 )
-const showTrxTaxReportNotification = require(
-  '../show-notification/show-trx-tax-report-notification'
-)
-const showSyncNotification = require(
-  '../show-notification/show-sync-notification'
-)
+const {
+  showTrxTaxReportNotification,
+  showSyncNotification
+} = require('../show-notification')
 const PROCESS_MESSAGES = require(
   '../../bfx-reports-framework/workers/loc.api/process.message.manager/process.messages'
 )
