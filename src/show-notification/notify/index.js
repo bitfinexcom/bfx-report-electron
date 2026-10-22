@@ -4,12 +4,13 @@ const { Notification } = require('electron')
 const path = require('node:path')
 const i18next = require('i18next')
 
-const wins = require('../window-creators/windows')
-const WINDOW_NAMES = require('../window-creators/window.names')
-const { showWindow } = require('../helpers/manage-window')
+const wins = require('../../window-creators/windows')
+const WINDOW_NAMES = require('../../window-creators/window.names')
+const { showWindow } = require('../../helpers/manage-window')
 
-const { rootPath } = require('../helpers/root-path')
+const { rootPath } = require('../../helpers/root-path')
 const icon = path.join(rootPath, 'build/icons/64x64.png')
+const NotificationController = require('./notification.controller')
 
 module.exports = (params) => {
   if (!Notification.isSupported()) {
@@ -34,7 +35,8 @@ module.exports = (params) => {
     ).catch((err) => { console.debug(err) })
   })
 
-  notification.show()
+  // eslint-disable-next-line no-new
+  new NotificationController(notification)
 
   return notification
 }
