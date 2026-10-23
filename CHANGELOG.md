@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.49.0] - 2026-11-04
+
+### Added
+
+- Added interrupter support to the responder module to finalize interruption on both the resolve and rejection states. PRs: [bfx-report#495](https://github.com/bitfinexcom/bfx-report/pull/495), [bfx-reports-framework#532](https://github.com/bitfinexcom/bfx-reports-framework/pull/532)
+- Added interrupter support to the data consistency checker to speed up the interruption process. PR: [bfx-reports-framework#533](https://github.com/bitfinexcom/bfx-reports-framework/pull/533)
+- Added ability to show a native OS notification in the electron app when an update is available, and the app is not on top. PR: [bfx-report-electron#657](https://github.com/bitfinexcom/bfx-report-electron/pull/657)
+- Added test coverage for the `Profits` section logic. PR: [bfx-report-ui#1131](https://github.com/bitfinexcom/bfx-report-ui/pull/1131)
+- Added test coverage for the `Positions Active` section logic. PR: [bfx-report-ui#1135](https://github.com/bitfinexcom/bfx-report-ui/pull/1135)
+
+### Changed
+
+- Provided a flag to the `getWallets` endpoint to be able to convert to USD using public trades instead of using the overloaded `getFullSnapshotReport` endpoint for performance. PR: [bfx-reports-framework#536](https://github.com/bitfinexcom/bfx-reports-framework/pull/536)
+- Removed the useless `getFullTaxReport` endpoint and corresponding logic as it was replaced with the transaction tax report. PR: [bfx-reports-framework#537](https://github.com/bitfinexcom/bfx-reports-framework/pull/537)
+- Improved the `Wallets` report performance using the new `getWallets` endpoint flag to convert to USD by public trades instead of the overloaded `getFullSnapshotReport` endpoint. PR: [bfx-report-ui#1133](https://github.com/bitfinexcom/bfx-report-ui/pull/1133)
+
+### Fixed
+
+- Fixed the redundant initial request for the `Account Balance` report. PR: [bfx-report-ui#1120](https://github.com/bitfinexcom/bfx-report-ui/pull/1120)
+
+### Security
+
+- Updated dependencies and fix vulnerabilities in the UI. PR: [bfx-report-ui#1132](https://github.com/bitfinexcom/bfx-report-ui/pull/1132)
+
 ## [4.48.0] - 2026-10-14
 
 ### Added
