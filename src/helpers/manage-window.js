@@ -2,8 +2,6 @@
 
 const { screen } = require('electron')
 
-const { IS_LINUX } = require('./platform-identifiers')
-
 const hideWindow = (win, opts) => {
   return new Promise((resolve, reject) => {
     try {
@@ -49,10 +47,6 @@ const showWindow = (win, opts) => {
         shouldWinBeFocused = false
       } = opts ?? {}
       const isMinimized = win?.isMinimized?.()
-      const shouldLinuxWorkspacesBeConsidered = (
-        IS_LINUX &&
-        shouldWinBeFocused
-      )
 
       if (
         !win ||
@@ -72,18 +66,18 @@ const showWindow = (win, opts) => {
         if (shouldWinBeFocused) {
           win.focus()
         }
-        if (shouldLinuxWorkspacesBeConsidered) {
+        if (shouldWinBeFocused) {
           win.setVisibleOnAllWorkspaces(false)
         }
 
         resolve()
       })
 
+      if (shouldWinBeFocused) {
+        win.setVisibleOnAllWorkspaces(true)
+      }
       if (isMinimized) {
         win.restore()
-      }
-      if (shouldLinuxWorkspacesBeConsidered) {
-        win.setVisibleOnAllWorkspaces(true)
       }
       if (shouldWinBeShownInactive) {
         win.showInactive()
