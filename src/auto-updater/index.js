@@ -30,6 +30,7 @@ const {
 const AutoUpdateIpcChannelHandlers = require(
   '../window-creators/main-renderer-ipc-bridge/auto-update-ipc-channel-handlers'
 )
+const { showUpdateNotification } = require('../show-notification')
 
 const MENU_ITEM_IDS = require('../create-menu/menu.item.ids')
 const { changeMenuItemStatesById } = require('../create-menu/utils')
@@ -194,8 +195,11 @@ const _autoUpdaterFactory = () => {
       if (
         /ERR_INTERNET_DISCONNECTED/gi.test(err.toString())
       ) {
+        const title = i18next.t('autoUpdater.errorToast.inetIssueTitle')
+
+        showUpdateNotification({ title, isError: true })
         await _fireToast({
-          title: i18next.t('autoUpdater.errorToast.inetIssueTitle'),
+          title,
           icon: 'error',
           timer: 60000
         })
@@ -203,8 +207,11 @@ const _autoUpdaterFactory = () => {
         return
       }
 
+      const title = i18next.t('autoUpdater.errorToast.title')
+
+      showUpdateNotification({ title, isError: true })
       await _fireToast({
-        title: i18next.t('autoUpdater.errorToast.title'),
+        title,
         icon: 'error',
         timer: 60000
       })
@@ -234,13 +241,15 @@ const _autoUpdaterFactory = () => {
   autoUpdater.on('update-available', async (info) => {
     try {
       const { version } = { ...info }
+      const title = i18next.t(
+        'autoUpdater.updateAvailableToast.title',
+        { version }
+      )
 
+      showUpdateNotification({ title })
       const { dismiss } = await _fireToast(
         {
-          title: i18next.t(
-            'autoUpdater.updateAvailableToast.title',
-            { version }
-          ),
+          title,
           text: i18next.t('autoUpdater.updateAvailableToast.description'),
           timer: 10000
         }
@@ -328,13 +337,15 @@ const _autoUpdaterFactory = () => {
       }
 
       isProgressToastEmittingUnlocked = false
+      const title = i18next.t(
+        'autoUpdater.updateDownloadedToast.title',
+        { version }
+      )
 
+      showUpdateNotification({ title })
       const { dismiss } = await _fireToast(
         {
-          title: i18next.t(
-            'autoUpdater.updateDownloadedToast.title',
-            { version }
-          ),
+          title,
           text: i18next.t('autoUpdater.updateDownloadedToast.description'),
           icon: 'question',
           timer: 60000,
