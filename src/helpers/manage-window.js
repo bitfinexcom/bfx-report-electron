@@ -46,14 +46,15 @@ const showWindow = (win, opts) => {
         shouldWinBeShownInactive = false,
         shouldWinBeFocused = false
       } = opts ?? {}
+      const isMinimized = win?.isMinimized?.()
 
       if (
         !win ||
         typeof win !== 'object' ||
         win.isDestroyed() ||
         (
-          win.isVisible() &&
-          !win.isMinimized()
+          !isWindowInvisible(win, { shouldChildWinsBeChecked: shouldWinBeFocused }) &&
+          !isMinimized
         )
       ) {
         resolve()
@@ -65,11 +66,17 @@ const showWindow = (win, opts) => {
         if (shouldWinBeFocused) {
           win.focus()
         }
+        if (shouldWinBeFocused) {
+          win.setVisibleOnAllWorkspaces(false)
+        }
 
         resolve()
       })
 
-      if (win.isMinimized()) {
+      if (shouldWinBeFocused) {
+        win.setVisibleOnAllWorkspaces(true)
+      }
+      if (isMinimized) {
         win.restore()
       }
       if (shouldWinBeShownInactive) {

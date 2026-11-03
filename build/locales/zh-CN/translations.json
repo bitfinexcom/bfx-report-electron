@@ -108,6 +108,10 @@
     "trxTaxReport": {
       "completedBody": "您的税务报告已准备好！",
       "errorBody": "生成税务报告时发生了意外错误！"
+    },
+    "reportFileGen": {
+      "completedBody": "您的报告文件已准备就绪！",
+      "errorBody": "生成报告文件时发生意外错误！"
     }
   },
   "autoUpdater": {

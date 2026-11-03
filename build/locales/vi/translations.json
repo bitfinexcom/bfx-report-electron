@@ -108,6 +108,10 @@
     "trxTaxReport": {
       "completedBody": "Báo cáo thuế của bạn đã sẵn sàng!",
       "errorBody": "Đã xảy ra lỗi ngoài ý muốn khi tạo báo cáo thuế!"
+    },
+    "reportFileGen": {
+      "completedBody": "Tập tin báo cáo của bạn đã sẵn sàng!",
+      "errorBody": "Đã xảy ra lỗi không mong muốn trong quá trình tạo tập tin báo cáo!"
     }
   },
   "autoUpdater": {

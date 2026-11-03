@@ -108,6 +108,10 @@
     "trxTaxReport": {
       "completedBody": "Your tax report is ready!",
       "errorBody": "An unexpected error occurred while generating the tax report!"
+    },
+    "reportFileGen": {
+      "completedBody": "Your report file is ready!",
+      "errorBody": "An unexpected error occurred while generating the report file!"
     }
   },
   "autoUpdater": {
