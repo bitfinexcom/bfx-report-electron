@@ -108,6 +108,10 @@
     "trxTaxReport": {
       "completedBody": "¡Tu reporte fiscal está listo!",
       "errorBody": "¡Se ha producido un error inesperado al generar el reporte fiscal!"
+    },
+    "reportFileGen": {
+      "completedBody": "¡Tu archivo de informe está listo!",
+      "errorBody": "¡Ocurrió un error inesperado al generar el archivo de informe!"
     }
   },
   "autoUpdater": {

@@ -1,0 +1,29 @@
+'use strict'
+
+const i18next = require('i18next')
+
+const PROCESS_MESSAGES = require(
+  '../../bfx-reports-framework/workers/loc.api/process.message.manager/process.messages'
+)
+const wins = require('../window-creators/windows')
+const { isWindowInvisible } = require('../helpers/manage-window')
+const notify = require('./notify')
+
+module.exports = (mess) => {
+  const { state } = mess ?? {}
+
+  if (!isWindowInvisible(
+    wins?.mainWindow,
+    { shouldChildWinsBeChecked: true }
+  )) {
+    return
+  }
+
+  const isError = state === PROCESS_MESSAGES.ERROR_REPORT_FILE_GENERATION
+  const body = isError
+    ? i18next.t('nativeNotification.reportFileGen.errorBody')
+    : i18next.t('nativeNotification.reportFileGen.completedBody')
+  const urgency = isError ? 'critical' : 'normal'
+
+  notify({ body, urgency })
+}

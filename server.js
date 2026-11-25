@@ -67,6 +67,9 @@ const allowedProcessMessagesSet = _getAllowedStatesSet({
     'READY_TRX_TAX_REPORT',
     'ERROR_TRX_TAX_REPORT',
 
+    'READY_REPORT_FILE_GENERATION',
+    'ERROR_REPORT_FILE_GENERATION',
+
     'READY_SYNC',
     'ERROR_SYNC',
 

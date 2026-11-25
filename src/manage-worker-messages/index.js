@@ -13,6 +13,7 @@ const isMainWinAvailable = require(
 )
 const {
   showTrxTaxReportNotification,
+  showReportFileGenNotification,
   showSyncNotification
 } = require('../show-notification')
 const PROCESS_MESSAGES = require(
@@ -258,6 +259,12 @@ module.exports = async (ipc) => {
         state === PROCESS_MESSAGES.ERROR_TRX_TAX_REPORT
       ) {
         showTrxTaxReportNotification(mess)
+      }
+      if (
+        state === PROCESS_MESSAGES.READY_REPORT_FILE_GENERATION ||
+        state === PROCESS_MESSAGES.ERROR_REPORT_FILE_GENERATION
+      ) {
+        showReportFileGenNotification(mess)
       }
       if (
         state === PROCESS_MESSAGES.READY_SYNC ||
